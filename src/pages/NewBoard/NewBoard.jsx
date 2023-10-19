@@ -24,19 +24,19 @@ const NewBoard = () => {
             >
                 <h4 className="title">게시물 작성</h4>
             </header>
-            <form>
-                <button type="button" onClick={handleInputClick}>
+            <S.NewBoarForm>
+                <S.FileInputButton type="button" onClick={handleInputClick}>
                     사진 추가
-                </button>
+                </S.FileInputButton>
                 <input
                     type="file"
                     onChange={handleFileChange}
                     ref={hiddenFileInput}
                     style={{ display: 'none' }}
                 />
-                <textarea></textarea>
+                <S.NewBoardTextarea></S.NewBoardTextarea>
                 <button type="submit">올리기</button>
-            </form>
+            </S.NewBoarForm>
         </>
     );
 };

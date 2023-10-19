@@ -1,6 +1,19 @@
 import { createGlobalStyle } from 'styled-components';
 
+import PreRegular from '../fonts/Pretendard-Regular.otf';
+import PreBold from '../fonts/Pretendard-Bold.otf';
+
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+        font-family: 'PreRegular';
+        font-style: normal;
+        src: url(${PreRegular}) format('opentype');
+  }
+	@font-face {
+        font-family: 'PreBold';
+        font-style: normal;
+        src: url(${PreBold}) format('opentype');
+  }
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -55,8 +68,13 @@ button{
 a{
   text-decoration: none;
 }
+
 html{
 	font-size:14px;
+}
+
+body{
+	font-family:"PreRegular"
 }
 `;
 

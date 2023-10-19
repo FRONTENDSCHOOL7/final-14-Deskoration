@@ -1,0 +1,10 @@
+.app-body {
+    padding: 50px;
+}
+
+.container {
+    width: 360px;
+    height: 800px;
+    border: 1px solid black;
+    margin: auto;
+}

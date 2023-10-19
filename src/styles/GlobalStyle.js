@@ -30,24 +30,6 @@ footer, header, hgroup, menu, nav, section {
 *{
   box-sizing: border-box;
 }
-body {
-	width: 100%;
-	min-height: 100vh;
-	line-height: 1;
-	font-family: 'PT Sans Narrow', sans-serif;
-
-	display: flex;
-
-	background-color: ${props => props.theme.bgColor};
-}
-
-#root{
-flex-grow:1;
-}
-
-.app{
-	height: 100vh;
-}
 ol, ul {
 	list-style: none;
 }
@@ -63,7 +45,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
 button{
   cursor: pointer;
 	padding: 0;
@@ -73,6 +54,9 @@ button{
 
 a{
   text-decoration: none;
+}
+html{
+	font-size:14px;
 }
 `;
 

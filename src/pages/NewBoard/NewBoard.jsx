@@ -1,8 +1,13 @@
 import React from 'react';
+import { RegisterForm } from './RegisterForm';
 import * as S from './NewBoard.styled';
 
 const NewBoard = () => {
-    return <div>NewBoard</div>;
+    return (
+        <article>
+            <RegisterForm />
+        </article>
+    );
 };
 
 export default NewBoard;

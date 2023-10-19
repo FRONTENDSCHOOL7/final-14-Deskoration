@@ -12,13 +12,15 @@ const fontSize = {
     lg: '1.5rem',
 };
 
-const lightversion = {
-    background: '#fff',
-    fontPrimary: 'black',
-    fontSecondary: 'gray',
-    primary: '#00a0ff',
-    secondary: '#ddd',
-    hover: '#00a0ff50',
+const lightMode = {
+    logo: '685c53',
+    main: '#45522b',
+    point: '#d67a38',
+    marker: '#ff6D24',
+    border: '#dbdbdb',
+    mainFont: '#0f0f0f',
+    subFont: '#767676',
+    bgSecondary: '#ecebeb',
 };
 
 const repo = {
@@ -30,7 +32,7 @@ const theme = {
     windowSize,
     repo,
     fontSize,
-    lightversion,
+    lightMode,
 };
 
 export default theme;

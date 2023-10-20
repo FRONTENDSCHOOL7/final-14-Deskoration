@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import theme from '../../styles/theme';
-console.log({ theme });
+
 export const ProductRegisterForm = styled.form`
     width: 100%;
     padding: 0 30px;

@@ -2,7 +2,11 @@ import React from 'react';
 import * as S from './Header.styled';
 
 const Header = () => {
-    return <div>Header</div>;
+    return (
+        <>
+            <S.Headbar>DESKORATION</S.Headbar>
+        </>
+    );
 };
 
 export default Header;

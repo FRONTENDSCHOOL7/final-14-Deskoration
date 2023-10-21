@@ -9,7 +9,6 @@ export const RegisterForm = () => {
         store: '',
         link: '',
     });
-    const [isEmpty, setIsEmpty] = useState(false);
 
     // submit 함수
     const dataSubmit = event => {
@@ -19,30 +18,46 @@ export const RegisterForm = () => {
     return (
         <>
             {/* 헤더 컴포넌트 불러올 예정 */}
-            <header
+            {/* <header
                 className="header"
                 style={{ width: '100%', height: '70px' }}
             >
                 <h4 className="title">상품 정보 입력</h4>
-            </header>
+            </header> */}
             <main>
                 <S.ProductRegisterForm onSubmit={dataSubmit}>
                     <fieldset>
                         <Input
-                            label="카테고리"
+                            label="카테고리 *"
                             value={data.category}
-                            isBlank={isEmpty}
+                            setData={setData}
                         />
                         {<WarningMsg />}
 
-                        <Input label="상품명" />
-                        {isEmpty && <WarningMsg />}
+                        <Input
+                            label="상품명 *"
+                            value={data.productName}
+                            setData={setData}
+                        />
+                        {<WarningMsg />}
 
-                        <Input label="구매가격" />
-                        {isEmpty && <WarningMsg />}
+                        <Input
+                            label="구매가격 *"
+                            value={data.price}
+                            setData={setData}
+                        />
+                        {<WarningMsg />}
 
-                        <Input label="구매처" />
-                        <Input label="구매링크" />
+                        <Input
+                            label="구매처"
+                            value={data.store}
+                            setData={setData}
+                        />
+                        <Input
+                            label="구매링크"
+                            value={data.link}
+                            setData={setData}
+                        />
                     </fieldset>
 
                     <S.RegisterButton>등록하기</S.RegisterButton>
@@ -52,13 +67,51 @@ export const RegisterForm = () => {
     );
 };
 
-const Input = ({ label, isEmpty }) => {
+const Input = ({ label, value, setData }) => {
+    //input값을 data에 저장하기
+    const onInputChange = event => {
+        switch (label) {
+            case '카테고리':
+                setData(prev => ({
+                    ...prev,
+                    category: event.target.value,
+                }));
+                break;
+            case '상품명':
+                setData(prev => ({
+                    ...prev,
+                    productName: event.target.value,
+                }));
+                break;
+            case '구매가격':
+                setData(prev => ({
+                    ...prev,
+                    price: event.target.value,
+                }));
+                break;
+            case '구매처':
+                setData(prev => ({
+                    ...prev,
+                    store: event.target.value,
+                }));
+                break;
+            case '구매링크':
+                setData(prev => ({
+                    ...prev,
+                    link: event.target.value,
+                }));
+                break;
+            default:
+                console.log('에러');
+        }
+    };
+
     return (
         <>
             <S.InputLabel htmlFor={label} label={label}>
                 {label}
             </S.InputLabel>
-            <S.InputText id={label} isEmpty={isEmpty} />
+            <S.InputText id={label} value={value} onChange={onInputChange} />
         </>
     );
 };

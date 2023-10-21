@@ -3,10 +3,11 @@ import { RegisterForm } from './RegisterForm';
 import * as S from './NewBoard.styled';
 
 const NewBoard = () => {
-    const [isClicked, setIsClicked] = useState(false);
+    const [showRegisterForm, setShowRegisterForm] = useState(false);
+    const [items, setItems] = useState([]);
 
     const onRegister = () => {
-        setIsClicked(true);
+        setShowRegisterForm(true);
     };
 
     return (
@@ -18,7 +19,7 @@ const NewBoard = () => {
                 <h4 className="title">사진선택</h4>
             </header>
             <article style={{ padding: '0 30px' }}>
-                {!isClicked && (
+                {!showRegisterForm && (
                     <img
                         src={`${process.env.PUBLIC_URL}/images/dummyImg.jpg`}
                         style={{ width: '100%', display: 'block' }}
@@ -26,7 +27,13 @@ const NewBoard = () => {
                         alt="사진"
                     />
                 )}
-                {isClicked && <RegisterForm />}
+                {showRegisterForm && (
+                    <RegisterForm
+                        setShowRegisterForm={setShowRegisterForm}
+                        items={items}
+                        setItems={setItems}
+                    />
+                )}
             </article>
         </>
     );

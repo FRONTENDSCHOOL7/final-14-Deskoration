@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import * as S from './RegisterForm.styled';
 
-export const RegisterForm = () => {
+export const RegisterForm = ({ setShowRegisterForm, items, setItems }) => {
     const [data, setData] = useState({
+        id: '',
         category: '',
         productName: '',
         price: '',
@@ -13,7 +14,12 @@ export const RegisterForm = () => {
     // submit 함수
     const dataSubmit = event => {
         event.preventDefault();
-        console.log(data);
+        const newData = {
+            ...data,
+            id: items.length,
+        };
+        setItems(prev => [...prev, newData]);
+        setShowRegisterForm(false);
     };
     return (
         <>
@@ -71,19 +77,19 @@ const Input = ({ label, value, setData }) => {
     //input값을 data에 저장하기
     const onInputChange = event => {
         switch (label) {
-            case '카테고리':
+            case '카테고리 *':
                 setData(prev => ({
                     ...prev,
                     category: event.target.value,
                 }));
                 break;
-            case '상품명':
+            case '상품명 *':
                 setData(prev => ({
                     ...prev,
                     productName: event.target.value,
                 }));
                 break;
-            case '구매가격':
+            case '구매가격 *':
                 setData(prev => ({
                     ...prev,
                     price: event.target.value,

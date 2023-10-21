@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const ProductRegisterForm = styled.form`
     width: 100%;
-    padding: 0 30px;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -42,13 +42,19 @@ export const NewBoardFileContainer = styled.div`
     align-items: center;
     justify-content: center;
 
-    height: 400px;
+    height: ${props => (props.$hasPhoto ? 'auto' : '400px')};
 
     border: 1px solid ${props => props.theme.border};
     border-radius: 14px;
     margin-bottom: 20px;
 
-    background: ${props => (props.$hasImg ? '#BF4F74' : 'white')};
+    img {
+        width: 100%;
+        border-radius: 14px;
+    }
+    input {
+        display: none;
+    }
 
     &:hover {
         ${ImgControlBox} {
@@ -66,6 +72,7 @@ export const NewBoardFileContainer = styled.div`
         }
     }
 `;
+
 export const FileInputButton = styled.button`
     border: 1px solid ${props => props.theme.border};
     border-radius: 14px;

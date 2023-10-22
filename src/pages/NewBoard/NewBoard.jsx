@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import * as S from './NewBoard.styled';
 
+import { ImgConvert } from '../../hooks/img_Uploader';
+
 const NewBoardInFormButton = ({ name, handleClick }) => {
     return (
         <S.FileInputButton type="button" onClick={handleClick}>
@@ -10,7 +12,7 @@ const NewBoardInFormButton = ({ name, handleClick }) => {
 };
 
 const NewBoard = () => {
-    const [img, setImg] = useState('');
+    const [photoURL, setPhotoURL] = useState('');
 
     const hiddenFileInput = useRef(null);
 
@@ -20,17 +22,18 @@ const NewBoard = () => {
     };
 
     const handleFileChange = event => {
-        const fileUploaded = event.target.files[0];
-        if (!fileUploaded && img) {
-            setImg(prev => setImg(prev));
+        const file = event.target.files[0];
+        if (!file) {
+            setPhotoURL(prev => setPhotoURL(prev));
+        } else {
+            ImgConvert(file, setPhotoURL);
         }
-        setImg(fileUploaded);
     };
 
     const deleteFile = () => {
         // 추후 컨펌 모달로 변경
         if (window.confirm('삭제하시겠습니까?')) {
-            setImg('');
+            setPhotoURL('');
         }
     };
 
@@ -41,15 +44,15 @@ const NewBoard = () => {
                 <h4>게시물 작성</h4>
             </S.NewBoardHeader>
             <form>
-                <S.NewBoardFileContainer $hasImg={img}>
+                <S.NewBoardFileContainer $hasPhoto={photoURL}>
                     <>
+                        {photoURL && <img src={photoURL} alt="photoURL" />}
                         <input
                             type="file"
                             onChange={handleFileChange}
                             ref={hiddenFileInput}
-                            style={{ display: 'none' }}
                         />
-                        {img ? (
+                        {photoURL ? (
                             <S.ImgControlBox>
                                 <NewBoardInFormButton
                                     name="사진 변경"

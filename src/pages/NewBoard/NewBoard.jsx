@@ -21,9 +21,19 @@ const NewBoard = () => {
 
     const handleFileChange = event => {
         const fileUploaded = event.target.files[0];
-        console.log(fileUploaded);
+        if (!fileUploaded && img) {
+            setImg(prev => setImg(prev));
+        }
         setImg(fileUploaded);
     };
+
+    const deleteFile = () => {
+        // 추후 컨펌 모달로 변경
+        if (window.confirm('삭제하시겠습니까?')) {
+            setImg('');
+        }
+    };
+
     return (
         <S.NewBoardContainer>
             <S.NewBoardHeader>
@@ -49,7 +59,7 @@ const NewBoard = () => {
                                 <NewBoardInFormButton name="태그 추가" />
                                 <NewBoardInFormButton
                                     name="사진 삭제"
-                                    handleClick={() => setImg('')}
+                                    handleClick={deleteFile}
                                 />
                             </S.ImgControlBox>
                         ) : (

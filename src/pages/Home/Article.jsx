@@ -6,22 +6,28 @@ const Article = () => {
         <>
             <S.Section>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
                 </S.Article>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
                 </S.Article>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
                 </S.Article>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
                 </S.Article>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
                 </S.Article>
                 <S.Article>
-                    이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지이미지
+                    <S.A></S.A>
+                </S.Article>
+                <S.Article>
+                    <S.A></S.A>
+                </S.Article>
+                <S.Article>
+                    <S.A></S.A>
                 </S.Article>
             </S.Section>
         </>

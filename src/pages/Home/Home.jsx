@@ -3,11 +3,13 @@ import * as S from './Home.styled';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import Article from './Article';
+import Slide from './Slide';
 
 const Home = () => {
     return (
         <>
             <Header />
+            <Slide />
             <Article />
             <Footer />
         </>

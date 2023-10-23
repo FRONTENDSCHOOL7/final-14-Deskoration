@@ -3,14 +3,6 @@ import * as S from './NewBoard.styled';
 
 import { ImgConvert } from '../../hooks/img_Uploader';
 
-const NewBoardInFormButton = ({ name, handleClick }) => {
-    return (
-        <S.FileInputButton type="button" onClick={handleClick}>
-            {name}
-        </S.FileInputButton>
-    );
-};
-
 const NewBoard = () => {
     const [photoURL, setPhotoURL] = useState('');
 
@@ -40,7 +32,9 @@ const NewBoard = () => {
     return (
         <S.NewBoardContainer>
             <S.NewBoardHeader>
-                <i>아이콘</i>
+                <button>
+                    <S.BackIcon />
+                </button>
                 <h4>게시물 작성</h4>
             </S.NewBoardHeader>
             <form>
@@ -54,27 +48,35 @@ const NewBoard = () => {
                         />
                         {photoURL ? (
                             <S.ImgControlBox>
-                                <NewBoardInFormButton
-                                    name="사진 변경"
-                                    handleClick={handleInputClick}
-                                />
-                                {/* 추후 상품정보 입력 페이지로 변경되는 함수 handleClick에 추가 */}
-                                <NewBoardInFormButton name="태그 추가" />
-                                <NewBoardInFormButton
-                                    name="사진 삭제"
-                                    handleClick={deleteFile}
-                                />
+                                <S.FileInputButton
+                                    type="button"
+                                    onClick={handleInputClick}
+                                >
+                                    <S.ChangeIcon />
+                                </S.FileInputButton>
+                                <S.FileInputButton
+                                    type="button"
+                                    onClick={deleteFile}
+                                >
+                                    <S.DeleteIcon />
+                                </S.FileInputButton>
                             </S.ImgControlBox>
                         ) : (
-                            <>
-                                <NewBoardInFormButton
-                                    name="사진 추가"
-                                    handleClick={handleInputClick}
-                                />
-                            </>
+                            <S.FileInputButton
+                                type="button"
+                                onClick={handleInputClick}
+                                $add
+                            >
+                                <S.AddIcon />
+                            </S.FileInputButton>
                         )}
                     </>
                 </S.NewBoardFileContainer>
+                {photoURL && (
+                    <S.ExplainTagP>
+                        원하는 위치에 상품을 등록하세요.
+                    </S.ExplainTagP>
+                )}
                 <S.NewBoardTextarea />
                 <S.SubmitNewBoardButton type="submit">
                     올리기

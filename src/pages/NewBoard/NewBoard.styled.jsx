@@ -1,4 +1,31 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+import { ReactComponent as ChangeFile } from '../../assets/images/ChangeFile.svg';
+import { ReactComponent as Delete } from '../../assets/images/Delete.svg';
+import { ReactComponent as Add } from '../../assets/images/Add.svg';
+import { ReactComponent as Back } from '../../assets/images/Backward.svg';
+
+export const ChangeIcon = styled(ChangeFile)`
+    path {
+        fill: white;
+    }
+`;
+
+export const DeleteIcon = styled(Delete)`
+    path {
+        fill: white;
+    }
+`;
+
+export const AddIcon = styled(Add)`
+    path {
+        fill: black;
+    }
+`;
+
+export const BackIcon = styled(Back)`
+    vertical-align: top;
+`;
 
 export const NewBoardContainer = styled.div`
     position: relative;
@@ -57,9 +84,13 @@ export const NewBoardFileContainer = styled.div`
     }
 
     &:hover {
+        img {
+            cursor: ${props => (props.$hasPhoto ? 'grab' : 'default')};
+        }
+
         ${ImgControlBox} {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
 
             background: linear-gradient(transparent, rgba(0, 0, 0, 0.54));
 
@@ -75,16 +106,34 @@ export const NewBoardFileContainer = styled.div`
 
 export const FileInputButton = styled.button`
     border: 1px solid ${props => props.theme.border};
+
     border-radius: 14px;
     padding: 10px;
 
     &:hover {
-        /* color: #fff;
-        background-color: #45522b; */
-        outline: 7px solid ${props => props.theme.main};
+        background-color: white;
+        ${props =>
+            props.$add
+                ? css`
+                      border: 5px solid ${props => props.theme.main};
+                  `
+                : css`
+                      border: 1px solid ${props => props.theme.main};
+                  `}
+
+        svg {
+            path {
+                fill: ${props => props.theme.main};
+            }
+        }
     }
 `;
 
+export const ExplainTagP = styled.p`
+    text-align: center;
+    margin-bottom: 20px;
+    color: ${props => props.theme.subFont};
+`;
 export const NewBoardTextarea = styled.textarea`
     display: block;
     outline: none;

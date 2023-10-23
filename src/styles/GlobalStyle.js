@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
-import PreRegular from '../fonts/Pretendard-Regular.otf';
-import PreBold from '../fonts/Pretendard-Bold.otf';
+import PreRegular from '../assets/fonts/Pretendard-Regular.otf';
+import PreBold from '../assets/fonts/Pretendard-Bold.otf';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {

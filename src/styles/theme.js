@@ -32,7 +32,7 @@ const theme = {
     windowSize,
     repo,
     fontSize,
-    lightMode,
+    ...lightMode,
 };
 
 export default theme;

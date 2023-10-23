@@ -1,25 +1,39 @@
 import { useState } from 'react';
 import * as S from './RegisterForm.styled';
 
-export const RegisterForm = ({ setShowRegisterForm, items, setItems }) => {
-    const [data, setData] = useState({
-        id: '',
-        category: '',
-        productName: '',
-        price: '',
-        store: '',
-        link: '',
-    });
-
+export const RegisterForm = ({
+    setShowRegisterForm,
+    items,
+    setItems,
+    data,
+    setData,
+    offset,
+    displayStyle,
+}) => {
     // submit 함수
     const dataSubmit = event => {
         event.preventDefault();
-        const newData = {
-            ...data,
-            id: items.length,
-        };
-        setItems(prev => [...prev, newData]);
-        setShowRegisterForm(false);
+        if (items.length < 5) {
+            const newData = {
+                ...data,
+                id: items.length,
+                location: offset,
+            };
+            setItems(prev => [...prev, newData]);
+            setShowRegisterForm(false);
+            setData(prev => ({
+                ...prev,
+                id: '',
+                location: {},
+                category: '',
+                productName: '',
+                price: '',
+                store: '',
+                link: '',
+            }));
+        } else {
+            alert('상품은 최대 5개까지 추가할 수 있습니다.');
+        }
     };
     return (
         <>
@@ -30,45 +44,43 @@ export const RegisterForm = ({ setShowRegisterForm, items, setItems }) => {
             >
                 <h4 className="title">상품 정보 입력</h4>
             </header> */}
-            <main>
-                <S.ProductRegisterForm onSubmit={dataSubmit}>
-                    <fieldset>
-                        <Input
-                            label="카테고리 *"
-                            value={data.category}
-                            setData={setData}
-                        />
-                        {<WarningMsg />}
+            <S.ProductRegisterForm onSubmit={dataSubmit} style={displayStyle}>
+                <fieldset>
+                    <Input
+                        label="카테고리 *"
+                        value={data.category}
+                        setData={setData}
+                    />
+                    {<WarningMsg />}
 
-                        <Input
-                            label="상품명 *"
-                            value={data.productName}
-                            setData={setData}
-                        />
-                        {<WarningMsg />}
+                    <Input
+                        label="상품명 *"
+                        value={data.productName}
+                        setData={setData}
+                    />
+                    {<WarningMsg />}
 
-                        <Input
-                            label="구매가격 *"
-                            value={data.price}
-                            setData={setData}
-                        />
-                        {<WarningMsg />}
+                    <Input
+                        label="구매가격 *"
+                        value={data.price}
+                        setData={setData}
+                    />
+                    {<WarningMsg />}
 
-                        <Input
-                            label="구매처"
-                            value={data.store}
-                            setData={setData}
-                        />
-                        <Input
-                            label="구매링크"
-                            value={data.link}
-                            setData={setData}
-                        />
-                    </fieldset>
+                    <Input
+                        label="구매처"
+                        value={data.store}
+                        setData={setData}
+                    />
+                    <Input
+                        label="구매링크"
+                        value={data.link}
+                        setData={setData}
+                    />
+                </fieldset>
 
-                    <S.RegisterButton>등록하기</S.RegisterButton>
-                </S.ProductRegisterForm>
-            </main>
+                <S.RegisterButton>등록하기</S.RegisterButton>
+            </S.ProductRegisterForm>
         </>
     );
 };

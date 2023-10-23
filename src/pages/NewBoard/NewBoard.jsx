@@ -5,8 +5,13 @@ import { ImgConvert } from '../../hooks/img_Uploader';
 
 const NewBoard = () => {
     const [photoURL, setPhotoURL] = useState('');
+    const [textareaCount, setTextareaCount] = useState(0);
 
     const hiddenFileInput = useRef(null);
+
+    const handleTextCountChange = e => {
+        setTextareaCount(e.target.value.length);
+    };
 
     const handleInputClick = event => {
         event.preventDefault();
@@ -77,7 +82,12 @@ const NewBoard = () => {
                         원하는 위치에 상품을 등록하세요.
                     </S.ExplainTagP>
                 )}
-                <S.NewBoardTextarea />
+                <S.NewBoardTextarea
+                    maxLength="100"
+                    placeholder="상품 관련 내용을 입력해주세요"
+                    onChange={handleTextCountChange}
+                />
+                <S.TextareaCounterP>{textareaCount}/100</S.TextareaCounterP>
                 <S.SubmitNewBoardButton type="submit">
                     올리기
                 </S.SubmitNewBoardButton>

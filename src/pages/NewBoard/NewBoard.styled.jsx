@@ -134,17 +134,25 @@ export const ExplainTagP = styled.p`
     margin-bottom: 20px;
     color: ${props => props.theme.subFont};
 `;
+
 export const NewBoardTextarea = styled.textarea`
     display: block;
     outline: none;
     resize: none;
 
     width: 100%;
-    height: 200px;
+    height: 250px;
 
     border: 1px solid ${props => props.theme.border};
     border-radius: 14px;
     padding: 10px;
+`;
+
+export const TextareaCounterP = styled.p`
+    text-align: right;
+    margin-top: 7px;
+    margin-right: 5px;
+    color: ${props => props.theme.subFont};
 `;
 
 export const SubmitNewBoardButton = styled.button`

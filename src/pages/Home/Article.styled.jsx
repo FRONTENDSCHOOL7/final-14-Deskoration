@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 
 export const Section = styled.section`
     margin: auto;
@@ -7,6 +8,7 @@ export const Section = styled.section`
     width: 310px;
     height: 650px;
     gap: 10px;
+    color: ${theme.mainFont};
 `;
 
 export const Article = styled.article`

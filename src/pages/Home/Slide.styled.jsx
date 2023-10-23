@@ -6,6 +6,7 @@ export const SlideSection = styled.section`
 `;
 
 export const Item = styled.div`
+    color: ${theme.subFont};
     display: inline-block;
     width: 45px;
     height: 45px;

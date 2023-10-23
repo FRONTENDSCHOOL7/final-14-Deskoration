@@ -13,7 +13,7 @@ const fontSize = {
 };
 
 const lightMode = {
-    logo: '685c53',
+    logo: '#685c53',
     main: '#45522b',
     point: '#d67a38',
     marker: '#ff6D24',

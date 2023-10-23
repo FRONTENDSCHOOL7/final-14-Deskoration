@@ -1,42 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Marker } from '../../components/Marker/Marker';
 
-const ShowMarker = React.forwardRef((props, markerRef) => {
-    const { onMouseDown, handleMarkerLoad, markerLocation } = props;
-    return (
-        <>
-            <img
-                src={`${process.env.PUBLIC_URL}/images/marker.svg`}
-                alt="이미지 마커 표시"
-                className="marker"
-                ref={markerRef}
-                onMouseDown={onMouseDown}
-                onLoad={handleMarkerLoad}
-                style={{
-                    position: 'absolute',
-                    left: `${markerLocation.left}%`,
-                    top: `${markerLocation.top}%`,
-                }}
-            />
-        </>
-    );
-});
-
-const DragNDrop = () => {
-    const [isClicked, setIsClicked] = useState(false);
+export const DragNDrop = ({
+    onImageClick,
+    setOffset,
+    items,
+    setItems,
+    displayStyle,
+}) => {
+    // const [isClicked, setIsClicked] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [isMarkerLoaded, setIsMarkerLoaded] = useState(false);
     const [containerSize, setContainerSize] = useState({});
-    const [markerSize, setMarkerSize] = useState({});
-    const [originPosition, setOriginPosition] = useState({});
+    const [markerSize] = useState({ width: 20, height: 20 });
     const [markerLocation, setMarkerLocation] = useState({
         left: 50,
         top: 50,
     });
+    const [originPosition, setOriginPosition] = useState({});
+    const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
     const containerEl = useRef();
-    const markerEl = useRef();
+    const markerRefs = useRef([]);
 
-    // 이미지와 마커의 크기 가져오기
+    // 이미지 크기 가져오기
     useEffect(() => {
         if (isImageLoaded && containerEl.current) {
             const containerRect = containerEl.current.getBoundingClientRect();
@@ -46,41 +33,44 @@ const DragNDrop = () => {
                 height: containerRect.height,
             }));
         }
+    }, [isImageLoaded]);
 
-        if (isMarkerLoaded && markerEl.current) {
-            const markerRect = markerEl.current.getBoundingClientRect();
-            setMarkerSize(prev => ({
+    // 로드 시 마커를 가운데로 이동
+    useEffect(() => {
+        if (isImageLoaded && Object.keys(containerSize).length !== 0) {
+            setMarkerLocation(prev => ({
                 ...prev,
-                width: markerRect.width,
-                height: markerRect.height,
+                left: 50 - (markerSize.width / (2 * containerSize.width)) * 100,
+                top:
+                    50 - (markerSize.height / (2 * containerSize.height)) * 100,
             }));
         }
-    }, [isClicked, isImageLoaded, isMarkerLoaded]);
-
-    // 클릭 여부 확인
-    const handleClick = () => {
-        setIsClicked(true);
-        return;
-    };
+    }, [isImageLoaded, isMarkerLoaded, containerSize]);
 
     // 마우스다운 함수
-    const onMouseDown = event => {
+    const onMouseDown = (event, index) => {
         event.preventDefault();
         setIsDragging(true);
+
+        const currentMarker = markerRefs.current[index];
+
         setOriginPosition(prev => ({
             ...prev,
             x: event.clientX,
             y: event.clientY,
-            left: markerEl.current.offsetLeft,
-            top: markerEl.current.offsetTop,
+            left: currentMarker ? currentMarker.offsetLeft : 0,
+            top: currentMarker ? currentMarker.offsetTop : 0,
         }));
+
+        setSelectedMarkerIndex(index);
     };
 
     // document에 마우스업 이벤트 적용
     useEffect(() => {
-        const handleDocumentMouseUp = () => {
+        const handleDocumentMouseUp = event => {
             setIsDragging(false);
         };
+
         document.addEventListener('mouseup', handleDocumentMouseUp);
         return () => {
             document.removeEventListener('mouseup', handleDocumentMouseUp);
@@ -92,6 +82,7 @@ const DragNDrop = () => {
         if (isDragging) {
             const diffX = event.clientX - originPosition.x;
             const diffY = event.clientY - originPosition.y;
+
             // 컨테이너를 초과하지 않도록 x,y의 이동 범위를 제한
             const endPointX = parseFloat(
                 ((containerSize.width - markerSize.width) /
@@ -103,22 +94,34 @@ const DragNDrop = () => {
                     containerSize.height) *
                     100,
             );
+
             // (마커의 위치 /컨테이너 크기) * 100
-            const convertLeft = parseFloat(
+            const newLeft = parseFloat(
                 (Math.max(0, originPosition.left + diffX) /
                     containerSize.width) *
                     100,
             );
-            const convertTop = parseFloat(
+            const newTop = parseFloat(
                 (Math.max(0, originPosition.top + diffY) /
                     containerSize.height) *
                     100,
             );
-            setMarkerLocation(prev => ({
-                ...prev,
-                left: Math.min(convertLeft, endPointX),
-                top: Math.min(convertTop, endPointY),
-            }));
+
+            if (selectedMarkerIndex !== null) {
+                // items 배열의 불변성을 유지하면서 업데이트
+                const updatedItems = [...items];
+                updatedItems[selectedMarkerIndex].location = {
+                    x: Math.min(newLeft, endPointX),
+                    y: Math.min(newTop, endPointY),
+                };
+                setItems(updatedItems); // 상위 컴포넌트에서 받은 setData 함수로 업데이트
+            } else {
+                setMarkerLocation(prev => ({
+                    ...prev,
+                    left: Math.min(newLeft, endPointX),
+                    top: Math.min(newTop, endPointY),
+                }));
+            }
         }
     };
 
@@ -132,29 +135,69 @@ const DragNDrop = () => {
         setIsMarkerLoaded(true);
     };
 
+    // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
+    // 클릭한 좌표를 저장 & 조건부 렌더링
+    const handleImageClick = event => {
+        if (!isDragging) {
+            const offsetX =
+                (event.nativeEvent.offsetX / containerSize.width) * 100;
+            const offsetY =
+                (event.nativeEvent.offsetY / containerSize.height) * 100;
+
+            setOffset(prev => ({
+                ...prev,
+                x: offsetX,
+                y: offsetY,
+            }));
+
+            setMarkerLocation(prev => ({
+                ...prev,
+                left: offsetX,
+                top: offsetY,
+            }));
+
+            onImageClick();
+        }
+    };
+
     return (
         <div
             ref={containerEl}
             style={{
-                width: 'calc(100% - 60px)',
+                ...displayStyle,
                 margin: '0 auto',
                 position: 'relative',
             }}
-            onClick={handleClick}
             onMouseMove={onMouseMove}
         >
             <img
                 src={`${process.env.PUBLIC_URL}/images/dummyImg.jpg`}
                 style={{ width: '100%', display: 'block' }}
                 onLoad={handleImageLoad}
+                onClick={handleImageClick}
+                alt=""
             />
-            {isClicked && (
-                <ShowMarker
-                    ref={markerEl}
-                    onMouseDown={onMouseDown}
+            {items.length === 0 ? (
+                <Marker
+                    ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
+                    // onMouseDown={e => onMouseDown(e, 0)}
                     handleMarkerLoad={handleMarkerLoad}
                     markerLocation={markerLocation}
+                    name="initialMarker"
                 />
+            ) : (
+                items.map((item, index) => (
+                    <Marker
+                        key={index}
+                        ref={ref => (markerRefs.current[index] = ref)}
+                        onMouseDown={e => onMouseDown(e, index)}
+                        handleMarkerLoad={handleMarkerLoad}
+                        markerLocation={{
+                            left: item.location.x,
+                            top: item.location.y,
+                        }}
+                    />
+                ))
             )}
         </div>
     );

@@ -10,7 +10,41 @@ export const RegisterForm = ({
     offset,
     displayStyle,
 }) => {
+    const [validation, setValidation] = useState({
+        category: true,
+        productName: true,
+        price: true,
+    });
+
+    console.log(validation);
+    // 유효성 검사 함수
+    const confirmValidation = inputName => {
+        if (inputName === 'category') {
+            setValidation(prev => ({
+                ...prev,
+                category: !!data.category,
+            }));
+        }
+
+        if (inputName === 'productName') {
+            setValidation(prev => ({
+                ...prev,
+                productName: !!data.productName,
+            }));
+        }
+
+        if (inputName === 'price') {
+            setValidation(prev => ({
+                ...prev,
+                price: !!data.price,
+            }));
+        }
+    };
+
     // submit 함수
+    // Items에 입력 데이터를 저장
+    // setShowRegisterForm 컨트롤하여 마커 컴포넌트 렌더링
+    // input 요소 초기화
     const dataSubmit = event => {
         event.preventDefault();
         if (items.length < 5) {
@@ -47,25 +81,33 @@ export const RegisterForm = ({
             <S.ProductRegisterForm onSubmit={dataSubmit} style={displayStyle}>
                 <fieldset>
                     <Input
-                        label="카테고리 *"
+                        label="카테고리"
                         value={data.category}
                         setData={setData}
+                        validation={validation}
+                        confirmValidation={() => confirmValidation('category')}
                     />
-                    {<WarningMsg />}
+                    {!validation.category && <WarningMsg />}
 
                     <Input
-                        label="상품명 *"
+                        label="상품명"
                         value={data.productName}
                         setData={setData}
+                        validation={validation}
+                        confirmValidation={() =>
+                            confirmValidation('productName')
+                        }
                     />
-                    {<WarningMsg />}
+                    {!validation.productName && <WarningMsg />}
 
                     <Input
-                        label="구매가격 *"
+                        label="구매가격"
                         value={data.price}
                         setData={setData}
+                        validation={validation}
+                        confirmValidation={() => confirmValidation('price')}
                     />
-                    {<WarningMsg />}
+                    {!validation.price && <WarningMsg />}
 
                     <Input
                         label="구매처"
@@ -85,23 +127,24 @@ export const RegisterForm = ({
     );
 };
 
-const Input = ({ label, value, setData }) => {
+const Input = ({ label, value, setData, validation, confirmValidation }) => {
     //input값을 data에 저장하기
+
     const onInputChange = event => {
         switch (label) {
-            case '카테고리 *':
+            case '카테고리':
                 setData(prev => ({
                     ...prev,
                     category: event.target.value,
                 }));
                 break;
-            case '상품명 *':
+            case '상품명':
                 setData(prev => ({
                     ...prev,
                     productName: event.target.value,
                 }));
                 break;
-            case '구매가격 *':
+            case '구매가격':
                 setData(prev => ({
                     ...prev,
                     price: event.target.value,
@@ -124,12 +167,32 @@ const Input = ({ label, value, setData }) => {
         }
     };
 
+    // 필수 input 필드에 해당하는 validation 값 가져오기
+    const getValidation = label => {
+        switch (label) {
+            case '카테고리':
+                return validation.category;
+            case '상품명':
+                return validation.productName;
+            case '구매가격':
+                return validation.price;
+            default:
+                return true;
+        }
+    };
+
     return (
         <>
             <S.InputLabel htmlFor={label} label={label}>
                 {label}
             </S.InputLabel>
-            <S.InputText id={label} value={value} onChange={onInputChange} />
+            <S.InputText
+                id={label}
+                value={value}
+                onChange={onInputChange}
+                onBlur={confirmValidation}
+                validation={getValidation(label).toString()}
+            />
         </>
     );
 };

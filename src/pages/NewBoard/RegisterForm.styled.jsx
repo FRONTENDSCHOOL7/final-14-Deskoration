@@ -20,7 +20,9 @@ export const InputText = styled.input`
     width: 100%;
     padding: 2.5px;
     border-style: none;
-    border-bottom: 1px solid ${({ theme }) => theme.border};
+    border-bottom: 1px solid
+        ${({ theme, validation }) =>
+            validation === 'true' ? theme.border : theme.repo.open};
     margin-bottom: 10px;
 
     &:focus {

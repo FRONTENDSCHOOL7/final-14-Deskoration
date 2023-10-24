@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { FiSearch } from 'react-icons/fi';
 
 export const ChatListPageContainer = styled.div`
     position: relative;
@@ -31,7 +30,7 @@ export const SearchBar = styled.div`
     margin-top: 20px;
 `;
 
-export const SearchIcon = styled(FiSearch)`
+export const SearchIcon = styled.div`
     width: 30px;
     height: 30px;
     margin: auto;

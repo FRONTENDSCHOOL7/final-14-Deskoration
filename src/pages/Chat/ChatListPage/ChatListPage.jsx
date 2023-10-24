@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
+import { Link } from 'react-router-dom';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const date = new Date();
-    const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
@@ -29,7 +29,7 @@ const ChatListPage = () => {
                 {/* 메인 부분 */}
                 <S.ChatlistPageMain>
                     <S.SearchBar>
-                        <S.SearchIcon />
+                        <S.SearchIcon>돋보기</S.SearchIcon>
                         <S.SearchUsernameInput
                             type="text"
                             placeholder="Search user"
@@ -41,29 +41,42 @@ const ChatListPage = () => {
                     <S.UserChatList>
                         {filteredProfiles.map((profile, index) => (
                             <li key={profile._id}>
-                                <S.UserChatRoom>
-                                    <img
-                                        src={profile.image}
-                                        className="user-img"
-                                        alt=""
-                                    />
-                                    <S.UserSimpleinfo>
-                                        <h2 className="user-name">
-                                            {profile.username}
-                                        </h2>
-                                        <div className="user-msg-time">
-                                            <p className="user-lastMeassage">
-                                                {
-                                                    profile.messages[
-                                                        profile.messages
-                                                            .length - 1
-                                                    ]
-                                                }
-                                            </p>
-                                            <p className="user-date">{`${month}.${day}`}</p>
-                                        </div>
-                                    </S.UserSimpleinfo>
-                                </S.UserChatRoom>
+                                <Link
+                                    to={`/chat/${profile.username}`}
+                                    state={{
+                                        user: profile.username,
+                                        lastMessage:
+                                            profile.messages[
+                                                profile.messages.length - 1
+                                            ],
+                                        image: profile.image,
+                                        // 다른 데이터 필드들도 추가
+                                    }}
+                                >
+                                    <S.UserChatRoom>
+                                        <img
+                                            src={profile.image}
+                                            className="user-img"
+                                            alt=""
+                                        />
+                                        <S.UserSimpleinfo>
+                                            <h2 className="user-name">
+                                                {profile.username}
+                                            </h2>
+                                            <div className="user-msg-time">
+                                                <p className="user-lastMeassage">
+                                                    {
+                                                        profile.messages[
+                                                            profile.messages
+                                                                .length - 1
+                                                        ]
+                                                    }
+                                                </p>
+                                                <p className="user-date">{`${month}.${day}`}</p>
+                                            </div>
+                                        </S.UserSimpleinfo>
+                                    </S.UserChatRoom>
+                                </Link>
                             </li>
                         ))}
                     </S.UserChatList>

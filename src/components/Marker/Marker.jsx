@@ -13,6 +13,8 @@ export const Marker = React.forwardRef((props, markerRef) => {
                 onLoad={handleMarkerLoad}
                 style={{
                     position: 'absolute',
+                    width: '20px',
+                    height: '20px',
                     left: `${markerLocation.left}%`,
                     top: `${markerLocation.top}%`,
                 }}

@@ -1,14 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Marker } from '../../components/Marker/Marker';
+import * as S from './NewBoard.styled';
 
-export const DragNDrop = ({
-    onImageClick,
+export const PostUpload = ({
     setOffset,
     items,
     setItems,
     displayStyle,
+    photoURL,
+    handleInputClick,
+    handleFileChange,
+    deleteFile,
+    hiddenFileInput,
+    checkItemsCount,
 }) => {
-    // const [isClicked, setIsClicked] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [isMarkerLoaded, setIsMarkerLoaded] = useState(false);
@@ -156,51 +161,85 @@ export const DragNDrop = ({
                 top: offsetY,
             }));
 
-            onImageClick();
+            checkItemsCount();
         }
     };
 
     return (
-        <div
-            ref={containerEl}
-            style={{
-                ...displayStyle,
-                margin: '0 auto',
-                position: 'relative',
-            }}
-            onMouseMove={onMouseMove}
-        >
-            <img
-                src={`${process.env.PUBLIC_URL}/images/dummyImg.jpg`}
-                style={{ width: '100%', display: 'block' }}
-                onLoad={handleImageLoad}
-                onClick={handleImageClick}
-                alt=""
-            />
-            {items.length === 0 ? (
-                <Marker
-                    ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
-                    // onMouseDown={e => onMouseDown(e, 0)}
-                    handleMarkerLoad={handleMarkerLoad}
-                    markerLocation={markerLocation}
-                    name="initialMarker"
-                />
-            ) : (
-                items.map((item, index) => (
-                    <Marker
-                        key={index}
-                        ref={ref => (markerRefs.current[index] = ref)}
-                        onMouseDown={e => onMouseDown(e, index)}
-                        handleMarkerLoad={handleMarkerLoad}
-                        markerLocation={{
-                            left: item.location.x,
-                            top: item.location.y,
-                        }}
+        <>
+            <S.NewBoardFileContainer
+                $hasPhoto={photoURL}
+                ref={containerEl}
+                onMouseMove={onMouseMove}
+                style={{
+                    ...displayStyle,
+                }}
+            >
+                <>
+                    {photoURL && (
+                        <img
+                            src={photoURL}
+                            alt="photoURL"
+                            onLoad={handleImageLoad}
+                            onClick={handleImageClick}
+                            style={{
+                                ...displayStyle,
+                            }}
+                        />
+                    )}
+                    {photoURL && items.length === 0 ? (
+                        <Marker
+                            ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
+                            // onMouseDown={e => onMouseDown(e, 0)}
+                            handleMarkerLoad={handleMarkerLoad}
+                            markerLocation={markerLocation}
+                            name="initialMarker"
+                        />
+                    ) : (
+                        items.map((item, index) => (
+                            <Marker
+                                key={index}
+                                ref={ref => (markerRefs.current[index] = ref)}
+                                onMouseDown={e => onMouseDown(e, index)}
+                                handleMarkerLoad={handleMarkerLoad}
+                                markerLocation={{
+                                    left: item.location.x,
+                                    top: item.location.y,
+                                }}
+                            />
+                        ))
+                    )}
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        ref={hiddenFileInput}
                     />
-                ))
-            )}
-        </div>
+                    {photoURL ? (
+                        <S.ImgControlBox>
+                            <S.FileInputButton
+                                type="button"
+                                onClick={handleInputClick}
+                            >
+                                <S.ChangeIcon />
+                            </S.FileInputButton>
+                            <S.FileInputButton
+                                type="button"
+                                onClick={deleteFile}
+                            >
+                                <S.DeleteIcon />
+                            </S.FileInputButton>
+                        </S.ImgControlBox>
+                    ) : (
+                        <S.FileInputButton
+                            type="button"
+                            onClick={handleInputClick}
+                            $add
+                        >
+                            <S.AddIcon />
+                        </S.FileInputButton>
+                    )}
+                </>
+            </S.NewBoardFileContainer>
+        </>
     );
 };
-
-export default DragNDrop;

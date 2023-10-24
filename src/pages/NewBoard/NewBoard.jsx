@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { RegisterForm } from './RegisterForm';
-import { DragNDrop } from './DragNDrop';
+import { PostUpload } from './PostUpload';
 import * as S from './NewBoard.styled';
 
 import { ImgConvert } from '../../hooks/img_Uploader';
@@ -46,6 +46,12 @@ const NewBoard = () => {
         }
     };
 
+    const checkItemsCount = () => {
+        items.length < 5
+            ? setShowRegisterForm(true)
+            : alert('상품은 최대 5개까지 추가할 수 있습니다.');
+    };
+
     const dragNDropStyle = showRegisterForm ? { display: 'none' } : {};
     const registerFormStyle = showRegisterForm ? {} : { display: 'none' };
 
@@ -58,41 +64,19 @@ const NewBoard = () => {
                     </button>
                     <h4>게시물 작성</h4>
                 </S.NewBoardHeader>
-                <form>
-                    <S.NewBoardFileContainer $hasPhoto={photoURL}>
-                        <>
-                            {photoURL && <img src={photoURL} alt="photoURL" />}
-                            <input
-                                type="file"
-                                onChange={handleFileChange}
-                                ref={hiddenFileInput}
-                            />
-                            {photoURL ? (
-                                <S.ImgControlBox>
-                                    <S.FileInputButton
-                                        type="button"
-                                        onClick={handleInputClick}
-                                    >
-                                        <S.ChangeIcon />
-                                    </S.FileInputButton>
-                                    <S.FileInputButton
-                                        type="button"
-                                        onClick={deleteFile}
-                                    >
-                                        <S.DeleteIcon />
-                                    </S.FileInputButton>
-                                </S.ImgControlBox>
-                            ) : (
-                                <S.FileInputButton
-                                    type="button"
-                                    onClick={handleInputClick}
-                                    $add
-                                >
-                                    <S.AddIcon />
-                                </S.FileInputButton>
-                            )}
-                        </>
-                    </S.NewBoardFileContainer>
+                <form style={{ ...dragNDropStyle }}>
+                    <PostUpload
+                        setData={setData}
+                        setOffset={setOffset}
+                        items={items}
+                        setItems={setItems}
+                        photoURL={photoURL}
+                        handleInputClick={handleInputClick}
+                        handleFileChange={handleFileChange}
+                        deleteFile={deleteFile}
+                        hiddenFileInput={hiddenFileInput}
+                        checkItemsCount={checkItemsCount}
+                    />
                     {photoURL && (
                         <S.ExplainTagP>
                             원하는 위치에 상품을 등록하세요.
@@ -108,31 +92,15 @@ const NewBoard = () => {
                         올리기
                     </S.SubmitNewBoardButton>
                 </form>
-                <article style={{ padding: '0 25px' }}>
-                    <DragNDrop
-                        displayStyle={dragNDropStyle}
-                        setData={setData}
-                        setOffset={setOffset}
-                        items={items}
-                        setItems={setItems}
-                        onImageClick={() =>
-                            items.length < 5
-                                ? setShowRegisterForm(true)
-                                : alert(
-                                      '상품은 최대 5개까지 추가할 수 있습니다.',
-                                  )
-                        }
-                    />
-                    <RegisterForm
-                        displayStyle={registerFormStyle}
-                        setShowRegisterForm={setShowRegisterForm}
-                        items={items}
-                        setItems={setItems}
-                        data={data}
-                        setData={setData}
-                        offset={offset}
-                    />
-                </article>
+                <RegisterForm
+                    displayStyle={registerFormStyle}
+                    setShowRegisterForm={setShowRegisterForm}
+                    items={items}
+                    setItems={setItems}
+                    data={data}
+                    setData={setData}
+                    offset={offset}
+                />
             </S.NewBoardContainer>
         </>
     );

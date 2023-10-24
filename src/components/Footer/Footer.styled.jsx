@@ -7,7 +7,23 @@ export const Footer = styled.footer`
     padding: 0 25px;
     align-items: center;
     justify-content: space-between;
-    background-color: beige;
     position: absolute;
     bottom: 0;
+    border-top: 1px solid ${({ theme }) => theme.border};
+`;
+
+export const IconButton = styled.button`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px;
+    min-width: 48px;
+`;
+
+export const IconName = styled.span`
+    font-weight: 700;
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    color: ${({ theme, hover, clicked }) =>
+        clicked ? theme.main : hover === 'true' ? theme.main : theme.mainFont};
 `;

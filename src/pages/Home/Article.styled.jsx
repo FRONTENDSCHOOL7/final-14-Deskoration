@@ -9,18 +9,18 @@ export const Section = styled.section`
     height: 650px;
     gap: 10px;
     color: ${theme.mainFont};
+    overflow-y: auto;
 `;
 
 export const Article = styled.article`
-    width: 150px;
-    height: 150px;
-`;
-
-export const A = styled.a`
-    display: inline-block;
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     background-image: url('./images/DeskSetup.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: cover;
+    box-sizing: border-box;
+    transition: border 0.1s ease;
+    &:hover {
+        border: 3px solid ${theme.main};
+    }
+    border-radius: 20px;
 `;

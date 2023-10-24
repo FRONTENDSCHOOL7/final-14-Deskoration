@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as S from './RegisterForm.styled';
+import { valid } from 'semver';
 
 export const RegisterForm = ({
     setShowRegisterForm,
@@ -11,32 +12,40 @@ export const RegisterForm = ({
     displayStyle,
 }) => {
     const [validation, setValidation] = useState({
-        category: true,
-        productName: true,
-        price: true,
+        category: { isValid: true, isTouched: false },
+        productName: { isValid: true, isTouched: false },
+        price: { isValid: true, isTouched: false },
     });
 
-    console.log(validation);
     // 유효성 검사 함수
     const confirmValidation = inputName => {
         if (inputName === 'category') {
             setValidation(prev => ({
                 ...prev,
-                category: !!data.category,
+                category: {
+                    isValid: !!data.category,
+                    isTouched: true,
+                },
             }));
         }
 
         if (inputName === 'productName') {
             setValidation(prev => ({
                 ...prev,
-                productName: !!data.productName,
+                productName: {
+                    isValid: !!data.productName,
+                    isTouched: true,
+                },
             }));
         }
 
         if (inputName === 'price') {
             setValidation(prev => ({
                 ...prev,
-                price: !!data.price,
+                price: {
+                    isValid: !!data.price,
+                    isTouched: true,
+                },
             }));
         }
     };
@@ -71,13 +80,6 @@ export const RegisterForm = ({
     };
     return (
         <>
-            {/* 헤더 컴포넌트 불러올 예정 */}
-            {/* <header
-                className="header"
-                style={{ width: '100%', height: '70px' }}
-            >
-                <h4 className="title">상품 정보 입력</h4>
-            </header> */}
             <S.ProductRegisterForm onSubmit={dataSubmit} style={displayStyle}>
                 <fieldset>
                     <Input
@@ -87,7 +89,7 @@ export const RegisterForm = ({
                         validation={validation}
                         confirmValidation={() => confirmValidation('category')}
                     />
-                    {!validation.category && <WarningMsg />}
+                    {!validation.category.isValid && <WarningMsg />}
 
                     <Input
                         label="상품명"
@@ -98,7 +100,7 @@ export const RegisterForm = ({
                             confirmValidation('productName')
                         }
                     />
-                    {!validation.productName && <WarningMsg />}
+                    {!validation.productName.isValid && <WarningMsg />}
 
                     <Input
                         label="구매가격"
@@ -107,7 +109,7 @@ export const RegisterForm = ({
                         validation={validation}
                         confirmValidation={() => confirmValidation('price')}
                     />
-                    {!validation.price && <WarningMsg />}
+                    {!validation.price.isValid && <WarningMsg />}
 
                     <Input
                         label="구매처"
@@ -121,7 +123,18 @@ export const RegisterForm = ({
                     />
                 </fieldset>
 
-                <S.RegisterButton>등록하기</S.RegisterButton>
+                <S.RegisterButton
+                    disabled={
+                        !validation.category.isTouched ||
+                        !validation.productName.isTouched ||
+                        !validation.price.isTouched ||
+                        !validation.category.isValid ||
+                        !validation.productName.isValid ||
+                        !validation.price.isValid
+                    }
+                >
+                    등록하기
+                </S.RegisterButton>
             </S.ProductRegisterForm>
         </>
     );
@@ -191,7 +204,7 @@ const Input = ({ label, value, setData, validation, confirmValidation }) => {
                 value={value}
                 onChange={onInputChange}
                 onBlur={confirmValidation}
-                validation={getValidation(label).toString()}
+                validation={getValidation(label)}
             />
         </>
     );

@@ -1,11 +1,12 @@
 import React from 'react';
+import markerImg from '../../assets/images/Marker.svg';
 
 export const Marker = React.forwardRef((props, markerRef) => {
     const { onMouseDown, handleMarkerLoad, markerLocation } = props;
     return (
         <button>
             <img
-                src={`${process.env.PUBLIC_URL}/images/marker.svg`}
+                src={markerImg}
                 alt="이미지 마커 표시"
                 className="marker"
                 ref={markerRef}

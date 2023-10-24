@@ -52,6 +52,11 @@ const NewBoard = () => {
             : alert('상품은 최대 5개까지 추가할 수 있습니다.');
     };
 
+    //form submit 함수
+    const handleSubmit = event => {
+        event.preventDefault();
+    };
+
     const dragNDropStyle = showRegisterForm ? { display: 'none' } : {};
     const registerFormStyle = showRegisterForm ? {} : { display: 'none' };
 
@@ -64,7 +69,7 @@ const NewBoard = () => {
                     </button>
                     <h4>게시물 작성</h4>
                 </S.NewBoardHeader>
-                <form style={{ ...dragNDropStyle }}>
+                <form style={{ ...dragNDropStyle }} onSubmit={handleSubmit}>
                     <PostUpload
                         setData={setData}
                         setOffset={setOffset}

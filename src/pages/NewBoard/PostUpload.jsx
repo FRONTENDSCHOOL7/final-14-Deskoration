@@ -120,12 +120,6 @@ export const PostUpload = ({
                     y: Math.min(newTop, endPointY),
                 };
                 setItems(updatedItems); // 상위 컴포넌트에서 받은 setData 함수로 업데이트
-            } else {
-                setMarkerLocation(prev => ({
-                    ...prev,
-                    left: Math.min(newLeft, endPointX),
-                    top: Math.min(newTop, endPointY),
-                }));
             }
         }
     };
@@ -141,7 +135,7 @@ export const PostUpload = ({
     };
 
     // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
-    // 클릭한 좌표를 저장 & 조건부 렌더링
+    // 클릭한 좌표를 저장 & 아이템 카운트 체크
     const handleImageClick = event => {
         if (!isDragging) {
             const offsetX =
@@ -190,7 +184,6 @@ export const PostUpload = ({
                     {photoURL && items.length === 0 ? (
                         <Marker
                             ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
-                            // onMouseDown={e => onMouseDown(e, 0)}
                             handleMarkerLoad={handleMarkerLoad}
                             markerLocation={markerLocation}
                             name="initialMarker"

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import * as S from './RegisterForm.styled';
-import { valid } from 'semver';
 
 export const RegisterForm = ({
     setShowRegisterForm,
@@ -190,7 +189,7 @@ const Input = ({ label, value, setData, validation, confirmValidation }) => {
             case '구매가격':
                 return validation.price;
             default:
-                return true;
+                return 'true';
         }
     };
 

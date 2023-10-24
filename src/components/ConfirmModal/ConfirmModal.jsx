@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import * as S from './ConfirmModal.styled';
 
-const ConfirmModal = () => {
+const ConfirmModal = ({ qustion }) => {
     const [temp, setTemp] = useState(false);
     const onTemp = () => setTemp(!temp);
 
@@ -12,9 +12,7 @@ const ConfirmModal = () => {
             <S.Dialog open={temp}>
                 <S.ConfirmModalContainer>
                     <S.ConfirmModalInnerContainer>
-                        <S.ConfirmModalQustion>
-                            관련된 물음
-                        </S.ConfirmModalQustion>
+                        <S.ConfirmModalQustion>{qustion}</S.ConfirmModalQustion>
                         <S.ConfirmModalButtonBox>
                             <button type="button">yes</button>
                             <button type="button">no</button>

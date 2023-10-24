@@ -1,4 +1,6 @@
-import { styled } from 'styled-components';
+import { styled, css } from 'styled-components';
+
+import { ReactComponent as Close } from '../../assets/images/Close.svg';
 
 export const Dialog = styled.dialog`
     position: absolute;
@@ -8,7 +10,7 @@ export const Dialog = styled.dialog`
     width: 100%;
     height: 100%;
 
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px);
 `;
 
@@ -39,6 +41,8 @@ export const ConfirmModalInnerContainer = styled.div`
 export const ConfirmModalQustion = styled.p`
     font-size: 24px;
     font-family: 'PreBold';
+
+    margin-bottom: 20px;
 `;
 
 export const ConfirmModalButtonBox = styled.div`
@@ -51,5 +55,10 @@ export const ConfirmModalButtonBox = styled.div`
 export const CloseConfirmModalButton = styled.button`
     position: absolute;
     top: 10px;
-    right: 24px;
+    right: 15px;
+    padding: 5px;
+`;
+
+export const CloseModalIcon = styled(Close)`
+    color: ${props => props.theme.subFont};
 `;

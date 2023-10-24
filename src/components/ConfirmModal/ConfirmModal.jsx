@@ -22,7 +22,7 @@ const ConfirmModal = ({ qustion }) => {
                             type="button"
                             onClick={onTemp}
                         >
-                            X아이콘
+                            <S.CloseModalIcon />
                         </S.CloseConfirmModalButton>
                     </S.ConfirmModalInnerContainer>
                 </S.ConfirmModalContainer>

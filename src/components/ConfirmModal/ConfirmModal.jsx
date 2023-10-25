@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import GradientButton from '../GradientButton/GradientButton';
 
 import * as S from './ConfirmModal.styled';
 
@@ -14,8 +15,14 @@ const ConfirmModal = ({ qustion }) => {
                     <S.ConfirmModalInnerContainer>
                         <S.ConfirmModalQustion>{qustion}</S.ConfirmModalQustion>
                         <S.ConfirmModalButtonBox>
-                            <button type="button">yes</button>
-                            <button type="button">no</button>
+                            <GradientButton
+                                gra="true"
+                                width="40%"
+                                padding="5px"
+                            >
+                                yes
+                            </GradientButton>
+                            <GradientButton width="40%">no</GradientButton>
                         </S.ConfirmModalButtonBox>
 
                         <S.CloseConfirmModalButton

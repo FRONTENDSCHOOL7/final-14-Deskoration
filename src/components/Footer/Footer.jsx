@@ -13,11 +13,11 @@ const Footer = () => {
 
     return (
         <S.Footer>
-            <HomeBtn />
-            <BrowseBtn />
-            <AddBtn />
-            <ChatBtn />
-            <UserBtn />
+            <HomeBtn hover={hover} setHover={setHover} />
+            <BrowseBtn hover={hover} setHover={setHover} />
+            <AddBtn hover={hover} setHover={setHover} />
+            <ChatBtn hover={hover} setHover={setHover} />
+            <UserBtn hover={hover} setHover={setHover} />
         </S.Footer>
     );
 };

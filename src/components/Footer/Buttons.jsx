@@ -9,47 +9,106 @@ import { ReactComponent as User } from '../../assets/images/User.svg';
 const mainColor = '#45522b';
 const basicColor = '#0f0f0f';
 
-export const HomeBtn = ({}) => {
+const handleMouseEnter = (name, setHover) => {
+    setHover(prev => ({
+        ...prev,
+        [name]: true,
+    }));
+};
+
+const handleMouseLeave = (name, setHover) => {
+    setHover(prev => ({
+        ...prev,
+        [name]: false,
+    }));
+};
+
+export const HomeBtn = ({ hover, setHover }) => {
     return (
-        <S.IconButton type="button" name="home">
-            <Home stroke={basicColor} />
-            <S.IconName>홈</S.IconName>
+        <S.IconButton
+            type="button"
+            name="home"
+            onMouseEnter={event =>
+                handleMouseEnter(event.currentTarget.name, setHover)
+            }
+            onMouseLeave={event =>
+                handleMouseLeave(event.currentTarget.name, setHover)
+            }
+        >
+            <Home stroke={hover.home ? mainColor : basicColor} />
+            <S.IconName $hover={hover.home}>홈</S.IconName>
         </S.IconButton>
     );
 };
 
-export const BrowseBtn = () => {
+export const BrowseBtn = ({ hover, setHover }) => {
     return (
-        <S.IconButton type="button" name="browse">
-            <Browse stroke={basicColor} />
-            <S.IconName>피드</S.IconName>
+        <S.IconButton
+            type="button"
+            name="browse"
+            onMouseEnter={event =>
+                handleMouseEnter(event.currentTarget.name, setHover)
+            }
+            onMouseLeave={event =>
+                handleMouseLeave(event.currentTarget.name, setHover)
+            }
+        >
+            <Browse stroke={hover.browse ? mainColor : basicColor} />
+            <S.IconName $hover={hover.browse}>피드</S.IconName>
         </S.IconButton>
     );
 };
 
-export const AddBtn = () => {
+export const AddBtn = ({ hover, setHover }) => {
     return (
-        <S.IconButton type="button" name="add">
-            <Add stroke={basicColor} />
-            <S.IconName>글쓰기</S.IconName>
+        <S.IconButton
+            type="button"
+            name="add"
+            onMouseEnter={event =>
+                handleMouseEnter(event.currentTarget.name, setHover)
+            }
+            onMouseLeave={event =>
+                handleMouseLeave(event.currentTarget.name, setHover)
+            }
+        >
+            <Add stroke={hover.add ? mainColor : basicColor} />
+            <S.IconName $hover={hover.add}>글쓰기</S.IconName>
         </S.IconButton>
     );
 };
 
-export const ChatBtn = ({}) => {
+export const ChatBtn = ({ hover, setHover }) => {
     return (
-        <S.IconButton type="button" name="chat">
-            <Chat fill={basicColor} />
-            <S.IconName>채팅</S.IconName>
+        <S.IconButton
+            type="button"
+            name="chat"
+            onMouseEnter={event =>
+                handleMouseEnter(event.currentTarget.name, setHover)
+            }
+            onMouseLeave={event =>
+                handleMouseLeave(event.currentTarget.name, setHover)
+            }
+        >
+            <Chat fill={hover.chat ? mainColor : basicColor} />
+            <S.IconName $hover={hover.chat}>채팅</S.IconName>
         </S.IconButton>
     );
 };
 
-export const UserBtn = ({}) => {
+export const UserBtn = ({ hover, setHover }) => {
     return (
-        <S.IconButton type="button" name="user">
-            <User stroke={basicColor} />
-            <S.IconName>프로필</S.IconName>
+        <S.IconButton
+            type="button"
+            name="user"
+            onMouseEnter={event =>
+                handleMouseEnter(event.currentTarget.name, setHover)
+            }
+            onMouseLeave={event =>
+                handleMouseLeave(event.currentTarget.name, setHover)
+            }
+        >
+            <User stroke={hover.user ? mainColor : basicColor} />
+            <S.IconName $hover={hover.user}>프로필</S.IconName>
         </S.IconButton>
     );
 };

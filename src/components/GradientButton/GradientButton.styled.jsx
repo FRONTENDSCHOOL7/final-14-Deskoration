@@ -16,6 +16,6 @@ export const GradientButton = styled.button`
         `};
 
     &:hover {
-        outline: 5px solid ${props => props.theme.main};
+        outline: 2px solid ${props => props.theme.main};
     }
 `;

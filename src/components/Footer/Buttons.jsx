@@ -1,7 +1,7 @@
 import React from 'react';
 import * as S from './Footer.styled';
 import { ReactComponent as Home } from '../../assets/images/Home.svg';
-import { ReactComponent as Browse } from '../../assets/images/Browse.svg';
+import { ReactComponent as Feed } from '../../assets/images/Feed.svg';
 import { ReactComponent as Add } from '../../assets/images/Add.svg';
 import { ReactComponent as Chat } from '../../assets/images/Chat.svg';
 import { ReactComponent as User } from '../../assets/images/User.svg';
@@ -23,92 +23,130 @@ const handleMouseLeave = (name, setHover) => {
     }));
 };
 
-export const HomeBtn = ({ hover, setHover }) => {
+const handleActive = (name, setActive) => {
+    setActive(name);
+};
+
+const getColor = (name, active, hover) => {
+    return active === name ? mainColor : hover[name] ? mainColor : basicColor;
+};
+
+export const HomeBtn = ({ hover, setHover, active, setActive }) => {
     return (
         <S.IconButton
             type="button"
             name="home"
+            $active={active === 'home'}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
             onMouseLeave={event =>
                 handleMouseLeave(event.currentTarget.name, setHover)
             }
+            onClick={event => {
+                handleActive(event.currentTarget.name, setActive);
+            }}
         >
-            <Home stroke={hover.home ? mainColor : basicColor} />
-            <S.IconName $hover={hover.home}>홈</S.IconName>
+            <Home stroke={getColor('home', active, hover)} />
+            <S.IconName $hover={hover.home} $active={active === 'home'}>
+                홈
+            </S.IconName>
         </S.IconButton>
     );
 };
 
-export const BrowseBtn = ({ hover, setHover }) => {
+export const FeedBtn = ({ hover, setHover, active, setActive }) => {
     return (
         <S.IconButton
             type="button"
-            name="browse"
+            name="feed"
+            $active={active === 'feed'}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
             onMouseLeave={event =>
                 handleMouseLeave(event.currentTarget.name, setHover)
             }
+            onClick={event => {
+                handleActive(event.currentTarget.name, setActive);
+            }}
         >
-            <Browse stroke={hover.browse ? mainColor : basicColor} />
-            <S.IconName $hover={hover.browse}>피드</S.IconName>
+            <Feed stroke={getColor('feed', active, hover)} />
+            <S.IconName $hover={hover.browse} $active={active === 'feed'}>
+                피드
+            </S.IconName>
         </S.IconButton>
     );
 };
 
-export const AddBtn = ({ hover, setHover }) => {
+export const AddBtn = ({ hover, setHover, active, setActive }) => {
     return (
         <S.IconButton
             type="button"
             name="add"
+            $active={active === 'add'}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
             onMouseLeave={event =>
                 handleMouseLeave(event.currentTarget.name, setHover)
             }
+            onClick={event => {
+                handleActive(event.currentTarget.name, setActive);
+            }}
         >
-            <Add stroke={hover.add ? mainColor : basicColor} />
-            <S.IconName $hover={hover.add}>글쓰기</S.IconName>
+            <Add stroke={getColor('add', active, hover)} />
+            <S.IconName $hover={hover.add} $active={active === 'add'}>
+                글쓰기
+            </S.IconName>
         </S.IconButton>
     );
 };
 
-export const ChatBtn = ({ hover, setHover }) => {
+export const ChatBtn = ({ hover, setHover, active, setActive }) => {
     return (
         <S.IconButton
             type="button"
             name="chat"
+            $active={active === 'chat'}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
             onMouseLeave={event =>
                 handleMouseLeave(event.currentTarget.name, setHover)
             }
+            onClick={event => {
+                handleActive(event.currentTarget.name, setActive);
+            }}
         >
-            <Chat fill={hover.chat ? mainColor : basicColor} />
-            <S.IconName $hover={hover.chat}>채팅</S.IconName>
+            <Chat fill={getColor('chat', active, hover)} />
+            <S.IconName $hover={hover.chat} $active={active === 'chat'}>
+                채팅
+            </S.IconName>
         </S.IconButton>
     );
 };
 
-export const UserBtn = ({ hover, setHover }) => {
+export const UserBtn = ({ hover, setHover, active, setActive }) => {
     return (
         <S.IconButton
             type="button"
             name="user"
+            $active={active === 'user'}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
             onMouseLeave={event =>
                 handleMouseLeave(event.currentTarget.name, setHover)
             }
+            onClick={event => {
+                handleActive(event.currentTarget.name, setActive);
+            }}
         >
-            <User stroke={hover.user ? mainColor : basicColor} />
-            <S.IconName $hover={hover.user}>프로필</S.IconName>
+            <User stroke={getColor('user', active, hover)} />
+            <S.IconName $hover={hover.user} $active={active === 'user'}>
+                프로필
+            </S.IconName>
         </S.IconButton>
     );
 };

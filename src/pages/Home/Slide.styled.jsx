@@ -3,21 +3,30 @@ import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
     margin: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 15px;
+    &::-webkit-scrollbar {
+        display: none; // 웹킷 기반 브라우저에서 스크롤바 숨기기
+    }
 `;
 
-export const Item = styled.div`
+export const Category = styled.div`
     color: ${theme.subFont};
-    display: inline-block;
     width: 45px;
     height: 45px;
     border: 1px solid black;
     border-radius: 50%;
-    margin: 0 15px 20px 0;
-    &::after {
-        content: 'followID';
-        display: block;
-        position: absolute;
-        top: 160px;
-        font-size: 12px;
-    }
+    margin-bottom: 20px;
+    /* flex-shrink: 3; */
+`;
+
+export const CateName = styled.p`
+    width: 45px;
+    position: relative;
+    top: 100%;
+    text-align: center;
+    font-size: 10px;
 `;

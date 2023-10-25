@@ -37,7 +37,7 @@ const Article = () => {
         <>
             <S.Section ref={sectionRef}>
                 {articles.map((article, index) => (
-                    <Link to={'/board'}>
+                    <Link key={index} to={'/board'}>
                         <S.Article></S.Article>
                     </Link>
                 ))}

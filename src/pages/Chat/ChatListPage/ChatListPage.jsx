@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
+import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -21,7 +22,7 @@ const ChatListPage = () => {
                 <S.ChatListHeader>
                     {/* header button 가져오기 */}
                     <button>
-                        <img src="/images/icon-backward.jpg" alt="" />
+                        <Backward />
                     </button>
                     <h2>Chat</h2>
                 </S.ChatListHeader>

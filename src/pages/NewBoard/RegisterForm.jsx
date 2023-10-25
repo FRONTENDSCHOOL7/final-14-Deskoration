@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as S from './RegisterForm.styled';
 
 export const RegisterForm = ({
@@ -10,59 +10,25 @@ export const RegisterForm = ({
     offset,
     displayStyle,
 }) => {
-    const [validation, setValidation] = useState({
-        category: { isValid: true, isTouched: false },
-        productName: { isValid: true, isTouched: false },
-        price: { isValid: true, isTouched: false },
-    });
-
-    // 유효성 검사 함수
-    const confirmValidation = inputName => {
-        if (inputName === 'category') {
-            setValidation(prev => ({
-                ...prev,
-                category: {
-                    isValid: !!data.category,
-                    isTouched: true,
-                },
-            }));
-        }
-
-        if (inputName === 'productName') {
-            setValidation(prev => ({
-                ...prev,
-                productName: {
-                    isValid: !!data.productName,
-                    isTouched: true,
-                },
-            }));
-        }
-
-        if (inputName === 'price') {
-            setValidation(prev => ({
-                ...prev,
-                price: {
-                    isValid: !!data.price,
-                    isTouched: true,
-                },
-            }));
-        }
-    };
-
+    const [initialAccess, setInitialAccess] = useState(true);
     // submit 함수
-    // Items에 입력 데이터를 저장
-    // setShowRegisterForm 컨트롤하여 마커 컴포넌트 렌더링
-    // input 요소 초기화
     const dataSubmit = event => {
         event.preventDefault();
-        if (items.length < 5) {
+        setInitialAccess(false);
+        // input에 입력 값이 없을 경우 submit이 되지 않는다.
+        if (!data.category || !data.productName || !data.price) {
+            return;
+        } else if (items.length < 5) {
+            // Items에 입력한 데이터를 저장
             const newData = {
                 ...data,
                 id: items.length,
                 location: offset,
             };
             setItems(prev => [...prev, newData]);
+            // 마커 컴포넌트 렌더링 여부 컨트롤
             setShowRegisterForm(false);
+            // data 초기화
             setData(prev => ({
                 ...prev,
                 id: '',
@@ -76,6 +42,8 @@ export const RegisterForm = ({
         } else {
             alert('상품은 최대 5개까지 추가할 수 있습니다.');
         }
+
+        setInitialAccess(true);
     };
     return (
         <>
@@ -85,64 +53,57 @@ export const RegisterForm = ({
                         label="카테고리"
                         value={data.category}
                         setData={setData}
-                        validation={validation}
-                        confirmValidation={() => confirmValidation('category')}
+                        warning={
+                            !initialAccess && !data.category ? 'warning' : null
+                        }
                     />
-                    {!validation.category.isValid && <WarningMsg />}
+                    {initialAccess ? null : !data.category && <WarningMsg />}
 
                     <Input
                         label="상품명"
                         value={data.productName}
                         setData={setData}
-                        validation={validation}
-                        confirmValidation={() =>
-                            confirmValidation('productName')
+                        warning={
+                            !initialAccess && !data.productName
+                                ? 'warning'
+                                : null
                         }
                     />
-                    {!validation.productName.isValid && <WarningMsg />}
+                    {initialAccess ? null : !data.productName && <WarningMsg />}
 
                     <Input
                         label="구매가격"
                         value={data.price}
                         setData={setData}
-                        validation={validation}
-                        confirmValidation={() => confirmValidation('price')}
+                        warning={
+                            !initialAccess && !data.price ? 'warning' : null
+                        }
                     />
-                    {!validation.price.isValid && <WarningMsg />}
+                    {initialAccess ? null : !data.price && <WarningMsg />}
 
                     <Input
                         label="구매처"
                         value={data.store}
                         setData={setData}
+                        initialAccess={initialAccess}
                     />
                     <Input
                         label="구매링크"
                         value={data.link}
                         setData={setData}
+                        initialAccess={initialAccess}
                     />
                 </fieldset>
 
-                <S.RegisterButton
-                    disabled={
-                        !validation.category.isTouched ||
-                        !validation.productName.isTouched ||
-                        !validation.price.isTouched ||
-                        !validation.category.isValid ||
-                        !validation.productName.isValid ||
-                        !validation.price.isValid
-                    }
-                >
-                    등록하기
-                </S.RegisterButton>
+                <S.RegisterButton>등록하기</S.RegisterButton>
             </S.ProductRegisterForm>
         </>
     );
 };
 
-const Input = ({ label, value, setData, validation, confirmValidation }) => {
+const Input = ({ label, value, setData, warning }) => {
     //input값을 data에 저장하기
-
-    const onInputChange = event => {
+    const handleInputChange = event => {
         switch (label) {
             case '카테고리':
                 setData(prev => ({
@@ -179,20 +140,6 @@ const Input = ({ label, value, setData, validation, confirmValidation }) => {
         }
     };
 
-    // 필수 input 필드에 해당하는 validation 값 가져오기
-    const getValidation = label => {
-        switch (label) {
-            case '카테고리':
-                return validation.category;
-            case '상품명':
-                return validation.productName;
-            case '구매가격':
-                return validation.price;
-            default:
-                return 'true';
-        }
-    };
-
     return (
         <>
             <S.InputLabel htmlFor={label} label={label}>
@@ -201,9 +148,8 @@ const Input = ({ label, value, setData, validation, confirmValidation }) => {
             <S.InputText
                 id={label}
                 value={value}
-                onChange={onInputChange}
-                onBlur={confirmValidation}
-                validation={getValidation(label)}
+                onChange={handleInputChange}
+                className={warning}
             />
         </>
     );

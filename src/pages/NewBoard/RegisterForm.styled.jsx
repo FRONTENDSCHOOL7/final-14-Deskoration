@@ -20,18 +20,16 @@ export const InputText = styled.input`
     width: 100%;
     padding: 2.5px;
     border-style: none;
-    border-bottom: 1px solid
-        ${({ theme, validation }) =>
-            validation.isTouched
-                ? validation.isValid
-                    ? theme.border
-                    : theme.repo.open
-                : theme.border};
+    border-bottom: 1px solid ${({ theme }) => theme.border};
     margin-bottom: 10px;
 
     &:focus {
         outline: none;
         border-bottom: 1px solid ${({ theme }) => theme.mainFont};
+    }
+
+    &.warning {
+        border-bottom: 1px solid ${({ theme }) => theme.repo.open};
     }
 `;
 
@@ -41,9 +39,6 @@ export const RegisterButton = styled.button`
     color: #fff;
     border-radius: 10px;
     background-color: ${({ theme }) => theme.main};
-    &:disabled {
-        background-color: ${({ theme }) => theme.border};
-    }
 `;
 
 export const Warning = styled.strong`

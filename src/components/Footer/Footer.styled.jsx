@@ -13,6 +13,12 @@ export const Footer = styled.footer`
     border-top: 1px solid ${({ theme }) => theme.border};
 `;
 
+export const FooterUl = styled.ul`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
 export const IconButton = styled.button`
     display: flex;
     flex-direction: column;

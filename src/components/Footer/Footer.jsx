@@ -11,40 +11,52 @@ const Footer = () => {
         user: false,
     });
 
-    const [active, setActive] = useState(null);
+    const [active, setActive] = useState('home');
 
     return (
         <S.Footer>
-            <HomeBtn
-                hover={hover}
-                setHover={setHover}
-                active={active}
-                setActive={setActive}
-            />
-            <FeedBtn
-                hover={hover}
-                setHover={setHover}
-                active={active}
-                setActive={setActive}
-            />
-            <AddBtn
-                hover={hover}
-                setHover={setHover}
-                active={active}
-                setActive={setActive}
-            />
-            <ChatBtn
-                hover={hover}
-                setHover={setHover}
-                active={active}
-                setActive={setActive}
-            />
-            <UserBtn
-                hover={hover}
-                setHover={setHover}
-                active={active}
-                setActive={setActive}
-            />
+            <S.FooterUl>
+                <li>
+                    <HomeBtn
+                        hover={hover}
+                        setHover={setHover}
+                        active={active}
+                        setActive={setActive}
+                    />
+                </li>
+                <li>
+                    <FeedBtn
+                        hover={hover}
+                        setHover={setHover}
+                        active={active}
+                        setActive={setActive}
+                    />
+                </li>
+                <li>
+                    <AddBtn
+                        hover={hover}
+                        setHover={setHover}
+                        active={active}
+                        setActive={setActive}
+                    />
+                </li>
+                <li>
+                    <ChatBtn
+                        hover={hover}
+                        setHover={setHover}
+                        active={active}
+                        setActive={setActive}
+                    />
+                </li>
+                <li>
+                    <UserBtn
+                        hover={hover}
+                        setHover={setHover}
+                        active={active}
+                        setActive={setActive}
+                    />
+                </li>
+            </S.FooterUl>
         </S.Footer>
     );
 };

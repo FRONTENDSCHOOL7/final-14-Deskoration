@@ -4,7 +4,7 @@ export const GradientButton = styled.button`
     width: ${props => props.width};
     border: 1px solid ${props => props.theme.main};
     border-radius: 12px;
-    padding: 5px 0;
+    padding: ${props => props.$padding};
 
     color: ${props => props.theme.main};
 

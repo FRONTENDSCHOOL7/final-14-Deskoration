@@ -42,6 +42,7 @@ export const SearchUsernameInput = styled.input`
     width: 244px;
     height: 24px;
     border: none;
+    outline: none;
     background-color: #dbdbdb;
 `;
 

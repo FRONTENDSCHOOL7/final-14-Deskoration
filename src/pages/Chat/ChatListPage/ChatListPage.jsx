@@ -3,6 +3,7 @@ import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
 import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
+import { ReactComponent as Search } from '../../../assets/images/Search.svg';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -30,7 +31,9 @@ const ChatListPage = () => {
                 {/* 메인 부분 */}
                 <S.ChatlistPageMain>
                     <S.SearchBar>
-                        <S.SearchIcon>돋보기</S.SearchIcon>
+                        <S.SearchIcon>
+                            <Search />
+                        </S.SearchIcon>
                         <S.SearchUsernameInput
                             type="text"
                             placeholder="Search user"

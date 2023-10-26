@@ -7,4 +7,5 @@
     height: 800px;
     border: 1px solid black;
     margin: auto;
+    position: relative;
 }

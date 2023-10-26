@@ -8,7 +8,7 @@ export const ProfileTitle = styled.h4`
 export const ProfileMain = styled.div`
     padding: 0 25px;
 `;
-export const ProfileImgContainer = styled.div`
+export const ProfileImgBox = styled.div`
     width: fit-content;
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@ export const ImgUploadLabel = styled.label`
     cursor: pointer;
 `;
 
-export const ImgUploadContainer = styled.div`
+export const ImgUploadBox = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;

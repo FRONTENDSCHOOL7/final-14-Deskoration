@@ -23,9 +23,9 @@ export const ProfileUpload = () => {
             <S.ProfileMain>
                 <S.ProfileTitle>프로필 설정</S.ProfileTitle>
                 <form>
-                    <S.ProfileImgContainer>
+                    <S.ProfileImgBox>
                         <S.ProfileImg src={photoURL} alt="프로필 이미지" />
-                        <S.ImgUploadContainer>
+                        <S.ImgUploadBox>
                             <S.ImgUploadInput
                                 type="file"
                                 id="profileUpload"
@@ -38,8 +38,8 @@ export const ProfileUpload = () => {
                                     height={24}
                                 />
                             </S.ImgUploadLabel>
-                        </S.ImgUploadContainer>
-                    </S.ProfileImgContainer>
+                        </S.ImgUploadBox>
+                    </S.ProfileImgBox>
                     <GradientButton
                         children="시작하기"
                         gra={true}

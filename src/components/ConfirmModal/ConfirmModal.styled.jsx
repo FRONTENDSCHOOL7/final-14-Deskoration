@@ -12,6 +12,8 @@ export const Dialog = styled.dialog`
 
     background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px);
+
+    z-index: 999;
 `;
 
 export const ConfirmModalContainer = styled.section`

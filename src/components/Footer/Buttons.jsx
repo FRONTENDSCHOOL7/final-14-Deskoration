@@ -1,9 +1,6 @@
 import React from 'react';
 import * as S from './Buttons.styled';
 
-const mainColor = '#45522b';
-const basicColor = '#0f0f0f';
-
 const handleMouseEnter = (name, setHover) => {
     setHover(prev => ({
         ...prev,
@@ -20,10 +17,6 @@ const handleMouseLeave = (name, setHover) => {
 
 const handleActive = (name, setActive) => {
     setActive(name);
-};
-
-const getColor = (name, active, hover) => {
-    return active === name ? mainColor : hover[name] ? mainColor : basicColor;
 };
 
 export const HomeBtn = ({ hover, setHover, active, setActive }) => {
@@ -66,8 +59,8 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <S.FeedIcon $hover={hover.browse} $active={active === 'feed'} />
-            <S.IconNameSpan $hover={hover.browse} $active={active === 'feed'}>
+            <S.FeedIcon $hover={hover.feed} $active={active === 'feed'} />
+            <S.IconNameSpan $hover={hover.feed} $active={active === 'feed'}>
                 피드
             </S.IconNameSpan>
         </S.IconButton>

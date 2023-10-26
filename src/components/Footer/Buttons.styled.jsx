@@ -9,6 +9,8 @@ export const HomeIcon = styled(HomeFile)`
     path {
         stroke: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
+        fill: ${({ theme, $hover, $active }) =>
+            $active ? theme.main : $hover ? theme.main : '#fff'};
     }
 `;
 export const FeedIcon = styled(FeedFile)`
@@ -22,13 +24,17 @@ export const FeedIcon = styled(FeedFile)`
     }
 `;
 export const AddIcon = styled(AddFile)`
+    /* path {
+    } */
     rect {
         stroke: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
+        fill: ${({ theme, $hover, $active }) =>
+            $active ? theme.main : $hover ? theme.main : '#fff'};
     }
     line {
         stroke: ${({ theme, $hover, $active }) =>
-            $active ? theme.main : $hover ? theme.main : theme.mainFont};
+            $active ? '#fff' : $hover ? '#fff' : theme.mainFont};
     }
 `;
 export const ChatIcon = styled(ChatFile)`
@@ -41,6 +47,8 @@ export const UserIcon = styled(UserFile)`
     path {
         stroke: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
+        fill: ${({ theme, $hover, $active }) =>
+            $active ? theme.main : $hover ? theme.main : '#fff'};
     }
 `;
 

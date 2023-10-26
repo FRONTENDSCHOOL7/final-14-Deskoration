@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeConfirmModal } from '../../features/modal/confirmModalSlice';
 import GradientButton from '../GradientButton/GradientButton';
 
 import * as S from './ConfirmModal.styled';
 
 const ConfirmModal = ({ qustion }) => {
-    const [temp, setTemp] = useState(false);
-    const onTemp = () => setTemp(!temp);
+    const dispatch = useDispatch();
+    const { isOpen } = useSelector(store => store.confirmModal);
 
     return (
         <>
-            <button onClick={onTemp}>modal</button>
-            <S.Dialog open={temp}>
+            <S.Dialog open={isOpen}>
                 <S.ConfirmModalContainer>
                     <S.ConfirmModalInnerContainer>
                         <S.ConfirmModalQustion>{qustion}</S.ConfirmModalQustion>
@@ -27,7 +28,7 @@ const ConfirmModal = ({ qustion }) => {
 
                         <S.CloseConfirmModalButton
                             type="button"
-                            onClick={onTemp}
+                            onClick={() => dispatch(closeConfirmModal())}
                         >
                             <S.CloseModalIcon />
                         </S.CloseConfirmModalButton>

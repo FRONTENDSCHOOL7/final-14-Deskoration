@@ -1,10 +1,5 @@
 import React from 'react';
-import * as S from './Footer.styled';
-import { ReactComponent as Home } from '../../assets/images/Home.svg';
-import { ReactComponent as Feed } from '../../assets/images/Feed.svg';
-import { ReactComponent as Add } from '../../assets/images/Add.svg';
-import { ReactComponent as Chat } from '../../assets/images/Chat.svg';
-import { ReactComponent as User } from '../../assets/images/User.svg';
+import * as S from './Buttons.styled';
 
 const mainColor = '#45522b';
 const basicColor = '#0f0f0f';
@@ -47,10 +42,10 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <Home stroke={getColor('home', active, hover)} />
-            <S.IconName $hover={hover.home} $active={active === 'home'}>
+            <S.HomeIcon $hover={hover.home} $active={active === 'home'} />
+            <S.IconNameSpan $hover={hover.home} $active={active === 'home'}>
                 홈
-            </S.IconName>
+            </S.IconNameSpan>
         </S.IconButton>
     );
 };
@@ -71,10 +66,10 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <Feed stroke={getColor('feed', active, hover)} />
-            <S.IconName $hover={hover.browse} $active={active === 'feed'}>
+            <S.FeedIcon $hover={hover.browse} $active={active === 'feed'} />
+            <S.IconNameSpan $hover={hover.browse} $active={active === 'feed'}>
                 피드
-            </S.IconName>
+            </S.IconNameSpan>
         </S.IconButton>
     );
 };
@@ -95,10 +90,10 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <Add stroke={getColor('add', active, hover)} />
-            <S.IconName $hover={hover.add} $active={active === 'add'}>
+            <S.AddIcon $hover={hover.add} $active={active === 'add'} />
+            <S.IconNameSpan $hover={hover.add} $active={active === 'add'}>
                 글쓰기
-            </S.IconName>
+            </S.IconNameSpan>
         </S.IconButton>
     );
 };
@@ -119,10 +114,10 @@ export const ChatBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <Chat fill={getColor('chat', active, hover)} />
-            <S.IconName $hover={hover.chat} $active={active === 'chat'}>
+            <S.ChatIcon $hover={hover.chat} $active={active === 'chat'} />
+            <S.IconNameSpan $hover={hover.chat} $active={active === 'chat'}>
                 채팅
-            </S.IconName>
+            </S.IconNameSpan>
         </S.IconButton>
     );
 };
@@ -143,10 +138,10 @@ export const UserBtn = ({ hover, setHover, active, setActive }) => {
                 handleActive(event.currentTarget.name, setActive);
             }}
         >
-            <User stroke={getColor('user', active, hover)} />
-            <S.IconName $hover={hover.user} $active={active === 'user'}>
+            <S.UserIcon $hover={hover.user} $active={active === 'user'} />
+            <S.IconNameSpan $hover={hover.user} $active={active === 'user'}>
                 프로필
-            </S.IconName>
+            </S.IconNameSpan>
         </S.IconButton>
     );
 };

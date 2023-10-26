@@ -1,6 +1,4 @@
-import { styled, css } from 'styled-components';
-
-import { ReactComponent as Close } from '../../assets/images/Close.svg';
+import { styled } from 'styled-components';
 
 import { ReactComponent as Close } from '../../assets/images/Close.svg';
 

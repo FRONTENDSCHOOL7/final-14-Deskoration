@@ -5,7 +5,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 const User = () => {
     return (
         <S.UserContainer>
-            <nav>
+            <S.UserNav>
                 <ul>
                     <li>
                         <NavLink to="login">로그인</NavLink>
@@ -14,22 +14,23 @@ const User = () => {
                         <NavLink to="signup">회원가입</NavLink>
                     </li>
                 </ul>
-            </nav>
-            <Outlet />
-
-            <section>
+            </S.UserNav>
+            <S.Content>
+                <Outlet />
+            </S.Content>
+            <S.SocialLoginContainer>
                 <ul>
                     <li>
-                        <button>구글</button>
+                        <button type="button">구글</button>
                     </li>
                     <li>
-                        <button>카카오</button>
+                        <button type="button">카카오</button>
                     </li>
                     <li>
-                        <button>페북</button>
+                        <button type="button">페북</button>
                     </li>
                 </ul>
-            </section>
+            </S.SocialLoginContainer>
         </S.UserContainer>
     );
 };

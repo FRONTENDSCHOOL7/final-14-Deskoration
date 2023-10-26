@@ -23,7 +23,12 @@ const ConfirmModal = ({ qustion }) => {
                             >
                                 yes
                             </GradientButton>
-                            <GradientButton width="40%">no</GradientButton>
+                            <GradientButton
+                                width="40%"
+                                onClick={() => dispatch(closeConfirmModal())}
+                            >
+                                no
+                            </GradientButton>
                         </S.ConfirmModalButtonBox>
 
                         <S.CloseConfirmModalButton

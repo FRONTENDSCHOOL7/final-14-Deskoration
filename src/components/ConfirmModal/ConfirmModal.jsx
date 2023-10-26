@@ -5,7 +5,7 @@ import GradientButton from '../GradientButton/GradientButton';
 
 import * as S from './ConfirmModal.styled';
 
-const ConfirmModal = ({ qustion }) => {
+const ConfirmModal = ({ qustion, confirmClick }) => {
     const dispatch = useDispatch();
     const { isOpen } = useSelector(store => store.confirmModal);
 
@@ -20,6 +20,7 @@ const ConfirmModal = ({ qustion }) => {
                                 gra="true"
                                 width="40%"
                                 padding="5px"
+                                onClick={confirmClick}
                             >
                                 yes
                             </GradientButton>

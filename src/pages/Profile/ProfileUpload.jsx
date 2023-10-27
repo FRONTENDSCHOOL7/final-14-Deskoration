@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
 import Input from '../../components/Input/Input';
@@ -17,6 +17,7 @@ export const ProfileUpload = () => {
     });
 
     const [initialAccess, setInitialAccess] = useState(true);
+    const [isIDAvailable, setIsIDAvailable] = useState(false);
 
     const userNameEl = useRef(null);
     const idEl = useRef(null);
@@ -76,19 +77,44 @@ export const ProfileUpload = () => {
         return intro.length > 0;
     };
 
+    // 계정 검증 함수
+    const checkAccountName = async () => {
+        const baseURL = 'https://api.mandarin.weniv.co.kr/';
+        const reqPath = 'user/accountnamevalid';
+        const reqURL = baseURL + reqPath;
+        try {
+            const response = await fetch(reqURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: { accountname: data.id } }),
+            });
+            const result = await response.json();
+
+            if (result.message === '사용 가능한 계정ID 입니다.') {
+                setIsIDAvailable(true);
+            } else if (result.message === '이미 가입된 계정ID 입니다.') {
+                setIsIDAvailable(false);
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     // submit 함수
-    const dataSubmit = event => {
+    const dataSubmit = async event => {
         event.preventDefault();
         setInitialAccess(false);
+
         if (
             !checkValidUserName(data.userName) ||
             !checkValidID(data.id) ||
             !checkValidIntro(data.intro)
         ) {
-            return; // 유효성 검사 실패
+            return;
         }
-
-        console.log(data);
+        await checkAccountName();
     };
 
     return (
@@ -132,15 +158,21 @@ export const ProfileUpload = () => {
                             label="계정 ID"
                             $ref={idEl}
                             fn={event => handleInput(event, '계정 ID')}
-                            warning={!initialAccess && !checkValidID(data.id)}
+                            warning={
+                                !initialAccess &&
+                                (!checkValidID(data.id) ||
+                                    isIDAvailable === false)
+                            }
                         />
-                        {!initialAccess && !checkValidID(data.id) && (
+                        {!initialAccess && !checkValidID(data.id) ? (
                             <WarningMsg
                                 msg={
                                     '2글자 이상이며, 영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
                                 }
                             />
-                        )}
+                        ) : !initialAccess && !isIDAvailable ? (
+                            <WarningMsg msg="이미 가입된 계정ID 입니다." />
+                        ) : null}
                         <Input
                             label="소개"
                             $ref={introEl}

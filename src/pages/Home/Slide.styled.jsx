@@ -26,7 +26,7 @@ export const Category = styled.div`
 export const CateName = styled.p`
     width: 45px;
     position: relative;
-    top: 100%;
+    top: 105%;
     text-align: center;
     font-size: 10px;
 `;

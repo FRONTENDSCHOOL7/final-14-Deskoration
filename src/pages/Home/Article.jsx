@@ -27,7 +27,7 @@ const Article = () => {
         setTimeout(() => {
             setArticles(prevArticles => [
                 ...prevArticles,
-                ...Array(8).fill({}),
+                ...Array(20).fill({}),
             ]); // 예시로 8개의 게시물을 추가
             setLoading(false);
         }, 1000); // 1초 지연으로 예시

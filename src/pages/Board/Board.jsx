@@ -19,7 +19,14 @@ const Board = () => {
             </S.BoardHeader>
             <S.CommentSection>
                 <S.CommentCounter>총 x개의 댓글</S.CommentCounter>
-                댓글창
+                <S.AComment>
+                    <S.ProfileImg />
+                    <div>
+                        <S.CommentID>팔로우ID</S.CommentID>
+                        <S.Comment>대애애애애앳그으으으을</S.Comment>
+                    </div>
+                    <S.DotsIcon />
+                </S.AComment>
             </S.CommentSection>
         </>
     );

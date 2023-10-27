@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { ReactComponent as Back } from '../../assets/images/Backward.svg';
 import theme from '../../styles/theme';
+import { ReactComponent as Dots } from '../../assets/images/Dots.svg';
 
+// 댓글창 헤더
 export const BoardHeader = styled.header`
     display: flex;
     justify-content: space-between;
@@ -11,6 +13,7 @@ export const BoardHeader = styled.header`
     margin: 0 25px;
 `;
 
+// 댓글 영역
 export const BoardHeaderUser = styled.div`
     display: flex;
     align-items: center;
@@ -40,6 +43,25 @@ export const CommentSection = styled.section`
 
 export const CommentCounter = styled.div`
     color: ${theme.subFont};
+    margin-bottom: 20px;
 `;
 
-export const Comment = styled.div``;
+export const AComment = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+export const CommentID = styled.p`
+    font-family: 'PreBold';
+    font-size: 12px;
+    margin-bottom: 5px;
+`;
+
+export const Comment = styled.p``;
+
+export const DotsIcon = styled(Dots)`
+    position: relative;
+    left: 20%;
+    transform: rotate(90deg);
+`;

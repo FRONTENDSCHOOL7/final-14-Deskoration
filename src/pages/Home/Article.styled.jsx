@@ -6,7 +6,7 @@ export const Section = styled.section`
     display: flex;
     flex-wrap: wrap;
     width: 310px;
-    height: 650px;
+    height: 575px;
     gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;

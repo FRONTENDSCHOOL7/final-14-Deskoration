@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
-    margin: 0 25px;
+    margin: 10px 25px;
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
@@ -15,8 +15,8 @@ export const SlideSection = styled.section`
 
 export const Category = styled.div`
     color: ${theme.subFont};
-    width: 45px;
-    height: 45px;
+    width: 50px;
+    height: 50px;
     border: 1px solid black;
     border-radius: 50%;
     margin-bottom: 20px;
@@ -24,7 +24,7 @@ export const Category = styled.div`
 `;
 
 export const CateName = styled.p`
-    width: 45px;
+    width: 50px;
     position: relative;
     top: 105%;
     text-align: center;

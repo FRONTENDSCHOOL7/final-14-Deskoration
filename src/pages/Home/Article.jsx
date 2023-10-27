@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
 
 const Article = () => {
-    const [articles, setArticles] = useState(Array(6).fill({}));
+    const [articles, setArticles] = useState(Array(8).fill({}));
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null); // S.Section에 대한 참조 생성
 
@@ -27,7 +27,7 @@ const Article = () => {
         setTimeout(() => {
             setArticles(prevArticles => [
                 ...prevArticles,
-                ...Array(6).fill({}),
+                ...Array(8).fill({}),
             ]); // 예시로 8개의 게시물을 추가
             setLoading(false);
         }, 1000); // 1초 지연으로 예시

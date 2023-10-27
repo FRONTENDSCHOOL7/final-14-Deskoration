@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const ProfileTitle = styled.h4`
+    margin-bottom: 30px;
     font-weight: 700;
     font-size: ${({ theme }) => theme.fontSize.lg};
 `;
@@ -45,4 +46,8 @@ export const ImgUploadBox = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
+`;
+
+export const InputBox = styled.div`
+    margin: 30px 0;
 `;

@@ -132,11 +132,7 @@ export const ProfileUpload = () => {
                                 onChange={handleFileChange}
                             />
                             <S.ImgUploadLabel htmlFor="profileUpload">
-                                <ImgUpload
-                                    stroke="#fff"
-                                    width={24}
-                                    height={24}
-                                />
+                                <S.ImgUploadIcon />
                             </S.ImgUploadLabel>
                         </S.ImgUploadBox>
                     </S.ProfileImgBox>

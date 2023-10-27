@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { ReactComponent as ImgUploadFile } from '../../assets/images/ImgUpload.svg';
 
 export const ProfileTitle = styled.h4`
     margin-bottom: 30px;
@@ -40,6 +41,14 @@ export const ImgUploadLabel = styled.label`
     background-color: ${({ theme }) => theme.point};
     border-radius: 50%;
     cursor: pointer;
+`;
+
+export const ImgUploadIcon = styled(ImgUploadFile)`
+    width: 24px;
+    height: 24px;
+    path {
+        stroke: #fff;
+    }
 `;
 
 export const ImgUploadBox = styled.div`

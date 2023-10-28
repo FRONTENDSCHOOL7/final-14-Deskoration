@@ -5,6 +5,8 @@ import { NavLink, Outlet } from 'react-router-dom';
 const User = () => {
     return (
         <S.UserContainer>
+            <header>Deskoration</header>
+
             <S.UserNav>
                 <ul>
                     <li>

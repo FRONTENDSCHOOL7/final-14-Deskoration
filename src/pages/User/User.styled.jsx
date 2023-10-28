@@ -2,6 +2,11 @@ import { styled } from 'styled-components';
 
 export const UserContainer = styled.article`
     padding-top: 50px;
+    header {
+        text-align: center;
+        font-size: 50px;
+        margin-bottom: 50px;
+    }
 `;
 
 export const UserNav = styled.nav`
@@ -89,10 +94,14 @@ export const Content = styled.div`
 
     z-index: 5;
 
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 `;
 
 export const SocialLoginContainer = styled.section`
+    position: relative;
+
+    border-top: 1px solid ${props => props.theme.border};
+    padding-top: 40px;
     ul {
         display: flex;
         justify-content: space-around;
@@ -103,5 +112,18 @@ export const SocialLoginContainer = styled.section`
         height: 60px;
         border-radius: 15px;
         background: ${props => props.theme.bgSecondary};
+    }
+
+    &::before {
+        position: absolute;
+        top: -17px;
+        right: 50%;
+        transform: translate(50%, 50%);
+
+        content: '간편 로그인';
+        padding: 0 10px;
+
+        color: ${props => props.theme.subFont};
+        background: #fff;
     }
 `;

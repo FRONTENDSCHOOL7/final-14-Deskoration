@@ -2,11 +2,11 @@ import styled from 'styled-components';
 
 export const ChatListPageContainer = styled.div`
     position: relative;
-    margin: 0 25px;
 `;
 
 export const ChatListHeader = styled.div`
     display: flex;
+    margin: 0 25px;
     width: 310px;
     height: 70px;
     padding-top: 20px;
@@ -15,11 +15,13 @@ export const ChatListHeader = styled.div`
 `;
 
 export const ChatlistPageMain = styled.div`
-    width: 310px;
+    width: 100%;
     height: 620px;
 `;
 
 export const SearchBar = styled.div`
+margin: 0 25px;
+
     width: 310px;
     height: 60px;
     background-color: #dbdbdb;
@@ -47,16 +49,16 @@ export const SearchUsernameInput = styled.input`
 `;
 
 export const UserChatList = styled.ul`
-    padding-top: 30px;
-    width: 310px;
+    padding-top: 25px;
+    width: 100%;
     height: 530px;
-    overflow-y: scroll; /* 세로 스크롤을 활성화합니다. */
+    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
 `;
 
 export const UserChatRoom = styled.div`
     width: 310px;
     height: 64px;
-    border-bottom: 1px solid black;
+    margin: 0 25px;
     display: flex;
     align-items: center;
     background-color: #fcfcfc;

@@ -49,10 +49,7 @@ const ChatListPage = () => {
                                     to={`/chat/${profile.username}`}
                                     state={{
                                         user: profile.username,
-                                        lastMessage:
-                                            profile.messages[
-                                                profile.messages.length - 1
-                                            ],
+                                        message: [profile.messages],
                                         image: profile.image,
                                         // 다른 데이터 필드들도 추가
                                     }}

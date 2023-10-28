@@ -5,7 +5,7 @@ import GradientButton from '../GradientButton/GradientButton';
 
 import * as S from './ConfirmModal.styled';
 
-const ConfirmModal = ({ qustion, confirmClick }) => {
+const ConfirmModal = ({ question, explain, confirmClick }) => {
     const dispatch = useDispatch();
     const { isOpen } = useSelector(store => store.confirmModal);
 
@@ -14,7 +14,14 @@ const ConfirmModal = ({ qustion, confirmClick }) => {
             <S.Dialog open={isOpen}>
                 <S.ConfirmModalContainer>
                     <S.ConfirmModalInnerContainer>
-                        <S.ConfirmModalQustion>{qustion}</S.ConfirmModalQustion>
+                        <S.ConfirmModalQustion>
+                            {question}
+                        </S.ConfirmModalQustion>
+                        <S.ConfirmModalExplain>
+                            {explain?.split(/(?<=\.)\s*/).map((line, i) => (
+                                <p key={i}>{line}</p>
+                            ))}
+                        </S.ConfirmModalExplain>
                         <S.ConfirmModalButtonBox>
                             <GradientButton
                                 gra="true"

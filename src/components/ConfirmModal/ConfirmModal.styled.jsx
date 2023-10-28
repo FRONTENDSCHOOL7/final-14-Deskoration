@@ -40,11 +40,15 @@ export const ConfirmModalInnerContainer = styled.div`
     height: 350px;
 `;
 
-export const ConfirmModalQustion = styled.p`
+export const ConfirmModalQustion = styled.h3`
     font-size: 24px;
     font-family: 'PreBold';
 
     margin-bottom: 20px;
+`;
+
+export const ConfirmModalExplain = styled.div`
+    color: ${props => props.theme.subFont};
 `;
 
 export const ConfirmModalButtonBox = styled.div`

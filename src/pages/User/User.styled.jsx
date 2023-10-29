@@ -97,6 +97,14 @@ export const Content = styled.div`
     margin-bottom: 60px;
 `;
 
+export const UserForm = styled.form`
+    padding: 20px 0;
+`;
+
+export const InputBox = styled.div`
+    margin-bottom: 20px;
+`;
+
 export const SocialLoginContainer = styled.section`
     position: relative;
 

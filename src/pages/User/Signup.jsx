@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Input from '../../../components/Input/Input';
-import { WarningMsg } from '../../../components/Input/WarningMsg';
-import { GradientButton } from '../../../components/GradientButton/GradientButton.styled';
+import Input from '../../components/Input/Input';
+import { WarningMsg } from '../../components/Input/WarningMsg';
+import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
 
-import * as S from './Signup.styled';
+import * as S from './User.styled';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Signup = () => {
     };
 
     return (
-        <S.SignupForm onSubmit={onSubmit}>
+        <S.UserForm onSubmit={onSubmit}>
             <S.InputBox>
                 <Input
                     label={'email'}
@@ -62,7 +62,7 @@ const Signup = () => {
             <GradientButton $gra={true} width={'100%'} $padding={'20px'}>
                 회원가입
             </GradientButton>
-        </S.SignupForm>
+        </S.UserForm>
     );
 };
 

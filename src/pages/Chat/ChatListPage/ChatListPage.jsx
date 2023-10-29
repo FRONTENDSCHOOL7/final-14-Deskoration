@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
-import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
-import { ReactComponent as Search } from '../../../assets/images/Search.svg';
+
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +22,7 @@ const ChatListPage = () => {
                 <S.ChatListHeader>
                     {/* header button 가져오기 */}
                     <button>
-                        <Backward />
+                        <S.Backwardicon />
                     </button>
                     <h2>Chat</h2>
                 </S.ChatListHeader>
@@ -31,9 +30,9 @@ const ChatListPage = () => {
                 {/* 메인 부분 */}
                 <S.ChatlistPageMain>
                     <S.SearchBar>
-                        <S.SearchIcon>
-                            <Search />
-                        </S.SearchIcon>
+                        <S.Searchmark>
+                            <S.Searchicon />
+                        </S.Searchmark>
                         <S.SearchUsernameInput
                             type="text"
                             placeholder="Search user"
@@ -49,10 +48,7 @@ const ChatListPage = () => {
                                     to={`/chat/${profile.username}`}
                                     state={{
                                         user: profile.username,
-                                        lastMessage:
-                                            profile.messages[
-                                                profile.messages.length - 1
-                                            ],
+                                        message: [profile.messages],
                                         image: profile.image,
                                         // 다른 데이터 필드들도 추가
                                     }}

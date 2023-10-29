@@ -1,6 +1,8 @@
 import { styled, css } from 'styled-components';
 
-export const GradientButton = styled.button`
+export const GradientButton = styled.button.attrs(props => ({
+    type: props.type || 'button',
+}))`
     width: ${props => props.width};
     border: 1px solid ${props => props.theme.main};
     border-radius: 12px;

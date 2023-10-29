@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
-import { ReactComponent as Send } from '../../../assets/images/Send.svg';
-import { ReactComponent as Clip } from '../../../assets/images/Clip.svg';
 
 const ChatRoomPage = () => {
     const location = useLocation();
@@ -63,7 +60,7 @@ const ChatRoomPage = () => {
             <S.ChatRoomPageContainer>
                 <S.ChatRoomHeader>
                     <button onClick={handleGoBack}>
-                        <Backward />
+                        <S.Backwardicon />
                     </button>
                     <img src={image} alt="" className="user-img" />
                     <h2>{user}</h2>
@@ -71,10 +68,10 @@ const ChatRoomPage = () => {
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
                     {message[0].map((receivedMessage, index) => (
-                        <S.ChatContent key={index} issentbyuser="false">
+                        <S.ChatContent key={index} $issentbyuser="false">
                             <img src={image} alt="" className="userChat-img" />
                             <div>
-                                <S.ChatBubble issentbyuser="false">
+                                <S.ChatBubble $issentbyuser="false">
                                     <p>{receivedMessage}</p>
                                 </S.ChatBubble>
                                 <p>{formattedTime}</p>
@@ -84,9 +81,9 @@ const ChatRoomPage = () => {
 
                     {/* 나의 채팅 */}
                     {chatMessages.map((chat, index) => (
-                        <S.ChatContent key={index} issentbyuser="true">
+                        <S.ChatContent key={index} $issentbyuser="true">
                             <div>
-                                <S.ChatBubble issentbyuser="true">
+                                <S.ChatBubble $issentbyuser="true">
                                     <p>{chat.text}</p>
                                 </S.ChatBubble>
                                 <p className="my-time">{formattedTime}</p>
@@ -97,7 +94,7 @@ const ChatRoomPage = () => {
             </S.ChatRoomPageContainer>
             <S.ChatRoomPageFooter>
                 <S.ChatInput>
-                    <Clip />
+                    <S.Clipicon />
                     <input
                         type="text"
                         value={newMessage}
@@ -106,7 +103,7 @@ const ChatRoomPage = () => {
                         placeholder="메세지를 입력하세요"
                     />
                     <button onClick={handleSendMessage}>
-                        <Send className="chat-send" />
+                        <S.Sendicon className="chat-send" />
                     </button>
                 </S.ChatInput>
             </S.ChatRoomPageFooter>

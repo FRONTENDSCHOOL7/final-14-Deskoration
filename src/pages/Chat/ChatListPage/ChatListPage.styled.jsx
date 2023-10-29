@@ -1,4 +1,12 @@
 import styled from 'styled-components';
+import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
+import { ReactComponent as Search } from '../../../assets/images/Search.svg';
+
+export const Backwardicon = styled(Backward)``;
+export const Searchicon = styled(Search)`
+    position: top;
+`;
+
 
 export const ChatListPageContainer = styled.div`
     position: relative;
@@ -32,7 +40,7 @@ margin: 0 25px;
     margin-top: 20px;
 `;
 
-export const SearchIcon = styled.div`
+export const Searchmark = styled.div`
     width: 30px;
     height: 30px;
     margin: auto;

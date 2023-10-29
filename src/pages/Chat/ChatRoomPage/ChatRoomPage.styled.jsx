@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+import { ReactComponent as Backward } from '../../../assets/images/Backward.svg';
+import { ReactComponent as Send } from '../../../assets/images/Send.svg';
+import { ReactComponent as Clip } from '../../../assets/images/Clip.svg';
+
+export const Backwardicon = styled(Backward)``;
+export const Sendicon = styled(Send)``;
+export const Clipicon = styled(Clip)``;
 
 export const ChatRoomPageContainer = styled.div`
     position: relative;
@@ -41,23 +48,23 @@ export const ChatContent = styled.div`
     display: flex;
     margin: 0 25px 10px;
     justify-content: ${props =>
-        props.issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
+        props.$issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
     margin-top: 10px;
     .my-time {
         display: flex;
         justify-content: ${props =>
-            props.issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
+            props.$issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
     }
 `;
 
 export const ChatBubble = styled.div`
     max-width: 220px;
     background-color: ${props =>
-        props.issentbyuser === 'true' ? '#ECEBEB' : '#FFFFFF'}; // 문자열 비교
+        props.$issentbyuser === 'true' ? '#ECEBEB' : '#FFFFFF'}; // 문자열 비교
     border: ${props =>
-        props.issentbyuser === 'true' ? '#ECEBEB' : '1px solid gray'}; // 문자열 비교
+        props.$issentbyuser === 'true' ? '#ECEBEB' : '1px solid gray'}; // 문자열 비교
     border-radius: ${props =>
-        props.issentbyuser === 'true'
+        props.$issentbyuser === 'true'
             ? '15px 0 15px 15px'
             : '0 15px 15px 15px'}; // 문자열 비교
     color: black; /* 말풍선 텍스트 색상 */

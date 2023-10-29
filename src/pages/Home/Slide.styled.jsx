@@ -3,6 +3,7 @@ import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
     margin: 10px 25px;
+    /* padding: 10px 25px; */
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
@@ -19,14 +20,18 @@ export const Category = styled.div`
     height: 50px;
     border: 1px solid black;
     border-radius: 50%;
-    margin-bottom: 20px;
-    /* flex-shrink: 3; */
+    margin-bottom: 5px;
+
+    background-image: url(${({ $url }) => $url});
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 `;
 
 export const CateName = styled.p`
     width: 50px;
     position: relative;
-    top: 105%;
+    /* top: %; */
     text-align: center;
     font-size: 10px;
 `;

@@ -1,33 +1,66 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Marker } from '../../components/Marker/Marker';
+import { ImgConvert } from '../../hooks/img_Uploader';
 import * as S from './NewBoard.styled';
 
 export const PostUpload = ({
-    setOffset,
     items,
+    handleShowRegisterForm,
+    setOffset,
     setItems,
-    displayStyle,
     photoURL,
-    handleInputClick,
-    handleFileChange,
-    deleteFile,
-    hiddenFileInput,
-    checkItemsCount,
+    setPhotoURL,
 }) => {
-    const [isDragging, setIsDragging] = useState(false);
+    const hiddenFileInput = useRef(null);
+
     const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [isMarkerLoaded, setIsMarkerLoaded] = useState(false);
     const [containerSize, setContainerSize] = useState({});
+    const [isDragging, setIsDragging] = useState(false);
+    const [originPosition, setOriginPosition] = useState({});
+    const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
     const [markerSize] = useState({ width: 20, height: 20 });
     const [markerLocation, setMarkerLocation] = useState({
         left: 50,
         top: 50,
     });
-    const [originPosition, setOriginPosition] = useState({});
-    const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
-    const containerEl = useRef();
     const markerRefs = useRef([]);
+    const containerEl = useRef();
 
+    const handleInputClick = event => {
+        event.preventDefault();
+        hiddenFileInput.current.click();
+    };
+
+    const handleFileChange = event => {
+        const file = event.target.files[0];
+        if (!file) {
+            setPhotoURL(prevPhotoURL => prevPhotoURL);
+        } else {
+            ImgConvert(file, setPhotoURL);
+            setItems([]);
+            setIsImageLoaded(false);
+        }
+    };
+
+    const deleteFile = () => {
+        // 추후 컨펌 모달로 변경
+        if (window.confirm('삭제하시겠습니까?')) {
+            setPhotoURL('');
+            setItems([]);
+            setIsImageLoaded(false);
+        }
+    };
+
+    const checkItemsCount = () => {
+        items.length < 5
+            ? handleShowRegisterForm()
+            : alert('상품은 최대 5개까지 추가할 수 있습니다.');
+    };
+
+    // 이미지 로드 함수
+    const handleImageLoad = () => {
+        setIsImageLoaded(true);
+    };
     // 이미지 크기 가져오기
     useEffect(() => {
         if (isImageLoaded && containerEl.current) {
@@ -50,7 +83,32 @@ export const PostUpload = ({
                     50 - (markerSize.height / (2 * containerSize.height)) * 100,
             }));
         }
-    }, [isImageLoaded, isMarkerLoaded, containerSize]);
+    }, [isImageLoaded, containerSize, markerSize.width, markerSize.height]);
+
+    // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
+    // 클릭한 좌표를 저장 & 아이템 카운트 체크
+    const handleImageClick = event => {
+        if (!isDragging) {
+            const offsetX =
+                (event.nativeEvent.offsetX / containerSize.width) * 100;
+            const offsetY =
+                (event.nativeEvent.offsetY / containerSize.height) * 100;
+
+            setOffset(prev => ({
+                ...prev,
+                x: offsetX,
+                y: offsetY,
+            }));
+
+            setMarkerLocation(prev => ({
+                ...prev,
+                left: offsetX,
+                top: offsetY,
+            }));
+
+            checkItemsCount();
+        }
+    };
 
     // 마우스다운 함수
     const onMouseDown = (event, index) => {
@@ -70,19 +128,7 @@ export const PostUpload = ({
         setSelectedMarkerIndex(index);
     };
 
-    // document에 마우스업 이벤트 적용
-    useEffect(() => {
-        const handleDocumentMouseUp = event => {
-            setIsDragging(false);
-        };
-
-        document.addEventListener('mouseup', handleDocumentMouseUp);
-        return () => {
-            document.removeEventListener('mouseup', handleDocumentMouseUp);
-        };
-    }, []);
-
-    // 마우스무브 함수
+    // 마우스무드레그 함수
     const onMouseMove = event => {
         if (isDragging) {
             const diffX = event.clientX - originPosition.x;
@@ -124,40 +170,17 @@ export const PostUpload = ({
         }
     };
 
-    // 이미지 로드 함수
-    const handleImageLoad = () => {
-        setIsImageLoaded(true);
-    };
+    // 드레그 후 마우스업 이벤트 적용
+    useEffect(() => {
+        const handleDocumentMouseUp = event => {
+            setIsDragging(false);
+        };
 
-    // 마커 로드 함수
-    const handleMarkerLoad = () => {
-        setIsMarkerLoaded(true);
-    };
-
-    // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
-    // 클릭한 좌표를 저장 & 아이템 카운트 체크
-    const handleImageClick = event => {
-        if (!isDragging) {
-            const offsetX =
-                (event.nativeEvent.offsetX / containerSize.width) * 100;
-            const offsetY =
-                (event.nativeEvent.offsetY / containerSize.height) * 100;
-
-            setOffset(prev => ({
-                ...prev,
-                x: offsetX,
-                y: offsetY,
-            }));
-
-            setMarkerLocation(prev => ({
-                ...prev,
-                left: offsetX,
-                top: offsetY,
-            }));
-
-            checkItemsCount();
-        }
-    };
+        document.addEventListener('mouseup', handleDocumentMouseUp);
+        return () => {
+            document.removeEventListener('mouseup', handleDocumentMouseUp);
+        };
+    }, []);
 
     return (
         <>
@@ -165,49 +188,43 @@ export const PostUpload = ({
                 $hasPhoto={photoURL}
                 ref={containerEl}
                 onMouseMove={onMouseMove}
-                style={{
-                    ...displayStyle,
-                }}
             >
-                <>
-                    {photoURL && (
+                <input
+                    type="file"
+                    onChange={handleFileChange}
+                    ref={hiddenFileInput}
+                />
+                {photoURL ? (
+                    <>
                         <img
                             src={photoURL}
                             alt="photoURL"
                             onLoad={handleImageLoad}
                             onClick={handleImageClick}
-                            style={{
-                                ...displayStyle,
-                            }}
                         />
-                    )}
-                    {photoURL && items.length === 0 ? (
-                        <Marker
-                            ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
-                            handleMarkerLoad={handleMarkerLoad}
-                            markerLocation={markerLocation}
-                            name="initialMarker"
-                        />
-                    ) : (
-                        items.map((item, index) => (
+
+                        {items.length === 0 ? (
                             <Marker
-                                key={index}
-                                ref={ref => (markerRefs.current[index] = ref)}
-                                onMouseDown={e => onMouseDown(e, index)}
-                                handleMarkerLoad={handleMarkerLoad}
-                                markerLocation={{
-                                    left: item.location.x,
-                                    top: item.location.y,
-                                }}
+                                ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
+                                markerLocation={markerLocation}
+                                name="initialMarker"
                             />
-                        ))
-                    )}
-                    <input
-                        type="file"
-                        onChange={handleFileChange}
-                        ref={hiddenFileInput}
-                    />
-                    {photoURL ? (
+                        ) : (
+                            items.map((item, index) => (
+                                <Marker
+                                    key={index}
+                                    ref={ref =>
+                                        (markerRefs.current[index] = ref)
+                                    }
+                                    onMouseDown={e => onMouseDown(e, index)}
+                                    markerLocation={{
+                                        left: item.location.x,
+                                        top: item.location.y,
+                                    }}
+                                />
+                            ))
+                        )}
+
                         <S.ImgControlBox>
                             <S.FileInputButton
                                 type="button"
@@ -222,17 +239,21 @@ export const PostUpload = ({
                                 <S.DeleteIcon />
                             </S.FileInputButton>
                         </S.ImgControlBox>
-                    ) : (
-                        <S.FileInputButton
-                            type="button"
-                            onClick={handleInputClick}
-                            $add
-                        >
-                            <S.AddIcon />
-                        </S.FileInputButton>
-                    )}
-                </>
+                    </>
+                ) : (
+                    <S.FileInputButton
+                        type="button"
+                        onClick={handleInputClick}
+                        $add
+                    >
+                        <S.AddIcon />
+                    </S.FileInputButton>
+                )}
             </S.NewBoardFileContainer>
+
+            {photoURL && (
+                <S.ExplainTagP>원하는 위치에 상품을 등록하세요.</S.ExplainTagP>
+            )}
         </>
     );
 };

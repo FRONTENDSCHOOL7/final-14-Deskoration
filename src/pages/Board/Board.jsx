@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Board.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { fetchPosts } from '../../service/board_service';
-
 const Board = () => {
     const [postData, setPostData] = useState(null);
 

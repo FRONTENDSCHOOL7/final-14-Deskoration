@@ -25,20 +25,26 @@ export const BoardHeaderUser = styled.div`
     display: flex;
     align-items: center;
     gap: 5px;
+
+    .profile-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
 `;
 
 export const BackIcon = styled(Back)`
     vertical-align: top;
 `;
 
-export const ProfileImg = styled.div`
-    width: 50px;
-    height: 50px;
+export const ProfileImg = styled.img`
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background-image: url('/images/puppy.jpg');
+    border: 1px solid black;
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
+    margin-right: 8px;
 `;
 
 export const BoardMain = styled.div`
@@ -49,16 +55,14 @@ export const BoardMain = styled.div`
 `;
 
 export const ContentSection = styled.div`
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     overflow-y: scroll; /* 스크롤 생성을 위해 수정 */
 
     img {
-        width: 100%;
-        height: auto;
         margin: 5px 0 5px 0;
     }
 
@@ -77,7 +81,7 @@ export const ContentSection = styled.div`
     }
 
     .user-name {
-        height: 300px;
+        height: auto;
         font-size: 14px;
         font-weight: bold;
         margin: 5px 0 5px 0;
@@ -100,6 +104,21 @@ export const CommentSection = styled.section`
 export const CommentCounter = styled.div`
     color: ${theme.subFont};
     margin-bottom: 20px;
+`;
+
+export const CommentList = styled.div``;
+
+export const AComment = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+`;
+
+export const CommentID = styled.p`
+    font-family: 'PreBold';
+    font-size: 12px;
+    margin-bottom: 5px;
 `;
 
 export const BoardFooter = styled.div`

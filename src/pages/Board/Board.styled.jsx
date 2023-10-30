@@ -2,6 +2,13 @@ import styled from 'styled-components';
 import { ReactComponent as Back } from '../../assets/images/Backward.svg';
 import theme from '../../styles/theme';
 import { ReactComponent as Dots } from '../../assets/images/Dots.svg';
+import { ReactComponent as Like } from '../../assets/images/Like.svg';
+import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
+import { ReactComponent as Dots_vertical } from '../../assets/images/Dots_vertical.svg';
+
+export const LikeIcon = styled(Like)``;
+export const CommentIcon = styled(Comment)``;
+export const Dots_verticalIcon = styled(Dots_vertical)``;
 
 // 댓글창 헤더
 export const BoardHeader = styled.header`
@@ -39,7 +46,6 @@ export const BoardMain = styled.div`
     height: 640px;
     padding-left: 20px;
     padding-right: 20px;
-    overflow: scroll; /* 스크롤 생성을 위해 수정 */
 `;
 
 export const ContentSection = styled.div`
@@ -47,8 +53,8 @@ export const ContentSection = styled.div`
     max-height: 100%;
     overflow: hidden;
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    overflow-y: scroll; /* 스크롤 생성을 위해 수정 */
 
     img {
         width: 100%;
@@ -71,6 +77,7 @@ export const ContentSection = styled.div`
     }
 
     .user-name {
+        height: 300px;
         font-size: 14px;
         font-weight: bold;
         margin: 5px 0 5px 0;
@@ -122,8 +129,10 @@ export const CommentInput = styled.div`
     }
 
     .comment-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         color: orange;
-        width: 30px;
-        height: 30px;
+        width: 50px;
     }
 `;

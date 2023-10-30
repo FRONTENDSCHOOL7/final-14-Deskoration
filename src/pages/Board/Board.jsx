@@ -1,9 +1,6 @@
 import React from 'react';
 import * as S from './Board.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import { ReactComponent as Like } from '../../assets/images/Like.svg';
-import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
-import { ReactComponent as Dots_vertical } from '../../assets/images/Dots_vertical.svg';
 
 const Board = () => {
     return (
@@ -22,20 +19,20 @@ const Board = () => {
             </S.BoardHeader>
             <S.BoardMain>
                 <S.ContentSection>
-                    <img src="/images/puppy.jpg" alt="" />
+                    <img src="/images/puppy.jpg" alt="" className="post-img" />
                     <img src="/images/puppy.jpg" alt="" />
                     <img src="/images/puppy.jpg" alt="" />
                     <div className="board-btn">
                         <div className="btn-hc">
                             <div>
-                                <Like className="like" />
+                                <S.LikeIcon className="like" />
                             </div>
                             <div>
-                                <Comment />
+                                <S.CommentIcon />
                             </div>
                         </div>
                         <div>
-                            <Dots_vertical />
+                            <S.Dots_verticalIcon />
                         </div>
                     </div>
                     <h2 className="user-name">프로필ID</h2>

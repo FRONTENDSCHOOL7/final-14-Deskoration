@@ -3,14 +3,31 @@ import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
     margin: 10px 25px;
-    /* padding: 10px 25px; */
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
     white-space: nowrap;
     gap: 15px;
+    /* &::-webkit-scrollbar {
+        display: none; 
+    } */
     &::-webkit-scrollbar {
-        display: none; // 웹킷 기반 브라우저에서 스크롤바 숨기기
+        /* width: 5px; */
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #f5f5f5;
+        border-radius: 10px;
     }
 `;
 

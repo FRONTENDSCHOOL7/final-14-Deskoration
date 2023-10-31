@@ -10,6 +10,7 @@ export const PostUpload = ({
     setItems,
     photoURL,
     setPhotoURL,
+    deleteItem,
 }) => {
     const hiddenFileInput = useRef(null);
 
@@ -197,6 +198,7 @@ export const PostUpload = ({
                 {photoURL ? (
                     <>
                         <img
+                            style={{ cursor: 'cell' }}
                             src={photoURL}
                             alt="photoURL"
                             onLoad={handleImageLoad}
@@ -213,6 +215,7 @@ export const PostUpload = ({
                             items.map((item, index) => (
                                 <Marker
                                     key={index}
+                                    item={item}
                                     ref={ref =>
                                         (markerRefs.current[index] = ref)
                                     }
@@ -221,6 +224,7 @@ export const PostUpload = ({
                                         left: item.location.x,
                                         top: item.location.y,
                                     }}
+                                    deleteItem={deleteItem}
                                 />
                             ))
                         )}

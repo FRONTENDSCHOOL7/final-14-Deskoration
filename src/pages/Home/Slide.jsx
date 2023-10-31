@@ -2,36 +2,47 @@ import React from 'react';
 import * as S from './Slide.styled';
 
 const Slide = () => {
+    const deskImageUrl = '/images/DeskSetup.jpg';
+
     return (
         <>
             <S.SlideSection>
-                <S.Category>
-                    <S.CateName>Desk</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Chair</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Monitor</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Keyboard</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Mouse</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Speaker</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>DeskTop</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>NoteBook</S.CateName>
-                </S.Category>
-                <S.Category>
-                    <S.CateName>Accessory</S.CateName>
-                </S.Category>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>책상</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>의자</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>모니터</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>키보드</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>마우스</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>스피커</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>데스크탑</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>노트북</S.CateName>
+                </div>
+                <div>
+                    <S.Category $url={deskImageUrl}></S.Category>
+                    <S.CateName>액세서리</S.CateName>
+                </div>
             </S.SlideSection>
         </>
     );

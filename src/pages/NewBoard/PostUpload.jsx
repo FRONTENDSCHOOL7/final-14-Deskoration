@@ -1,17 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 import { ImgConvert } from '../../hooks/img_Uploader';
-import * as S from './NewBoard.styled';
+import * as S from './PostUpload.styled';
 
 export const PostUpload = ({
     items,
-    handleShowRegisterForm,
-    setOffset,
     setItems,
+    setOffset,
     photoURL,
     setPhotoURL,
     deleteItem,
 }) => {
+    const navigate = useNavigate();
+
     const hiddenFileInput = useRef(null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -54,7 +56,7 @@ export const PostUpload = ({
 
     const checkItemsCount = () => {
         items.length < 5
-            ? handleShowRegisterForm()
+            ? navigate(`/newboard/${items.length}`)
             : alert('상품은 최대 5개까지 추가할 수 있습니다.');
     };
 
@@ -125,7 +127,6 @@ export const PostUpload = ({
             left: currentMarker ? currentMarker.offsetLeft : 0,
             top: currentMarker ? currentMarker.offsetTop : 0,
         }));
-
         setSelectedMarkerIndex(index);
     };
 
@@ -198,7 +199,6 @@ export const PostUpload = ({
                 {photoURL ? (
                     <>
                         <img
-                            style={{ cursor: 'cell' }}
                             src={photoURL}
                             alt="photoURL"
                             onLoad={handleImageLoad}
@@ -215,7 +215,6 @@ export const PostUpload = ({
                             items.map((item, index) => (
                                 <Marker
                                     key={index}
-                                    item={item}
                                     ref={ref =>
                                         (markerRefs.current[index] = ref)
                                     }
@@ -224,6 +223,7 @@ export const PostUpload = ({
                                         left: item.location.x,
                                         top: item.location.y,
                                     }}
+                                    item={item}
                                     deleteItem={deleteItem}
                                 />
                             ))

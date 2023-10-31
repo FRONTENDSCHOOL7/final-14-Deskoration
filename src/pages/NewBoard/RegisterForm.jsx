@@ -1,17 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import Input from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import * as S from './RegisterForm.styled';
 
-export const RegisterForm = ({
-    handleShowRegisterForm,
-    items,
-    setItems,
-    offset,
-    state,
-    setState,
-}) => {
+export const RegisterForm = ({ items, setItems, offset }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const editItem = location.state?.editItem;
+
     const formRef = useRef(null);
     const categoryRef = useRef(null);
     const productNameRef = useRef(null);
@@ -38,10 +36,10 @@ export const RegisterForm = ({
                 ? setWarnProductName(true)
                 : setWarnProductName(false);
             !priceValue ? setWarnPrice(true) : setWarnPrice(false);
-        } else if (items.length < 5) {
-            const itemIndex = items.findIndex(
-                item => item.id === state?.editItem.id,
-            );
+        } else if (items.length <= 6) {
+            const itemIndex = items.findIndex(item => item.id === editItem?.id);
+
+            const newID = () => Math.random().toString(36).substring(2, 16);
 
             const newData = {
                 category: categoryValue,
@@ -49,7 +47,7 @@ export const RegisterForm = ({
                 price: priceValue,
                 store: storeRef.current.value,
                 link: linkRef.current.value,
-                id: state ? state.editItem.id : items.length,
+                id: editItem ? editItem.id : newID(),
                 location: offset,
             };
 
@@ -64,12 +62,8 @@ export const RegisterForm = ({
                 setItems(prev => [...prev, newData]);
             }
 
-            // 마커 컴포넌트 렌더링 여부 컨트롤
-            handleShowRegisterForm();
+            navigate(`/newboard`);
             formRef.current.reset();
-            setState(null);
-        } else {
-            alert('상품은 최대 5개까지 추가할 수 있습니다.');
         }
     };
 
@@ -78,12 +72,12 @@ export const RegisterForm = ({
     }, []);
 
     useEffect(() => {
-        categoryRef.current.value = state ? state.editItem.category : null;
-        productNameRef.current.value = state && state.editItem.productName;
-        priceRef.current.value = state && state.editItem.price;
-        storeRef.current.value = state && state.editItem.store;
-        linkRef.current.value = state && state.editItem.link;
-    }, [state]);
+        categoryRef.current.value = editItem ? editItem.category : null;
+        productNameRef.current.value = editItem ? editItem.productName : null;
+        priceRef.current.value = editItem ? editItem.price : null;
+        storeRef.current.value = editItem ? editItem.store : null;
+        linkRef.current.value = editItem ? editItem.link : null;
+    }, [editItem]);
 
     return (
         <S.RegisterForm ref={formRef} onSubmit={dataSubmit}>
@@ -118,7 +112,7 @@ export const RegisterForm = ({
                 <GradientButton
                     width={'40%'}
                     padding={'12px'}
-                    onClick={handleShowRegisterForm}
+                    onClick={() => navigate(`/newboard`)}
                 >
                     취소하기
                 </GradientButton>

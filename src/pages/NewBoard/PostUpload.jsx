@@ -91,9 +91,9 @@ export const PostUpload = ({
     const handleImageClick = event => {
         if (!isDragging) {
             const offsetX =
-                (event.nativeEvent.offsetX / containerSize.width) * 100;
+                ((event.nativeEvent.offsetX - 10) / containerSize.width) * 100;
             const offsetY =
-                (event.nativeEvent.offsetY / containerSize.height) * 100;
+                ((event.nativeEvent.offsetY - 10) / containerSize.height) * 100;
 
             setOffset(prev => ({
                 ...prev,

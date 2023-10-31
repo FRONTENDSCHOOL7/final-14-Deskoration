@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import GradientButton from '../../components/GradientButton/GradientButton';
+import Input from '../../components/Input/Input';
+import { WarningMsg } from '../../components/Input/WarningMsg';
 import * as S from './RegisterForm.styled';
 
 export const RegisterForm = ({
@@ -6,157 +9,123 @@ export const RegisterForm = ({
     items,
     setItems,
     offset,
+    state,
+    setState,
 }) => {
-    const [data, setData] = useState({
-        id: '',
-        location: {},
-        category: '',
-        productName: '',
-        price: '',
-        store: '',
-        link: '',
-    });
+    const formRef = useRef(null);
+    const categoryRef = useRef(null);
+    const productNameRef = useRef(null);
+    const priceRef = useRef(null);
+    const storeRef = useRef(null);
+    const linkRef = useRef(null);
 
-    const [initialAccess, setInitialAccess] = useState(true);
+    const [warnCatagory, setWarnCatagory] = useState(false);
+    const [warnProductName, setWarnProductName] = useState(false);
+    const [warnPrice, setWarnPrice] = useState(false);
+
     // submit 함수
     const dataSubmit = event => {
         event.preventDefault();
-        setInitialAccess(false);
+
+        const categoryValue = categoryRef.current.value;
+        const productNameValue = productNameRef.current.value;
+        const priceValue = priceRef.current.value;
+
         // input에 입력 값이 없을 경우 submit이 되지 않는다.
-        if (!data.category || !data.productName || !data.price) {
-            return;
+        if (!categoryValue || !productNameValue || !priceValue) {
+            !categoryValue ? setWarnCatagory(true) : setWarnCatagory(false);
+            !productNameValue
+                ? setWarnProductName(true)
+                : setWarnProductName(false);
+            !priceValue ? setWarnPrice(true) : setWarnPrice(false);
         } else if (items.length < 5) {
-            // Items에 입력한 데이터를 저장
+            const itemIndex = items.findIndex(
+                item => item.id === state?.editItem.id,
+            );
+
             const newData = {
-                ...data,
-                id: items.length,
+                category: categoryValue,
+                productName: productNameValue,
+                price: priceValue,
+                store: storeRef.current.value,
+                link: linkRef.current.value,
+                id: state ? state.editItem.id : items.length,
                 location: offset,
             };
-            setItems(prev => [...prev, newData]);
+
+            if (itemIndex !== -1) {
+                const updatedData = [...items];
+                updatedData[itemIndex] = {
+                    ...updatedData[itemIndex],
+                    ...newData,
+                };
+                setItems(updatedData);
+            } else {
+                setItems(prev => [...prev, newData]);
+            }
+
             // 마커 컴포넌트 렌더링 여부 컨트롤
             handleShowRegisterForm();
-            // data 초기화
-            // 여기 form 이면 차라리 formRef를 써서 초기화
-            setData(prev => ({
-                ...prev,
-                id: '',
-                location: {},
-                category: '',
-                productName: '',
-                price: '',
-                store: '',
-                link: '',
-            }));
+            formRef.current.reset();
+            setState(null);
         } else {
             alert('상품은 최대 5개까지 추가할 수 있습니다.');
         }
-
-        setInitialAccess(true);
     };
+
+    useEffect(() => {
+        categoryRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+        categoryRef.current.value = state ? state.editItem.category : null;
+        productNameRef.current.value = state && state.editItem.productName;
+        priceRef.current.value = state && state.editItem.price;
+        storeRef.current.value = state && state.editItem.store;
+        linkRef.current.value = state && state.editItem.link;
+    }, [state]);
+
     return (
-        <S.ProductRegisterForm onSubmit={dataSubmit}>
+        <S.RegisterForm ref={formRef} onSubmit={dataSubmit}>
             <fieldset>
                 <Input
                     label="카테고리"
-                    value={data.category}
-                    setData={setData}
-                    warning={
-                        !initialAccess && !data.category ? 'warning' : null
-                    }
+                    inputRef={categoryRef}
+                    warning={warnCatagory}
                 />
-                {initialAccess ? null : !data.category && <WarningMsg />}
+                {warnCatagory && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
 
                 <Input
                     label="상품명"
-                    value={data.productName}
-                    setData={setData}
-                    warning={
-                        !initialAccess && !data.productName ? 'warning' : null
-                    }
+                    inputRef={productNameRef}
+                    warning={warnProductName}
                 />
-                {initialAccess ? null : !data.productName && <WarningMsg />}
+                {warnProductName && (
+                    <WarningMsg msg={'필수 정보를 입력하세요.'} />
+                )}
 
                 <Input
                     label="구매가격"
-                    value={data.price}
-                    setData={setData}
-                    warning={!initialAccess && !data.price ? 'warning' : null}
+                    inputRef={priceRef}
+                    warning={warnPrice}
                 />
-                {initialAccess ? null : !data.price && <WarningMsg />}
+                {warnPrice && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
 
-                <Input
-                    label="구매처"
-                    value={data.store}
-                    setData={setData}
-                    initialAccess={initialAccess}
-                />
-                <Input
-                    label="구매링크"
-                    value={data.link}
-                    setData={setData}
-                    initialAccess={initialAccess}
-                />
+                <Input label="구매처" inputRef={storeRef} />
+                <Input label="구매링크" inputRef={linkRef} />
             </fieldset>
-
-            <S.RegisterButton>등록하기</S.RegisterButton>
-        </S.ProductRegisterForm>
+            <S.RegisterButtonBox>
+                <GradientButton
+                    width={'40%'}
+                    padding={'12px'}
+                    onClick={handleShowRegisterForm}
+                >
+                    취소하기
+                </GradientButton>
+                <GradientButton gra={'true'} type={'submit'} width={'40%'}>
+                    등록하기
+                </GradientButton>
+            </S.RegisterButtonBox>
+        </S.RegisterForm>
     );
-};
-
-const Input = ({ label, value, setData, warning }) => {
-    //input값을 data에 저장하기
-    const handleInputChange = event => {
-        switch (label) {
-            case '카테고리':
-                setData(prev => ({
-                    ...prev,
-                    category: event.target.value,
-                }));
-                break;
-            case '상품명':
-                setData(prev => ({
-                    ...prev,
-                    productName: event.target.value,
-                }));
-                break;
-            case '구매가격':
-                setData(prev => ({
-                    ...prev,
-                    price: event.target.value,
-                }));
-                break;
-            case '구매처':
-                setData(prev => ({
-                    ...prev,
-                    store: event.target.value,
-                }));
-                break;
-            case '구매링크':
-                setData(prev => ({
-                    ...prev,
-                    link: event.target.value,
-                }));
-                break;
-            default:
-                console.log('에러');
-        }
-    };
-
-    return (
-        <>
-            <S.InputLabel htmlFor={label} label={label}>
-                {label}
-            </S.InputLabel>
-            <S.InputText
-                id={label}
-                value={value}
-                onChange={handleInputChange}
-                className={warning}
-            />
-        </>
-    );
-};
-
-const WarningMsg = () => {
-    return <S.Warning>필수 정보를 입력하세요.</S.Warning>;
 };

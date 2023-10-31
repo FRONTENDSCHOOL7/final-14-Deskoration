@@ -1,11 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RegisterForm } from './RegisterForm';
 import { PostUpload } from './PostUpload';
 import * as S from './NewBoard.styled';
-
-import { ImgConvert } from '../../hooks/img_Uploader';
+import { useLocation } from 'react-router-dom';
 
 const NewBoard = () => {
+    const location = useLocation();
+
+    const [state, setState] = useState(location.state);
     const [showRegisterForm, setShowRegisterForm] = useState(false);
     const [photoURL, setPhotoURL] = useState('');
     const [textareaCount, setTextareaCount] = useState(0);
@@ -18,6 +20,18 @@ const NewBoard = () => {
     };
 
     const handleShowRegisterForm = () => setShowRegisterForm(prev => !prev);
+
+    useEffect(() => {
+        handleShowRegisterForm();
+    }, [state]);
+
+    const deleteItem = itemID => {
+        if (window.confirm('삭제 ㄱㄱ?')) {
+            const updatedArray = items.filter(item => item.id !== itemID);
+            setItems(updatedArray);
+        }
+        return;
+    };
 
     const onSubmit = () => console.log('submit');
 
@@ -35,6 +49,8 @@ const NewBoard = () => {
                     setItems={setItems}
                     offset={offset}
                     handleShowRegisterForm={handleShowRegisterForm}
+                    state={state}
+                    setState={setState}
                 />
             ) : (
                 <form onSubmit={onSubmit}>
@@ -45,6 +61,7 @@ const NewBoard = () => {
                         handleShowRegisterForm={handleShowRegisterForm}
                         photoURL={photoURL}
                         setPhotoURL={setPhotoURL}
+                        deleteItem={deleteItem}
                     />
                     <S.NewBoardTextarea
                         maxLength="100"

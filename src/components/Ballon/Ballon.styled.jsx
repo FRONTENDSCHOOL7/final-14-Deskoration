@@ -9,12 +9,12 @@ export const Ballon = styled.div`
     width: 150px;
     height: 60px;
     padding: 12px;
-    color: #fff;
-    background: pink;
+    color: ${props => props.theme.mainFont};
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
+    background: #fff;
     z-index: 101;
 
-    display: flex;
-    justify-content: space-between;
+    display: none;
 
     ${props =>
         props.$markerLocation.x < 25
@@ -41,7 +41,7 @@ export const Ballon = styled.div`
         content: '';
         position: absolute;
         border-style: solid;
-        border-color: pink transparent;
+        border-color: #fff transparent;
         display: block;
         z-index: 200;
 
@@ -91,7 +91,12 @@ export const Product = styled.div`
     }
 `;
 
-export const TrashIcon = styled(Trash)``;
+export const TrashIcon = styled(Trash)`
+    path {
+        fill: ${props => props.theme.subFont};
+    }
+`;
+
 export const DeletItemButton = styled.button`
     padding: 0 6px;
 `;

@@ -83,7 +83,7 @@ export const Product = styled.div`
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        cursor: point;
+        cursor: pointer;
         &:hover {
             border-bottom: 1px solid red;
         }

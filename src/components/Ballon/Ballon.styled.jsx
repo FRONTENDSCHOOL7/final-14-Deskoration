@@ -4,70 +4,71 @@ import { ReactComponent as Trash } from '../../assets/images/Trash.svg';
 
 export const Ballon = styled.div`
     position: absolute;
-
-    top: ${props => props.$markerLocation.y}%;
-
-    transform: translate(-50%, 30px);
+    top: ${props => `calc(${props.$markerLocation.y}% + 34px)`};
 
     width: 150px;
+    height: 60px;
     padding: 12px;
-    border-radius: 10px;
     color: #fff;
     background: pink;
-
     z-index: 101;
-    display: none;
+
+    display: flex;
+    justify-content: space-between;
 
     ${props =>
-        props.$markerLocation.x < 27
+        props.$markerLocation.x < 25
             ? css`
-                  left: 78px;
+                  left: 0;
+                  transform: none;
               `
             : props.$markerLocation.x > 75
             ? css`
-                  left: 227px;
+                  left: calc(100% - 150px);
               `
             : css`
                   left: ${props => props.$markerLocation.x}%;
+                  transform: translateX(-50%);
               `}
 
     ${props =>
-        props.$markerLocation.y > 50 &&
+        props.$markerLocation.y > 48 &&
         css`
-            transform: translate(-50%, -75px);
+            top: ${props => `calc(${props.$markerLocation.y}% - 75px)`};
         `}
 
-    ::before {
+    &::before {
         content: '';
         position: absolute;
         border-style: solid;
         border-color: pink transparent;
         display: block;
-        width: 0;
-        z-index: 1;
-        left: 50%;
+        z-index: 200;
 
-        ${props =>
-            props.$markerLocation.y > 50
-                ? css`
-                      border-width: 15px 15px 0;
-                      bottom: -15px;
-                  `
-                : css`
-                      border-width: 0 15px 15px;
-                      top: -15px;
-                  `}
         ${props =>
             props.$markerLocation.x < 25
                 ? css`
-                      left: ${props => props.$markerLocation.x + 6}%;
+                      left: ${props => props.$markerLocation.x * 2}%;
                   `
                 : props.$markerLocation.x > 75
                 ? css`
-                      left: ${props => props.$markerLocation.x - 20}%;
+                      left: calc(
+                          50% + ${((props.$markerLocation.x - 75) / 25) * 50}%
+                      );
                   `
                 : css`
-                      transform: translateX(-50%);
+                      left: 50%;
+                  `}
+
+        ${props =>
+            props.$markerLocation.y > 48
+                ? css`
+                      border-width: 10px 10px 0;
+                      bottom: -10px;
+                  `
+                : css`
+                      border-width: 0 10px 10px;
+                      top: -10px;
                   `}
     }
 `;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ReactComponent as ImgUploadFile } from '../../assets/images/ImgUpload.svg';
+import { ReactComponent as Delete } from '../../assets/images/Delete.svg';
 
 export const ProfileTitle = styled.h4`
     margin-bottom: 30px;
@@ -17,6 +18,27 @@ export const ProfileImgBox = styled.div`
     align-items: center;
     position: relative;
     margin: 0 auto;
+    &::before {
+    }
+`;
+
+export const DeleteButton = styled.button`
+    width: 34px;
+    height: 34px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: ${({ theme }) => theme.point};
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const DeleteIcon = styled(Delete)`
+    path {
+        fill: #fff;
+    }
 `;
 
 export const ProfileImg = styled.img`
@@ -35,8 +57,8 @@ export const ImgUploadLabel = styled.label`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     padding: 4px;
     background-color: ${({ theme }) => theme.point};
     border-radius: 50%;

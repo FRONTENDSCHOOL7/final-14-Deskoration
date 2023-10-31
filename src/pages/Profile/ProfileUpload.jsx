@@ -6,6 +6,7 @@ import { WarningMsg } from '../../components/Input/WarningMsg';
 import { ReactComponent as ImgUpload } from '../../assets/images/ImgUpload.svg';
 import { ImgConvert } from '../../hooks/img_Uploader';
 import GradientButton from '../../components/GradientButton/GradientButton';
+import { useLocation } from 'react-router';
 
 export const ProfileUpload = () => {
     const [photoURL, setPhotoURL] = useState(basicImg);
@@ -18,6 +19,8 @@ export const ProfileUpload = () => {
 
     const [initialAccess, setInitialAccess] = useState(true);
     const [isIDAvailable, setIsIDAvailable] = useState(false);
+    const [isImageAdded, setIsImageAdded] = useState(false);
+    const { emailValue, passwordValue } = useLocation().state;
 
     const userNameEl = useRef(null);
     const idEl = useRef(null);
@@ -35,6 +38,17 @@ export const ProfileUpload = () => {
                 image: photoURL,
             }));
         }
+
+        setIsImageAdded(true);
+    };
+
+    const deleteImg = () => {
+        setIsImageAdded(false);
+        setPhotoURL(basicImg);
+        setData(prev => ({
+            ...prev,
+            image: photoURL,
+        }));
     };
 
     // input에 입력한 값을 data에 저장
@@ -125,6 +139,12 @@ export const ProfileUpload = () => {
                 <form onSubmit={dataSubmit}>
                     <S.ProfileImgBox>
                         <S.ProfileImg src={photoURL} alt="프로필 이미지" />
+                        {isImageAdded && (
+                            <S.DeleteButton type="button" onClick={deleteImg}>
+                                <S.DeleteIcon />
+                            </S.DeleteButton>
+                        )}
+
                         <S.ImgUploadBox>
                             <S.ImgUploadInput
                                 type="file"

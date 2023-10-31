@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
 import Input from '../../components/Input/Input';
@@ -60,6 +60,9 @@ export const ProfileUpload = () => {
         const validID = checkValidID(idValue);
         const validUserName = checkValidUserName(userNameValue);
 
+        // 사용자 이름에 따른 state 변경
+        setWarnUserName(!validUserName);
+
         // 계정 ID 검사
         if (validID) {
             try {
@@ -76,7 +79,6 @@ export const ProfileUpload = () => {
                 console.error(error);
             }
         } else {
-            !validUserName ? setWarnUserName(true) : setWarnUserName(false);
             !validID ? setWarnID(true) : setWarnID(false);
         }
 
@@ -87,15 +89,13 @@ export const ProfileUpload = () => {
             try {
                 const response = await fetch(reqURL, {
                     method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
+                    headers: { 'Content-type': 'application/json' },
                     body: JSON.stringify({
                         user: {
-                            userName: userNameValue,
+                            username: userNameValue,
                             email: emailValue,
                             password: passwordValue,
-                            accountName: idValue,
+                            accountname: idValue,
                             intro: introValue,
                             image: photoURL,
                         },

@@ -67,6 +67,7 @@ button{
 
 a{
   text-decoration: none;
+	color: inherit;
 }
 
 html{

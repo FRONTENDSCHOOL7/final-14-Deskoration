@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Loading.styled';
+import { useNavigate } from 'react-router-dom';
 
 const Loading = ({ text }) => {
-    const [toggleColor, setToggleColor] = useState(false);
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+    const [toggleColor, setToggleColor] = useState(true);
 
     useEffect(() => {
-        const textAnimationLoop = () => {
-            setToggleColor(true);
-
-            setTimeout(() => {
-                setToggleColor(false);
-            }, 2500);
-        };
-
-        const intervalId = setInterval(textAnimationLoop, 5000);
-
-        // 초기 애니메이션
-        textAnimationLoop();
-
-        // 컴포넌트가 언마운트 될 때 인터벌 클리어
-        return () => clearInterval(intervalId);
+        setToggleColor(false);
     }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 3000);
+    }, []);
+
+    useEffect(() => {
+        if (!isLoading) {
+            const timer = setTimeout(() => {
+                navigate('/login');
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isLoading]);
 
     return (
         <S.LogoContainer>
-            <S.LoadingImg />
+            <S.LoadingImg $isLoading={isLoading} />
             <S.TitleBox>
                 {text.split('').map((char, index) => (
                     <S.CharSpan

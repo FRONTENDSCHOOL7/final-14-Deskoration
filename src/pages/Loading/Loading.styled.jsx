@@ -1,21 +1,21 @@
 import styled, { css } from 'styled-components';
 import { ReactComponent as Logo } from '../../assets/images/Loading.svg';
 
+export const LoadingImg = styled(Logo)`
+    aspect-ratio: 94 / 124;
+    height: 180px;
+
+    .light {
+        fill: ${props => (props.$isLoading ? 'none' : '#efc265')};
+    }
+`;
+
 export const LogoContainer = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-`;
-
-export const LoadingImg = styled(Logo)`
-    aspect-ratio: 94 / 124;
-    height: 180px;
-
-    .custom-fill {
-        fill: none;
-    }
 `;
 
 export const TitleBox = styled.h1`

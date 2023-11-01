@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as S from './Footer.styled';
-
+import usePageHandler from '../../hooks/usePageHandler';
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
 import { useDispatch } from 'react-redux';
 import { setPage } from '../../features/page/pageSlice';
@@ -18,9 +18,7 @@ const Footer = () => {
 
     const dispatch = useDispatch();
 
-    const handlePage = (type, value) => {
-        dispatch(setPage({ type, value }));
-    };
+    const handlePage = usePageHandler();
 
     return (
         <S.Footer>

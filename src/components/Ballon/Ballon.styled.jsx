@@ -4,8 +4,6 @@ import { ReactComponent as Trash } from '../../assets/images/Trash.svg';
 
 export const Ballon = styled.div`
     position: absolute;
-    top: ${props => `calc(${props.$markerLocation.y}% + 34px)`};
-
     width: 150px;
     height: 60px;
     padding: 12px;
@@ -13,64 +11,24 @@ export const Ballon = styled.div`
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
     background: #fff;
     z-index: 101;
-
     display: none;
+`;
 
-    ${props =>
-        props.$markerLocation.x < 25
-            ? css`
-                  left: 0;
-                  transform: none;
-              `
-            : props.$markerLocation.x > 75
-            ? css`
-                  left: calc(100% - 150px);
-              `
-            : css`
-                  left: ${props => props.$markerLocation.x}%;
-                  transform: translateX(-50%);
-              `}
+export const Arrow = styled.div`
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    left: 50%;
 
-    ${props =>
-        props.$markerLocation.y > 48 &&
-        css`
-            top: ${props => `calc(${props.$markerLocation.y}% - 75px)`};
-        `}
-
-    &::before {
-        content: '';
-        position: absolute;
-        border-style: solid;
-        border-color: #fff transparent;
-        display: block;
-        z-index: 200;
-
-        ${props =>
-            props.$markerLocation.x < 25
-                ? css`
-                      left: ${props => props.$markerLocation.x * 2}%;
-                  `
-                : props.$markerLocation.x > 75
-                ? css`
-                      left: calc(
-                          50% + ${((props.$markerLocation.x - 75) / 25) * 50}%
-                      );
-                  `
-                : css`
-                      left: 50%;
-                  `}
-
-        ${props =>
-            props.$markerLocation.y > 48
-                ? css`
-                      border-width: 10px 10px 0;
-                      bottom: -10px;
-                  `
-                : css`
-                      border-width: 0 10px 10px;
-                      top: -10px;
-                  `}
-    }
+    // 화살표 방향과 위치 조정
+    ${({ isAbove }) => css`
+        border-color: ${isAbove
+            ? '#fff transparent transparent transparent'
+            : 'transparent transparent #fff transparent'};
+        border-width: 10px 10px 10px 10px;
+        ${isAbove ? 'bottom: -20px;' : 'top: -20px;'}
+    `}
 `;
 
 export const Product = styled.div`

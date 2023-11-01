@@ -14,7 +14,10 @@ export const Marker = React.forwardRef((props, markerRef) => {
                 className="marker"
                 ref={markerRef}
                 onMouseDown={onMouseDown}
-                $markerLocation={markerLocation}
+                style={{
+                    left: `${markerLocation.left}%`,
+                    top: `${markerLocation.top}%`,
+                }}
             />
             {item && <Ballon item={item} deleteItem={deleteItem} />}
         </S.MarkerContainer>

@@ -44,14 +44,12 @@ export const ProfileImg = styled.img`
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
-    margin-right: 8px;
+    margin-right: 5px;
 `;
 
 export const BoardMain = styled.div`
     width: 100%;
     height: 640px;
-    padding-left: 20px;
-    padding-right: 20px;
 `;
 
 export const ContentSection = styled.div`
@@ -60,7 +58,13 @@ export const ContentSection = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    padding-left: 20px;
+    padding-right: 20px;
     overflow-y: scroll; /* 스크롤 생성을 위해 수정 */
+
+    .post-img {
+        width: 100%;
+    }
 
     img {
         margin: 5px 0 5px 0;
@@ -93,7 +97,7 @@ export const ContentSection = styled.div`
 `;
 
 export const CommentSection = styled.section`
-    width: 100%;
+    width: 310px;
     height: auto;
     padding: 20px 0 25px 10px;
     margin-top: 10px;
@@ -106,13 +110,17 @@ export const CommentCounter = styled.div`
     margin-bottom: 20px;
 `;
 
-export const CommentList = styled.div``;
+export const CommentList = styled.div`
+    font-size: 12px;
+    width: 200px;
+`;
 
 export const AComment = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    margin-bottom: 5px;
 `;
 
 export const CommentID = styled.p`
@@ -154,4 +162,8 @@ export const CommentInput = styled.div`
         color: orange;
         width: 50px;
     }
+`;
+
+export const DotsIcon = styled(Dots)`
+    cursor: pointer;
 `;

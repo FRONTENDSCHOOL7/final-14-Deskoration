@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import * as S from './Footer.styled';
+
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
+import { useDispatch } from 'react-redux';
+import { setPage } from '../../features/page/pageSlice';
 
 const Footer = () => {
     const [hover, setHover] = useState({
@@ -13,6 +16,12 @@ const Footer = () => {
 
     const [active, setActive] = useState('home');
 
+    const dispatch = useDispatch();
+
+    const handlePage = (type, value) => {
+        dispatch(setPage({ type, value }));
+    };
+
     return (
         <S.Footer>
             <S.FooterUl>
@@ -22,6 +31,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -30,6 +40,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -38,6 +49,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -46,6 +58,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -54,6 +67,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
             </S.FooterUl>

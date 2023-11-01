@@ -6,9 +6,8 @@ import { useLocation } from 'react-router-dom';
 
 const NewBoard = () => {
     const location = useLocation();
+    const pathName = location.pathname;
 
-    const [state, setState] = useState(location.state);
-    const [showRegisterForm, setShowRegisterForm] = useState(false);
     const [photoURL, setPhotoURL] = useState('');
     const [textareaCount, setTextareaCount] = useState(0);
 
@@ -18,12 +17,6 @@ const NewBoard = () => {
     const handleTextCountChange = e => {
         setTextareaCount(e.target.value.length);
     };
-
-    const handleShowRegisterForm = () => setShowRegisterForm(prev => !prev);
-
-    useEffect(() => {
-        handleShowRegisterForm();
-    }, [state]);
 
     const deleteItem = itemID => {
         if (window.confirm('삭제 ㄱㄱ?')) {
@@ -43,22 +36,12 @@ const NewBoard = () => {
                 </button>
                 <h4>게시물 작성</h4>
             </S.NewBoardHeader>
-            {showRegisterForm ? (
-                <RegisterForm
-                    items={items}
-                    setItems={setItems}
-                    offset={offset}
-                    handleShowRegisterForm={handleShowRegisterForm}
-                    state={state}
-                    setState={setState}
-                />
-            ) : (
+            {pathName === '/newboard' ? (
                 <form onSubmit={onSubmit}>
                     <PostUpload
                         items={items}
                         setItems={setItems}
                         setOffset={setOffset}
-                        handleShowRegisterForm={handleShowRegisterForm}
                         photoURL={photoURL}
                         setPhotoURL={setPhotoURL}
                         deleteItem={deleteItem}
@@ -73,6 +56,12 @@ const NewBoard = () => {
                         올리기
                     </S.SubmitNewBoardButton>
                 </form>
+            ) : (
+                <RegisterForm
+                    items={items}
+                    setItems={setItems}
+                    offset={offset}
+                />
             )}
         </S.NewBoardContainer>
     );

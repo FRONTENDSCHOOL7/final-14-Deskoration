@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
 import Input from '../../components/Input/Input';
@@ -7,6 +8,8 @@ import { AuthLogin } from '../../service/auth_service';
 import * as S from './User.styled';
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [warmEmail, setWarnEmail] = useState(false);
     const [warnPassword, setWarnPassword] = useState(false);
 
@@ -35,7 +38,13 @@ const Login = () => {
                 ) {
                     alert(result.message);
                 } else {
-                    console.log(result);
+                    // 임시변경
+                    sessionStorage.setItem('tempToken', result.user.token);
+                    sessionStorage.setItem(
+                        'tempAccountName',
+                        result.user.accountname,
+                    );
+                    navigate('/home');
                 }
             } catch (error) {
                 console.error('error');
@@ -67,7 +76,12 @@ const Login = () => {
                 )}
             </S.InputBox>
 
-            <GradientButton $gra={true} width={'100%'} $padding={'20px'}>
+            <GradientButton
+                type={'submit'}
+                $gra={true}
+                width={'100%'}
+                $padding={'20px'}
+            >
                 로그인
             </GradientButton>
         </S.UserForm>

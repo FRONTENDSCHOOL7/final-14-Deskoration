@@ -7,8 +7,8 @@ const Ballon = ({ item, deleteItem }) => {
     // 내 글이 아니고, 수정중이 아니라면 삭제하기 안보이게
     const navigate = useNavigate();
 
-    const temp = () => {
-        navigate('/newboard', {
+    const editItem = () => {
+        navigate(`/newboard/${item.id}`, {
             state: { editItem: item },
         });
     };
@@ -52,7 +52,7 @@ const Ballon = ({ item, deleteItem }) => {
                 style={{ left: calcArrowLeft(item.location.x) }}
             />
             <S.Product>
-                <div onClick={temp}>{item.productName}</div>
+                <div onClick={editItem}>{item.productName}</div>
                 <div> {item.price}</div>
             </S.Product>
             <S.DeletItemButton

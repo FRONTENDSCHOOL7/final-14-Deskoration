@@ -1,7 +1,7 @@
-const baseURL = 'https://api.mandarin.weniv.co.kr/';
+const baseURL = 'https://api.mandarin.weniv.co.kr';
 
 export const ValidEmail = async email => {
-    const reqURL = `${baseURL}user/emailvalid`;
+    const reqURL = `${baseURL}/user/emailvalid`;
 
     try {
         const response = await fetch(reqURL, {
@@ -18,7 +18,7 @@ export const ValidEmail = async email => {
 };
 
 export const ValidAccountName = async accountName => {
-    const reqURL = `${baseURL}user/accountnamevalid`;
+    const reqURL = `${baseURL}/user/accountnamevalid`;
 
     try {
         const response = await fetch(reqURL, {
@@ -35,7 +35,7 @@ export const ValidAccountName = async accountName => {
 };
 
 export const AuthLogin = async (emailValue, passwordValue) => {
-    const reqURL = `${baseURL}user/login`;
+    const reqURL = `${baseURL}/user/login`;
 
     try {
         const response = await fetch(reqURL, {

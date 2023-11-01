@@ -1,11 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
+import { PostAll } from '../../service/board_service';
 
 const Article = () => {
-    const [articles, setArticles] = useState(Array(8).fill({}));
+    // const [articles, setArticles] = useState(Array(8).fill({}));
+    const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null); // S.Section에 대한 참조 생성
+
+    useEffect(() => {
+        PostAll()
+            .then(data => {
+                setArticles(data.posts);
+            })
+            .catch(error => {
+                console.error('API 요청 중 오류 발생하는 중: ', error);
+            });
+    }, []);
+
+    const postImage = articles.map(item => item.image);
+    console.log('articles:', articles);
+    // console.log(postImage);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,9 +52,14 @@ const Article = () => {
     return (
         <>
             <S.Section ref={sectionRef}>
-                {articles.map((article, index) => (
+                {/* {articles.map((article, index) => (
                     <Link key={index} to={'/board'}>
                         <S.Article></S.Article>
+                    </Link>
+                ))} */}
+                {postImage.map(item => (
+                    <Link to={'/board'}>
+                        <S.Article imageurl={item}></S.Article>
                     </Link>
                 ))}
             </S.Section>

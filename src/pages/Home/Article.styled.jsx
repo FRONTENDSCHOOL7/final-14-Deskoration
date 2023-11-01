@@ -33,7 +33,7 @@ export const Section = styled.section`
 export const Article = styled.article`
     width: 140px;
     height: 140px;
-    background-image: url('./images/DeskSetup.jpg');
+    background-image: url(${props => props.imageurl});
     background-size: cover;
     box-sizing: border-box;
     transition: border 0.1s ease;

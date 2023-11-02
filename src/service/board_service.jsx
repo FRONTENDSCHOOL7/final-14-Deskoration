@@ -24,8 +24,9 @@ export const fetchPosts = async () => {
 
 // 게시글 전체보기
 export const PostAll = async () => {
+    const number = 30;
     try {
-        const response = await fetch(`${baseURL}post`, {
+        const response = await fetch(`${baseURL}post?limit=${number}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -38,7 +39,7 @@ export const PostAll = async () => {
             // console.log('API보기1: ', data);
             return data;
         } else {
-            console.error('API 요청이 실패했습니다.');
+            console.error('API 요청이 실패했습니다.ㅜㅜㅜㅜㅜㅜㅜㅜㅜ');
         }
     } catch (error) {
         console.error('API 요청 중 오류 발생: ', error);

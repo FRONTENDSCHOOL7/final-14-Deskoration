@@ -7,7 +7,6 @@ export const Searchicon = styled(Search)`
     position: top;
 `;
 
-
 export const ChatListPageContainer = styled.div`
     position: relative;
 `;
@@ -28,11 +27,11 @@ export const ChatlistPageMain = styled.div`
 `;
 
 export const SearchBar = styled.div`
-margin: 0 25px;
+    margin: 0 25px;
 
     width: 310px;
     height: 60px;
-    background-color: #dbdbdb;
+    background-color: ${({ theme }) => theme.border};
     border: none;
     border-radius: 30px;
     display: flex;
@@ -53,7 +52,7 @@ export const SearchUsernameInput = styled.input`
     height: 24px;
     border: none;
     outline: none;
-    background-color: #dbdbdb;
+    background-color: ${({ theme }) => theme.border};
 `;
 
 export const UserChatList = styled.ul`
@@ -83,7 +82,7 @@ export const UserChatRoom = styled.div`
 export const UserSimpleinfo = styled.div`
     .user-name {
         font-size: 14px;
-        color: #0f0f0f;
+        color: ${({ theme }) => theme.mainFont};
     }
 
     .user-msg-time {
@@ -94,7 +93,7 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-lastMeassage {
-        color: #767676;
+        color: ${({ theme }) => theme.subFont};
         white-space: nowrap;
         /* 긴 텍스트를 한 줄로 표시 */
         overflow: hidden;
@@ -105,7 +104,7 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-date {
-        color: #767676;
+        color: ${({ theme }) => theme.subFont};
     }
 `;
 

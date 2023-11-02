@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
 import * as S from './Article.styled';
+import Board from '../Board/Board';
 import { PostAll } from '../../service/board_service';
+import { GetAllPost, GetMyPost } from '../../service/post_service';
+const token = sessionStorage.getItem('tempToken');
+const tempAccountName = sessionStorage.getItem('tempAccountName');
 
 const Article = () => {
     // const [articles, setArticles] = useState(Array(8).fill({}));
@@ -9,19 +13,54 @@ const Article = () => {
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null); // S.Section에 대한 참조 생성
 
+    // const tempAllApi = async token => {
+    //     try {
+    //         const data = await GetAllPost(token);
+    //         console.log('API보기2: ', data);
+    //         console.log(
+    //             'deskoration: ',
+    //             data.posts.filter(post =>
+    //                 post.content?.includes('deskoration'),
+    //             ),
+    //         );
+    //     } catch (error) {
+    //         console.error('error가 나타나는 중입니다.....');
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     tempAllApi(token);
+    // }, []);
+
+    const tempApi = async (accountName, token) => {
+        try {
+            const result = await GetMyPost(accountName, token);
+            console.log('API보기2: ', result);
+            const deskoration = result.filter(post =>
+                post.content?.includes('"deskoration"'),
+            );
+            console.log('deskoration: ', deskoration);
+            setArticles(deskoration);
+        } catch (error) {
+            console.error('error');
+        }
+    };
+    console.log('articles', articles);
     useEffect(() => {
-        PostAll()
-            .then(data => {
-                setArticles(data.posts);
-            })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생하는 중: ', error);
-            });
+        const desk_result = tempApi(tempAccountName, token);
     }, []);
 
+    // useEffect(() => {
+    //     PostAll()
+    //         .then(data => {
+    //             setArticles(data.posts);
+    //         })
+    //         .catch(error => {
+    //             console.error('API 요청 중 오류 발생하는 중: ', error);
+    //         });
+    // }, []);
+
     const postImage = articles.map(item => item.image);
-    console.log('articles:', articles);
-    // console.log(postImage);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -55,27 +94,34 @@ const Article = () => {
         console.log('스크롤 후 aricles:', articles);
     };
 
+    //////////////////////////////////////////
+
+    // const tempApi = async (accountName, token) => {
+    //     try {
+    //         const result = await GetMyPost(accountName, token);
+    //         console.log('API보기2: ', result);
+
+    //         console.log(
+    //             result.filter(post => post.content?.includes('"deskoration"')),
+    //         );
+    //     } catch (error) {
+    //         console.error('error');
+    //     }
+    // };
+
     return (
         <>
             <S.Section ref={sectionRef}>
-                {/* {articles.map((article, index) => (
-                    <Link key={index} to={'/board'}>
-                        <S.Article></S.Article>
-                    </Link>
-                ))} */}
-
-                {/* {postImage.map(item => (
-                    <Link to={'/board'}>
-                        <S.Article src={item}></S.Article>
-                    </Link>
-                ))} */}
                 {articles.map(article => (
-                    <Link key={article._id} to={`/board/${article._id}`}>
+                    <Link key={article.id} to={`/board/${article.id}`}>
                         <S.Article src={article.image}></S.Article>
                     </Link>
                 ))}
             </S.Section>
             {loading && <div>Loading...</div>}
+            <Routes>
+                <Route path={'/board/:id'} element={<Board />} />
+            </Routes>
         </>
     );
 };

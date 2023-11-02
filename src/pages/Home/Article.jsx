@@ -84,6 +84,11 @@ const Article = () => {
         //     setLoading(false);
         // });
 
+        // PostAll().then(data => {
+        //     setArticles(prevArticles => [...prevArticles, ...data.posts]);
+        //     setLoading(false);
+        // });
+
         setTimeout(() => {
             setArticles(prevArticles => [
                 ...prevArticles,

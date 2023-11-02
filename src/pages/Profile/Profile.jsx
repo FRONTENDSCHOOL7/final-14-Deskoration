@@ -1,32 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Profile.styled';
 import Footer from '../../components/Footer/Footer';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import Article from '../Home/Article';
+import { GetMyProfile } from '../../service/profile_service';
+import { fetchPosts } from '../../service/board_service';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
-    const content =
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum minima possimus praesentium'; // 여기에 표시할 텍스트 추가
+    const [profileData, setProfileData] = useState(null);
+    const [userPost, setUserPost] = useState(null);
+    const [expandedContent, setExpandedContent] = useState(false);
+
+    const myAccountName = sessionStorage.getItem('tempAccountName');
+
+    useEffect(() => {
+        // API 호출해서 데이터 받아오기
+        GetMyProfile()
+            .then(data => {
+                setProfileData(data.user);
+                console.log(data.user);
+            })
+            .catch(error => {
+                console.error('API 요청 중 오류 발생: ', error);
+            });
+        fetchPosts(myAccountName)
+            .then(data => {
+                setUserPost(data.post);
+                console.log(data.post);
+            })
+            .catch(error => {
+                console.error('API 요청 중 오류 발생: ', error);
+            });
+    }, []);
+
+    if (profileData === null || userPost === null) {
+        return <div>Loading...</div>;
+    }
+
+    const toggleExpandedContent = () => {
+        setExpandedContent(!expandedContent);
+    };
+
     return (
         <>
             <S.ProfileHeader>
                 <button>
                     <S.Backwardicon />
                 </button>
-                <h2>user</h2>
+                <h2>My profile</h2>
             </S.ProfileHeader>
             <S.ProfileContainer>
                 <S.UserInfo>
-                    <img
-                        src="/images/DeskSetup.jpg"
-                        alt=""
-                        className="user-img"
-                    />
+                    <img src={profileData.image} alt="" className="user-img" />
+
                     <div className="user-introduce">
-                        <p className="user-name">username</p>
+                        <p className="user-name">{profileData.accountname}</p>
                         <p className="user-info">
-                            {content}
-                            <button>더보기</button>
+                            {expandedContent
+                                ? profileData.intro
+                                : profileData.intro.slice(0, 53)}
+                            {profileData.intro.length > 30 && (
+                                <button onClick={toggleExpandedContent}>
+                                    {expandedContent ? '접기' : '더보기'}
+                                </button>
+                            )}
                         </p>
                     </div>
                 </S.UserInfo>
@@ -40,20 +78,26 @@ const Profile = () => {
                 </GradientButton>
                 <S.UserDataList>
                     <button className="user-post">
-                        <p>1234</p>
+                        <p>{userPost.length}</p>
                         <p>게시물</p>
                     </button>
-                    <button className="user-follow">
-                        <p>1234</p>
-                        <p>팔로우</p>
-                    </button>
-                    <button className="user-following">
-                        <p>1234</p>
-                        <p>팔로잉</p>
-                    </button>
+                    <Link to="/follow-following-list">
+                        <button className="user-follow">
+                            <p>{profileData.followerCount}</p>
+                            <p>팔로우</p>
+                        </button>
+                    </Link>
+                    <Link to="/follow-following-list">
+                        <button className="user-following">
+                            <p>{profileData.followingCount}</p>
+                            <p>팔로잉</p>
+                        </button>
+                    </Link>
                 </S.UserDataList>
                 <S.UserPostings>
-                    <Article />
+                    {userPost.map((post, index) => (
+                        <img key={index} src={post.image} alt="게시물 목록" />
+                    ))}
                 </S.UserPostings>
             </S.ProfileContainer>
             <Footer />

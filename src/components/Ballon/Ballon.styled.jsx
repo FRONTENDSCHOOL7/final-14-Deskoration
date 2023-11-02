@@ -4,72 +4,31 @@ import { ReactComponent as Trash } from '../../assets/images/Trash.svg';
 
 export const Ballon = styled.div`
     position: absolute;
-
-    top: ${props => props.$markerLocation.y}%;
-
-    transform: translate(-50%, 30px);
-
     width: 150px;
+    height: 60px;
     padding: 12px;
-    border-radius: 10px;
-    color: #fff;
-    background: pink;
-
+    color: ${props => props.theme.mainFont};
+    box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
+    background: #fff;
     z-index: 101;
     display: none;
+`;
 
-    ${props =>
-        props.$markerLocation.x < 27
-            ? css`
-                  left: 78px;
-              `
-            : props.$markerLocation.x > 75
-            ? css`
-                  left: 227px;
-              `
-            : css`
-                  left: ${props => props.$markerLocation.x}%;
-              `}
+export const Arrow = styled.div`
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    left: 50%;
 
-    ${props =>
-        props.$markerLocation.y > 50 &&
-        css`
-            transform: translate(-50%, -75px);
-        `}
-
-    ::before {
-        content: '';
-        position: absolute;
-        border-style: solid;
-        border-color: pink transparent;
-        display: block;
-        width: 0;
-        z-index: 1;
-        left: 50%;
-
-        ${props =>
-            props.$markerLocation.y > 50
-                ? css`
-                      border-width: 15px 15px 0;
-                      bottom: -15px;
-                  `
-                : css`
-                      border-width: 0 15px 15px;
-                      top: -15px;
-                  `}
-        ${props =>
-            props.$markerLocation.x < 25
-                ? css`
-                      left: ${props => props.$markerLocation.x + 6}%;
-                  `
-                : props.$markerLocation.x > 75
-                ? css`
-                      left: ${props => props.$markerLocation.x - 20}%;
-                  `
-                : css`
-                      transform: translateX(-50%);
-                  `}
-    }
+    // 화살표 방향과 위치 조정
+    ${({ isAbove }) => css`
+        border-color: ${isAbove
+            ? '#fff transparent transparent transparent'
+            : 'transparent transparent #fff transparent'};
+        border-width: 10px 10px 10px 10px;
+        ${isAbove ? 'bottom: -20px;' : 'top: -20px;'}
+    `}
 `;
 
 export const Product = styled.div`
@@ -83,14 +42,19 @@ export const Product = styled.div`
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        cursor: point;
+        cursor: pointer;
         &:hover {
             border-bottom: 1px solid red;
         }
     }
 `;
 
-export const TrashIcon = styled(Trash)``;
+export const TrashIcon = styled(Trash)`
+    path {
+        fill: ${props => props.theme.subFont};
+    }
+`;
+
 export const DeletItemButton = styled.button`
     padding: 0 6px;
 `;

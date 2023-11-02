@@ -4,9 +4,6 @@ import { Ballon } from '../Ballon/Ballon.styled';
 
 export const MarkerPointer = styled.img`
     position: absolute;
-    top: ${props => props.$markerLocation.top}%;
-    left: ${props => props.$markerLocation.left}%;
-
     z-index: 100;
 
     &.marker {

@@ -128,13 +128,13 @@ export const CommentID = styled.p`
     margin-bottom: 5px;
 `;
 
-export const BoardFooter = styled.div`
+export const CommentContainer = styled.div`
     width: 100%;
     height: 90px;
     padding: 15px 25px 15px 25px;
 `;
 
-export const CommentInput = styled.div`
+export const CommentBox = styled.div`
     width: 100%;
     height: 100%;
     border: 1px solid #ccc;

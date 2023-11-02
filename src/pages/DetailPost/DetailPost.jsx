@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './Board.styled';
+import * as S from './DetailPost.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { fetchPosts } from '../../service/board_service';
 import { fetchcomment, postComment } from '../../service/comment_service';
@@ -108,9 +108,9 @@ const Board = () => {
                         <p className="main-content">{postData.content}</p>
                         <S.CommentSection>
                             <S.CommentCounter>
-                                총 {commentData.length}개의 댓글
+                                총 {commentData?.length}개의 댓글
                             </S.CommentCounter>
-                            {commentData.map((comment, index) => (
+                            {commentData?.map((comment, index) => (
                                 <S.AComment key={index}>
                                     <S.ProfileImg
                                         src={comment.author.image}
@@ -126,7 +126,7 @@ const Board = () => {
                                     </div>
                                     {comment.author._id === myId && (
                                         <div class="dropdown">
-                                            <S.DotsIcon />
+                                            <S.Dots_verticalIcon />
                                         </div>
                                     )}
                                 </S.AComment>
@@ -135,8 +135,8 @@ const Board = () => {
                     </S.ContentSection>
                 )}
             </S.BoardMain>
-            <S.BoardFooter>
-                <S.CommentInput>
+            <S.CommentContainer>
+                <S.CommentBox>
                     <input
                         type="text"
                         placeholder="메시지를 입력하세요"
@@ -150,8 +150,8 @@ const Board = () => {
                     >
                         <p>등록</p>
                     </button>
-                </S.CommentInput>
-            </S.BoardFooter>
+                </S.CommentBox>
+            </S.CommentContainer>
         </>
     );
 };

@@ -11,6 +11,7 @@ import './App.css';
 import User from './pages/User/User';
 import Login from './pages/User/Login';
 import Signup from './pages/User/Signup';
+import Router from './router/Router';
 
 const token = sessionStorage.getItem('tempToken');
 
@@ -20,31 +21,7 @@ function App() {
             <div className="container" style={{ padding: '0 25px' }}>
                 <ThemeProvider theme={theme}>
                     <GlobalStyle />
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path={'/home'} element={<Home />}></Route>
-                            <Route path={'/board'} element={<Board />}></Route>
-                            <Route
-                                path="/"
-                                element={<Navigate to="/login" replace />}
-                            />
-                            {token ? (
-                                <Route
-                                    path={'/home'}
-                                    element={<Home />}
-                                ></Route>
-                            ) : (
-                                <Route path="/" element={<User />}>
-                                    <Route path="/login" element={<Login />} />
-                                    <Route
-                                        path="/signup"
-                                        element={<Signup />}
-                                    />
-                                </Route>
-                            )}
-                        </Routes>
-                    </BrowserRouter>
-
+                    <Router />
                 </ThemeProvider>
             </div>
         </div>

@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import * as S from './Footer.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
-import { useDispatch } from 'react-redux';
-import { setPage } from '../../features/page/pageSlice';
 
 const Footer = () => {
     const [hover, setHover] = useState({
@@ -15,8 +13,6 @@ const Footer = () => {
     });
 
     const [active, setActive] = useState('home');
-
-    const dispatch = useDispatch();
 
     const handlePage = usePageHandler();
 

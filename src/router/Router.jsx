@@ -6,6 +6,7 @@ import NewBoard from '../pages/NewBoard/NewBoard';
 import Login from '../pages/User/Login';
 import Signup from '../pages/User/Signup';
 import User from '../pages/User/User';
+import ProfileUpload from '../pages/Profile/ProfileUpload';
 
 const Router = () => {
     return (
@@ -17,7 +18,10 @@ const Router = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                 </Route>
-
+                <Route
+                    path={'/profileUpload'}
+                    element={<ProfileUpload />}
+                ></Route>
                 <Route path={'/home'} element={<Home />}></Route>
 
                 <Route path={'/newboard'} element={<NewBoard />}></Route>

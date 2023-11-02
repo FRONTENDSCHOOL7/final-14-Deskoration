@@ -48,7 +48,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
                 store: storeRef.current.value,
                 link: linkRef.current.value,
                 id: editItem ? editItem.id : newID(),
-                location: offset,
+                location: editItem ? editItem.location : offset,
             };
 
             if (itemIndex !== -1) {

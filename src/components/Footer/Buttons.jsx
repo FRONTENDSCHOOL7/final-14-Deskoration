@@ -1,5 +1,8 @@
 import React from 'react';
 import * as S from './Buttons.styled';
+import LogoImage from '../../assets/images/Logo.svg';
+import { useDispatch } from 'react-redux';
+import { setPage } from '../../features/page/pageSlice';
 import { useNavigation } from '../../hooks/useNavigate';
 
 const handleMouseEnter = (name, setHover) => {
@@ -20,7 +23,7 @@ const handleActive = (name, setActive) => {
     setActive(name);
 };
 
-export const HomeBtn = ({ hover, setHover, active, setActive }) => {
+export const HomeBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -35,6 +38,7 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handlePage('image', LogoImage);
                 handleNavigate('/home');
             }}
         >
@@ -46,7 +50,7 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
     );
 };
 
-export const FeedBtn = ({ hover, setHover, active, setActive }) => {
+export const FeedBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -61,6 +65,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handlePage('text', '피드');
                 handleNavigate('/board');
             }}
         >
@@ -72,7 +77,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
     );
 };
 
-export const AddBtn = ({ hover, setHover, active, setActive }) => {
+export const AddBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -87,6 +92,7 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handlePage('text', '게시글 작성');
                 handleNavigate('/newboard');
             }}
         >
@@ -98,7 +104,7 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
     );
 };
 
-export const ChatBtn = ({ hover, setHover, active, setActive }) => {
+export const ChatBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -113,6 +119,7 @@ export const ChatBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handlePage('text', '채팅');
                 handleNavigate('/chat');
             }}
         >
@@ -124,6 +131,7 @@ export const ChatBtn = ({ hover, setHover, active, setActive }) => {
     );
 };
 
+export const UserBtn = ({ hover, setHover, active, setActive, handlePage }) => {
 export const UserBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
@@ -139,6 +147,7 @@ export const UserBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handlePage('text', '프로필');
                 handleNavigate('/user');
             }}
         >

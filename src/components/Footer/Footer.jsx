@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as S from './Footer.styled';
+import usePageHandler from '../../hooks/usePageHandler';
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
 
 const Footer = () => {
@@ -13,6 +14,8 @@ const Footer = () => {
 
     const [active, setActive] = useState('home');
 
+    const handlePage = usePageHandler();
+
     return (
         <S.Footer>
             <S.FooterUl>
@@ -22,6 +25,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -30,6 +34,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -38,6 +43,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -46,6 +52,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -54,6 +61,7 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
+                        handlePage={handlePage}
                     />
                 </li>
             </S.FooterUl>

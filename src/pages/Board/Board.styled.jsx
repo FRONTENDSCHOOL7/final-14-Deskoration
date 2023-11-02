@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { ReactComponent as Back } from '../../assets/images/Backward.svg';
 import theme from '../../styles/theme';
-import { ReactComponent as Dots } from '../../assets/images/Dots.svg';
 import { ReactComponent as Like } from '../../assets/images/Like.svg';
 import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
 import { ReactComponent as Dots_vertical } from '../../assets/images/Dots_vertical.svg';
@@ -162,8 +161,4 @@ export const CommentInput = styled.div`
         color: orange;
         width: 50px;
     }
-`;
-
-export const DotsIcon = styled(Dots)`
-    cursor: pointer;
 `;

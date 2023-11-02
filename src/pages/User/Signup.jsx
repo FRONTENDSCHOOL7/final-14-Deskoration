@@ -35,9 +35,12 @@ const Signup = () => {
 
                 if (result.message === '사용 가능한 이메일 입니다.') {
                     console.log('오케이');
-                    // navigate('/profileUpload', {
-                    //     state: { emailValue: emailValue, passwordValue: passwordValue },
-                    // });
+                    navigate('/profileUpload', {
+                        state: {
+                            emailValue: emailValue,
+                            passwordValue: passwordValue,
+                        },
+                    });
                 } else if (
                     result.message === '이미 가입된 이메일 주소 입니다.'
                 ) {
@@ -74,7 +77,12 @@ const Signup = () => {
                     <WarningMsg msg={'비밀번호는 6자 이상이여야 합니다.'} />
                 )}
             </S.InputBox>
-            <GradientButton $gra={true} width={'100%'} $padding={'20px'}>
+            <GradientButton
+                type={'submit'}
+                $gra={true}
+                width={'100%'}
+                $padding={'20px'}
+            >
                 회원가입
             </GradientButton>
         </S.UserForm>

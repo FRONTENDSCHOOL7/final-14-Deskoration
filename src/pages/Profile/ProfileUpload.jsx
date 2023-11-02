@@ -3,20 +3,23 @@ import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
 import Input from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
-import { ImgConvert } from '../../hooks/img_Uploader';
+import { UploadImg } from '../../service/img_service';
 import { ValidAccountName } from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
+import imageCompression from 'browser-image-compression';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
+    const baseURL = 'https://api.mandarin.weniv.co.kr/';
 
     const [photoURL, setPhotoURL] = useState(basicImg);
     const [existID, setExistID] = useState(null);
     const [isImageAdded, setIsImageAdded] = useState(false);
     const [warnUserName, setWarnUserName] = useState(false);
     const [warnID, setWarnID] = useState(false);
+    const [file, setFile] = useState();
     const { emailValue, passwordValue } = useLocation().state || {};
 
     const userNameEl = useRef(null);
@@ -24,15 +27,42 @@ export const ProfileUpload = () => {
     const introEl = useRef(null);
 
     // 업로드한 이미지 url 저장
-    const handleFileChange = event => {
-        const file = event.target.files[0];
-        if (!file) {
-            setPhotoURL(prev => setPhotoURL(prev));
-        } else {
-            ImgConvert(file, setPhotoURL);
-        }
+    const handleUploadImg = async event => {
+        const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
 
-        setIsImageAdded(true);
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const options = {
+            maxSizeMB: 5,
+        };
+        const fileTypeOptions = { ...options, fileType: 'image/jpeg' };
+
+        try {
+            const compressedBlob = await imageCompression(
+                file,
+                regex.test(file) ? options : fileTypeOptions,
+            );
+            const compressedFile = new File(
+                [compressedBlob],
+                regex.test(file)
+                    ? compressedBlob.name
+                    : compressedBlob.name.split('.')[0] + '.jpeg',
+                {
+                    type: compressedBlob.type,
+                },
+            );
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onloadend = () => {
+                const imgData = new FormData();
+                imgData.append('image', compressedFile);
+                UploadImg(imgData, setFile);
+                setPhotoURL(reader.result);
+            };
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     // 이미지 삭제
@@ -84,7 +114,6 @@ export const ProfileUpload = () => {
 
         // 유효성 검사를 통과하면 post 요청
         if (validUserName && validID && !existID) {
-            const baseURL = 'https://api.mandarin.weniv.co.kr/';
             const reqURL = `${baseURL}user`;
             try {
                 const response = await fetch(reqURL, {
@@ -97,7 +126,7 @@ export const ProfileUpload = () => {
                             password: passwordValue,
                             accountname: idValue,
                             intro: introValue,
-                            image: photoURL,
+                            image: `${!file ? '' : baseURL + file}`,
                         },
                     }),
                 });
@@ -112,6 +141,8 @@ export const ProfileUpload = () => {
             }
         }
     };
+
+    console.log(`${baseURL}${file}`);
 
     return (
         <section>
@@ -131,7 +162,7 @@ export const ProfileUpload = () => {
                             <S.ImgUploadInput
                                 type="file"
                                 id="profileUpload"
-                                onChange={handleFileChange}
+                                onChange={handleUploadImg}
                             />
                             <S.ImgUploadLabel htmlFor="profileUpload">
                                 <S.ImgUploadIcon />

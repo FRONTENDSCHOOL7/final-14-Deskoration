@@ -1,16 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
-import { ImgConvert } from '../../hooks/img_Uploader';
-import * as S from './NewBoard.styled';
+
+import { UploadImg } from '../../service/img_service';
+import * as S from './PostUpload.styled';
+import imageCompression from 'browser-image-compression';
 
 export const PostUpload = ({
     items,
-    handleShowRegisterForm,
-    setOffset,
     setItems,
+    setOffset,
     photoURL,
     setPhotoURL,
+    setFile,
+    deleteItem,
 }) => {
+    const navigate = useNavigate();
+
     const hiddenFileInput = useRef(null);
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
@@ -31,14 +37,41 @@ export const PostUpload = ({
         hiddenFileInput.current.click();
     };
 
-    const handleFileChange = event => {
+    const handleUploadImg = async event => {
+        const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
+
         const file = event.target.files[0];
-        if (!file) {
-            setPhotoURL(prevPhotoURL => prevPhotoURL);
-        } else {
-            ImgConvert(file, setPhotoURL);
-            setItems([]);
-            setIsImageLoaded(false);
+        if (!file) return;
+
+        const options = {
+            maxSizeMB: 5,
+        };
+        const fileTypeOptions = { ...options, fileType: 'image/jpeg' };
+
+        try {
+            const compressedBlob = await imageCompression(
+                file,
+                regex.test(file) ? options : fileTypeOptions,
+            );
+            const compressedFile = new File(
+                [compressedBlob],
+                regex.test(file)
+                    ? compressedBlob.name
+                    : compressedBlob.name.split('.')[0] + '.jpeg',
+                {
+                    type: compressedBlob.type,
+                },
+            );
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onloadend = () => {
+                const imgData = new FormData();
+                imgData.append('image', compressedFile);
+                UploadImg(imgData, setFile);
+                setPhotoURL(reader.result);
+            };
+        } catch (e) {
+            console.log(e);
         }
     };
 
@@ -53,7 +86,7 @@ export const PostUpload = ({
 
     const checkItemsCount = () => {
         items.length < 5
-            ? handleShowRegisterForm()
+            ? navigate(`/newboard/${items.length}`)
             : alert('상품은 최대 5개까지 추가할 수 있습니다.');
     };
 
@@ -124,7 +157,6 @@ export const PostUpload = ({
             left: currentMarker ? currentMarker.offsetLeft : 0,
             top: currentMarker ? currentMarker.offsetTop : 0,
         }));
-
         setSelectedMarkerIndex(index);
     };
 
@@ -172,7 +204,7 @@ export const PostUpload = ({
 
     // 드레그 후 마우스업 이벤트 적용
     useEffect(() => {
-        const handleDocumentMouseUp = event => {
+        const handleDocumentMouseUp = () => {
             setIsDragging(false);
         };
 
@@ -191,7 +223,7 @@ export const PostUpload = ({
             >
                 <input
                     type="file"
-                    onChange={handleFileChange}
+                    onChange={handleUploadImg}
                     ref={hiddenFileInput}
                 />
                 {photoURL ? (
@@ -221,6 +253,8 @@ export const PostUpload = ({
                                         left: item.location.x,
                                         top: item.location.y,
                                     }}
+                                    item={item}
+                                    deleteItem={deleteItem}
                                 />
                             ))
                         )}

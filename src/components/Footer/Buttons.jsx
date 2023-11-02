@@ -1,5 +1,6 @@
 import React from 'react';
 import * as S from './Buttons.styled';
+import { useNavigation } from '../../hooks/useNavigate';
 
 const handleMouseEnter = (name, setHover) => {
     setHover(prev => ({
@@ -20,6 +21,7 @@ const handleActive = (name, setActive) => {
 };
 
 export const HomeBtn = ({ hover, setHover, active, setActive }) => {
+    const handleNavigate = useNavigation();
     return (
         <S.IconButton
             type="button"
@@ -33,6 +35,7 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handleNavigate('/home');
             }}
         >
             <S.HomeIcon $hover={hover.home} $active={active === 'home'} />
@@ -44,6 +47,7 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
 };
 
 export const FeedBtn = ({ hover, setHover, active, setActive }) => {
+    const handleNavigate = useNavigation();
     return (
         <S.IconButton
             type="button"
@@ -57,6 +61,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handleNavigate('/board');
             }}
         >
             <S.FeedIcon $hover={hover.feed} $active={active === 'feed'} />
@@ -68,6 +73,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive }) => {
 };
 
 export const AddBtn = ({ hover, setHover, active, setActive }) => {
+    const handleNavigate = useNavigation();
     return (
         <S.IconButton
             type="button"
@@ -81,6 +87,7 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handleNavigate('/newboard');
             }}
         >
             <S.AddIcon $hover={hover.add} $active={active === 'add'} />
@@ -92,6 +99,7 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
 };
 
 export const ChatBtn = ({ hover, setHover, active, setActive }) => {
+    const handleNavigate = useNavigation();
     return (
         <S.IconButton
             type="button"
@@ -105,6 +113,7 @@ export const ChatBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handleNavigate('/chat');
             }}
         >
             <S.ChatIcon $hover={hover.chat} $active={active === 'chat'} />
@@ -116,6 +125,7 @@ export const ChatBtn = ({ hover, setHover, active, setActive }) => {
 };
 
 export const UserBtn = ({ hover, setHover, active, setActive }) => {
+    const handleNavigate = useNavigation();
     return (
         <S.IconButton
             type="button"
@@ -129,6 +139,7 @@ export const UserBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
+                handleNavigate('/user');
             }}
         >
             <S.UserIcon $hover={hover.user} $active={active === 'user'} />

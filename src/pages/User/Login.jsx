@@ -40,7 +40,11 @@ const Login = () => {
                 } else {
                     // 임시변경
                     sessionStorage.setItem('tempToken', result.user.token);
-                    navigate('/Home');
+                    sessionStorage.setItem(
+                        'tempAccountName',
+                        result.user.accountname,
+                    );
+                    navigate('/home');
                 }
             } catch (error) {
                 console.error('error');
@@ -73,7 +77,7 @@ const Login = () => {
             </S.InputBox>
 
             <GradientButton
-                type="submit"
+                type={'submit'}
                 $gra={true}
                 width={'100%'}
                 $padding={'20px'}

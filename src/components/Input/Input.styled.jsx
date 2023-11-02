@@ -8,7 +8,9 @@ export const InputLabel = styled.label`
     margin-bottom: 10px;
 `;
 
-export const InputText = styled.input`
+export const InputText = styled.input.attrs(props => ({
+    type: props.type || 'text',
+}))`
     width: 100%;
     padding: 2.5px;
     border-style: none;

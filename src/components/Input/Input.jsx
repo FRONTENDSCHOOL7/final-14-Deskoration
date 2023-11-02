@@ -2,14 +2,14 @@ import React from 'react';
 import * as S from './Input.styled';
 
 const Input = props => {
-    const { inputRef, warning, label } = props;
+    const { label, inputRef, type, warning } = props;
 
     return (
         <>
             <S.InputLabel htmlFor={label}>{label}</S.InputLabel>
             <S.InputText
                 id={label}
-                type={label}
+                type={type}
                 ref={inputRef}
                 className={warning ? 'warning' : null}
             />

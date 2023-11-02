@@ -1,6 +1,7 @@
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
+
 import Home from './pages/Home/Home';
 import Board from './pages/Board/Board';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -16,7 +17,7 @@ const token = sessionStorage.getItem('tempToken');
 function App() {
     return (
         <div className="app-body">
-            <div className="container">
+            <div className="container" style={{ padding: '0 25px' }}>
                 <ThemeProvider theme={theme}>
                     <GlobalStyle />
                     <BrowserRouter>
@@ -43,6 +44,7 @@ function App() {
                             )}
                         </Routes>
                     </BrowserRouter>
+
                 </ThemeProvider>
             </div>
         </div>

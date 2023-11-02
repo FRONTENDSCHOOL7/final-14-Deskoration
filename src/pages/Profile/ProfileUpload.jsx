@@ -13,6 +13,7 @@ import imageCompression from 'browser-image-compression';
 export const ProfileUpload = () => {
     const navigate = useNavigate();
     const baseURL = 'https://api.mandarin.weniv.co.kr/';
+    const noImage = 'Ellipse.png';
 
     const [photoURL, setPhotoURL] = useState(basicImg);
     const [existID, setExistID] = useState(null);
@@ -126,7 +127,9 @@ export const ProfileUpload = () => {
                             password: passwordValue,
                             accountname: idValue,
                             intro: introValue,
-                            image: `${!file ? '' : baseURL + file}`,
+                            image: `${
+                                !file ? baseURL + noImage : baseURL + file
+                            }`,
                         },
                     }),
                 });
@@ -141,8 +144,6 @@ export const ProfileUpload = () => {
             }
         }
     };
-
-    console.log(`${baseURL}${file}`);
 
     return (
         <section>

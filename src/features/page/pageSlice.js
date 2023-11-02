@@ -1,9 +1,10 @@
+import logoImg from '../../assets/images/Logo.svg';
 const { createSlice } = require('@reduxjs/toolkit');
 
 const initialState = {
     currentPage: {
-        type: 'text',
-        value: '홈',
+        type: 'image',
+        value: logoImg,
     },
 };
 

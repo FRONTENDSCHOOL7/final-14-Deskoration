@@ -22,12 +22,12 @@ export const Arrow = styled.div`
     left: 50%;
 
     // 화살표 방향과 위치 조정
-    ${({ isAbove }) => css`
-        border-color: ${isAbove
+    ${({ $isAbove }) => css`
+        border-color: ${$isAbove
             ? '#fff transparent transparent transparent'
             : 'transparent transparent #fff transparent'};
         border-width: 10px 10px 10px 10px;
-        ${isAbove ? 'bottom: -20px;' : 'top: -20px;'}
+        ${$isAbove ? 'bottom: -20px;' : 'top: -20px;'}
     `}
 `;
 

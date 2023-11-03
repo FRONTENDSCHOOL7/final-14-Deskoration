@@ -48,7 +48,7 @@ const Ballon = ({ productItem, deleteProduct }) => {
             }}
         >
             <S.Arrow
-                isAbove={productItem.marker.y > 48}
+                $isAbove={productItem.marker.y > 48}
                 style={{ left: calcArrowLeft(productItem.marker.x) }}
             />
             <S.Product>

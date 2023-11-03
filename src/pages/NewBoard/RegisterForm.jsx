@@ -7,11 +7,15 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 
 import * as S from './RegisterForm.styled';
 
-const RegisterForm = ({ productItems, setProductItems, offset }) => {
+const RegisterForm = ({
+    productItems,
+    setProductItems,
+    offset,
+    trimTextArea,
+}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const editProductItem = location.state?.editProductItem;
-    const message = location.state?.message;
 
     const editProductItemDetail = editProductItem?.detail;
 
@@ -74,8 +78,8 @@ const RegisterForm = ({ productItems, setProductItems, offset }) => {
                     },
                 ]);
             }
-
-            navigate(`/newboard`, { state: { message: message } });
+            trimTextArea();
+            navigate(`/newboard`);
             formRef.current.reset();
         }
     };
@@ -135,9 +139,7 @@ const RegisterForm = ({ productItems, setProductItems, offset }) => {
                 <GradientButton
                     width={'40%'}
                     padding={'12px'}
-                    onClick={() =>
-                        navigate(`/newboard`, { state: { message: message } })
-                    }
+                    onClick={() => navigate(`/newboard`)}
                 >
                     취소하기
                 </GradientButton>

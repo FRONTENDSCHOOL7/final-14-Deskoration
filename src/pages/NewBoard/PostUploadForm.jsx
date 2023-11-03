@@ -15,7 +15,6 @@ const PostUploadForm = ({
     imageURL,
     setImageURL,
     setImageFile,
-    message,
     deleteProduct,
 }) => {
     const navigate = useNavigate();
@@ -91,9 +90,7 @@ const PostUploadForm = ({
 
     const checkProductsCount = () => {
         productItems.length < 5
-            ? navigate(`/newboard/${productItems.length}`, {
-                  state: { message: message },
-              })
+            ? navigate(`/newboard/${productItems.length}`)
             : alert('상품은 최대 5개까지 추가할 수 있습니다.');
     };
 

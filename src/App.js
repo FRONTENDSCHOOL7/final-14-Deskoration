@@ -11,6 +11,7 @@ import './App.css';
 import User from './pages/User/User';
 import Login from './pages/User/Login';
 import Signup from './pages/User/Signup';
+import Router from './router/Router';
 
 const token = sessionStorage.getItem('tempToken');
 

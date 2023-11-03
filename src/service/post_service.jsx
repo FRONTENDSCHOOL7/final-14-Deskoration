@@ -29,8 +29,9 @@ export const UploadPost = async (content, image, token) => {
 };
 
 export const GetAllPost = async token => {
+    const number = 200;
     try {
-        const response = await fetch(`${baseURL}/post`, {
+        const response = await fetch(`${baseURL}/post?limit=${number}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -66,7 +67,7 @@ export const GetMyPost = async (accountname, token) => {
         if (response.ok) {
             const data = await response.json();
 
-            return data;
+            return data.post;
         } else {
             console.error('API 요청이 실패했습니다.');
         }

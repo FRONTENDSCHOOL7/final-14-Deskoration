@@ -3,7 +3,7 @@ import GlobalStyle from './styles/GlobalStyle';
 import theme from './styles/theme';
 
 import Home from './pages/Home/Home';
-import Board from './pages/Board/Board';
+import DetailPost from './pages/DetailPost/DetailPost';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // 추후 라우터 설정하면 라우터에 css적용할 예정입니다.
@@ -23,7 +23,10 @@ function App() {
                     <BrowserRouter>
                         <Routes>
                             <Route path={'/home'} element={<Home />}></Route>
-                            <Route path={'/board'} element={<Board />}></Route>
+                            <Route
+                                path={'/board'}
+                                element={<DetailPost />}
+                            ></Route>
                             <Route
                                 path="/"
                                 element={<Navigate to="/login" replace />}
@@ -44,7 +47,6 @@ function App() {
                             )}
                         </Routes>
                     </BrowserRouter>
-
                 </ThemeProvider>
             </div>
         </div>

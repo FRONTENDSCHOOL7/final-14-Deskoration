@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
-import Input from '../../components/Input/Input';
+import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { UploadImg } from '../../service/img_service';
 import { ValidAccountName } from '../../service/auth_service';

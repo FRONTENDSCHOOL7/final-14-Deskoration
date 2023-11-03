@@ -69,6 +69,8 @@ export const PostUpload = ({
                 imgData.append('image', compressedFile);
                 UploadImg(imgData, setFile);
                 setPhotoURL(reader.result);
+                setItems([]);
+                setIsImageLoaded(false);
             };
         } catch (e) {
             console.log(e);

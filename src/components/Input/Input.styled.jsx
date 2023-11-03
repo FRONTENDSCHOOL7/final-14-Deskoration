@@ -30,7 +30,7 @@ export const InputText = styled.input.attrs(props => ({
     type: props.type || 'text',
 }))`
     width: 100%;
-    padding: 2.5px;
+    padding: 2.5px 0;
     border-style: none;
     border-bottom: 1px solid ${({ theme }) => theme.border};
     margin-bottom: 10px;

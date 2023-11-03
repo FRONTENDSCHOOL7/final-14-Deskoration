@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './Profile.styled';
+import * as S from './UserProfile.styled';
 import Footer from '../../components/Footer/Footer';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import Article from '../Home/Article';
-import { GetMyProfile } from '../../service/profile_service';
+import { GetUserProfile } from '../../service/profile_service';
 import { fetchPosts } from '../../service/board_service';
 import { Link } from 'react-router-dom';
 
-const Profile = () => {
+const UserProfile = () => {
     const [profileData, setProfileData] = useState(null);
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
 
-    const myAccountName = sessionStorage.getItem('tempAccountName');
-
     useEffect(() => {
         // API 호출해서 데이터 받아오기
-        GetMyProfile()
+        GetUserProfile()
             .then(data => {
-                setProfileData(data.user);
-                console.log(data.user);
+                setProfileData(data.profile);
+                // setotherAccountname(data.profile.accountname);
+                // console.log(data.profile);
+                return data.profile.accountname;
             })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생: ', error);
-            });
-        fetchPosts(myAccountName)
-            .then(data => {
-                setUserPost(data.post);
-                console.log(data.post);
+            .then(temp => {
+                fetchPosts(temp).then(data => {
+                    setUserPost(data.post);
+                    // console.log(data.post);
+                });
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
@@ -48,7 +45,7 @@ const Profile = () => {
                 <button>
                     <S.Backwardicon />
                 </button>
-                <h2>My profile</h2>
+                <h2>{profileData.accountname}</h2>
             </S.ProfileHeader>
             <S.ProfileContainer>
                 <S.UserInfo>
@@ -68,14 +65,24 @@ const Profile = () => {
                         </p>
                     </div>
                 </S.UserInfo>
-                <GradientButton
-                    type={'button'}
-                    gra={'true'}
-                    width={'310px'}
-                    padding={'10px'}
-                >
-                    프로필 편집
-                </GradientButton>
+                <div className="gradient_btn">
+                    <GradientButton
+                        type={'button'}
+                        gra={'true'}
+                        width={'310px'}
+                        padding={'10px'}
+                    >
+                        팔로우
+                    </GradientButton>
+                    <GradientButton
+                        type={'button'}
+                        gra={''}
+                        width={'310px'}
+                        padding={'10px'}
+                    >
+                        메시지 보내기
+                    </GradientButton>
+                </div>
                 <S.UserDataList>
                     <button className="user-post">
                         <p>{userPost.length}</p>
@@ -105,4 +112,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default UserProfile;

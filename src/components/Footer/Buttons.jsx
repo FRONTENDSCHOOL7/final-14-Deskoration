@@ -132,7 +132,6 @@ export const ChatBtn = ({ hover, setHover, active, setActive, handlePage }) => {
 };
 
 export const UserBtn = ({ hover, setHover, active, setActive, handlePage }) => {
-export const UserBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton

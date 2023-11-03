@@ -32,15 +32,14 @@ export const SlideSection = styled.section`
 `;
 
 export const Category = styled.div`
-    color: ${theme.subFont};
     width: 50px;
     height: 50px;
-    border: 1px solid black;
+    border: 1px solid ${({ theme }) => theme.border};
     border-radius: 50%;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 
     background-image: url(${({ $url }) => $url});
-    background-size: 100% 100%;
+    background-size: cover;
     background-position: 50% 50%;
     background-repeat: no-repeat;
 `;
@@ -51,4 +50,5 @@ export const CateName = styled.p`
     /* top: %; */
     text-align: center;
     font-size: 10px;
+    color: ${({ theme }) => theme.mainFont};
 `;

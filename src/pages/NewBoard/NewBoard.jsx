@@ -1,81 +1,107 @@
-import React, { useState } from 'react';
-import { RegisterForm } from './RegisterForm';
-import { PostUpload } from './PostUpload';
-import * as S from './NewBoard.styled';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { UploadPost } from '../../service/post_service';
 
+import RegisterForm from './RegisterForm';
+import PostUpload from './PostUploadForm';
+
+import * as S from './NewBoard.styled';
+
 const NewBoard = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
+    const message = location.state?.message;
 
-    const [photoURL, setPhotoURL] = useState();
-    const [file, setFile] = useState();
+    const token = sessionStorage.getItem('tempToken');
 
-    const [textareaCount, setTextareaCount] = useState(0);
-    const [items, setItems] = useState([]);
+    const [apiContent, setApiContent] = useState();
+
+    const [imageURL, setImageURL] = useState();
+    const [imageFile, setImageFile] = useState();
+
+    const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-    const handleTextCountChange = e => {
-        setTextareaCount(e.target.value.length);
+    const [textArea, setTextares] = useState({
+        message: message,
+        length: 0,
+    });
+
+    const handleMessageChange = e => {
+        setTextares({
+            message: e.target.value,
+            length: e.target.value.length,
+        });
     };
 
-    const deleteItem = itemID => {
+    const deleteProduct = itemID => {
         if (window.confirm('삭제 ㄱㄱ?')) {
-            const updatedArray = items.filter(item => item.id !== itemID);
-            setItems(updatedArray);
+            const updatedProductItems = productItems.filter(
+                item => item.detail.id !== itemID,
+            );
+            setProductItems(updatedProductItems);
         }
         return;
     };
-    const token = sessionStorage.getItem('tempToken');
 
-    const onSubmit = async e => {
-        e.preventDefault();
+    useEffect(() => {
+        setApiContent({ message: textArea.message, productItems });
+    }, [textArea.message, productItems]);
+
+    const submitPost = async event => {
+        event.preventDefault();
         try {
-            const result = await UploadPost(items, file, token);
-            if (result.message === '내용 또는 이미지를 입력해주세요.') {
-                alert(result.message);
+            const postData = await UploadPost(apiContent, imageFile, token);
+
+            if (postData.message === '내용 또는 이미지를 입력해주세요.') {
+                alert(postData.message);
             } else {
-                console.log(result);
+                console.log(postData);
             }
         } catch (error) {
-            console.error('error');
+            console.log('error', error);
         }
     };
 
     return (
         <S.NewBoardContainer>
             <S.NewBoardHeader>
-                <button>
+                <button onClick={() => navigate(-1)}>
                     <S.BackIcon />
                 </button>
                 <h4>게시물 작성</h4>
             </S.NewBoardHeader>
             {pathName === '/newboard' ? (
-                <form onSubmit={onSubmit}>
+                <form onSubmit={submitPost}>
                     <PostUpload
-                        items={items}
-                        setItems={setItems}
+                        productItems={productItems}
+                        setProductItems={setProductItems}
                         setOffset={setOffset}
-                        photoURL={photoURL}
-                        setFile={setFile}
-                        setPhotoURL={setPhotoURL}
-                        deleteItem={deleteItem}
+                        imageURL={imageURL}
+                        setImageURL={setImageURL}
+                        setImageFile={setImageFile}
+                        message={textArea.message}
+                        deleteProduct={deleteProduct}
                     />
                     <S.NewBoardTextarea
+                        value={textArea.message}
                         maxLength="100"
                         placeholder="상품 관련 내용을 입력해주세요"
-                        onChange={handleTextCountChange}
+                        onChange={handleMessageChange}
                     />
-                    <S.TextareaCounterP>{textareaCount}/100</S.TextareaCounterP>
+                    <S.TextareaCounterP>
+                        {textArea.length}/100
+                    </S.TextareaCounterP>
                     <S.SubmitNewBoardButton type="submit">
                         올리기
                     </S.SubmitNewBoardButton>
                 </form>
             ) : (
                 <RegisterForm
-                    items={items}
-                    setItems={setItems}
+                    productItems={productItems}
+                    setProductItems={setProductItems}
                     offset={offset}
                 />
             )}

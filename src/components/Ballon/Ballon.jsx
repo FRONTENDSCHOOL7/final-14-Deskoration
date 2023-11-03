@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import * as S from './Ballon.styled';
 
-const Ballon = ({ item, deleteItem }) => {
+const Ballon = ({ productItem, deleteProduct }) => {
     // 내 글이 아니고, 수정중이 아니라면 삭제하기 안보이게
     const navigate = useNavigate();
 
-    const editItem = () => {
-        navigate(`/newboard/${item.id}`, {
-            state: { editItem: item },
+    const editProduct = () => {
+        navigate(`/newboard/${productItem.detail.id}`, {
+            state: { editProductItem: productItem },
         });
     };
 
@@ -41,23 +41,25 @@ const Ballon = ({ item, deleteItem }) => {
 
     return (
         <S.Ballon
-            $markerLocation={item.location}
+            $markerLocation={productItem.marker}
             style={{
-                left: calcLeft(item.location),
-                top: calcTop(item.location),
+                left: calcLeft(productItem.marker),
+                top: calcTop(productItem.marker),
             }}
         >
             <S.Arrow
-                isAbove={item.location.y > 48}
-                style={{ left: calcArrowLeft(item.location.x) }}
+                isAbove={productItem.marker.y > 48}
+                style={{ left: calcArrowLeft(productItem.marker.x) }}
             />
             <S.Product>
-                <div onClick={editItem}>{item.productName}</div>
-                <div> {item.price}</div>
+                <div onClick={editProduct}>
+                    {productItem.detail.productName}
+                </div>
+                <div> {productItem.detail.price}</div>
             </S.Product>
             <S.DeletItemButton
                 type="button"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => deleteProduct(productItem.detail.id)}
             >
                 <S.TrashIcon />
             </S.DeletItemButton>

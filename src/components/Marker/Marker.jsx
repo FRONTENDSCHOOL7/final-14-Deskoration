@@ -1,10 +1,12 @@
 import React from 'react';
-import * as S from './Marker.styled';
-import markerImg from '../../assets/images/Marker.svg';
+
 import Ballon from '../Ballon/Ballon';
 
+import * as S from './Marker.styled';
+import markerImg from '../../assets/images/Marker.svg';
+
 export const Marker = React.forwardRef((props, markerRef) => {
-    const { onMouseDown, markerLocation, item, deleteItem } = props;
+    const { onMouseDown, markerLocation, productItem, deleteProduct } = props;
 
     return (
         <S.MarkerContainer>
@@ -19,7 +21,12 @@ export const Marker = React.forwardRef((props, markerRef) => {
                     top: `${markerLocation.top}%`,
                 }}
             />
-            {item && <Ballon item={item} deleteItem={deleteItem} />}
+            {productItem && (
+                <Ballon
+                    productItem={productItem}
+                    deleteProduct={deleteProduct}
+                />
+            )}
         </S.MarkerContainer>
     );
 });

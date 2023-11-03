@@ -1,6 +1,6 @@
 const baseURL = 'https://api.mandarin.weniv.co.kr';
 
-export const UploadImg = async (formData, setFile) => {
+export const UploadImg = async (formData, setImageFile) => {
     try {
         const response = await fetch(`${baseURL}/image/uploadfiles`, {
             method: 'POST',
@@ -9,7 +9,7 @@ export const UploadImg = async (formData, setFile) => {
 
         const data = await response.json();
 
-        setFile(data[0].filename);
+        setImageFile(data[0].filename);
         return data;
     } catch (err) {
         console.error(err);

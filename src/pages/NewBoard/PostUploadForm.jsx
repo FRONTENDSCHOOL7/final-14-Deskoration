@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Marker } from '../../components/Marker/Marker';
 
 import { UploadImg } from '../../service/img_service';
-import * as S from './PostUpload.styled';
 import imageCompression from 'browser-image-compression';
 
-export const PostUpload = ({
-    items,
-    setItems,
+import { Marker } from '../../components/Marker/Marker';
+
+import * as S from './PostUploadForm.styled';
+
+const PostUploadForm = ({
+    productItems,
+    setProductItems,
     setOffset,
-    photoURL,
-    setPhotoURL,
-    setFile,
-    deleteItem,
+    imageURL,
+    setImageURL,
+    setImageFile,
+    message,
+    deleteProduct,
 }) => {
     const navigate = useNavigate();
 
@@ -67,9 +70,11 @@ export const PostUpload = ({
             reader.onloadend = () => {
                 const imgData = new FormData();
                 imgData.append('image', compressedFile);
-                UploadImg(imgData, setFile);
-                setPhotoURL(reader.result);
+                UploadImg(imgData, setImageFile);
+                setImageURL(reader.result);
             };
+            setProductItems([]);
+            setIsImageLoaded(false);
         } catch (e) {
             console.log(e);
         }
@@ -78,15 +83,17 @@ export const PostUpload = ({
     const deleteFile = () => {
         // 추후 컨펌 모달로 변경
         if (window.confirm('삭제하시겠습니까?')) {
-            setPhotoURL('');
-            setItems([]);
+            setImageURL('');
+            setProductItems([]);
             setIsImageLoaded(false);
         }
     };
 
-    const checkItemsCount = () => {
-        items.length < 5
-            ? navigate(`/newboard/${items.length}`)
+    const checkProductsCount = () => {
+        productItems.length < 5
+            ? navigate(`/newboard/${productItems.length}`, {
+                  state: { message: message },
+              })
             : alert('상품은 최대 5개까지 추가할 수 있습니다.');
     };
 
@@ -139,7 +146,7 @@ export const PostUpload = ({
                 top: offsetY,
             }));
 
-            checkItemsCount();
+            checkProductsCount();
         }
     };
 
@@ -191,13 +198,13 @@ export const PostUpload = ({
             );
 
             if (selectedMarkerIndex !== null) {
-                // items 배열의 불변성을 유지하면서 업데이트
-                const updatedItems = [...items];
-                updatedItems[selectedMarkerIndex].location = {
+                // products 배열의 불변성을 유지하면서 업데이트
+                const updatedProductItems = [...productItems];
+                updatedProductItems[selectedMarkerIndex].marker = {
                     x: Math.min(newLeft, endPointX),
                     y: Math.min(newTop, endPointY),
                 };
-                setItems(updatedItems); // 상위 컴포넌트에서 받은 setData 함수로 업데이트
+                setProductItems(updatedProductItems); // 상위 컴포넌트에서 받은 setProductItems 함수로 업데이트
             }
         }
     };
@@ -217,7 +224,7 @@ export const PostUpload = ({
     return (
         <>
             <S.NewBoardFileContainer
-                $hasPhoto={photoURL}
+                $hasPhoto={imageURL}
                 ref={containerEl}
                 onMouseMove={onMouseMove}
             >
@@ -226,23 +233,23 @@ export const PostUpload = ({
                     onChange={handleUploadImg}
                     ref={hiddenFileInput}
                 />
-                {photoURL ? (
+                {imageURL ? (
                     <>
                         <img
-                            src={photoURL}
-                            alt="photoURL"
+                            src={imageURL}
+                            alt="imageURL"
                             onLoad={handleImageLoad}
                             onClick={handleImageClick}
                         />
 
-                        {items.length === 0 ? (
+                        {productItems.length === 0 ? (
                             <Marker
                                 ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
                                 markerLocation={markerLocation}
                                 name="initialMarker"
                             />
                         ) : (
-                            items.map((item, index) => (
+                            productItems.map((item, index) => (
                                 <Marker
                                     key={index}
                                     ref={ref =>
@@ -250,11 +257,11 @@ export const PostUpload = ({
                                     }
                                     onMouseDown={e => onMouseDown(e, index)}
                                     markerLocation={{
-                                        left: item.location.x,
-                                        top: item.location.y,
+                                        left: item.marker.x,
+                                        top: item.marker.y,
                                     }}
-                                    item={item}
-                                    deleteItem={deleteItem}
+                                    productItem={item}
+                                    deleteProduct={deleteProduct}
                                 />
                             ))
                         )}
@@ -285,9 +292,11 @@ export const PostUpload = ({
                 )}
             </S.NewBoardFileContainer>
 
-            {photoURL && (
+            {imageURL && (
                 <S.ExplainTagP>원하는 위치에 상품을 등록하세요.</S.ExplainTagP>
             )}
         </>
     );
 };
+
+export default PostUploadForm;

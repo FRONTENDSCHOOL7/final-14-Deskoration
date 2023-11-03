@@ -1,14 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import GradientButton from '../../components/GradientButton/GradientButton';
+
 import Input from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
+import GradientButton from '../../components/GradientButton/GradientButton';
+
 import * as S from './RegisterForm.styled';
 
-export const RegisterForm = ({ items, setItems, offset }) => {
+const RegisterForm = ({ productItems, setProductItems, offset }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const editItem = location.state?.editItem;
+    const editProductItem = location.state?.editProductItem;
+    const message = location.state?.message;
+
+    const editProductItemDetail = editProductItem?.detail;
 
     const formRef = useRef(null);
     const categoryRef = useRef(null);
@@ -21,8 +26,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     const [warnProductName, setWarnProductName] = useState(false);
     const [warnPrice, setWarnPrice] = useState(false);
 
-    // submit 함수
-    const dataSubmit = event => {
+    const submitProduct = event => {
         event.preventDefault();
 
         const categoryValue = categoryRef.current.value;
@@ -36,8 +40,10 @@ export const RegisterForm = ({ items, setItems, offset }) => {
                 ? setWarnProductName(true)
                 : setWarnProductName(false);
             !priceValue ? setWarnPrice(true) : setWarnPrice(false);
-        } else if (items.length <= 6) {
-            const itemIndex = items.findIndex(item => item.id === editItem?.id);
+        } else if (productItems.length <= 6) {
+            const itemIndex = productItems.findIndex(
+                item => item.detail.id === editProductItemDetail?.id,
+            );
 
             const newID = () => Math.random().toString(36).substring(2, 16);
 
@@ -47,22 +53,29 @@ export const RegisterForm = ({ items, setItems, offset }) => {
                 price: priceValue,
                 store: storeRef.current.value,
                 link: linkRef.current.value,
-                id: editItem ? editItem.id : newID(),
-                location: offset,
+                id: editProductItem ? editProductItemDetail.id : newID(),
             };
 
             if (itemIndex !== -1) {
-                const updatedData = [...items];
-                updatedData[itemIndex] = {
-                    ...updatedData[itemIndex],
+                const updateProductItems = [...productItems];
+                updateProductItems[itemIndex].detail = {
+                    ...updateProductItems[itemIndex].detail,
                     ...newData,
                 };
-                setItems(updatedData);
+                setProductItems(updateProductItems);
             } else {
-                setItems(prev => [...prev, newData]);
+                setProductItems(prev => [
+                    ...prev,
+                    {
+                        marker: editProductItem
+                            ? editProductItem.marker
+                            : offset,
+                        detail: newData,
+                    },
+                ]);
             }
 
-            navigate(`/newboard`);
+            navigate(`/newboard`, { state: { message: message } });
             formRef.current.reset();
         }
     };
@@ -72,15 +85,25 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     }, []);
 
     useEffect(() => {
-        categoryRef.current.value = editItem ? editItem.category : null;
-        productNameRef.current.value = editItem ? editItem.productName : null;
-        priceRef.current.value = editItem ? editItem.price : null;
-        storeRef.current.value = editItem ? editItem.store : null;
-        linkRef.current.value = editItem ? editItem.link : null;
-    }, [editItem]);
+        categoryRef.current.value = editProductItemDetail
+            ? editProductItemDetail.category
+            : null;
+        productNameRef.current.value = editProductItemDetail
+            ? editProductItemDetail.productName
+            : null;
+        priceRef.current.value = editProductItemDetail
+            ? editProductItemDetail.price
+            : null;
+        storeRef.current.value = editProductItemDetail
+            ? editProductItemDetail.store
+            : null;
+        linkRef.current.value = editProductItemDetail
+            ? editProductItemDetail.link
+            : null;
+    }, [editProductItemDetail]);
 
     return (
-        <S.RegisterForm ref={formRef} onSubmit={dataSubmit}>
+        <S.RegisterForm ref={formRef} onSubmit={submitProduct}>
             <fieldset>
                 <Input
                     label="카테고리"
@@ -112,7 +135,9 @@ export const RegisterForm = ({ items, setItems, offset }) => {
                 <GradientButton
                     width={'40%'}
                     padding={'12px'}
-                    onClick={() => navigate(`/newboard`)}
+                    onClick={() =>
+                        navigate(`/newboard`, { state: { message: message } })
+                    }
                 >
                     취소하기
                 </GradientButton>
@@ -123,3 +148,5 @@ export const RegisterForm = ({ items, setItems, offset }) => {
         </S.RegisterForm>
     );
 };
+
+export default RegisterForm;

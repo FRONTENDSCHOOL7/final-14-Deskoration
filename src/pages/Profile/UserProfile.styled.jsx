@@ -18,13 +18,19 @@ export const ProfileContainer = styled.div`
     height: 640px;
     padding: 10px 25px 0px 25px;
     overflow-y: auto;
+
+    .gradient_btn {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
 `;
 
 export const UserInfo = styled.div`
     height: max-content;
-    margin-bottom: 10px;
     display: flex;
     flex-direction: row;
+    margin-bottom: 10px;
 
     .user-img {
         width: 80px;
@@ -45,11 +51,8 @@ export const UserInfo = styled.div`
     }
 
     .user-info {
-        margin-bottom: 20px;
-
         color: #767676;
         width: 215px;
-        margin-bottom: 10px;
         border: '1px solid #ccc'; // 테두리 추가
     }
 `;

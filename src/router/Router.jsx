@@ -1,33 +1,74 @@
-import React from 'react';
+import { React, lazy, Suspense } from 'react';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from '../pages/Home/Home';
-import NewBoard from '../pages/NewBoard/NewBoard';
-import Login from '../pages/User/Login';
-import Signup from '../pages/User/Signup';
-import User from '../pages/User/User';
-import ProfileUpload from '../pages/Profile/ProfileUpload';
+
+const HomePage = lazy(() => import('../pages/Home/Home'));
+const NewBoardPage = lazy(() => import('../pages/NewBoard/NewBoard'));
+const LoginPage = lazy(() => import('../pages/User/Login'));
+const SignupPage = lazy(() => import('../pages/User/Signup'));
+const UserPage = lazy(() => import('../pages/User/User'));
+const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
+const ChatListPage = lazy(() =>
+    import('../pages/Chat/ChatListPage/ChatListPage'),
+);
+const ChatRoomPage = lazy(() =>
+    import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
+);
+const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
+const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
+const DetailPostPage = lazy(() => import('../pages/DetailPost/DetailPost'));
+const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
+const PublicRoutePage = lazy(() => import('./PublicRoute'));
+const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
+const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
 
 const Router = () => {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+        <Suspense>
+            <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/"
+                        element={<Navigate to="/login" replace />}
+                    />
 
-                <Route path="/" element={<User />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                </Route>
-                <Route
-                    path={'/profileUpload'}
-                    element={<ProfileUpload />}
-                ></Route>
-                <Route path={'/home'} element={<Home />}></Route>
+                    <Route path="/" element={<UserPage />}>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
+                    </Route>
 
-                <Route path={'/newboard'} element={<NewBoard />}></Route>
-                <Route path="/newboard/:id" element={<NewBoard />} />
-            </Routes>
-        </BrowserRouter>
+                    <Route element={<DefaultLayoutPage />}>
+                        <Route path={'/home/*'} element={<HomePage />} />
+                        <Route path={'/chat'} element={<ChatListPage />} />
+                        <Route path={'/profile'} element={<ProfilePage />} />
+                        <Route
+                            path={'/userProfile'}
+                            element={<UserProfilePage />}
+                        />
+                        <Route path={'/newboard'} element={<NewBoardPage />} />
+                        <Route
+                            path={'/newboard/:id'}
+                            element={<NewBoardPage />}
+                        />
+                        <Route
+                            path={'/detailpost/:id'}
+                            element={<DetailPostPage />}
+                        />
+                    </Route>
+
+                    <Route element={<NoFooterLayoutPage />}>
+                        <Route
+                            path={'/chat/:username'}
+                            element={<ChatRoomPage />}
+                        />
+                        <Route
+                            path={'/profileUpload'}
+                            element={<ProfileUploadPage />}
+                        />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </Suspense>
     );
 };
 

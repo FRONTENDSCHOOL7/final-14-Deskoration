@@ -9,6 +9,8 @@ export const BackIcon = styled(Back)`
 export const NewBoardContainer = styled.div`
     /* position: relative; */
     /* padding: 0 25px; */
+    height: 100%;
+    overflow: auto;
 `;
 
 export const NewBoardHeader = styled.header`

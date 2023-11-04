@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './UserProfile.styled';
-import Footer from '../../components/Footer/Footer';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { GetUserProfile } from '../../service/profile_service';
 import { fetchPosts } from '../../service/board_service';
@@ -41,12 +40,12 @@ const UserProfile = () => {
 
     return (
         <>
-            <S.ProfileHeader>
+            {/* <S.ProfileHeader>
                 <button>
                     <S.Backwardicon />
                 </button>
                 <h2>{profileData.accountname}</h2>
-            </S.ProfileHeader>
+            </S.ProfileHeader> */}
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData.image} alt="" className="user-img" />
@@ -57,7 +56,7 @@ const UserProfile = () => {
                             {expandedContent
                                 ? profileData.intro
                                 : profileData.intro.slice(0, 53)}
-                            {profileData.intro.length > 30 && (
+                            {profileData.intro?.length > 30 && (
                                 <button onClick={toggleExpandedContent}>
                                     {expandedContent ? '접기' : '더보기'}
                                 </button>
@@ -69,7 +68,7 @@ const UserProfile = () => {
                     <GradientButton
                         type={'button'}
                         gra={'true'}
-                        width={'310px'}
+                        width={'100%'}
                         padding={'10px'}
                     >
                         팔로우
@@ -77,7 +76,7 @@ const UserProfile = () => {
                     <GradientButton
                         type={'button'}
                         gra={''}
-                        width={'310px'}
+                        width={'100%'}
                         padding={'10px'}
                     >
                         메시지 보내기
@@ -85,7 +84,7 @@ const UserProfile = () => {
                 </div>
                 <S.UserDataList>
                     <button className="user-post">
-                        <p>{userPost.length}</p>
+                        <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
                     <Link to="/follow-following-list">
@@ -102,12 +101,11 @@ const UserProfile = () => {
                     </Link>
                 </S.UserDataList>
                 <S.UserPostings>
-                    {userPost.map((post, index) => (
+                    {userPost?.map((post, index) => (
                         <img key={index} src={post.image} alt="게시물 목록" />
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>
-            <Footer />
         </>
     );
 };

@@ -14,7 +14,6 @@ export const ChatRoomHeader = styled.div`
     display: flex;
     width: 310px;
     height: 70px;
-    padding-top: 20px;
     margin: 0 25px;
 
     font-size: 24px;
@@ -46,7 +45,7 @@ export const ChatRoomMain = styled.div`
 
 export const ChatContent = styled.div`
     display: flex;
-    margin: 0 25px 10px;
+    /* margin: 0 25px 10px; */
     justify-content: ${props =>
         props.$issentbyuser === 'true'
             ? 'flex-end'
@@ -81,18 +80,18 @@ export const ChatBubble = styled.div`
 `;
 
 export const ChatRoomPageFooter = styled.div`
-    width: 360px;
-    height: 90px;
-    border-top: 1px solid ${props => props.theme.mainFont};
+    width: 100%;
+    height: 85px;
+    border-top: 1px solid black;
 `;
 
 export const ChatInput = styled.div`
-    width: 360px;
-    height: 90px;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 25px 25px 25px 25px;
+    /* padding: 25px 25px 25px 25px; */
 
     .chat-input {
         width: 225px;
@@ -108,4 +107,9 @@ export const ChatInput = styled.div`
         width: 30px;
         height: 30px;
     }
+`;
+
+export const ChatTime = styled.p`
+    font-size: ${props => props.theme.fontSize.sm};
+    color: ${props => props.theme.subFont};
 `;

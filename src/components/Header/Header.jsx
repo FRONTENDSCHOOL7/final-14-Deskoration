@@ -8,16 +8,17 @@ const Header = () => {
     return (
         <>
             <S.Headbar>
+                <S.BackwardIcon />
                 <div>
                     {currentPage.type === 'text' && (
-                        <span>{currentPage.value}</span>
+                        <S.titleSpan>{currentPage.value}</S.titleSpan>
                     )}
                     {currentPage.type === 'image' && (
                         <img src={currentPage.value} alt="Content" />
                     )}
                 </div>
                 {/* <S.LogoIcon /> */}
-                <S.SearchIcon />
+                {/* <S.SearchIcon /> */}
             </S.Headbar>
         </>
     );

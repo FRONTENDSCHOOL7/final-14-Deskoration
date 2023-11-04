@@ -44,12 +44,12 @@ const Profile = () => {
 
     return (
         <>
-            <S.ProfileHeader>
+            {/* <S.ProfileHeader>
                 <button>
                     <S.Backwardicon />
                 </button>
                 <h2>My profile</h2>
-            </S.ProfileHeader>
+            </S.ProfileHeader> */}
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData.image} alt="" className="user-img" />
@@ -60,7 +60,7 @@ const Profile = () => {
                             {expandedContent
                                 ? profileData.intro
                                 : profileData.intro.slice(0, 53)}
-                            {profileData.intro.length > 30 && (
+                            {profileData.intro?.length > 30 && (
                                 <button onClick={toggleExpandedContent}>
                                     {expandedContent ? '접기' : '더보기'}
                                 </button>
@@ -71,14 +71,14 @@ const Profile = () => {
                 <GradientButton
                     type={'button'}
                     gra={'true'}
-                    width={'310px'}
+                    width={'100%'}
                     padding={'10px'}
                 >
                     프로필 편집
                 </GradientButton>
                 <S.UserDataList>
                     <button className="user-post">
-                        <p>{userPost.length}</p>
+                        <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
                     <Link to="/follow-following-list">
@@ -95,12 +95,11 @@ const Profile = () => {
                     </Link>
                 </S.UserDataList>
                 <S.UserPostings>
-                    {userPost.map((post, index) => (
+                    {userPost?.map((post, index) => (
                         <img key={index} src={post.image} alt="게시물 목록" />
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>
-            <Footer />
         </>
     );
 };

@@ -54,17 +54,16 @@ const ChatRoomPage = () => {
         }
     }, [chatMessages]);
 
-
     return (
         <>
             <S.ChatRoomPageContainer>
-                <S.ChatRoomHeader>
+                {/* <S.ChatRoomHeader>
                     <button onClick={handleGoBack}>
                         <S.Backwardicon />
                     </button>
                     <img src={image} alt="" className="user-img" />
                     <h2>{user}</h2>
-                </S.ChatRoomHeader>
+                </S.ChatRoomHeader> */}
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
                     {message[0].map((receivedMessage, index) => (
@@ -74,7 +73,7 @@ const ChatRoomPage = () => {
                                 <S.ChatBubble $issentbyuser="false">
                                     <p>{receivedMessage}</p>
                                 </S.ChatBubble>
-                                <p>{formattedTime}</p>
+                                <S.ChatTime>{formattedTime}</S.ChatTime>
                             </div>
                         </S.ChatContent>
                     ))}
@@ -86,7 +85,9 @@ const ChatRoomPage = () => {
                                 <S.ChatBubble $issentbyuser="true">
                                     <p>{chat.text}</p>
                                 </S.ChatBubble>
-                                <p className="my-time">{formattedTime}</p>
+                                <S.ChatTime className="my-time">
+                                    {formattedTime}
+                                </S.ChatTime>
                             </div>
                         </S.ChatContent>
                     ))}

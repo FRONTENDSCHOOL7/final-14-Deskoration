@@ -1,5 +1,8 @@
 import React from 'react';
 import * as S from './User.styled';
+import googleLogo from '../../assets/images/login/Google.png';
+import kakaoLogo from '../../assets/images/login/Kakao.png';
+import facebookLogo from '../../assets/images/login/Facebook.png';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const User = () => {
@@ -23,13 +26,19 @@ const User = () => {
             <S.SocialLoginContainer>
                 <ul>
                     <li>
-                        <button type="button">구글</button>
+                        <button type="button">
+                            <img src={googleLogo} alt="구글 로그인" />
+                        </button>
                     </li>
                     <li>
-                        <button type="button">카카오</button>
+                        <button type="button">
+                            <img src={kakaoLogo} alt="카카오 로그인" />
+                        </button>
                     </li>
                     <li>
-                        <button type="button">페북</button>
+                        <button type="button">
+                            <img src={facebookLogo} alt="페이스북 로그인" />
+                        </button>
                     </li>
                 </ul>
             </S.SocialLoginContainer>

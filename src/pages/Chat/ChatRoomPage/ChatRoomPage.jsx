@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
 import { useLocation, useNavigate } from 'react-router-dom';
+import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatRoomPage = () => {
     const location = useLocation();
@@ -27,10 +28,6 @@ const ChatRoomPage = () => {
 
     const [chatMessages, setChatMessages] = useState([]);
 
-    const handleGoBack = () => {
-        navigate(-1); // Use navigate to go back to the previous page
-    };
-
     const handleSendMessage = () => {
         if (newMessage.trim() === '') {
             return; // 빈 메시지 전송 방지
@@ -54,16 +51,11 @@ const ChatRoomPage = () => {
         }
     }, [chatMessages]);
 
+    usePageHandler('user', image, user);
+
     return (
         <>
             <S.ChatRoomPageContainer>
-                {/* <S.ChatRoomHeader>
-                    <button onClick={handleGoBack}>
-                        <S.Backwardicon />
-                    </button>
-                    <img src={image} alt="" className="user-img" />
-                    <h2>{user}</h2>
-                </S.ChatRoomHeader> */}
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
                     {message[0].map((receivedMessage, index) => (

@@ -4,7 +4,7 @@ import { ReactComponent as Logo } from '../../assets/images/Logo.svg';
 import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 
 export const Headbar = styled.header`
-    height: 30px;
+    height: 70px;
     color: ${props => props.theme.main};
     display: flex;
     align-items: center;

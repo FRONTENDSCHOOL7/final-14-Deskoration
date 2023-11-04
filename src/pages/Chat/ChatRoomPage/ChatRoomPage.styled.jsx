@@ -10,23 +10,6 @@ export const Clipicon = styled(Clip)``;
 export const ChatRoomPageContainer = styled.div`
     position: relative;
 `;
-export const ChatRoomHeader = styled.div`
-    display: flex;
-    width: 310px;
-    height: 70px;
-    margin: 0 25px;
-
-    font-size: 24px;
-    align-items: center;
-
-    .user-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 100%;
-        margin-left: 8px;
-        margin-right: 8px;
-    }
-`;
 
 export const ChatRoomMain = styled.div`
     width: 100%;
@@ -38,8 +21,8 @@ export const ChatRoomMain = styled.div`
         width: 36px;
         height: 36px;
         border-radius: 100%;
-        margin-left: 8px;
         margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
     }
 `;
 

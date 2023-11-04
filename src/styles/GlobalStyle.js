@@ -79,6 +79,10 @@ body{
 	font-family:"PreRegular"
 }
 
+svg, img{
+	vertical-align: top;
+}
+
 *::-webkit-scrollbar {
 	width: 7px;
 	height: 5px;

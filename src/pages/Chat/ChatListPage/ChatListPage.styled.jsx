@@ -69,6 +69,7 @@ export const UserChatRoom = styled.div`
         height: 50px;
         border-radius: 100%;
         margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
     }
 `;
 

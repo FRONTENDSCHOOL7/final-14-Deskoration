@@ -122,6 +122,11 @@ export const SocialLoginContainer = styled.section`
         background: ${props => props.theme.bgSecondary};
     }
 
+    img {
+        width: 35px;
+        height: 35px;
+    }
+
     &::before {
         position: absolute;
         top: -17px;

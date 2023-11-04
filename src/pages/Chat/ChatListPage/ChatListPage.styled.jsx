@@ -23,20 +23,17 @@ export const ChatListHeader = styled.div`
 
 export const ChatlistPageMain = styled.div`
     width: 100%;
-    height: 620px;
 `;
 
 export const SearchBar = styled.div`
-    margin: 0 25px;
-
-    width: 310px;
-    height: 60px;
-    background-color: ${({ theme }) => theme.border};
+    width: 100%;
+    padding: 10px;
+    background-color: #dbdbdb;
     border: none;
     border-radius: 30px;
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
+    margin: 10px 0;
 `;
 
 export const Searchmark = styled.div`
@@ -56,16 +53,15 @@ export const SearchUsernameInput = styled.input`
 `;
 
 export const UserChatList = styled.ul`
-    padding-top: 25px;
     width: 100%;
-    height: 530px;
-    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    height: 580px;
+    overflow: auto;
 `;
 
 export const UserChatRoom = styled.div`
     width: 310px;
     height: 64px;
-    margin: 0 25px;
+    /* margin: 0 25px; */
     display: flex;
     align-items: center;
     background-color: #fcfcfc;
@@ -80,6 +76,7 @@ export const UserChatRoom = styled.div`
 `;
 
 export const UserSimpleinfo = styled.div`
+    flex-grow: 1;
     .user-name {
         font-size: 14px;
         color: ${({ theme }) => theme.mainFont};

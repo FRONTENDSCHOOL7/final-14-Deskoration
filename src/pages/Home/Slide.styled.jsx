@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
-    margin: 10px 0px;
+    padding: 8px 0px;
     display: flex;
     justify-content: space-between;
     overflow-x: auto;

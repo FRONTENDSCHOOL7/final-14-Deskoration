@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UploadPost } from '../../service/post_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
+import usePageHandler from '../../hooks/usePageHandler';
 
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
@@ -37,11 +38,18 @@ const NewBoard = () => {
             length: prev.message.trim().length,
         }));
     };
+
+    usePageHandler('text', '게시글 작성');
+
     const handleMessageChange = e => {
         setTextArea({
             message: e.target.value,
             length: e.target.value.length,
         });
+    };
+
+    const handleTextCountChange = e => {
+        setTextareaCount(e.target.value.length);
     };
 
     const deleteProduct = itemID => {

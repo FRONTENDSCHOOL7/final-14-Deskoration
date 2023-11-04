@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
+import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -13,6 +14,8 @@ const ChatListPage = () => {
     const filteredProfiles = profile.filter(profile =>
         profile.username.toLowerCase().includes(searchQuery.toLowerCase()),
     );
+
+    usePageHandler('text', '채팅');
 
     return (
         <>

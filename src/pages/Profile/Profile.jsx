@@ -6,6 +6,7 @@ import Article from '../Home/Article';
 import { GetMyProfile } from '../../service/profile_service';
 import { fetchPosts } from '../../service/board_service';
 import { Link } from 'react-router-dom';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState(null);
@@ -13,6 +14,8 @@ const Profile = () => {
     const [expandedContent, setExpandedContent] = useState(false);
 
     const myAccountName = sessionStorage.getItem('tempAccountName');
+
+    usePageHandler('text', '나의 프로필');
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
@@ -44,12 +47,6 @@ const Profile = () => {
 
     return (
         <>
-            {/* <S.ProfileHeader>
-                <button>
-                    <S.Backwardicon />
-                </button>
-                <h2>My profile</h2>
-            </S.ProfileHeader> */}
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData.image} alt="" className="user-img" />

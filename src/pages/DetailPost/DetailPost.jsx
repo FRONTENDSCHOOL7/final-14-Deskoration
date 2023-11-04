@@ -3,7 +3,7 @@ import * as S from './DetailPost.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { fetchPosts } from '../../service/board_service';
 import { fetchcomment, postComment } from '../../service/comment_service';
-const Board = () => {
+const DetailPost = () => {
     const [postData, setPostData] = useState(null);
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
@@ -58,24 +58,6 @@ const Board = () => {
 
     return (
         <>
-            <S.BoardHeader>
-                <S.BoardHeaderUser>
-                    <button>
-                        <S.BackIcon />
-                    </button>
-                    {postData && ( // null이 아닌 경우에만 렌더링
-                        <>
-                            <S.ProfileImg src={postData.author.image} alt="" />
-                            <div className="profile-name">
-                                {postData.author.username}
-                            </div>
-                        </>
-                    )}
-                </S.BoardHeaderUser>
-                <GradientButton gra={true} width={'80px'} padding={'5px 0'}>
-                    팔로우
-                </GradientButton>
-            </S.BoardHeader>
             <S.BoardMain>
                 {postData && ( // null이 아닌 경우에만 렌더링
                     <S.ContentSection>
@@ -156,4 +138,4 @@ const Board = () => {
     );
 };
 
-export default Board;
+export default DetailPost;

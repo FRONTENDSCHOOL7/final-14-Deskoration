@@ -4,11 +4,14 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { GetUserProfile } from '../../service/profile_service';
 import { fetchPosts } from '../../service/board_service';
 import { Link } from 'react-router-dom';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const UserProfile = () => {
     const [profileData, setProfileData] = useState(null);
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
+
+    usePageHandler('text', profileData?.accountname);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
@@ -40,12 +43,6 @@ const UserProfile = () => {
 
     return (
         <>
-            {/* <S.ProfileHeader>
-                <button>
-                    <S.Backwardicon />
-                </button>
-                <h2>{profileData.accountname}</h2>
-            </S.ProfileHeader> */}
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData.image} alt="" className="user-img" />

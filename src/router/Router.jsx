@@ -21,7 +21,7 @@ const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
-
+const token = sessionStorage.getItem('tempToken');
 const Router = () => {
     return (
         <Suspense>
@@ -31,20 +31,24 @@ const Router = () => {
                         path="/"
                         element={<Navigate to="/login" replace />}
                     />
-
-                    <Route path="/" element={<UserPage />}>
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/signup" element={<SignupPage />} />
-                    </Route>
+                    {token ? (
+                        <Route element={<DefaultLayoutPage />}>
+                            <Route path={'/home/*'} element={<HomePage />} />
+                        </Route>
+                    ) : (
+                        <Route path="/" element={<UserPage />}>
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/signup" element={<SignupPage />} />
+                        </Route>
+                    )}
 
                     <Route element={<DefaultLayoutPage />}>
-                        <Route path={'/home/*'} element={<HomePage />} />
                         <Route path={'/chat'} element={<ChatListPage />} />
-                        <Route path={'/profile'} element={<ProfilePage />} />
+                        {/* <Route path={'/profile'} element={<ProfilePage />} />
                         <Route
                             path={'/userProfile'}
                             element={<UserProfilePage />}
-                        />
+                        /> */}
                         <Route path={'/newboard'} element={<NewBoardPage />} />
                         <Route
                             path={'/newboard/:id'}

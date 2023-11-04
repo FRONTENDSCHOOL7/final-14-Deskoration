@@ -59,6 +59,7 @@ table {
 	border-spacing: 0;
 }
 button{
+	font-family: inherit;
   cursor: pointer;
 	padding: 0;
 	border: none;

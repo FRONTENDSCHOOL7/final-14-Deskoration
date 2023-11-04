@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Footer.styled';
-import usePageHandler from '../../hooks/usePageHandler';
+
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
+import { useLocation } from 'react-router-dom';
 
 const Footer = () => {
+    const location = useLocation();
     const [hover, setHover] = useState({
         home: false,
         feed: false,
@@ -12,9 +14,20 @@ const Footer = () => {
         user: false,
     });
 
-    const [active, setActive] = useState('home');
+    const activeTab = path => {
+        if (path === '/home') return 'home';
+        if (path.includes('/board')) return 'feed';
+        if (path.includes('/newboard')) return 'add';
+        if (path === '/chat') return 'chat';
+        if (path.includes('/profile')) return 'user';
+        return '';
+    };
 
-    const handlePage = usePageHandler();
+    const [active, setActive] = useState(activeTab(location.pathname));
+
+    useEffect(() => {
+        setActive(activeTab(location.pathname));
+    }, [location]);
 
     return (
         <S.Footer>
@@ -25,7 +38,6 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
-                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -34,7 +46,6 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
-                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -43,7 +54,6 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
-                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -52,7 +62,6 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
-                        handlePage={handlePage}
                     />
                 </li>
                 <li>
@@ -61,7 +70,6 @@ const Footer = () => {
                         setHover={setHover}
                         active={active}
                         setActive={setActive}
-                        handlePage={handlePage}
                     />
                 </li>
             </S.FooterUl>

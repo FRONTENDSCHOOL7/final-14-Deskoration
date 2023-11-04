@@ -25,3 +25,19 @@ export const titleSpan = styled.span`
     color: ${props => props.theme.main};
     font-weight: 700;
 `;
+
+export const UserInfo = styled.div`
+    display: flex;
+    width: 100%;
+    font-size: ${props => props.theme.fontSize.lg};
+    font-weight: 700;
+    align-items: center;
+
+    .user-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
+    }
+`;

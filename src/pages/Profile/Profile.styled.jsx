@@ -33,6 +33,7 @@ export const UserInfo = styled.div`
         height: 80px;
         border-radius: 100%;
         margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
     }
     .user-introduce {
         display: flex;

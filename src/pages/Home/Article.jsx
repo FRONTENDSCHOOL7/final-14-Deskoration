@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
-import Board from '../Board/Board';
-import { PostAll } from '../../service/board_service';
-import { GetAllPost, GetMyPost } from '../../service/post_service';
+import { GetMyPost } from '../../service/post_service';
+
 const token = sessionStorage.getItem('tempToken');
 const tempAccountName = sessionStorage.getItem('tempAccountName');
 
@@ -118,15 +117,15 @@ const Article = () => {
         <>
             <S.Section ref={sectionRef}>
                 {articles.map(article => (
-                    <Link key={article.id} to={`/board/${article.id}`}>
+                    <Link key={article.id} to={`/detailpost/${article.id}`}>
                         <S.Article src={article.image}></S.Article>
                     </Link>
                 ))}
             </S.Section>
+            <S.SearchButton type="button">
+                <S.SearchIcon />
+            </S.SearchButton>
             {loading && <div>Loading...</div>}
-            <Routes>
-                <Route path={'/board/:id'} element={<Board />} />
-            </Routes>
         </>
     );
 };

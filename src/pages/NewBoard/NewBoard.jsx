@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UploadPost } from '../../service/post_service';
+import GradientButton from '../../components/GradientButton/GradientButton';
 
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
@@ -102,12 +103,16 @@ const NewBoard = () => {
                         placeholder="나의 데스크 셋업에 대해서 얘기해주세요."
                         onChange={handleMessageChange}
                     />
-                    <S.TextareaCounterP>
-                        {textArea.length}/100
-                    </S.TextareaCounterP>
-                    <S.SubmitNewBoardButton type="submit">
-                        올리기
-                    </S.SubmitNewBoardButton>
+                    <S.TextareaCounterP>{textareaCount}/100</S.TextareaCounterP>
+                    <S.SubmitButtonBox>
+                        <GradientButton
+                            type="submit"
+                            children={'올리기'}
+                            gra={'true'}
+                            width={'70px'}
+                            padding={'5px'}
+                        />
+                    </S.SubmitButtonBox>
                 </form>
             ) : (
                 <RegisterForm

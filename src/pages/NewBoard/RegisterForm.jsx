@@ -79,7 +79,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     };
 
     useEffect(() => {
-        categoryRef.current.value = editItem ? editItem.category : null;
+        categoryRef.current.value = editItem ? editItem.category : '책상';
         productNameRef.current.value = editItem ? editItem.productName : null;
         priceRef.current.value = editItem ? editItem.price : null;
         storeRef.current.value = editItem ? editItem.store : null;
@@ -93,7 +93,6 @@ export const RegisterForm = ({ items, setItems, offset }) => {
                     label="카테고리"
                     inputRef={categoryRef}
                     warning={warnCategory}
-                    defaultValue={'책상'}
                     options={options}
                 />
 

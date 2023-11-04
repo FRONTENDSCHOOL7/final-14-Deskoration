@@ -78,12 +78,13 @@ const NewBoard = () => {
 
     return (
         <S.NewBoardContainer>
-            <S.NewBoardHeader>
-                <button onClick={() => navigate(-1)}>
+            {/* <S.NewBoardHeader>
+                <button>
                     <S.BackIcon />
                 </button>
                 <h4>게시물 작성</h4>
-            </S.NewBoardHeader>
+            </S.NewBoardHeader>{' '}
+            */}
             {pathName === '/newboard' ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm

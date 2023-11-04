@@ -9,10 +9,8 @@ import Slide from './Slide';
 const Home = () => {
     return (
         <>
-            <Header />
             <Slide />
             <Article />
-            <Footer />
         </>
     );
 };

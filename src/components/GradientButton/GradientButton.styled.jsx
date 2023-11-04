@@ -15,7 +15,7 @@ export const GradientButton = styled.button.attrs(props => ({
         css`
             border: none;
             color: #fff;
-            background: linear-gradient(90deg, #45522b 48.51%, #d67a38 81.29%);
+            background: linear-gradient(90deg, #685c53 16.45%, #8d7358 97.1%);
         `};
 
     &:hover {

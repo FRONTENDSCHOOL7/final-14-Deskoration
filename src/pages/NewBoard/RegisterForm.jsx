@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import Input from '../../components/Input/Input';
+import { Input, SelectInput } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import * as S from './RegisterForm.styled';
 
@@ -17,9 +17,20 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     const storeRef = useRef(null);
     const linkRef = useRef(null);
 
-    const [warnCatagory, setWarnCatagory] = useState(false);
+    const [warnCategory, setWarnCategory] = useState(false);
     const [warnProductName, setWarnProductName] = useState(false);
     const [warnPrice, setWarnPrice] = useState(false);
+    const options = [
+        '책상',
+        '의자',
+        '모니터',
+        '키보드',
+        '마우스',
+        '스피커',
+        '데스크탑',
+        '노트북',
+        '액세서리',
+    ];
 
     // submit 함수
     const dataSubmit = event => {
@@ -31,7 +42,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
 
         // input에 입력 값이 없을 경우 submit이 되지 않는다.
         if (!categoryValue || !productNameValue || !priceValue) {
-            !categoryValue ? setWarnCatagory(true) : setWarnCatagory(false);
+            !categoryValue ? setWarnCategory(true) : setWarnCategory(false);
             !productNameValue
                 ? setWarnProductName(true)
                 : setWarnProductName(false);
@@ -68,11 +79,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     };
 
     useEffect(() => {
-        categoryRef.current.focus();
-    }, []);
-
-    useEffect(() => {
-        categoryRef.current.value = editItem ? editItem.category : null;
+        categoryRef.current.value = editItem ? editItem.category : '책상';
         productNameRef.current.value = editItem ? editItem.productName : null;
         priceRef.current.value = editItem ? editItem.price : null;
         storeRef.current.value = editItem ? editItem.store : null;
@@ -82,12 +89,14 @@ export const RegisterForm = ({ items, setItems, offset }) => {
     return (
         <S.RegisterForm ref={formRef} onSubmit={dataSubmit}>
             <fieldset>
-                <Input
+                <SelectInput
                     label="카테고리"
                     inputRef={categoryRef}
-                    warning={warnCatagory}
+                    warning={warnCategory}
+                    options={options}
                 />
-                {warnCatagory && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
+
+                {warnCategory && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
 
                 <Input
                     label="상품명"
@@ -100,6 +109,7 @@ export const RegisterForm = ({ items, setItems, offset }) => {
 
                 <Input
                     label="구매가격"
+                    type={'number'}
                     inputRef={priceRef}
                     warning={warnPrice}
                 />

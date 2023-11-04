@@ -100,6 +100,9 @@ const Profile = () => {
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>
+            <S.MoreButton>
+                <S.MoreIcon />
+            </S.MoreButton>
         </>
     );
 };

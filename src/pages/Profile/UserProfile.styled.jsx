@@ -112,24 +112,6 @@ export const UserPostings = styled.div`
     color: ${({ theme }) => theme.mainFont};
     overflow-y: hidden;
 
-    /* &::-webkit-scrollbar {
-        width: 7px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #888;
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #f5f5f5;
-        border-radius: 10px;
-    } */
-
     img {
         width: 50%;
         height: 50%;

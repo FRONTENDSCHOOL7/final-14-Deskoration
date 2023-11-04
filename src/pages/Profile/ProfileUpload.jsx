@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
-import Input from '../../components/Input/Input';
+import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { UploadImg } from '../../service/img_service';
 import { ValidAccountName } from '../../service/auth_service';
@@ -175,6 +175,7 @@ export const ProfileUpload = () => {
                             label="사용자 이름"
                             inputRef={userNameEl}
                             warning={warnUserName}
+                            placeholder={'2~10자 이내여야 합니다.'}
                         />
                         {warnUserName && (
                             <WarningMsg msg={'2~10자 이내여야 합니다.'} />
@@ -183,17 +184,24 @@ export const ProfileUpload = () => {
                             label="계정 ID"
                             inputRef={idEl}
                             warning={warnID || existID}
+                            placeholder={
+                                '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
+                            }
                         />
                         {warnID ? (
                             <WarningMsg
                                 msg={
-                                    '2글자 이상이며, 영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
+                                    '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
                                 }
                             />
                         ) : existID ? (
                             <WarningMsg msg="이미 가입된 계정ID 입니다." />
                         ) : null}
-                        <Input label="소개" inputRef={introEl} />
+                        <Input
+                            label="소개"
+                            inputRef={introEl}
+                            placeholder={'자신을 소개해주세요.'}
+                        />
                     </S.InputBox>
                     <GradientButton
                         children={'Deskoration 시작하기'}

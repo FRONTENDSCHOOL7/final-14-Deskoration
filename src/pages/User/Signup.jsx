@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Input from '../../components/Input/Input';
+import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
 import { ValidEmail } from '../../service/auth_service';

@@ -48,35 +48,42 @@ export const ChatContent = styled.div`
     display: flex;
     margin: 0 25px 10px;
     justify-content: ${props =>
-        props.$issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
+        props.$issentbyuser === 'true'
+            ? 'flex-end'
+            : 'flex-start'}; // 문자열 비교
     margin-top: 10px;
     .my-time {
         display: flex;
         justify-content: ${props =>
-            props.$issentbyuser === 'true' ? 'flex-end' : 'flex-start'}; // 문자열 비교
+            props.$issentbyuser === 'true'
+                ? 'flex-end'
+                : 'flex-start'}; // 문자열 비교
     }
 `;
 
 export const ChatBubble = styled.div`
     max-width: 220px;
     background-color: ${props =>
-        props.$issentbyuser === 'true' ? '#ECEBEB' : '#FFFFFF'}; // 문자열 비교
+        props.$issentbyuser === 'true'
+            ? props.theme.bgSecondary
+            : '#FFFFFF'}; // 문자열 비교
     border: ${props =>
-        props.$issentbyuser === 'true' ? '#ECEBEB' : '1px solid gray'}; // 문자열 비교
+        props.$issentbyuser === 'true'
+            ? props.theme.bgSecondary
+            : `1px solid ${props.theme.border}`}; // 문자열 비교
     border-radius: ${props =>
         props.$issentbyuser === 'true'
             ? '15px 0 15px 15px'
             : '0 15px 15px 15px'}; // 문자열 비교
-    color: black; /* 말풍선 텍스트 색상 */
+    color: ${props => props.theme.mainFont}; /* 말풍선 텍스트 색상 */
     padding: 10px 20px; /* 말풍선 안의 여백 */
     margin: 5px 0; /* 말풍선 간격 설정 */
 `;
 
-
 export const ChatRoomPageFooter = styled.div`
     width: 360px;
     height: 90px;
-    border-top: 1px solid black;
+    border-top: 1px solid ${props => props.theme.mainFont};
 `;
 
 export const ChatInput = styled.div`
@@ -92,7 +99,7 @@ export const ChatInput = styled.div`
         height: 40px;
         border: none;
         outline: none;
-        background-color: #dbdbdb;
+        background-color: ${props => props.theme.border};
         border-radius: 20px;
         padding-left: 20px;
     }

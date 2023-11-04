@@ -1,5 +1,23 @@
 import styled from 'styled-components';
 
+export const Select = styled.select`
+    display: block;
+    width: 100%;
+    padding: 2.5px;
+    border-style: none;
+    border-bottom: 1px solid ${({ theme }) => theme.border};
+    margin-bottom: 10px;
+
+    &:focus {
+        outline: none;
+        border-bottom: 1px solid ${({ theme }) => theme.mainFont};
+    }
+
+    &.warning {
+        border-bottom: 1px solid ${({ theme }) => theme.repo.open};
+    }
+`;
+
 export const InputLabel = styled.label`
     display: inline-block;
     color: ${({ theme }) => theme.subFont};
@@ -12,7 +30,7 @@ export const InputText = styled.input.attrs(props => ({
     type: props.type || 'text',
 }))`
     width: 100%;
-    padding: 2.5px;
+    padding: 2.5px 0;
     border-style: none;
     border-bottom: 1px solid ${({ theme }) => theme.border};
     margin-bottom: 10px;

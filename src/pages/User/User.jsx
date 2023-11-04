@@ -1,5 +1,6 @@
 import React from 'react';
 import * as S from './User.styled';
+import Logo from '../../assets/images/Logo.svg';
 import googleLogo from '../../assets/images/login/Google.png';
 import kakaoLogo from '../../assets/images/login/Kakao.png';
 import facebookLogo from '../../assets/images/login/Facebook.png';
@@ -8,7 +9,9 @@ import { NavLink, Outlet } from 'react-router-dom';
 const User = () => {
     return (
         <S.UserContainer>
-            <header>Deskoration</header>
+            <S.UserLogo>
+                <img src={Logo} alt="데스코레이션 로고" />
+            </S.UserLogo>
 
             <S.UserNav>
                 <ul>

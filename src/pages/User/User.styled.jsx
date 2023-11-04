@@ -9,6 +9,14 @@ export const UserContainer = styled.article`
     }
 `;
 
+export const UserLogo = styled.h2`
+    text-align: center;
+    margin: 20px 0 30px;
+    img {
+        width: 200px;
+    }
+`;
+
 export const UserNav = styled.nav`
     ul {
         display: flex;

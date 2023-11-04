@@ -7,8 +7,8 @@ export const BackIcon = styled(Back)`
 `;
 
 export const NewBoardContainer = styled.div`
-    position: relative;
-    padding: 0 25px;
+    /* position: relative; */
+    /* padding: 0 25px; */
 `;
 
 export const NewBoardHeader = styled.header`

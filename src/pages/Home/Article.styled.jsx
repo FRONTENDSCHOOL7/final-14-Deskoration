@@ -10,6 +10,7 @@ export const Section = styled.section`
     gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;
+    margin-top: 10px;
 
     &::-webkit-scrollbar {
         width: 7px;
@@ -37,10 +38,11 @@ export const Article = styled.article`
     /* background-image: url(${props =>
         props.imageurl || './images/DeskSetup.jpg'}); */
     background-size: cover;
+    border: 1px solid ${props => props.theme.border};
     box-sizing: border-box;
     transition: border 0.1s ease;
     &:hover {
-        border: 3px solid ${theme.main};
+        border: 3px solid ${props => props.theme.main};
     }
     border-radius: 20px;
 `;

@@ -5,14 +5,14 @@ export const Section = styled.section`
     margin: auto;
     display: flex;
     flex-wrap: wrap;
-    width: 310px;
+    width: 100%;
     height: 575px;
     gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;
     margin-top: 10px;
 
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 7px;
     }
 
@@ -28,7 +28,7 @@ export const Section = styled.section`
     &::-webkit-scrollbar-track {
         background-color: #f5f5f5;
         border-radius: 10px;
-    }
+    } */
 `;
 
 export const Article = styled.article`

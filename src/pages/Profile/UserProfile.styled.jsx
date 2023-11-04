@@ -5,7 +5,7 @@ export const Backwardicon = styled(Backward)``;
 
 export const ProfileHeader = styled.div`
     display: flex;
-    width: 310px;
+    width: 100%;
     height: 70px;
     padding-top: 20px;
     margin: 0 25px;
@@ -16,7 +16,7 @@ export const ProfileHeader = styled.div`
 export const ProfileContainer = styled.div`
     width: 100%;
     height: 640px;
-    padding: 10px 25px 0px 25px;
+    /* padding: 10px 25px 0px 25px; */
     overflow-y: auto;
 
     .gradient_btn {
@@ -51,9 +51,9 @@ export const UserInfo = styled.div`
     }
 
     .user-info {
-        color: #767676;
+        color: ${props => props.theme.subFont};
         width: 215px;
-        border: '1px solid #ccc'; // 테두리 추가
+        /* border: 1px solid ${props => props.theme.border};  */
     }
 `;
 
@@ -112,7 +112,7 @@ export const UserPostings = styled.div`
     color: ${({ theme }) => theme.mainFont};
     overflow-y: hidden;
 
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 7px;
     }
 
@@ -128,7 +128,7 @@ export const UserPostings = styled.div`
     &::-webkit-scrollbar-track {
         background-color: #f5f5f5;
         border-radius: 10px;
-    }
+    } */
 
     img {
         width: 50%;
@@ -138,7 +138,7 @@ export const UserPostings = styled.div`
         &:hover {
             border: 3px solid ${({ theme }) => theme.main};
         }
-        border: 3px solid white;
+        border: 3px solid #fff;
         border-radius: 10px;
     }
 `;

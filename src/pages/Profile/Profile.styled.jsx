@@ -3,24 +3,25 @@ import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 
 export const Backwardicon = styled(Backward)``;
 
-export const ProfileHeader = styled.div`
-    display: flex;
-    width: 310px;
-    height: 70px;
-    padding-top: 20px;
-    margin: 0 25px;
+// export const ProfileHeader = styled.div`
+//     display: flex;
+//     width: 310px;
+//     height: 70px;
+//     padding-top: 20px;
+//     margin: 0 25px;
 
-    font-size: 24px;
-    align-items: center;
-`;
+//     font-size: 24px;
+//     align-items: center;
+// `;
 export const ProfileContainer = styled.div`
     width: 100%;
     height: 640px;
-    padding: 10px 25px 0px 25px;
+    /* padding: 10px 25px 0px 25px; */
     overflow-y: auto;
 `;
 
 export const UserInfo = styled.div`
+    width: 100%;
     height: max-content;
     margin-bottom: 10px;
     display: flex;
@@ -47,10 +48,9 @@ export const UserInfo = styled.div`
     .user-info {
         margin-bottom: 20px;
 
-        color: #767676;
+        color: ${props => props.theme.subFont};
         width: 215px;
         margin-bottom: 10px;
-        border: '1px solid #ccc'; // 테두리 추가
     }
 `;
 
@@ -109,7 +109,7 @@ export const UserPostings = styled.div`
     color: ${({ theme }) => theme.mainFont};
     overflow-y: hidden;
 
-    &::-webkit-scrollbar {
+    /* &::-webkit-scrollbar {
         width: 7px;
     }
 
@@ -125,7 +125,7 @@ export const UserPostings = styled.div`
     &::-webkit-scrollbar-track {
         background-color: #f5f5f5;
         border-radius: 10px;
-    }
+    } */
 
     img {
         width: 50%;

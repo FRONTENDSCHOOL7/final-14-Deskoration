@@ -4,7 +4,8 @@ import { ReactComponent as Search } from '../../../assets/images/Search.svg';
 
 export const Backwardicon = styled(Backward)``;
 export const Searchicon = styled(Search)`
-    position: top;
+    width: 26px;
+    height: 26px;
 `;
 
 export const ChatListPageContainer = styled.div`
@@ -28,7 +29,7 @@ export const ChatlistPageMain = styled.div`
 export const SearchBar = styled.div`
     width: 100%;
     padding: 10px;
-    background-color: #dbdbdb;
+    background-color: ${props => props.theme.border};
     border: none;
     border-radius: 30px;
     display: flex;
@@ -37,10 +38,7 @@ export const SearchBar = styled.div`
 `;
 
 export const Searchmark = styled.div`
-    width: 30px;
-    height: 30px;
     margin: auto;
-    margin-left: 15px;
 `;
 
 export const SearchUsernameInput = styled.input`
@@ -49,7 +47,7 @@ export const SearchUsernameInput = styled.input`
     height: 24px;
     border: none;
     outline: none;
-    background-color: ${({ theme }) => theme.border};
+    background-color: ${props => props.theme.border};
 `;
 
 export const UserChatList = styled.ul`
@@ -59,8 +57,8 @@ export const UserChatList = styled.ul`
 `;
 
 export const UserChatRoom = styled.div`
-    width: 310px;
-    height: 64px;
+    /* width: 310px; */
+    height: 70px;
     /* margin: 0 25px; */
     display: flex;
     align-items: center;
@@ -70,7 +68,6 @@ export const UserChatRoom = styled.div`
         width: 50px;
         height: 50px;
         border-radius: 100%;
-        margin-left: 8px;
         margin-right: 8px;
     }
 `;
@@ -79,18 +76,18 @@ export const UserSimpleinfo = styled.div`
     flex-grow: 1;
     .user-name {
         font-size: 14px;
-        color: ${({ theme }) => theme.mainFont};
+        color: #0f0f0f;
     }
 
     .user-msg-time {
-        width: 240px;
+        /* width: 240px; */
         font-size: 12px;
         display: flex;
         justify-content: space-between;
     }
 
     .user-lastMeassage {
-        color: ${({ theme }) => theme.subFont};
+        color: #767676;
         white-space: nowrap;
         /* 긴 텍스트를 한 줄로 표시 */
         overflow: hidden;
@@ -101,30 +98,30 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-date {
-        color: ${({ theme }) => theme.subFont};
+        color: #767676;
     }
 `;
 
-export const ChatListPageFooter = styled.div`
-    width: 360px;
-    height: 90px;
-    border-top: 1px solid black;
+// export const ChatListPageFooter = styled.div`
+//     width: 360px;
+//     height: 90px;
+//     border-top: 1px solid black;
 
-    .btn-list {
-        margin-left: 25px;
-        margin-right: 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center; /* 수직 가운데 정렬 */
-        height: 100%; /* 부모 컨테이너의 높이를 100%로 설정하여 버튼을 수직 가운데 정렬 */
-    }
+//     .btn-list {
+//         margin-left: 25px;
+//         margin-right: 25px;
+//         display: flex;
+//         justify-content: space-between;
+//         align-items: center; /* 수직 가운데 정렬 */
+//         height: 100%; /* 부모 컨테이너의 높이를 100%로 설정하여 버튼을 수직 가운데 정렬 */
+//     }
 
-    .btn {
-        width: 30px;
-        height: 30px;
-        background-color: black;
-        align-self: center; /* 수직 가운데 정렬 */
-    }
-`;
+//     .btn {
+//         width: 30px;
+//         height: 30px;
+//         background-color: black;
+//         align-self: center; /* 수직 가운데 정렬 */
+//     }
+// `;
 
 // 별개 css

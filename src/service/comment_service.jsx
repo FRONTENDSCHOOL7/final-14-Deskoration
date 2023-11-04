@@ -1,10 +1,8 @@
 const baseURL = 'https://api.mandarin.weniv.co.kr/';
-const token = sessionStorage.getItem('tempToken');
-const post_id = '65412b57b2cb2056639e00af';
 
-export const fetchcomment = async () => {
+export const fetchcomment = async (id, token) => {
     try {
-        const response = await fetch(`${baseURL}post/${post_id}/comments`, {
+        const response = await fetch(`${baseURL}post/${id}/comments`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -20,8 +18,8 @@ export const fetchcomment = async () => {
     }
 };
 
-export const postComment = async content => {
-    const apiUrl = `${baseURL}post/${post_id}/comments`;
+export const postComment = async (id, content, token) => {
+    const apiUrl = `${baseURL}post/${id}/comments`;
 
     const commentData = {
         comment: {

@@ -5,18 +5,19 @@ const initialState = {
     currentPage: {
         type: 'image',
         value: logoImg,
+        username: '',
     },
 };
 
-export const pageSlice = createSlice({
+export const pageTitleSlice = createSlice({
     name: 'page',
     initialState,
     reducers: {
-        setPage: (state, action) => {
+        setPageTitle: (state, action) => {
             state.currentPage = action.payload;
         },
     },
 });
 
-export const { setPage } = pageSlice.actions;
-export default pageSlice.reducer;
+export const { setPageTitle } = pageTitleSlice.actions;
+export default pageTitleSlice.reducer;

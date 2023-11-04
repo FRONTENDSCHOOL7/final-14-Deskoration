@@ -1,15 +1,16 @@
 // usePageHandler.js
 import { useDispatch } from 'react-redux';
-import { setPage } from '../features/page/pageSlice';
+import { setPageTitle } from '../features/pageTitle/pageTitleSlice';
+import { useEffect } from 'react';
 
-const usePageHandler = () => {
+const usePageHandler = (type, title, username) => {
     const dispatch = useDispatch();
 
-    const handlePage = (type, value) => {
-        dispatch(setPage({ type, value }));
-    };
-
-    return handlePage;
+    useEffect(() => {
+        dispatch(
+            setPageTitle({ type: type, value: title, username: username }),
+        );
+    }, [dispatch, title, username]);
 };
 
 export default usePageHandler;

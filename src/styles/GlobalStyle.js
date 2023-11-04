@@ -77,6 +77,25 @@ html{
 body{
 	font-family:"PreRegular"
 }
+
+*::-webkit-scrollbar {
+	width: 7px;
+	height: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #888;
+	border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background-color: #555;
+}
+
+*::-webkit-scrollbar-track {
+	background-color: #f5f5f5;
+	border-radius: 10px;
+}
 `;
 
 export default GlobalStyle;

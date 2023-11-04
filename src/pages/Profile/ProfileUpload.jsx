@@ -9,6 +9,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
+import usePageHandler from '../../hooks/usePageHandler';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
@@ -26,6 +27,8 @@ export const ProfileUpload = () => {
     const userNameEl = useRef(null);
     const idEl = useRef(null);
     const introEl = useRef(null);
+
+    usePageHandler('text', '프로필 설정');
 
     // 업로드한 이미지 url 저장
     const handleUploadImg = async event => {
@@ -147,9 +150,7 @@ export const ProfileUpload = () => {
 
     return (
         <section>
-            {/* <header>헤더</header> */}
-            <S.ProfileMain>
-                <S.ProfileTitle>프로필 설정</S.ProfileTitle>
+            <S.ProfileContainer>
                 <form onSubmit={dataSubmit}>
                     <S.ProfileImgBox>
                         <S.ProfileImg src={photoURL} alt="프로필 이미지" />
@@ -211,7 +212,7 @@ export const ProfileUpload = () => {
                         padding={'20px'}
                     />
                 </form>
-            </S.ProfileMain>
+            </S.ProfileContainer>
         </section>
     );
 };

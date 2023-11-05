@@ -49,11 +49,11 @@ const Router = () => {
 
                     <Route element={<DefaultLayoutPage />}>
                         <Route path={'/chat'} element={<ChatListPage />} />
-                        {/* <Route path={'/profile'} element={<ProfilePage />} />
+                        <Route path={'/profile'} element={<ProfilePage />} />
                         <Route
                             path={'/userProfile'}
                             element={<UserProfilePage />}
-                        /> */}
+                        />
                         <Route path={'/newboard'} element={<NewBoardPage />} />
                         <Route path={'/feed'} element={<FeedPage />} />
                         <Route
@@ -64,13 +64,13 @@ const Router = () => {
                             path={'/detailpost/:id'}
                             element={<DetailPostPage />}
                         />
-                    </Route>
-
-                    <Route element={<NoFooterLayoutPage />}>
                         <Route
                             path={'/chat/:username'}
                             element={<ChatRoomPage />}
                         />
+                    </Route>
+
+                    <Route element={<NoFooterLayoutPage />}>
                         <Route
                             path={'/profileUpload'}
                             element={<ProfileUploadPage />}

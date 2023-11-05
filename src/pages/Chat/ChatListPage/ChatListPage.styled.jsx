@@ -62,7 +62,6 @@ export const UserChatRoom = styled.div`
     /* margin: 0 25px; */
     display: flex;
     align-items: center;
-    background-color: #fcfcfc;
 
     .user-img {
         width: 50px;
@@ -77,7 +76,7 @@ export const UserSimpleinfo = styled.div`
     flex-grow: 1;
     .user-name {
         font-size: 14px;
-        color: #0f0f0f;
+        color: ${props => props.theme.mainFont};
     }
 
     .user-msg-time {
@@ -88,7 +87,7 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-lastMeassage {
-        color: #767676;
+        color: ${props => props.theme.subFont};
         white-space: nowrap;
         /* 긴 텍스트를 한 줄로 표시 */
         overflow: hidden;
@@ -99,30 +98,8 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-date {
-        color: #767676;
+        color: ${props => props.theme.subFont};
     }
 `;
-
-// export const ChatListPageFooter = styled.div`
-//     width: 360px;
-//     height: 90px;
-//     border-top: 1px solid black;
-
-//     .btn-list {
-//         margin-left: 25px;
-//         margin-right: 25px;
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: center; /* 수직 가운데 정렬 */
-//         height: 100%; /* 부모 컨테이너의 높이를 100%로 설정하여 버튼을 수직 가운데 정렬 */
-//     }
-
-//     .btn {
-//         width: 30px;
-//         height: 30px;
-//         background-color: black;
-//         align-self: center; /* 수직 가운데 정렬 */
-//     }
-// `;
 
 // 별개 css

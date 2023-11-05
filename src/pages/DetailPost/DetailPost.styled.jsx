@@ -108,12 +108,18 @@ export const CommentContainer = styled.div`
     width: 100%;
     height: 90px;
     padding: 15px 25px 15px 25px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: #fff;
+    border: 1px solid ${props => props.theme.border};
 `;
 
 export const CommentBox = styled.div`
     width: 100%;
     height: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid ${props => props.theme.border};
     border-radius: 5px;
     box-sizing: border-box;
     display: flex;
@@ -134,8 +140,9 @@ export const CommentBox = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        color: orange;
+        color: ${props => props.theme.point};
         width: 50px;
+        font-weight: 700;
     }
 `;
 

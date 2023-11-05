@@ -87,7 +87,6 @@ const ChatRoomPage = () => {
             </S.ChatRoomPageContainer>
             <S.ChatRoomPageFooter>
                 <S.ChatInput>
-                    <S.Clipicon />
                     <input
                         type="text"
                         value={newMessage}

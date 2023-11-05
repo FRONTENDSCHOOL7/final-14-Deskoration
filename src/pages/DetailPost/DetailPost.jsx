@@ -6,7 +6,7 @@ import { fetchcomment, postComment } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 
-const DetailPost = () => {
+const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
@@ -131,6 +131,8 @@ const DetailPost = () => {
                                         left: key.location.x,
                                         top: key.location.y,
                                     }}
+                                    productItem={key}
+                                    deleteItem={deleteItem}
                                 />
                             ))}
                         </div>
@@ -153,7 +155,7 @@ const DetailPost = () => {
                         <h2 className="user-name">
                             {postData.author.username}
                         </h2>
-                        <p className="main-content">{postData.content}</p>
+                        <p className="main-content">{markerData.message}</p>
                         <S.CommentSection>
                             <S.CommentCounter>
                                 총 {commentData?.length}개의 댓글

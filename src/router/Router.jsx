@@ -7,6 +7,7 @@ import Login from '../pages/User/Login';
 import Signup from '../pages/User/Signup';
 import User from '../pages/User/User';
 import ProfileUpload from '../pages/Profile/ProfileUpload';
+import DetailPost from '../pages/DetailPost/DetailPost';
 
 const Router = () => {
     return (
@@ -26,6 +27,7 @@ const Router = () => {
 
                 <Route path={'/newboard'} element={<NewBoard />}></Route>
                 <Route path="/newboard/:id" element={<NewBoard />} />
+                <Route path="/detailpost/:id" element={<DetailPost />} />
             </Routes>
         </BrowserRouter>
     );

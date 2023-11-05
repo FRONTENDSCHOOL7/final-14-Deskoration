@@ -79,6 +79,11 @@ body{
 	font-family:"PreRegular"
 }
 
+input{
+	outline: none;
+  border: none;
+
+
 svg, img{
 	vertical-align: top;
 }

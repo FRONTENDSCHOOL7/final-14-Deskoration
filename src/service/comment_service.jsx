@@ -10,8 +10,6 @@ export const fetchcomment = async (id, token) => {
             },
         });
         const result = await response.json();
-        console.log(result.comments);
-        console.log(token);
         return result;
     } catch (error) {
         console.error('API 요청 중 오류 발생: ', error);
@@ -37,7 +35,24 @@ export const postComment = async (id, content, token) => {
             body: JSON.stringify(commentData),
         });
         const result = await response.json();
-        console.log(result);
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const deleteCommentAPI = async (postID, commentID, token) => {
+    const apiUrl = `${baseURL}post/${postID}/comments/${commentID}`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
+            },
+        });
+        const result = await response.json();
         return result;
     } catch (error) {
         console.error(error);

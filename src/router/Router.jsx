@@ -8,6 +8,11 @@ const LoginPage = lazy(() => import('../pages/User/Login'));
 const SignupPage = lazy(() => import('../pages/User/Signup'));
 const UserPage = lazy(() => import('../pages/User/User'));
 const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
+const FollowerListPage = lazy(() =>
+    import('../pages/FollowFollowingList/FollowerList'),
+);
+
+const FeedPage = lazy(() => import('../pages/Feed/Feed'));
 const ChatListPage = lazy(() =>
     import('../pages/Chat/ChatListPage/ChatListPage'),
 );
@@ -50,6 +55,7 @@ const Router = () => {
                             element={<UserProfilePage />}
                         /> */}
                         <Route path={'/newboard'} element={<NewBoardPage />} />
+                        <Route path={'/feed'} element={<FeedPage />} />
                         <Route
                             path={'/newboard/:id'}
                             element={<NewBoardPage />}
@@ -68,6 +74,10 @@ const Router = () => {
                         <Route
                             path={'/profileUpload'}
                             element={<ProfileUploadPage />}
+                        />
+                        <Route
+                            path={'/followerList'}
+                            element={<FollowerListPage />}
                         />
                     </Route>
                 </Routes>

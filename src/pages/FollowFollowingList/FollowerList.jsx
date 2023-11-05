@@ -1,17 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import { followService } from '../../service/follow_service';
-import usePageHandler from '../../hooks/usePageHandler';
+import { followService, followerService } from '../../service/follow_service';
 
 const FollowerList = () => {
-    const [followerData, setFollowerData] = useState(null);
-    usePageHandler('text', '팔로워');
+    const baseURL = 'https://api.mandarin.weniv.co.kr/';
+    const token = sessionStorage.getItem('tempToken');
+    const myAccountName = sessionStorage.getItem('tempAccountName');
+    const [followerData, setFollowerData] = useState([]);
+    const [follow, setFollow] = useState(false);
 
     useEffect(() => {
-        followService()
+        const fetchFollower = async () => {
+            await followerService(baseURL, token, myAccountName)
+                .then(data => {
+                    setFollowerData(data);
+                    // console.log('follower:', data);
+                })
+                .catch(error => {
+                    console.error('API 요청 중 오류 발생: ', error);
+                });
+        };
+        fetchFollower();
+    }, []);
+
+    // console.log('follower:', followerData[0]);
+
+    useEffect(() => {
+        // console.log('accountname:', followerData[0]?.accountname);
+        followService(baseURL, token, followerData[0]?.accountname)
             .then(data => {
-                setFollowerData(data);
+                setFollow(data.profile.isfollow);
+                // setFollow(!follow);
                 // console.log('follower:', data);
             })
             .catch(error => {
@@ -19,19 +39,55 @@ const FollowerList = () => {
             });
     }, []);
 
-    console.log('follower:', followerData);
+    // console.log('follow:', follow);
+
+    const handleFollowToggle = () => {
+        setFollow(!follow);
+    };
 
     return (
         <>
-            <S.FollwerContainer>
-                <S.FollwerList>
+            <S.FollowerHeader>
+                <button>
+                    <S.Backwardicon />
+                </button>
+                <h2>Follwer</h2>
+            </S.FollowerHeader>
+            <S.FollowerContainer>
+                {followerData.map(data => (
+                    <S.FollowerList>
+                        <S.FollowerInfo>
+                            <img src={data?.image} className="follower-img" />
+                            <div>{data?.accountname}</div>
+                        </S.FollowerInfo>
+                        <GradientButton
+                            width={'80px'}
+                            onClick={handleFollowToggle}
+                            gra={follow ? false : true}
+                            // gra={followerData.profile.isfollow}
+                        >
+                            {follow ? '팔로우' : '팔로잉'}
+                        </GradientButton>
+                    </S.FollowerList>
+                ))}
+                {/* <S.FollowerList>
                     <S.FollowerInfo>
-                        <img src="" className="follower-img" />
-                        <div>followerID</div>
+                        <img
+                            src={followerData[0]?.image}
+                            className="follower-img"
+                        />
+                        <div>{followerData[0]?.accountname}</div>
                     </S.FollowerInfo>
-                    <GradientButton padding={'10px'}>follow</GradientButton>
-                </S.FollwerList>
-            </S.FollwerContainer>
+                    <GradientButton
+                        width={'80px'}
+                        onClick={handleFollowToggle}
+                        gra={follow ? true : false}
+                        // gra={followerData.profile.isfollow}
+                    >
+                        {follow ? 'follow' : 'unfollow'}
+                    </GradientButton>
+                </S.FollowerList> */}
+            </S.FollowerContainer>
         </>
     );
 };

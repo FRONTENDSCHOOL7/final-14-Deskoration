@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const FollwerContainer = styled.ul`
+export const FollowerContainer = styled.ul`
     width: 100%;
     overflow-y: auto;
 `;
 
-export const FollwerList = styled.li`
+export const FollowerList = styled.li`
     display: flex;
     justify-content: space-between;
     width: 100%;

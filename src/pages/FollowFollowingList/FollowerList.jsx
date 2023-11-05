@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { followService } from '../../service/follow_service';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const FollowerList = () => {
     const [followerData, setFollowerData] = useState(null);
+    usePageHandler('text', '팔로워');
 
     useEffect(() => {
         followService()
@@ -21,12 +23,6 @@ const FollowerList = () => {
 
     return (
         <>
-            <S.FollowerHeader>
-                <button>
-                    <S.Backwardicon />
-                </button>
-                <h2>Follwer</h2>
-            </S.FollowerHeader>
             <S.FollwerContainer>
                 <S.FollwerList>
                     <S.FollowerInfo>

@@ -77,6 +77,10 @@ html{
 body{
 	font-family:"PreRegular"
 }
+input{
+	outline: none;
+  border: none;
+}
 `;
 
 export default GlobalStyle;

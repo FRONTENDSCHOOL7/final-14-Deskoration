@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import * as S from './Feed.styled';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const Feed = () => {
     const [like, setLike] = useState(false);
+    usePageHandler('text', '팔로잉 피드');
 
     const handleLike = () => {
         setLike(!like);

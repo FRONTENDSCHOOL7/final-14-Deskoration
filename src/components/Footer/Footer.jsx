@@ -16,7 +16,7 @@ const Footer = () => {
 
     const activeTab = path => {
         if (path === '/home') return 'home';
-        if (path.includes('/board')) return 'feed';
+        if (path.includes('/feed')) return 'feed';
         if (path.includes('/newboard')) return 'add';
         if (path === '/chat') return 'chat';
         if (path.includes('/profile')) return 'user';

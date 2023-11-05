@@ -65,7 +65,7 @@ const FollowerList = () => {
                         <GradientButton
                             width={'80px'}
                             onClick={handleFollowToggle}
-                            gra={follow ? false : true}
+                            gra={follow ? true : false}
                             // gra={followerData.profile.isfollow}
                         >
                             {follow ? '팔로우' : '팔로잉'}

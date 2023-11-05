@@ -18,7 +18,7 @@ const UserProfile = () => {
         navigate(-1); // Use navigate to go back to the previous page
     };
 
-    // usePageHandler('text', profileData?.accountname);
+    usePageHandler('text', profileData?.accountname);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기

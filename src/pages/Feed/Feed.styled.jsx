@@ -63,8 +63,8 @@ export const LikeIcon = styled(Like)`
     height: 26px;
     &.like {
         path {
-            fill: red;
-            stroke: red;
+            fill: ${props => props.theme.repo.open};
+            stroke: ${props => props.theme.repo.open};
         }
     }
 `;

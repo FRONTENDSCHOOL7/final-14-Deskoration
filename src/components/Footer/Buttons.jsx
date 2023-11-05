@@ -20,7 +20,7 @@ const handleActive = (name, setActive) => {
     setActive(name);
 };
 
-export const HomeBtn = ({ hover, setHover, active, setActive, handlePage }) => {
+export const HomeBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -46,7 +46,7 @@ export const HomeBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     );
 };
 
-export const FeedBtn = ({ hover, setHover, active, setActive, handlePage }) => {
+export const FeedBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -61,7 +61,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive, handlePage }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/board');
+                handleNavigate('/feed');
             }}
         >
             <S.FeedIcon $hover={hover.feed} $active={active === 'feed'} />
@@ -72,7 +72,7 @@ export const FeedBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     );
 };
 
-export const AddBtn = ({ hover, setHover, active, setActive, handlePage }) => {
+export const AddBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -98,7 +98,7 @@ export const AddBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     );
 };
 
-export const ChatBtn = ({ hover, setHover, active, setActive, handlePage }) => {
+export const ChatBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton
@@ -124,7 +124,7 @@ export const ChatBtn = ({ hover, setHover, active, setActive, handlePage }) => {
     );
 };
 
-export const UserBtn = ({ hover, setHover, active, setActive, handlePage }) => {
+export const UserBtn = ({ hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
     return (
         <S.IconButton

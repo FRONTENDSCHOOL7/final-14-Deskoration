@@ -4,11 +4,13 @@ import { ReactComponent as Logo } from '../../assets/images/Logo.svg';
 import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 
 export const Headbar = styled.header`
-    height: 70px;
+    height: 60px;
     color: ${props => props.theme.main};
     display: flex;
     align-items: center;
     padding: 0 25px;
+    margin-bottom: 15px;
+    border: 1px solid ${props => props.theme.border};
 `;
 
 export const LogoIcon = styled(Logo)`

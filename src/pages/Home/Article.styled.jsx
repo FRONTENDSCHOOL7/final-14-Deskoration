@@ -34,7 +34,7 @@ export const SearchButton = styled.button`
     position: absolute;
     width: 30px;
     height: 30px;
-    top: 20px;
+    top: 15px;
     right: 25px;
 `;
 

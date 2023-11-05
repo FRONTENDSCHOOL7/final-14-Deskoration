@@ -45,7 +45,7 @@ export const TextareaCounterP = styled.p`
 
 export const SubmitButtonBox = styled.div`
     position: absolute;
-    top: 18px;
+    top: 13px;
     right: 25px;
 
     color: ${props => props.theme.point};

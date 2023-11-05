@@ -128,7 +128,7 @@ export const MoreButton = styled.button`
     width: 30px;
     height: 30px;
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 20px;
     transform: rotate(90deg);
 `;

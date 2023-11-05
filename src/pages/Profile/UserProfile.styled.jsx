@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
+import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 
 export const Backwardicon = styled(Backward)``;
 
@@ -124,4 +125,18 @@ export const UserPostings = styled.div`
         border: 3px solid #fff;
         border-radius: 10px;
     }
+`;
+
+export const MoreButton = styled.button`
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    transform: rotate(90deg);
+`;
+
+export const MoreIcon = styled(More)`
+    width: 25px;
+    height: 25px;
 `;

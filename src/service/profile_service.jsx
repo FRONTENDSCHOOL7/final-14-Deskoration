@@ -1,10 +1,8 @@
 const baseURL = 'https://api.mandarin.weniv.co.kr/';
-const token = sessionStorage.getItem('tempToken');
 const myAccountName = sessionStorage.getItem('tempAccountName');
-const userAccountName = 'hothot';
 
-export const GetUserProfile = async () => {
-    const reqURL = `${baseURL}profile/${userAccountName}`;
+export const GetUserProfile = async (username, token) => {
+    const reqURL = `${baseURL}profile/${username}`;
 
     try {
         const response = await fetch(reqURL, {
@@ -22,7 +20,7 @@ export const GetUserProfile = async () => {
     }
 };
 
-export const GetMyProfile = async () => {
+export const GetMyProfile = async token => {
     const reqURL = `${baseURL}user/myinfo`;
 
     try {

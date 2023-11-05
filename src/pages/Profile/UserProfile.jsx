@@ -2,30 +2,36 @@ import React, { useEffect, useState } from 'react';
 import * as S from './UserProfile.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { GetUserProfile } from '../../service/profile_service';
-import { fetchPosts } from '../../service/board_service';
-import { Link } from 'react-router-dom';
-import usePageHandler from '../../hooks/usePageHandler';
+import { GetMyPost, fetchPosts } from '../../service/post_service';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const UserProfile = () => {
     const [profileData, setProfileData] = useState(null);
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
+    const { username } = useParams(); //선택한 게시물 아이디 값
+    const token = sessionStorage.getItem('tempToken');
 
-    usePageHandler('text', profileData?.accountname);
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+        navigate(-1); // Use navigate to go back to the previous page
+    };
+
+    // usePageHandler('text', profileData?.accountname);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
-        GetUserProfile()
+        GetUserProfile(username, token)
             .then(data => {
                 setProfileData(data.profile);
-                // setotherAccountname(data.profile.accountname);
-                // console.log(data.profile);
+                console.log(data.profile);
                 return data.profile.accountname;
             })
             .then(temp => {
-                fetchPosts(temp).then(data => {
-                    setUserPost(data.post);
-                    // console.log(data.post);
+                GetMyPost(temp, token).then(data => {
+                    setUserPost(data);
+                    console.log(data);
                 });
             })
             .catch(error => {
@@ -43,16 +49,22 @@ const UserProfile = () => {
 
     return (
         <>
+            <S.ProfileHeader>
+                <button>
+                    <S.Backwardicon onClick={handleGoBack} />
+                </button>
+                <h2>{profileData?.accountname}</h2>
+            </S.ProfileHeader>
             <S.ProfileContainer>
                 <S.UserInfo>
-                    <img src={profileData.image} alt="" className="user-img" />
+                    <img src={profileData?.image} alt="" className="user-img" />
 
                     <div className="user-introduce">
-                        <p className="user-name">{profileData.accountname}</p>
+                        <p className="user-name">{profileData?.accountname}</p>
                         <p className="user-info">
                             {expandedContent
                                 ? profileData.intro
-                                : profileData.intro.slice(0, 53)}
+                                : profileData?.intro?.slice(0, 53)}
                             {profileData.intro?.length > 30 && (
                                 <button onClick={toggleExpandedContent}>
                                     {expandedContent ? '접기' : '더보기'}
@@ -86,20 +98,22 @@ const UserProfile = () => {
                     </button>
                     <Link to="/follow-following-list">
                         <button className="user-follow">
-                            <p>{profileData.followerCount}</p>
+                            <p>{profileData?.followerCount}</p>
                             <p>팔로우</p>
                         </button>
                     </Link>
                     <Link to="/follow-following-list">
                         <button className="user-following">
-                            <p>{profileData.followingCount}</p>
+                            <p>{profileData?.followingCount}</p>
                             <p>팔로잉</p>
                         </button>
                     </Link>
                 </S.UserDataList>
                 <S.UserPostings>
                     {userPost?.map((post, index) => (
-                        <img key={index} src={post.image} alt="게시물 목록" />
+                        <Link key={post.id} to={`/detailpost/${post.id}`}>
+                            <img src={post.image} alt="게시물 목록" />
+                        </Link>
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>

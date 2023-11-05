@@ -18,7 +18,7 @@ export const ProfileContainer = styled.div`
     width: 100%;
     height: 640px;
     /* padding: 10px 25px 0px 25px; */
-    overflow-y: auto;
+    overflow: hidden;
 `;
 
 export const UserInfo = styled.div`

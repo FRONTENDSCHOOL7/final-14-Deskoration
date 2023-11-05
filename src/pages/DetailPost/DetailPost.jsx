@@ -7,7 +7,7 @@ import {
     postComment,
     deleteCommentAPI,
 } from '../../service/comment_service';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -56,6 +56,7 @@ const DetailPost = deleteItem => {
             //     }),
             // );
             setPostData(postResult.post);
+            // console.log(postResult);
         } catch (error) {
             console.error('error');
         }
@@ -246,14 +247,6 @@ const DetailPost = deleteItem => {
                     deleteFn={e => deleteComment(e)}
                 />
             </S.DetailPostCotainer>
-            <S.FollowBtnBox>
-                <GradientButton
-                    children={'팔로우'}
-                    gra={true}
-                    width={'70px'}
-                    padding={'10px'}
-                />
-            </S.FollowBtnBox>
         </>
     );
 };

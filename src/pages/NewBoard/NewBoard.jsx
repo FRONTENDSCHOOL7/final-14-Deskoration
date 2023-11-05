@@ -25,11 +25,12 @@ const NewBoard = () => {
 
     const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-
     const [textArea, setTextArea] = useState({
         message: '',
         length: 0,
     });
+
+    usePageHandler('text', '게시글 작성');
 
     const trimTextArea = () => {
         setTextArea(prev => ({
@@ -38,18 +39,11 @@ const NewBoard = () => {
             length: prev.message.trim().length,
         }));
     };
-
-    usePageHandler('text', '게시글 작성');
-
     const handleMessageChange = e => {
         setTextArea({
             message: e.target.value,
             length: e.target.value.length,
         });
-    };
-
-    const handleTextCountChange = e => {
-        setTextareaCount(e.target.value.length);
     };
 
     const deleteProduct = itemID => {
@@ -87,13 +81,6 @@ const NewBoard = () => {
 
     return (
         <S.NewBoardContainer>
-            {/* <S.NewBoardHeader>
-                <button>
-                    <S.BackIcon />
-                </button>
-                <h4>게시물 작성</h4>
-            </S.NewBoardHeader>{' '}
-            */}
             {pathName === '/newboard' ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
@@ -111,7 +98,9 @@ const NewBoard = () => {
                         placeholder="나의 데스크 셋업에 대해서 얘기해주세요."
                         onChange={handleMessageChange}
                     />
-                    <S.TextareaCounterP>{textareaCount}/100</S.TextareaCounterP>
+                    <S.TextareaCounterP>
+                        {textArea.length}/100
+                    </S.TextareaCounterP>
                     <S.SubmitButtonBox>
                         <GradientButton
                             type="submit"

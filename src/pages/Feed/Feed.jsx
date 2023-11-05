@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
+import { getFollowingFeed } from '../../service/post_service';
 
 const Feed = () => {
+    const token = sessionStorage.getItem('tempToken');
     const [like, setLike] = useState(false);
+    const [feeds, setFeeds] = useState([]);
+    const pathClassName = like ? 'like' : null;
+
     usePageHandler('text', '팔로잉 피드');
 
     const handleLike = () => {
         setLike(!like);
     };
 
-    const pathClassName = like ? 'like' : null;
+    const callAPI = async token => {
+        const result = await getFollowingFeed(token);
+        console.log(result);
+    };
+
+    useEffect(() => {
+        callAPI(token);
+    }, []);
 
     return (
         <ul>

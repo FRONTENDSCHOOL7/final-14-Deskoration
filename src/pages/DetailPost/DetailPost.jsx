@@ -9,7 +9,11 @@ import {
 } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
+
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
+
+import usePageHandler from '../../hooks/usePageHandler';
+
 
 const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
@@ -23,17 +27,15 @@ const DetailPost = deleteItem => {
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
 
-    const handleGoBack = () => {
-        navigate(-1); // Use navigate to go back to the previous page
-    };
-
     const postApi = async (id, token) => {
         try {
             const postResult = await fetchPosts(id, token);
             const dataObject = JSON.parse(postResult.post.content);
 
+
             setPostContent(JSON.parse(postResult.post.content));
-            // setPostContent(JSON.parse(postResult.post.content));
+
+
             // setMakerData(
             //     dataObject.deskoration.map(item => {
             //         const {
@@ -97,6 +99,7 @@ const DetailPost = deleteItem => {
             });
     };
 
+
     // bottomsheet
     const [commentID, setCommentID] = useState();
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
@@ -109,6 +112,10 @@ const DetailPost = deleteItem => {
         setCommentID(comment_id);
         setIsCommentBottomSheet(!isCommentBottomSheet);
     };
+
+    usePageHandler('user', postData?.author.image, postData?.author.username);
+
+
 
     const editPost = e => {
         e.stopPropagation();
@@ -143,11 +150,12 @@ const DetailPost = deleteItem => {
         }
     };
     return (
+
         <S.DetailPostCotainer>
             <S.DetailPostHeader>
                 <S.DetailPostUser>
                     <button>
-                        <S.BackIcon onClick={handleGoBack} />
+                        <S.BackIcon />
                     </button>
                     {postData && ( // null이 아닌 경우에만 렌더링
                         <>

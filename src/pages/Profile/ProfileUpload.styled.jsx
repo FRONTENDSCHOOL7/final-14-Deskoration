@@ -8,8 +8,8 @@ export const ProfileTitle = styled.h4`
     font-size: ${({ theme }) => theme.fontSize.lg};
 `;
 
-export const ProfileMain = styled.div`
-    padding: 0 25px;
+export const ProfileContainer = styled.div`
+    margin-top: 10px;
 `;
 export const ProfileImgBox = styled.div`
     width: fit-content;

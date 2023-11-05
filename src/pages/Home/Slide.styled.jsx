@@ -2,33 +2,12 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
-    margin: 10px 0px;
+    padding-bottom: 8px;
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
     white-space: nowrap;
     gap: 15px;
-    /* &::-webkit-scrollbar {
-        display: none; 
-    } */
-    &::-webkit-scrollbar {
-        /* width: 5px; */
-        height: 5px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #888;
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: #f5f5f5;
-        border-radius: 10px;
-    }
 `;
 
 export const Category = styled.div`

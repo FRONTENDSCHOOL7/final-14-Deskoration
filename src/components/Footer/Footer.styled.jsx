@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Footer = styled.footer`
+export const Footer = styled.nav`
     display: flex;
     width: 100%;
     height: 85px;
@@ -18,4 +18,3 @@ export const FooterUl = styled.ul`
     justify-content: space-between;
     width: 100%;
 `;
-

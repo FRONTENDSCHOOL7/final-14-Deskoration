@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import GradientButton from '../../components/GradientButton/GradientButton';
 import { ReactComponent as Back } from '../../assets/images/Backward.svg';
 
 export const BackIcon = styled(Back)`
@@ -7,8 +7,10 @@ export const BackIcon = styled(Back)`
 `;
 
 export const NewBoardContainer = styled.div`
-    position: relative;
-    padding: 0 25px;
+    /* position: relative; */
+    /* padding: 0 25px; */
+    height: 100%;
+    overflow: auto;
 `;
 
 export const NewBoardHeader = styled.header`
@@ -41,9 +43,9 @@ export const TextareaCounterP = styled.p`
     color: ${props => props.theme.subFont};
 `;
 
-export const SubmitNewBoardButton = styled.button`
+export const SubmitButtonBox = styled.div`
     position: absolute;
-    top: 20px;
+    top: 18px;
     right: 25px;
 
     color: ${props => props.theme.point};

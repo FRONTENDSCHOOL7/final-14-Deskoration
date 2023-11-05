@@ -14,42 +14,42 @@ const Slide = () => {
     return (
         <>
             <S.SlideSection>
-                <div>
+                <button>
                     <S.Category $url={deskImg}></S.Category>
                     <S.CateName>책상</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={chairImg}></S.Category>
                     <S.CateName>의자</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={monitorImg}></S.Category>
                     <S.CateName>모니터</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={keyboardImg}></S.Category>
                     <S.CateName>키보드</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={mouseImg}></S.Category>
                     <S.CateName>마우스</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={speakerImg}></S.Category>
                     <S.CateName>스피커</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={desktopImg}></S.Category>
                     <S.CateName>데스크탑</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={laptopImg}></S.Category>
                     <S.CateName>노트북</S.CateName>
-                </div>
-                <div>
+                </button>
+                <button>
                     <S.Category $url={accImg}></S.Category>
                     <S.CateName>액세서리</S.CateName>
-                </div>
+                </button>
             </S.SlideSection>
         </>
     );

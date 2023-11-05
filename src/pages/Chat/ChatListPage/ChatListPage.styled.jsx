@@ -4,7 +4,8 @@ import { ReactComponent as Search } from '../../../assets/images/Search.svg';
 
 export const Backwardicon = styled(Backward)``;
 export const Searchicon = styled(Search)`
-    position: top;
+    width: 26px;
+    height: 26px;
 `;
 
 export const ChatListPageContainer = styled.div`
@@ -23,27 +24,21 @@ export const ChatListHeader = styled.div`
 
 export const ChatlistPageMain = styled.div`
     width: 100%;
-    height: 620px;
 `;
 
 export const SearchBar = styled.div`
-    margin: 0 25px;
-
-    width: 310px;
-    height: 60px;
-    background-color: ${({ theme }) => theme.border};
+    width: 100%;
+    padding: 10px;
+    background-color: ${props => props.theme.border};
     border: none;
     border-radius: 30px;
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
+    margin: 10px 0;
 `;
 
 export const Searchmark = styled.div`
-    width: 30px;
-    height: 30px;
     margin: auto;
-    margin-left: 15px;
 `;
 
 export const SearchUsernameInput = styled.input`
@@ -52,48 +47,47 @@ export const SearchUsernameInput = styled.input`
     height: 24px;
     border: none;
     outline: none;
-    background-color: ${({ theme }) => theme.border};
+    background-color: ${props => props.theme.border};
 `;
 
 export const UserChatList = styled.ul`
-    padding-top: 25px;
     width: 100%;
-    height: 530px;
-    overflow-y: auto; /* 세로 스크롤을 활성화합니다. */
+    height: 580px;
+    overflow: auto;
 `;
 
 export const UserChatRoom = styled.div`
-    width: 310px;
-    height: 64px;
-    margin: 0 25px;
+    /* width: 310px; */
+    height: 70px;
+    /* margin: 0 25px; */
     display: flex;
     align-items: center;
-    background-color: #fcfcfc;
 
     .user-img {
         width: 50px;
         height: 50px;
         border-radius: 100%;
-        margin-left: 8px;
         margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
     }
 `;
 
 export const UserSimpleinfo = styled.div`
+    flex-grow: 1;
     .user-name {
         font-size: 14px;
-        color: ${({ theme }) => theme.mainFont};
+        color: ${props => props.theme.mainFont};
     }
 
     .user-msg-time {
-        width: 240px;
+        /* width: 240px; */
         font-size: 12px;
         display: flex;
         justify-content: space-between;
     }
 
     .user-lastMeassage {
-        color: ${({ theme }) => theme.subFont};
+        color: ${props => props.theme.subFont};
         white-space: nowrap;
         /* 긴 텍스트를 한 줄로 표시 */
         overflow: hidden;
@@ -104,29 +98,7 @@ export const UserSimpleinfo = styled.div`
     }
 
     .user-date {
-        color: ${({ theme }) => theme.subFont};
-    }
-`;
-
-export const ChatListPageFooter = styled.div`
-    width: 360px;
-    height: 90px;
-    border-top: 1px solid black;
-
-    .btn-list {
-        margin-left: 25px;
-        margin-right: 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center; /* 수직 가운데 정렬 */
-        height: 100%; /* 부모 컨테이너의 높이를 100%로 설정하여 버튼을 수직 가운데 정렬 */
-    }
-
-    .btn {
-        width: 30px;
-        height: 30px;
-        background-color: black;
-        align-self: center; /* 수직 가운데 정렬 */
+        color: ${props => props.theme.subFont};
     }
 `;
 

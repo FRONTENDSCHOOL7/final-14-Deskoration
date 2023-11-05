@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import { ReactComponent as Search } from '../../assets/images/Search.svg';
+
 import { ReactComponent as Logo } from '../../assets/images/Logo.svg';
+import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 
 export const Headbar = styled.header`
-    height: 30px;
+    height: 70px;
     color: ${props => props.theme.main};
     display: flex;
-    justify-content: space-between;
-    margin: 20px 25px 10px;
+    align-items: center;
+    padding: 0 25px;
 `;
 
 export const LogoIcon = styled(Logo)`
@@ -15,6 +16,28 @@ export const LogoIcon = styled(Logo)`
     color: ${props => props.theme.main};
 `;
 
-export const SearchIcon = styled(Search)`
-    height: 30px;
+export const BackwardIcon = styled(Backward)`
+    margin-right: 12px;
+`;
+
+export const titleSpan = styled.span`
+    font-size: ${props => props.theme.fontSize.lg};
+    color: ${props => props.theme.main};
+    font-weight: 700;
+`;
+
+export const UserInfo = styled.div`
+    display: flex;
+    width: 100%;
+    font-size: ${props => props.theme.fontSize.lg};
+    font-weight: 700;
+    align-items: center;
+
+    .user-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 100%;
+        margin-right: 8px;
+        border: 1px solid ${props => props.theme.border};
+    }
 `;

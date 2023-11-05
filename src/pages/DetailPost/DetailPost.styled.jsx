@@ -9,32 +9,6 @@ export const LikeIcon = styled(Like)``;
 export const CommentIcon = styled(Comment)``;
 export const Dots_verticalIcon = styled(Dots_vertical)``;
 
-// 댓글창 헤더
-export const BoardHeader = styled.header`
-    display: flex;
-    justify-content: space-between;
-
-    align-items: center;
-    height: 70px;
-    margin: 0 25px;
-`;
-
-// 댓글 영역
-export const BoardHeaderUser = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    .profile-name {
-        font-weight: bold;
-        font-size: 16px;
-    }
-`;
-
-export const BackIcon = styled(Back)`
-    vertical-align: top;
-`;
-
 export const ProfileImg = styled.img`
     width: 40px;
     height: 40px;
@@ -48,7 +22,7 @@ export const ProfileImg = styled.img`
 
 export const BoardMain = styled.div`
     width: 100%;
-    height: 640px;
+    /* height: 640px; */
 `;
 
 export const ContentSection = styled.div`
@@ -57,12 +31,12 @@ export const ContentSection = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding-left: 20px;
-    padding-right: 20px;
     overflow-y: scroll; /* 스크롤 생성을 위해 수정 */
 
     .post-img {
         width: 100%;
+        border-radius: 20px;
+        border: 1px solid ${props => props.theme.border};
     }
 
     .post {
@@ -72,7 +46,7 @@ export const ContentSection = styled.div`
     .board-btn {
         display: flex;
         justify-content: space-between;
-        margin: 5px 0 5px 0;
+        margin: 10px 0;
     }
 
     .btn-hc {
@@ -163,4 +137,10 @@ export const CommentBox = styled.div`
         color: orange;
         width: 50px;
     }
+`;
+
+export const FollowBtnBox = styled.div`
+    position: absolute;
+    top: 20px;
+    right: 25px;
 `;

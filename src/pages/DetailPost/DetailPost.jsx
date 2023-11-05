@@ -5,6 +5,7 @@ import { fetchPosts } from '../../service/post_service';
 import { fetchcomment, postComment } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
@@ -18,36 +19,32 @@ const DetailPost = deleteItem => {
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
 
-    const handleGoBack = () => {
-        navigate(-1); // Use navigate to go back to the previous page
-    };
-
     const postApi = async (id, token) => {
         try {
             const postResult = await fetchPosts(id, token);
             const dataObject = JSON.parse(postResult.post.content);
-            setMakerData(
-                dataObject.deskoration.map(item => {
-                    const {
-                        category,
-                        productName,
-                        price,
-                        store,
-                        link,
-                        id,
-                        location,
-                    } = item;
-                    return {
-                        category,
-                        productName,
-                        price,
-                        store,
-                        link,
-                        id,
-                        location,
-                    };
-                }),
-            );
+            // setMakerData(
+            //     dataObject.deskoration.map(item => {
+            //         const {
+            //             category,
+            //             productName,
+            //             price,
+            //             store,
+            //             link,
+            //             id,
+            //             location,
+            //         } = item;
+            //         return {
+            //             category,
+            //             productName,
+            //             price,
+            //             store,
+            //             link,
+            //             id,
+            //             location,
+            //         };
+            //     }),
+            // );
             setPostData(postResult.post);
         } catch (error) {
             console.error('error');
@@ -93,28 +90,11 @@ const DetailPost = deleteItem => {
             });
     };
 
+    usePageHandler('user', postData?.author.image, postData?.author.username);
     // ...
 
     return (
         <>
-            <S.BoardHeader>
-                <S.BoardHeaderUser>
-                    <button>
-                        <S.BackIcon onClick={handleGoBack} />
-                    </button>
-                    {postData && ( // null이 아닌 경우에만 렌더링
-                        <>
-                            <S.ProfileImg src={postData.author.image} alt="" />
-                            <div className="profile-name">
-                                {postData.author.username}
-                            </div>
-                        </>
-                    )}
-                </S.BoardHeaderUser>
-                <GradientButton gra={true} width={'80px'} padding={'5px 0'}>
-                    팔로우
-                </GradientButton>
-            </S.BoardHeader>
             <S.BoardMain>
                 {postData && ( // null이 아닌 경우에만 렌더링
                     <S.ContentSection>
@@ -202,6 +182,14 @@ const DetailPost = deleteItem => {
                     </button>
                 </S.CommentBox>
             </S.CommentContainer>
+            <S.FollowBtnBox>
+                <GradientButton
+                    children={'팔로우'}
+                    gra={true}
+                    width={'70px'}
+                    padding={'10px'}
+                />
+            </S.FollowBtnBox>
         </>
     );
 };

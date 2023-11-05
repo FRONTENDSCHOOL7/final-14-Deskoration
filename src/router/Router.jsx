@@ -2,7 +2,6 @@ import { React, lazy, Suspense } from 'react';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-
 const HomePage = lazy(() => import('../pages/Home/Home'));
 const NewBoardPage = lazy(() => import('../pages/NewBoard/NewBoard'));
 const LoginPage = lazy(() => import('../pages/User/Login'));
@@ -52,7 +51,7 @@ const Router = () => {
                         <Route path={'/chat'} element={<ChatListPage />} />
                         <Route path={'/profile'} element={<ProfilePage />} />
                         <Route
-                            path={'/userProfile'}
+                            path={'/userProfile/:username'}
                             element={<UserProfilePage />}
                         />
                         <Route path={'/newboard'} element={<NewBoardPage />} />
@@ -70,7 +69,6 @@ const Router = () => {
                             element={<ChatRoomPage />}
                         />
                     </Route>
-
 
                     <Route element={<NoFooterLayoutPage />}>
                         <Route

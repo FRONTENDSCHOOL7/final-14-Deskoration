@@ -49,12 +49,6 @@ const UserProfile = () => {
 
     return (
         <>
-            <S.ProfileHeader>
-                <button>
-                    <S.Backwardicon onClick={handleGoBack} />
-                </button>
-                <h2>{profileData?.accountname}</h2>
-            </S.ProfileHeader>
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData?.image} alt="" className="user-img" />

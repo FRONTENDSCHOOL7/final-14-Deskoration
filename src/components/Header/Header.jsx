@@ -1,23 +1,58 @@
 import React from 'react';
 import * as S from './Header.styled';
 import { useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const currentPage = useSelector(state => state.page.currentPage);
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleGoBack = () => {
+        navigate(-1);
+    };
+    const currentPage = useSelector(state => state.pageTitle.currentPage);
+
+    const isHome = location.pathname.includes('/home');
+    const isFeed = location.pathname.includes('/feed');
+    const isNewBoard = location.pathname.includes('/newboard');
+    const isChat = location.pathname.includes('/chat');
+    const isMyProfile = location.pathname.includes('/profile');
+    const isUserProfile = location.pathname.includes('/userProfile');
 
     return (
         <>
             <S.Headbar>
+                {isHome ||
+                isFeed ||
+                isNewBoard ||
+                isChat ||
+                isMyProfile ||
+                isUserProfile ? null : (
+                    <button type="button" onClick={handleGoBack}>
+                        <S.BackwardIcon />
+                    </button>
+                )}
+
                 <div>
                     {currentPage.type === 'text' && (
-                        <span>{currentPage.value}</span>
+                        <S.titleSpan>{currentPage.value}</S.titleSpan>
                     )}
                     {currentPage.type === 'image' && (
-                        <img src={currentPage.value} alt="Content" />
+                        <img src={currentPage.value} alt="데스코레이션 로고" />
+                    )}
+                    {currentPage.type === 'user' && (
+                        <S.UserInfo>
+                            <img
+                                src={currentPage.value}
+                                alt=""
+                                className="user-img"
+                            />
+                            <h2>{currentPage.username}</h2>
+                        </S.UserInfo>
                     )}
                 </div>
                 {/* <S.LogoIcon /> */}
-                <S.SearchIcon />
+                {/* <S.SearchIcon /> */}
             </S.Headbar>
         </>
     );

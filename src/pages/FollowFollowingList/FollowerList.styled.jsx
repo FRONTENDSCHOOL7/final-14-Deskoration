@@ -1,18 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
-
-export const Backwardicon = styled(Backward)``;
-
-export const FollowerHeader = styled.header`
-    display: flex;
-    width: 310px;
-    height: 70px;
-    padding-top: 20px;
-    margin: 0 25px;
-
-    font-size: 24px;
-    align-items: center;
-`;
 
 export const FollwerContainer = styled.ul`
     width: 100%;

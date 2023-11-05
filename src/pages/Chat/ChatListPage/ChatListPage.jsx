@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
-
+import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -15,18 +15,11 @@ const ChatListPage = () => {
         profile.username.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
+    usePageHandler('text', '채팅');
+
     return (
         <>
             <S.ChatListPageContainer>
-                {/* 헤더 부분 */}
-                <S.ChatListHeader>
-                    {/* header button 가져오기 */}
-                    <button>
-                        <S.Backwardicon />
-                    </button>
-                    <h2>Chat</h2>
-                </S.ChatListHeader>
-
                 {/* 메인 부분 */}
                 <S.ChatlistPageMain>
                     <S.SearchBar>
@@ -82,17 +75,6 @@ const ChatListPage = () => {
                     </S.UserChatList>
                 </S.ChatlistPageMain>
             </S.ChatListPageContainer>
-            {/* 푸터 부분 */}
-            <S.ChatListPageFooter>
-                {/* 푸터 버튼 가져오기 */}
-                <div className="btn-list">
-                    <button className="btn">home</button>
-                    <button className="btn">feed</button>
-                    <button className="btn">create</button>
-                    <button className="btn">chat</button>
-                    <button className="btn">profile</button>
-                </div>
-            </S.ChatListPageFooter>
         </>
     );
 };

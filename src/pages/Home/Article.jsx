@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
 import DetailPost from '../DetailPost/DetailPost';
 import { GetAllPost, GetMyPost } from '../../service/post_service';
@@ -69,10 +69,10 @@ const Article = () => {
                     </Link>
                 ))}
             </S.Section>
+            <S.SearchButton type="button">
+                <S.SearchIcon />
+            </S.SearchButton>
             {loading && <div>Loading...</div>}
-            <Routes>
-                <Route path={'/detailpost/:id'} element={<DetailPost />} />
-            </Routes>
         </>
     );
 };

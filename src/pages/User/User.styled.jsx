@@ -1,11 +1,19 @@
 import { styled } from 'styled-components';
 
 export const UserContainer = styled.article`
-    padding-top: 50px;
+    padding: 50px 25px 0;
     header {
         text-align: center;
         font-size: 50px;
         margin-bottom: 50px;
+    }
+`;
+
+export const UserLogo = styled.h2`
+    text-align: center;
+    margin: 20px 0 30px;
+    img {
+        width: 200px;
     }
 `;
 
@@ -120,6 +128,11 @@ export const SocialLoginContainer = styled.section`
         height: 60px;
         border-radius: 15px;
         background: ${props => props.theme.bgSecondary};
+    }
+
+    img {
+        width: 35px;
+        height: 35px;
     }
 
     &::before {

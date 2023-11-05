@@ -6,6 +6,7 @@ import Article from '../Home/Article';
 import { GetMyProfile } from '../../service/profile_service';
 import { fetchPosts } from '../../service/board_service';
 import { Link } from 'react-router-dom';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState(null);
@@ -13,6 +14,8 @@ const Profile = () => {
     const [expandedContent, setExpandedContent] = useState(false);
 
     const myAccountName = sessionStorage.getItem('tempAccountName');
+
+    usePageHandler('text', '나의 프로필');
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
@@ -44,12 +47,6 @@ const Profile = () => {
 
     return (
         <>
-            <S.ProfileHeader>
-                <button>
-                    <S.Backwardicon />
-                </button>
-                <h2>My profile</h2>
-            </S.ProfileHeader>
             <S.ProfileContainer>
                 <S.UserInfo>
                     <img src={profileData.image} alt="" className="user-img" />
@@ -60,7 +57,7 @@ const Profile = () => {
                             {expandedContent
                                 ? profileData.intro
                                 : profileData.intro.slice(0, 53)}
-                            {profileData.intro.length > 30 && (
+                            {profileData.intro?.length > 30 && (
                                 <button onClick={toggleExpandedContent}>
                                     {expandedContent ? '접기' : '더보기'}
                                 </button>
@@ -71,14 +68,14 @@ const Profile = () => {
                 <GradientButton
                     type={'button'}
                     gra={'true'}
-                    width={'310px'}
+                    width={'100%'}
                     padding={'10px'}
                 >
                     프로필 편집
                 </GradientButton>
                 <S.UserDataList>
                     <button className="user-post">
-                        <p>{userPost.length}</p>
+                        <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
                     <Link to="/follow-following-list">
@@ -95,12 +92,14 @@ const Profile = () => {
                     </Link>
                 </S.UserDataList>
                 <S.UserPostings>
-                    {userPost.map((post, index) => (
+                    {userPost?.map((post, index) => (
                         <img key={index} src={post.image} alt="게시물 목록" />
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>
-            <Footer />
+            <S.MoreButton>
+                <S.MoreIcon />
+            </S.MoreButton>
         </>
     );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UploadPost } from '../../service/post_service';
+import GradientButton from '../../components/GradientButton/GradientButton';
+import usePageHandler from '../../hooks/usePageHandler';
 
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
@@ -23,11 +25,12 @@ const NewBoard = () => {
 
     const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-
     const [textArea, setTextArea] = useState({
         message: '',
         length: 0,
     });
+
+    usePageHandler('text', '게시글 작성');
 
     const trimTextArea = () => {
         setTextArea(prev => ({
@@ -74,16 +77,11 @@ const NewBoard = () => {
                 console.log('error', error);
             }
         }
+        navigate('/home');
     };
 
     return (
         <S.NewBoardContainer>
-            <S.NewBoardHeader>
-                <button onClick={() => navigate(-1)}>
-                    <S.BackIcon />
-                </button>
-                <h4>게시물 작성</h4>
-            </S.NewBoardHeader>
             {pathName === '/newboard' ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
@@ -104,9 +102,15 @@ const NewBoard = () => {
                     <S.TextareaCounterP>
                         {textArea.length}/100
                     </S.TextareaCounterP>
-                    <S.SubmitNewBoardButton type="submit">
-                        올리기
-                    </S.SubmitNewBoardButton>
+                    <S.SubmitButtonBox>
+                        <GradientButton
+                            type="submit"
+                            children={'올리기'}
+                            gra={'true'}
+                            width={'70px'}
+                            padding={'10px'}
+                        />
+                    </S.SubmitButtonBox>
                 </form>
             ) : (
                 <RegisterForm

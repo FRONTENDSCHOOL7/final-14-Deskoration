@@ -1,42 +1,81 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './DetailPost.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import { fetchPosts } from '../../service/board_service';
+import { fetchPosts } from '../../service/post_service';
 import { fetchcomment, postComment } from '../../service/comment_service';
-const Board = () => {
+import { useNavigate, useParams } from 'react-router-dom';
+import { Marker } from '../../components/Marker/Marker';
+
+const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
+    const [markerData, setMakerData] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
-
+    const token = sessionStorage.getItem('tempToken');
+    const tempAccountName = sessionStorage.getItem('tempAccountName');
     const myId = sessionStorage.getItem('tempID');
+    const { id } = useParams(); //선택한 게시물 아이디 값
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+        navigate(-1); // Use navigate to go back to the previous page
+    };
+
+    const postApi = async (id, token) => {
+        try {
+            const postResult = await fetchPosts(id, token);
+            const dataObject = JSON.parse(postResult.post.content);
+            setMakerData(
+                dataObject.deskoration.map(item => {
+                    const {
+                        category,
+                        productName,
+                        price,
+                        store,
+                        link,
+                        id,
+                        location,
+                    } = item;
+                    return {
+                        category,
+                        productName,
+                        price,
+                        store,
+                        link,
+                        id,
+                        location,
+                    };
+                }),
+            );
+            setPostData(postResult.post);
+        } catch (error) {
+            console.error('error');
+        }
+    };
+
+    const commentApi = async (id, token) => {
+        try {
+            const commentResult = await fetchcomment(id, token);
+            console.log(commentResult.comments);
+            setCommentData(commentResult.comments);
+        } catch (error) {
+            console.error('error');
+        }
+    };
 
     useEffect(() => {
-        // API 호출해서 데이터 받아오기
-        fetchPosts()
-            .then(data => {
-                setPostData(data.post);
-                console.log(data.post);
-            })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생: ', error);
-            });
-        fetchcomment()
-            .then(data => {
-                setCommentData(data.comments);
-                console.log(data.comments);
-            })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생: ', error);
-            });
+        console.log(id);
+        const selectPost = postApi(id, token);
+        const selectPostComment = commentApi(id, token);
     }, []);
 
     const handleCommentSubmit = () => {
         // 새로운 댓글을 서버로 전송
-        postComment(newComment) // postComment 함수는 새 댓글을 작성하기 위한 API 요청을 보내야 합니다
+        postComment(id, newComment, token) // postComment 함수는 새 댓글을 작성하기 위한 API 요청을 보내야 합니다
             .then(response => {
                 // 새 댓글이 성공적으로 작성되면, commentData를 업데이트하거나 다시 불러오도록 구현
-                fetchcomment()
+                fetchcomment(id, token)
                     .then(data => {
                         setCommentData(data.comments);
                         console.log(data.comments);
@@ -61,7 +100,7 @@ const Board = () => {
             <S.BoardHeader>
                 <S.BoardHeaderUser>
                     <button>
-                        <S.BackIcon />
+                        <S.BackIcon onClick={handleGoBack} />
                     </button>
                     {postData && ( // null이 아닌 경우에만 렌더링
                         <>
@@ -79,12 +118,23 @@ const Board = () => {
             <S.BoardMain>
                 {postData && ( // null이 아닌 경우에만 렌더링
                     <S.ContentSection>
-                        <div className="">
+                        <div className="post">
                             <img
                                 src={postData.image}
                                 alt=""
                                 className="post-img"
                             />
+                            {markerData.map((key, index) => (
+                                <Marker
+                                    key={index}
+                                    markerLocation={{
+                                        left: key.location.x,
+                                        top: key.location.y,
+                                    }}
+                                    productItem={key}
+                                    deleteItem={deleteItem}
+                                />
+                            ))}
                         </div>
                         <div className="board-btn">
                             <div className="btn-hc">
@@ -105,7 +155,7 @@ const Board = () => {
                         <h2 className="user-name">
                             {postData.author.username}
                         </h2>
-                        <p className="main-content">{postData.content}</p>
+                        <p className="main-content">{markerData.message}</p>
                         <S.CommentSection>
                             <S.CommentCounter>
                                 총 {commentData?.length}개의 댓글
@@ -156,4 +206,4 @@ const Board = () => {
     );
 };
 
-export default Board;
+export default DetailPost;

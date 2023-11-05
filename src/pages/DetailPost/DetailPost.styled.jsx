@@ -65,8 +65,8 @@ export const ContentSection = styled.div`
         width: 100%;
     }
 
-    img {
-        margin: 5px 0 5px 0;
+    .post {
+        position: relative;
     }
 
     .board-btn {
@@ -92,6 +92,8 @@ export const ContentSection = styled.div`
 
     .main-content {
         margin: 5px 0 5px 0;
+    }
+    .maker {
     }
 `;
 

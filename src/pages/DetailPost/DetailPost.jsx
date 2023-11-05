@@ -151,7 +151,7 @@ const DetailPost = deleteItem => {
                                                     top: item.marker.y,
                                                 }}
                                                 productItem={item}
-                                                deleteProduct={deleteItem}
+                                                isEditing={false}
                                             />
                                         ),
                                     )}

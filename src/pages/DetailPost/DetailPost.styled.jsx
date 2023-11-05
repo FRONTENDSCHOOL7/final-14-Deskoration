@@ -22,7 +22,7 @@ export const ProfileImg = styled.img`
 
 export const BoardMain = styled.div`
     width: 100%;
-    /* height: 640px; */
+    height: 640px;
 `;
 
 export const ContentSection = styled.div`

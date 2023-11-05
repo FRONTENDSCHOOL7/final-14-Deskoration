@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { followService, followerService } from '../../service/follow_service';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const FollowerList = () => {
     const baseURL = 'https://api.mandarin.weniv.co.kr/';
@@ -9,6 +10,7 @@ const FollowerList = () => {
     const myAccountName = sessionStorage.getItem('tempAccountName');
     const [followerData, setFollowerData] = useState([]);
     const [follow, setFollow] = useState(false);
+    usePageHandler('text', '팔로워');
 
     useEffect(() => {
         const fetchFollower = async () => {
@@ -47,12 +49,12 @@ const FollowerList = () => {
 
     return (
         <>
-            <S.FollowerHeader>
+            {/* <S.FollowerHeader>
                 <button>
                     <S.Backwardicon />
                 </button>
                 <h2>Follwer</h2>
-            </S.FollowerHeader>
+            </S.FollowerHeader> */}
             <S.FollowerContainer>
                 {followerData.map(data => (
                     <S.FollowerList>

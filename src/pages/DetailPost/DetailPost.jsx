@@ -124,6 +124,7 @@ const DetailPost = deleteItem => {
         if (window.confirm('삭제고?')) {
             deletePostAPI(postData.id, token);
         }
+        navigate(-1);
     };
     const deleteComment = e => {
         e.stopPropagation();

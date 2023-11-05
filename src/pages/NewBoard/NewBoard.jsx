@@ -77,6 +77,7 @@ const NewBoard = () => {
                 console.log('error', error);
             }
         }
+        navigate('/home');
     };
 
     return (
@@ -107,7 +108,7 @@ const NewBoard = () => {
                             children={'올리기'}
                             gra={'true'}
                             width={'70px'}
-                            padding={'5px'}
+                            padding={'10px'}
                         />
                     </S.SubmitButtonBox>
                 </form>

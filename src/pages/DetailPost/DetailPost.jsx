@@ -17,9 +17,8 @@ const DetailPost = deleteItem => {
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
     const [markerData, setMakerData] = useState([]);
-    // const [isDropdownVisible, setDropdownVisible] = useState(false);
+
     const token = sessionStorage.getItem('tempToken');
-    const tempAccountName = sessionStorage.getItem('tempAccountName');
     const myId = sessionStorage.getItem('tempID');
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
@@ -32,28 +31,31 @@ const DetailPost = deleteItem => {
         try {
             const postResult = await fetchPosts(id, token);
             const dataObject = JSON.parse(postResult.post.content);
-            setMakerData(
-                dataObject.deskoration.map(item => {
-                    const {
-                        category,
-                        productName,
-                        price,
-                        store,
-                        link,
-                        id,
-                        location,
-                    } = item;
-                    return {
-                        category,
-                        productName,
-                        price,
-                        store,
-                        link,
-                        id,
-                        location,
-                    };
-                }),
-            );
+
+            setPostContent(JSON.parse(postResult.post.content));
+            // setPostContent(JSON.parse(postResult.post.content));
+            // setMakerData(
+            //     dataObject.deskoration.map(item => {
+            //         const {
+            //             category,
+            //             productName,
+            //             price,
+            //             store,
+            //             link,
+            //             id,
+            //             location,
+            //         } = item;
+            //         return {
+            //             category,
+            //             productName,
+            //             price,
+            //             store,
+            //             link,
+            //             id,
+            //             location,
+            //         };
+            //     }),
+            // );
             setPostData(postResult.post);
         } catch (error) {
             console.error('error');
@@ -63,7 +65,6 @@ const DetailPost = deleteItem => {
     const commentApi = async (id, token) => {
         try {
             const commentResult = await fetchcomment(id, token);
-            console.log(commentResult.comments);
             setCommentData(commentResult.comments);
         } catch (error) {
             console.error('error');
@@ -71,10 +72,9 @@ const DetailPost = deleteItem => {
     };
 
     useEffect(() => {
-        console.log(id);
-        const selectPost = postApi(id, token);
-        const selectPostComment = commentApi(id, token);
-    }, []);
+        postApi(id, token);
+        commentApi(id, token);
+    }, [id, token]);
 
     const handleCommentSubmit = () => {
         // 새로운 댓글을 서버로 전송
@@ -97,6 +97,7 @@ const DetailPost = deleteItem => {
             });
     };
 
+    // bottomsheet
     const [commentID, setCommentID] = useState();
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
     const handlePostBottomSheet = () => {
@@ -127,11 +128,11 @@ const DetailPost = deleteItem => {
     const deleteComment = e => {
         e.stopPropagation();
         if (window.confirm('삭제고?')) {
-            deleteCommentAPI(commentID) //
+            deleteCommentAPI(postData.id, commentID, token) //
                 .then(() =>
-                    fetchcomment()
+                    fetchcomment(id, token)
                         .then(data => {
-                            setCommentData(data.comments.reverse());
+                            setCommentData(data.comments);
                         })
                         .catch(error => {
                             console.error('API 요청 중 오류 발생: ', error);
@@ -162,59 +163,41 @@ const DetailPost = deleteItem => {
                 {postData && ( // null이 아닌 경우에만 렌더링
                     <>
                         <S.ContentSection>
-                            <div className="post">
-                                <img
-                                    src={postData.image}
-                                    alt="데스크 셋업 이미지"
+                            <img
+                                src={postData.image}
+                                alt="데스크 셋업 이미지"
+                            />
+                            {markerData.map((key, index) => (
+                                <Marker
+                                    key={index}
+                                    markerLocation={{
+                                        left: key.location.x,
+                                        top: key.location.y,
+                                    }}
+                                    productItem={key}
+                                    deleteItem={deleteItem}
                                 />
-                                {markerData.map((key, index) => (
-                                    <Marker
-                                        key={index}
-                                        markerLocation={{
-                                            left: key.location.x,
-                                            top: key.location.y,
-                                        }}
-                                        productItem={key}
-                                        deleteItem={deleteItem}
-                                    />
-                                ))}
-                            </div>
-                            <div className="board-btn">
-                                <div className="btn-hc">
-                                    <div>
-                                        <S.LikeIcon className="like" />
-                                    </div>
-                                    <div>
-                                        <S.CommentIcon />
-                                    </div>
-                                </div>
+                            ))}
+
+                            <S.ContentButtonBox>
                                 <div>
-                                    <div>
-                                        <button>
-                                            <S.LikeIcon />
-                                        </button>
-                                        <button>
-                                            <S.CommentIcon />
-                                        </button>
-                                    </div>
-                                    <button onClick={handlePostBottomSheet}>
-                                        {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
-                                            <S.Dots_verticalIcon />
-                                        )}
+                                    <button>
+                                        <S.LikeIcon />
+                                    </button>
+                                    <button>
+                                        <S.CommentIcon />
                                     </button>
                                 </div>
-                                <div className="user-name">
-                                    {postData.author.username}
-                                </div>
-                                <p>
-                                    {postContent?.deskoration.message}
-                                    asdofijopqwiejrokjasdoifjasoidjfoaisjdfpioasdpofijapsdoifjpaisdjfpaidfpoiajsdpfijaspdifjpasodijfpaijsdpoij
-                                </p>
-                            </div>
-                            <h2 className="user-name">
+                                <button onClick={handlePostBottomSheet}>
+                                    {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+                                        <S.Dots_verticalIcon />
+                                    )}
+                                </button>
+                            </S.ContentButtonBox>
+                            <div className="user-name">
                                 {postData.author.username}
-                            </h2>
-                            <p className="main-content">{markerData.message}</p>
+                            </div>
+                            <p>{postContent?.deskoration.message}</p>
                         </S.ContentSection>
 
                         <S.CommentSection>

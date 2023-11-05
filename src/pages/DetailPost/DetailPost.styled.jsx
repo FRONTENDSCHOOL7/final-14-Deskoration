@@ -63,18 +63,8 @@ export const DetailPostMain = styled.div`
 
 export const ContentSection = styled.section`
     margin-bottom: 10px;
-
-    .post {
-        position: relative;
-    }
     img {
         width: 100%;
-        margin-bottom: 10px;
-    }
-
-    div {
-        display: flex;
-        justify-content: space-between;
         margin-bottom: 10px;
     }
 
@@ -83,8 +73,16 @@ export const ContentSection = styled.section`
         font-family: 'PreBold';
         margin-bottom: 10px;
     }
-    .maker {
+
+    p {
+        word-wrap: break-word;
     }
+`;
+
+export const ContentButtonBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
 `;
 
 export const CommentSection = styled.section`

@@ -9,13 +9,11 @@ import Router from './router/Router';
 
 function App() {
     return (
-        <div className="app-body">
-            <div className="container">
-                <ThemeProvider theme={theme}>
-                    <GlobalStyle />
-                    <Router />
-                </ThemeProvider>
-            </div>
+        <div className="container">
+            <ThemeProvider theme={theme}>
+                <GlobalStyle />
+                <Router />
+            </ThemeProvider>
         </div>
     );
 }

@@ -1,24 +1,9 @@
 import styled from 'styled-components';
-import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
+import theme from '../../styles/theme';
 import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 
-export const Backwardicon = styled(Backward)``;
-
-// export const ProfileHeader = styled.div`
-//     display: flex;
-//     width: 310px;
-//     height: 70px;
-//     padding-top: 20px;
-//     margin: 0 25px;
-
-//     font-size: 24px;
-//     align-items: center;
-// `;
 export const ProfileContainer = styled.div`
     width: 100%;
-    height: 640px;
-    /* padding: 10px 25px 0px 25px; */
-    overflow: hidden;
 `;
 
 export const UserInfo = styled.div`
@@ -59,7 +44,7 @@ export const UserInfo = styled.div`
 export const UserDataList = styled.div`
     width: 100%;
     height: 80px;
-    margin-top: 15px;
+    margin: 20px 0;
     display: flex;
     justify-content: space-between;
 
@@ -102,19 +87,23 @@ export const UserDataList = styled.div`
 `;
 
 export const UserPostings = styled.div`
+    width: 100%;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
     color: ${({ theme }) => theme.mainFont};
-    overflow-y: hidden;
 
     img {
-        width: 50%; /* Fill the available width in each column */
-        box-sizing: border-box;
+        width: 145px;
+        height: 145px;
+        object-fit: cover;
         transition: border 0.1s ease;
         &:hover {
             border: 3px solid ${({ theme }) => theme.main};
         }
-        border: 3px solid white;
+        border: 1px solid ${theme.border};
         border-radius: 10px;
     }
 

@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const myacountName = sessionStorage.getItem('tempAccountName');
     const handleGoBack = () => {
         navigate(-1);
     };
@@ -15,7 +15,7 @@ const Header = () => {
     const isHome = location.pathname.includes('/home');
     const isFeed = location.pathname.includes('/feed');
     const isNewBoard = location.pathname.includes('/newboard');
-    const isChat = location.pathname.includes('/chat');
+    const isChat = /^\/chat\/?$/.test(location.pathname);
     const isMyProfile = location.pathname.includes('/profile');
     const isUserProfile = location.pathname.includes('/userProfile');
 
@@ -46,7 +46,14 @@ const Header = () => {
                     )}
                     {currentPage.type === 'user' && (
                         <S.UserInfo>
-                            <Link to={`profile/${currentPage.accountname}`}>
+                            <Link
+                                to={
+                                    currentPage.accountname === myacountName
+                                        ? '/profile'
+                                        : `/userprofile/${currentPage.accountname}`
+                                }
+                            >
+
                                 <img
                                     src={currentPage.value}
                                     alt=""
@@ -57,8 +64,6 @@ const Header = () => {
                         </S.UserInfo>
                     )}
                 </div>
-                {/* <S.LogoIcon /> */}
-                {/* <S.SearchIcon /> */}
             </S.Headbar>
         </>
     );

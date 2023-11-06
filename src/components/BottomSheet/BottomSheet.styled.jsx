@@ -11,6 +11,7 @@ export const BottomSheetContainer = styled.div`
     visibility: ${props => (props.$isBottomSheet ? 'visible' : 'hidden')};
     opacity: ${props => (props.$isBottomSheet ? '1' : '0')};
     transition: all 0.3s;
+    z-index: 1000;
 `;
 
 const FadeIn = keyframes`
@@ -39,7 +40,7 @@ export const BottomSheetBox = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 200px;
+    height: ${props => (props.oneButton ? '150px' : '200px')};
 
     background: #fff;
 
@@ -50,6 +51,7 @@ export const BottomSheetBox = styled.div`
     align-items: center;
     justify-content: center;
     gap: 15px;
+
     ${props =>
         props.$isBottomSheet
             ? css`

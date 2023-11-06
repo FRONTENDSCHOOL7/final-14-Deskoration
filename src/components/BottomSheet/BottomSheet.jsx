@@ -19,6 +19,7 @@ const BottomSheet = ({
             <S.BottomSheetBox
                 onClick={e => e.stopPropagation()}
                 $isBottomSheet={isBottomSheet}
+                oneButton={oneButton}
             >
                 {!oneButton && (
                     <GradientButton

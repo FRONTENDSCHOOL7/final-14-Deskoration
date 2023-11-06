@@ -38,7 +38,7 @@ const Home = () => {
     usePageHandler('image', logoImg);
     return (
         <>
-            {isReady ? (
+            {!isReady ? (
                 <CommonLoading />
             ) : (
                 <>

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import bgLoading from '../../assets/images/bgLoading.jpg';
 import { ReactComponent as Logo } from '../../assets/images/Loading.svg';
 
@@ -41,19 +41,15 @@ export const TitleBox = styled.h1`
     margin-top: 10px;
 `;
 
+const changeColor = keyframes`
+    from{
+        color:#eee;
+    } to{
+        color: #685c53;
+    }
+`;
+
 export const CharSpan = styled.span`
-    ${props =>
-        props.$toggleColor
-            ? css`
-                  color: #eee;
-              `
-            : css`
-                  color: ${props => props.theme.main};
-              `}
-    transition: color 1.5s;
-    ${props =>
-        props.$delay &&
-        css`
-            transition-delay: ${props.$delay}s;
-        `}
+    color: #eee;
+    animation: ${changeColor} 2s ${props => props.$delay}s forwards;
 `;

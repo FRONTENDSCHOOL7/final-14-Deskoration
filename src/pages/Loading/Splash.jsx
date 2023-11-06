@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './FirstConnectLoading.styled';
-import { useNavigate } from 'react-router-dom';
+import * as S from './Splash.styled';
 
 const FirstConnectLoading = () => {
     const text = 'Deskoration';
-    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [toggleColor, setToggleColor] = useState(true);
     const lightColor = isLoading ? 'none' : '#efc265';
@@ -16,18 +14,8 @@ const FirstConnectLoading = () => {
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false);
-        }, 3000);
+        }, 2500);
     }, []);
-
-    useEffect(() => {
-        if (!isLoading) {
-            const timer = setTimeout(() => {
-                navigate('/login');
-            }, 1000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [isLoading]);
 
     return (
         <S.LogoContainer>

@@ -6,6 +6,7 @@ import Article from '../Home/Article';
 import { GetMyProfile } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
 import { GetMyPost } from '../../service/post_service';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const Profile = () => {
     const [profileData, setProfileData] = useState(null);
@@ -18,11 +19,7 @@ const Profile = () => {
 
     const navigate = useNavigate();
 
-    const handleGoBack = () => {
-        navigate(-1); // Use navigate to go back to the previous page
-    };
-
-    // usePageHandler('text', '나의 프로필');
+    usePageHandler('text', '나의 프로필');
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기

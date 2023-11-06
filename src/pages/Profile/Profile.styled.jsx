@@ -44,7 +44,7 @@ export const UserInfo = styled.div`
 export const UserDataList = styled.div`
     width: 100%;
     height: 80px;
-    margin-top: 15px;
+    margin: 20px 0;
     display: flex;
     justify-content: space-between;
 

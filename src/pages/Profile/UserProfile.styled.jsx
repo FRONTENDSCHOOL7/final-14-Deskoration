@@ -108,7 +108,7 @@ export const UserPostings = styled.div`
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
-    margin-top: 10px;
+    margin: 20px 0;
     color: ${({ theme }) => theme.mainFont};
 
     img {

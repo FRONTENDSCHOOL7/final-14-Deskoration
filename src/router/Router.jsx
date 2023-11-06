@@ -11,6 +11,9 @@ const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
 const FollowerListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowerList'),
 );
+const FollowingListPage = lazy(() =>
+    import('../pages/FollowFollowingList/FollowingList'),
+);
 
 const FeedPage = lazy(() => import('../pages/Feed/Feed'));
 const ChatListPage = lazy(() =>
@@ -78,6 +81,10 @@ const Router = () => {
                         <Route
                             path={'/followerList'}
                             element={<FollowerListPage />}
+                        />
+                        <Route
+                            path={'/followingList'}
+                            element={<FollowingListPage />}
                         />
                     </Route>
                 </Routes>

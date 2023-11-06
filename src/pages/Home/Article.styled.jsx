@@ -7,10 +7,10 @@ export const Section = styled.section`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: 575px;
     gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;
+    height: calc(100vh - 248px);
 `;
 
 export const Article = styled.article`

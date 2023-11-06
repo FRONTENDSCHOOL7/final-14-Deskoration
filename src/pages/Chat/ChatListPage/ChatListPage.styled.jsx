@@ -34,7 +34,7 @@ export const SearchBar = styled.div`
     border-radius: 30px;
     display: flex;
     justify-content: space-around;
-    margin: 10px 0;
+    margin-bottom: 10px;
 `;
 
 export const Searchmark = styled.div`

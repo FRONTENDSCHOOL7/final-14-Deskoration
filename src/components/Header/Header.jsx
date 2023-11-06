@@ -15,7 +15,7 @@ const Header = () => {
     const isHome = location.pathname.includes('/home');
     const isFeed = location.pathname.includes('/feed');
     const isNewBoard = location.pathname.includes('/newboard');
-    const isChat = location.pathname.includes('/chat');
+    const isChat = /^\/chat\/?$/.test(location.pathname);
     const isMyProfile = location.pathname.includes('/profile');
     const isUserProfile = location.pathname.includes('/userProfile');
 
@@ -57,8 +57,6 @@ const Header = () => {
                         </S.UserInfo>
                     )}
                 </div>
-                {/* <S.LogoIcon /> */}
-                {/* <S.SearchIcon /> */}
             </S.Headbar>
         </>
     );

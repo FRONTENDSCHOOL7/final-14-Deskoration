@@ -55,10 +55,10 @@ const Feed = () => {
     };
 
     return (
-        <S.FeedList>
-            <li>
-                {feedData.map((_, index) => {
-                    return (
+        <ul>
+            {feedData.map((_, index) => {
+                return (
+                    <li>
                         <S.FeedContainer key={feedData[index].id}>
                             <S.FeedItemHeader>
                                 <S.UserInfoBox>
@@ -118,10 +118,10 @@ const Feed = () => {
                                 </S.FeedDate>
                             </S.FeedDetailBox>
                         </S.FeedContainer>
-                    );
-                })}
-            </li>
-        </S.FeedList>
+                    </li>
+                );
+            })}
+        </ul>
     );
 };
 

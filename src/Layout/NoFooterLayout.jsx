@@ -1,11 +1,12 @@
 import Header from '../components/Header/Header';
 import { Outlet } from 'react-router-dom';
+import * as S from './LayoutStyle.styled';
 const NoFooterLayout = () => (
     <>
         <Header />
-        <main style={{ padding: '0 25px' }}>
+        <S.Main>
             <Outlet />
-        </main>
+        </S.Main>
     </>
 );
 

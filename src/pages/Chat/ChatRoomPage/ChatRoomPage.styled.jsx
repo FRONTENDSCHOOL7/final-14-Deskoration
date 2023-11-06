@@ -17,13 +17,10 @@ export const Clipicon = styled(Clip)``;
 
 export const ChatRoomPageContainer = styled.div`
     position: relative;
-    height: 640px;
-    overflow-y: scroll;
 `;
 
 export const ChatRoomMain = styled.div`
     width: 100%;
-    padding-top: 20px;
 
     .userChat-img {
         width: 36px;

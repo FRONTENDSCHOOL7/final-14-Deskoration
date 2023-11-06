@@ -4,6 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { GetUserProfile } from '../../service/profile_service';
 import { GetMyPost, fetchPosts } from '../../service/post_service';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const UserProfile = () => {
     const [profileData, setProfileData] = useState(null);
@@ -14,11 +15,7 @@ const UserProfile = () => {
 
     const navigate = useNavigate();
 
-    const handleGoBack = () => {
-        navigate(-1); // Use navigate to go back to the previous page
-    };
-
-    // usePageHandler('text', profileData?.accountname);
+    usePageHandler('text', profileData?.accountname);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기

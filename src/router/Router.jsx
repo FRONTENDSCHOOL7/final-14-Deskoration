@@ -39,7 +39,7 @@ const Router = () => {
                         element={<Navigate to="/login" replace />}
                     />
                     {token ? (
-                        <Route element={<HomeLayout />}>
+                        <Route element={<HomeLayoutPage />}>
                             <Route path={'/home/*'} element={<HomePage />} />
                         </Route>
                     ) : (

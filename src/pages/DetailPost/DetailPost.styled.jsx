@@ -52,10 +52,7 @@ export const ProfileImg = styled.img`
 `;
 
 export const DetailPostMain = styled.div`
-    height: calc(100% - 150px);
-    padding: 0 20px;
-    overflow: hidden;
-    overflow-y: ${props => !props.$isBottomSheet && 'scroll'};
+    /* overflow-y: ${props => !props.$isBottomSheet && 'scroll'}; */
 
     padding-bottom: 10px;
 `;

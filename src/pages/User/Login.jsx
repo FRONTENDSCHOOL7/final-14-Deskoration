@@ -45,7 +45,7 @@ const Login = () => {
                         result.user.accountname,
                     );
                     sessionStorage.setItem('tempID', result.user._id);
-                    navigate('/home');
+                    navigate('/home', { replace: true });
                 }
             } catch (error) {
                 console.error('error');

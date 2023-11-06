@@ -1,12 +1,14 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-const PrivateRoute = ({ authenticated, component: Component }) => {
-    return authenticated ? (
-        Component
+const PrivateRoutePage = () => {
+    const authenticated = sessionStorage.getItem('tempToken');
+
+    return !authenticated ? (
+        // 로그아웃 상태라면 PrivateRoutePage 접근 방지
+        <Navigate to="/" {...alert('로그인이 필요한 서비스입니다.')} />
     ) : (
-        <Navigate to="/login" {...alert('로그인이 필요합니다.')}></Navigate>
+        <Outlet />
     );
 };
 
-export default PrivateRoute;
+export default PrivateRoutePage;

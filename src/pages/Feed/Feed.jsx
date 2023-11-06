@@ -2,12 +2,9 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFollowingFeed } from '../../service/post_service';
-import { useNavigate, useParams } from 'react-router-dom';
-import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
+import { Link } from 'react-router-dom';
 
 const Feed = () => {
-    const navigate = useNavigate();
-    // const { id } = useParams();
     const token = sessionStorage.getItem('tempToken');
     const [feedData, setFeedData] = useState([]);
     const [feedContent, setFeedContent] = useState([]);
@@ -25,6 +22,7 @@ const Feed = () => {
     const callFeedAPI = async token => {
         const result = await getFollowingFeed(token);
         setFeedData(result.posts);
+        console.log(result.posts);
 
         const newFeedContent = [];
         const newCreateDate = [];
@@ -43,85 +41,67 @@ const Feed = () => {
         setFeedContent(newFeedContent);
         setCreateDate(newCreateDate);
     };
-    // console.log(feedData);
-    // console.log(feedContent);
 
     useEffect(() => {
         callFeedAPI(token);
     }, []);
 
-    const moveToDetailPage = id => {
-        navigate(`/detailpost/${id}`);
-    };
-
     return (
-        <S.FeedList>
-            <li>
-                {feedData.map((_, index) => {
-                    return (
-                        <S.FeedContainer key={feedData[index].id}>
-                            <S.FeedItemHeader>
-                                <S.UserInfoBox>
+        <ul>
+            {feedData.map((item, index) => {
+                return (
+                    <S.FeedContainer key={item.id}>
+                        <S.FeedItemHeader>
+                            <S.UserInfoBox>
+                                <Link
+                                    to={`/profile/${feedData[index].author.accountname}`}
+                                >
                                     <img
-                                        src={feedData[index]?.author.image}
+                                        src={item?.author.image}
                                         alt="이미지"
                                         className="profile-img"
                                     />
-                                    <div>
-                                        <h4>
-                                            {feedData[index]?.author.username}
-                                        </h4>
-                                        <p>
-                                            {
-                                                feedData[index]?.author
-                                                    .accountname
-                                            }
-                                        </p>
-                                    </div>
-                                </S.UserInfoBox>
-                                <button>
-                                    <S.MoreIcon />
-                                </button>
-                            </S.FeedItemHeader>
-                            <S.FeedDetailBox>
-                                <p>{feedContent[index]?.deskoration.message}</p>
-                                <img
-                                    src={feedData[index]?.image}
-                                    alt="게시글 내용"
-                                />
-                                <S.BtnBox>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleLike(index)}
+                                </Link>
+                                <div>
+                                    <h4>{item?.author.username}</h4>
+                                    <p>{item?.author.accountname}</p>
+                                </div>
+                            </S.UserInfoBox>
+                            <button>
+                                <S.MoreIcon />
+                            </button>
+                        </S.FeedItemHeader>
+
+                        <S.FeedDetailBox>
+                            <p>{feedContent[index]?.deskoration.message}</p>
+                            <img src={item.image} alt="게시글 내용" />
+                            <S.BtnBox>
+                                <button
+                                    type="button"
+                                    onClick={() => handleLike(index)}
+                                >
+                                    <S.LikeIcon
+                                        className={likes[index] ? 'like' : null}
                                     >
-                                        <S.LikeIcon
-                                            className={
-                                                likes[index] ? 'like' : null
-                                            }
-                                        >
-                                            좋아요
-                                        </S.LikeIcon>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            moveToDetailPage(
-                                                feedContent[index]?.id,
-                                            )
-                                        }
+                                        좋아요
+                                    </S.LikeIcon>
+                                </button>
+                                <button type="button">
+                                    <Link
+                                        to={`/detailpost/${feedData[index].id}`}
                                     >
                                         <S.CommentIcon>댓글</S.CommentIcon>
-                                    </button>
-                                </S.BtnBox>
-                                <S.FeedDate>
-                                    {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
-                                </S.FeedDate>
-                            </S.FeedDetailBox>
-                        </S.FeedContainer>
-                    );
-                })}
-            </li>
-        </S.FeedList>
+                                    </Link>
+                                </button>
+                            </S.BtnBox>
+                            <S.FeedDate>
+                                {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
+                            </S.FeedDate>
+                        </S.FeedDetailBox>
+                    </S.FeedContainer>
+                );
+            })}
+        </ul>
     );
 };
 

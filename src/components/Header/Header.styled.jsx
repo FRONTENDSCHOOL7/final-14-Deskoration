@@ -9,7 +9,6 @@ export const Headbar = styled.header`
     display: flex;
     align-items: center;
     padding: 0 25px;
-    margin-bottom: 15px;
     border: 1px solid ${props => props.theme.border};
 `;
 

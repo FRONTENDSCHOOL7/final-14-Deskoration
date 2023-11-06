@@ -87,7 +87,7 @@ export const AddBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/newboard');
+                handleNavigate('/postUpload');
             }}
         >
             <S.AddIcon $hover={hover.add} $active={active === 'add'} />

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { GetMyProfile } from '../../service/profile_service';
 import { GetMyPost } from '../../service/post_service';
+import usePageHandler from '../../hooks/usePageHandler';
 
 import GradientButton from '../../components/GradientButton/GradientButton';
 
@@ -27,7 +28,8 @@ const Profile = () => {
         navigate('/');
     };
 
-    // usePageHandler('text', '나의 프로필');
+    usePageHandler('text', '나의 프로필');
+
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기

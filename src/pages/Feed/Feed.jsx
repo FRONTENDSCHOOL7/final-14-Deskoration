@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFollowingFeed } from '../../service/post_service';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 
 const Feed = () => {
@@ -21,10 +21,14 @@ const Feed = () => {
         copyLikes[index] = !copyLikes[index];
         setLikes(copyLikes);
     };
+    const handleGoBack = () => {
+        navigate(-1);
+    };
 
     const callFeedAPI = async token => {
         const result = await getFollowingFeed(token);
         setFeedData(result.posts);
+        console.log(result.posts);
 
         const newFeedContent = [];
         const newCreateDate = [];
@@ -50,45 +54,40 @@ const Feed = () => {
         callFeedAPI(token);
     }, []);
 
-    const moveToDetailPage = id => {
-        navigate(`/detailpost/${id}`);
-    };
+    // const moveToDetailPage = id => {
+    //     navigate(`/detailpost/${id}`);
+    // };
 
     return (
-        <ul>
-            {feedData.map((_, index) => {
-                return (
-                    <li>
-                        <S.FeedContainer key={feedData[index].id}>
+        <S.FeedList>
+            <ul>
+                {feedData.map((item, index) => {
+                    return (
+                        <S.FeedContainer key={item.id}>
                             <S.FeedItemHeader>
                                 <S.UserInfoBox>
-                                    <img
-                                        src={feedData[index]?.author.image}
-                                        alt="이미지"
-                                        className="profile-img"
-                                    />
+                                    <Link
+                                        to={`/userprofile/${feedData[index].author.accountname}`}
+                                    >
+                                        <img
+                                            src={item?.author.image}
+                                            alt="이미지"
+                                            className="profile-img"
+                                        />
+                                    </Link>
                                     <div>
-                                        <h4>
-                                            {feedData[index]?.author.username}
-                                        </h4>
-                                        <p>
-                                            {
-                                                feedData[index]?.author
-                                                    .accountname
-                                            }
-                                        </p>
+                                        <h4>{item?.author.username}</h4>
+                                        <p>{item?.author.accountname}</p>
                                     </div>
                                 </S.UserInfoBox>
                                 <button>
                                     <S.MoreIcon />
                                 </button>
                             </S.FeedItemHeader>
+
                             <S.FeedDetailBox>
                                 <p>{feedContent[index]?.deskoration.message}</p>
-                                <img
-                                    src={feedData[index]?.image}
-                                    alt="게시글 내용"
-                                />
+                                <img src={item.image} alt="게시글 내용" />
                                 <S.BtnBox>
                                     <button
                                         type="button"
@@ -104,13 +103,17 @@ const Feed = () => {
                                     </button>
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            moveToDetailPage(
-                                                feedContent[index]?.id,
-                                            )
-                                        }
+                                        // onClick={() =>
+                                        //     moveToDetailPage(
+                                        //         feedData[index]?.id,
+                                        //     )
+                                        // }
                                     >
-                                        <S.CommentIcon>댓글</S.CommentIcon>
+                                        <Link
+                                            to={`/detailpost/${feedData[index].id}`}
+                                        >
+                                            <S.CommentIcon>댓글</S.CommentIcon>
+                                        </Link>
                                     </button>
                                 </S.BtnBox>
                                 <S.FeedDate>
@@ -118,10 +121,10 @@ const Feed = () => {
                                 </S.FeedDate>
                             </S.FeedDetailBox>
                         </S.FeedContainer>
-                    </li>
-                );
-            })}
-        </ul>
+                    );
+                })}
+            </ul>
+        </S.FeedList>
     );
 };
 

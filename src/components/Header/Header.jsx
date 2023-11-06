@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const myacountName = sessionStorage.getItem('tempAccountName');
     const handleGoBack = () => {
         navigate(-1);
     };
@@ -46,7 +46,13 @@ const Header = () => {
                     )}
                     {currentPage.type === 'user' && (
                         <S.UserInfo>
-                            <Link to={`userprofile/${currentPage.accountname}`}>
+                            <Link
+                                to={
+                                    currentPage.accountname === myacountName
+                                        ? '/profile'
+                                        : `/userprofile/${currentPage.accountname}`
+                                }
+                            >
                                 <img
                                     src={currentPage.value}
                                     alt=""

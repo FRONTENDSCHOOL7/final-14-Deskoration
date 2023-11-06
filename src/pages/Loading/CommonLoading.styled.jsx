@@ -1,25 +1,23 @@
-import styled, { keyframes } from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const baseLineHeight = '30px';
-const grayRGB = '170, 170, 170';
-const alphaValue = 0.2;
-const offGray = `rgba(${grayRGB}, ${alphaValue})`;
-const spinDuration = '1s';
-
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+export const TitleBox = styled.h1`
+    font-size: 24px;
+    font-weight: 700;
 `;
 
-export const Loading = styled.div`
-    border-radius: 50%;
-    width: ${baseLineHeight};
-    height: ${baseLineHeight};
-    border: 0.25rem solid ${offGray};
-    border-top-color: rgb(${grayRGB}); // rgb() is used here for consistency
-    animation: ${spin} ${spinDuration} infinite linear;
+export const CharSpan = styled.span`
+    ${props =>
+        props.$toggleColor
+            ? css`
+                  color: #eee;
+              `
+            : css`
+                  color: ${props => props.theme.main};
+              `}
+    transition: color 1.5s;
+    ${props =>
+        props.$delay &&
+        css`
+            transition-delay: ${props.$delay}s;
+        `}
 `;

@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './CommonLoading.styled';
 
 const CommonLoading = () => {
+    const text = 'Deskoration';
+    const [toggleColor, setToggleColor] = useState(false);
+
+    useEffect(() => {
+        const textAnimationLoop = () => {
+            setToggleColor(true);
+
+            setTimeout(() => {
+                setToggleColor(false);
+            }, 2500);
+        };
+        const intervalId = setInterval(textAnimationLoop, 5000);
+        textAnimationLoop();
+        return () => clearInterval(intervalId);
+    }, []);
+
     return (
-        <>
-            <S.Loading></S.Loading>
-        </>
+        <S.TitleBox>
+            {text.split('').map((char, index) => (
+                <S.CharSpan
+                    key={index}
+                    $toggleColor={toggleColor}
+                    $delay={0.1 * index}
+                >
+                    {char}
+                </S.CharSpan>
+            ))}
+        </S.TitleBox>
     );
 };
 

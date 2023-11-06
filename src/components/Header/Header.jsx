@@ -14,10 +14,9 @@ const Header = () => {
 
     const isHome = location.pathname.includes('/home');
     const isFeed = location.pathname.includes('/feed');
-    const isNewBoard = location.pathname.includes('/newboard');
+    const isPostUpload = location.pathname.includes('/postUpload');
     const isChat = /^\/chat\/?$/.test(location.pathname);
-    const isMyProfile = location.pathname.includes('/profile');
-    const isUserProfile = location.pathname.includes('/userProfile');
+    const isMyProfile = /^\/profile\/?$/.test(location.pathname);
 
     // useEffect(() => {
     //     console.log(currentPage);
@@ -28,10 +27,9 @@ const Header = () => {
             <S.Headbar>
                 {isHome ||
                 isFeed ||
-                isNewBoard ||
+                isPostUpload ||
                 isChat ||
-                isMyProfile ||
-                isUserProfile ? null : (
+                isMyProfile ? null : (
                     <button type="button" onClick={handleGoBack}>
                         <S.BackwardIcon />
                     </button>
@@ -50,10 +48,9 @@ const Header = () => {
                                 to={
                                     currentPage.accountname === myacountName
                                         ? '/profile'
-                                        : `/userprofile/${currentPage.accountname}`
+                                        : `/profile/${currentPage.accountname}`
                                 }
                             >
-
                                 <img
                                     src={currentPage.value}
                                     alt=""

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './Loading.styled';
+import * as S from './FirstConnectLoading.styled';
 import { useNavigate } from 'react-router-dom';
 
-const Loading = () => {
+const FirstConnectLoading = () => {
     const text = 'Deskoration';
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
@@ -47,4 +47,4 @@ const Loading = () => {
     );
 };
 
-export default Loading;
+export default FirstConnectLoading;

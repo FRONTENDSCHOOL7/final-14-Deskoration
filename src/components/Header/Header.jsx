@@ -46,7 +46,7 @@ const Header = () => {
                     )}
                     {currentPage.type === 'user' && (
                         <S.UserInfo>
-                            <Link to={`userprofile/${currentPage.accountname}`}>
+                            <Link to={`profile/${currentPage.accountname}`}>
                                 <img
                                     src={currentPage.value}
                                     alt=""

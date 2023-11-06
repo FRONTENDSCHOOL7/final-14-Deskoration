@@ -90,7 +90,7 @@ const UserProfile = () => {
                     <Link to="/followerList">
                         <button className="user-follow">
                             <p>{profileData?.followerCount}</p>
-                            <p>팔로우</p>
+                            <p>팔로워</p>
                         </button>
                     </Link>
                     <Link to="/followingList">

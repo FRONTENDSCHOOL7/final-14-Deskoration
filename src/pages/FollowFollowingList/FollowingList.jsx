@@ -1,46 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './FollowerList.styled';
+import * as S from './FollowingList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
     followService,
-    followerService,
+    followingService,
     unFollowService,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 
-const FollowerList = () => {
+const FollowingList = () => {
     const baseURL = 'https://api.mandarin.weniv.co.kr/';
     const token = sessionStorage.getItem('tempToken');
     const myAccountName = sessionStorage.getItem('tempAccountName');
-    const [followerData, setFollowerData] = useState([]);
+    const [followingData, setFollowingData] = useState([]);
     const [follow, setFollow] = useState(false);
-    usePageHandler('text', '팔로워');
+    usePageHandler('text', '팔로잉');
 
-    // 팔로워 리스트 불러오기
+    // 팔로잉 리스트 불러오기
     useEffect(() => {
-        const fetchFollower = async () => {
-            await followerService(baseURL, token, myAccountName)
+        const fetchFollowing = async () => {
+            await followingService(baseURL, token, myAccountName)
                 .then(data => {
-                    setFollowerData(data);
+                    setFollowingData(data);
                     // console.log('follower:', data);
                 })
                 .catch(error => {
                     console.error('API 요청 중 오류 발생: ', error);
                 });
         };
-        fetchFollower();
+        fetchFollowing();
     }, []);
 
-    const followerList = followerData.map(data => data.accountname);
+    const followingList = followingData.map(data => data.accountname);
     // console.log('followerList:', followerList);
+
+    // 팔로우, 언팔로우 기능 구현
+    useEffect(() => {
+        // console.log('accountname:', followerData[0]?.accountname);
+        console.log('accountname:', followingList);
+        followingList.map(follower => {
+            followService(baseURL, token, follower)
+                .then(data => {
+                    setFollow(data.profile.isfollow);
+                    // console.log('follower:', data);
+                })
+                .catch(error => {
+                    console.error('API 요청 중 오류 발생: ', error);
+                });
+        });
+    }, []);
+
+    // console.log('follow:', follow);
 
     const handleFollowToggle = async accountname => {
         setFollow(!follow);
         console.log('클릭시 이름받아오기!:', accountname);
-        const follower = followerData.find(f => f.accountname === accountname);
-        if (follower) {
+        const following = followingData.find(
+            f => f.accountname === accountname,
+        );
+        if (following) {
             try {
-                if (follower.isFollowing) {
+                if (following.isFollowing) {
                     const result = await unFollowService(
                         baseURL,
                         token,
@@ -53,12 +73,12 @@ const FollowerList = () => {
                         accountname,
                     );
                 }
-                const updatedFollowerData = followerData.map(f =>
+                const updatedFollowerData = followingData.map(f =>
                     f.accountname === accountname
                         ? { ...f, isFollowing: !f.isFollowing }
                         : f,
                 );
-                setFollowerData(updatedFollowerData);
+                setFollowingData(updatedFollowerData);
             } catch (error) {
                 console.error('API 요청 중 오류 발생:', error);
             }
@@ -67,13 +87,13 @@ const FollowerList = () => {
 
     return (
         <>
-            <S.FollowerContainer>
-                {followerData.map(data => (
-                    <S.FollowerList key={data._id}>
-                        <S.FollowerInfo>
+            <S.FollowingContainer>
+                {followingData.map(data => (
+                    <S.FollowingList key={data._id}>
+                        <S.FollowingInfo>
                             <img src={data?.image} className="follower-img" />
                             <div>{data?.accountname}</div>
-                        </S.FollowerInfo>
+                        </S.FollowingInfo>
                         <GradientButton
                             width={'80px'}
                             onClick={() =>
@@ -83,11 +103,11 @@ const FollowerList = () => {
                         >
                             {follow ? '팔로우' : '팔로잉'}
                         </GradientButton>
-                    </S.FollowerList>
+                    </S.FollowingList>
                 ))}
-            </S.FollowerContainer>
+            </S.FollowingContainer>
         </>
     );
 };
 
-export default FollowerList;
+export default FollowingList;

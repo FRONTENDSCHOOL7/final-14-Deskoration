@@ -29,6 +29,9 @@ const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
 const FollowerListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowerList'),
 );
+
+const NotFoundPage = lazy(() => import('../pages/404/NotFoundPage'));
+
 const Router = () => {
     return (
         <Suspense>
@@ -88,6 +91,7 @@ const Router = () => {
                             element={<ProfileUploadPage />}
                         />
                     </Route>
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </BrowserRouter>
         </Suspense>

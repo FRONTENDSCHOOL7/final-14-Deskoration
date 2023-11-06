@@ -12,7 +12,6 @@ export const CommentIcon = styled(Comment)``;
 export const Dots_verticalIcon = styled(Dots_vertical)``;
 
 export const DetailPostCotainer = styled.div`
-    position: relative;
     height: 100%;
 `;
 
@@ -66,6 +65,8 @@ export const ContentSection = styled.section`
     img {
         width: 100%;
         margin-bottom: 10px;
+        border-radius: 20px;
+        border: 1px solid ${props => props.theme.border};
     }
 
     .user-name {
@@ -127,9 +128,11 @@ export const CommentItem = styled.div`
 export const CommentInputContainer = styled.div`
     position: absolute;
     bottom: 0;
+    left: 0;
     width: 100%;
     background: #fff;
     padding: 15px;
+    border-top: 1px solid ${props => props.theme.border};
 `;
 
 export const CommentInputBox = styled.div`
@@ -148,9 +151,16 @@ export const CommentInputBox = styled.div`
     }
 
     button {
-        color: orange;
+        color: ${props => props.theme.point};
+        font-weight: 700;
         width: 50px;
     }
+`;
+
+export const FollowBtnBox = styled.div`
+    position: absolute;
+    top: 15px;
+    right: 25px;
 `;
 
 export const BottomSheetControlButton = styled.button``;

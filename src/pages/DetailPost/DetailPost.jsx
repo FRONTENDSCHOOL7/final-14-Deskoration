@@ -14,7 +14,6 @@ import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
 
-
 const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
     const [postContent, setPostContent] = useState('');
@@ -32,9 +31,7 @@ const DetailPost = deleteItem => {
             const postResult = await fetchPosts(id, token);
             const dataObject = JSON.parse(postResult.post.content);
 
-
             setPostContent(JSON.parse(postResult.post.content));
-
 
             // setMakerData(
             //     dataObject.deskoration.map(item => {
@@ -99,7 +96,6 @@ const DetailPost = deleteItem => {
             });
     };
 
-
     // bottomsheet
     const [commentID, setCommentID] = useState();
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
@@ -114,8 +110,6 @@ const DetailPost = deleteItem => {
     };
 
     usePageHandler('user', postData?.author.image, postData?.author.username);
-
-
 
     const editPost = e => {
         e.stopPropagation();
@@ -150,124 +144,117 @@ const DetailPost = deleteItem => {
         }
     };
     return (
-
-        <S.DetailPostCotainer>
-            <S.DetailPostHeader>
-                <S.DetailPostUser>
-                    <button>
-                        <S.BackIcon />
-                    </button>
+        <>
+            <S.DetailPostCotainer>
+                <S.DetailPostMain $isBottomSheet={isPostBottomSheet}>
                     {postData && ( // null이 아닌 경우에만 렌더링
                         <>
-                            <S.ProfileImg src={postData.author.image} alt="" />
-                            <div>{postData.author.username}</div>
+                            <S.ContentSection>
+                                <img
+                                    src={postData.image}
+                                    alt="데스크 셋업 이미지"
+                                />
+                                {markerData.map((key, index) => (
+                                    <Marker
+                                        key={index}
+                                        markerLocation={{
+                                            left: key.location.x,
+                                            top: key.location.y,
+                                        }}
+                                        productItem={key}
+                                        deleteItem={deleteItem}
+                                    />
+                                ))}
+
+                                <S.ContentButtonBox>
+                                    <div>
+                                        <button>
+                                            <S.LikeIcon />
+                                        </button>
+                                        <button>
+                                            <S.CommentIcon />
+                                        </button>
+                                    </div>
+                                    <button onClick={handlePostBottomSheet}>
+                                        {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+                                            <S.Dots_verticalIcon />
+                                        )}
+                                    </button>
+                                </S.ContentButtonBox>
+                                <div className="user-name">
+                                    {postData.author.username}
+                                </div>
+                                <p>{postContent?.deskoration.message}</p>
+                            </S.ContentSection>
+
+                            <S.CommentSection>
+                                <S.CommentCounter>
+                                    총 {commentData?.length}개의 댓글
+                                </S.CommentCounter>
+                                {commentData?.map((comment, index) => (
+                                    <S.CommentItem key={index}>
+                                        <S.ProfileImg
+                                            src={comment.author.image}
+                                            alt="사용자 이미지"
+                                        />
+                                        <div>
+                                            <div>{comment.author.username}</div>
+                                            <p>{comment.content}</p>
+                                        </div>
+                                        {comment.author._id === myId && (
+                                            <button
+                                                onClick={() =>
+                                                    handleCommentBottomSheet(
+                                                        comment.id,
+                                                    )
+                                                }
+                                            >
+                                                <S.Dots_verticalIcon />
+                                            </button>
+                                        )}
+                                    </S.CommentItem>
+                                ))}
+                            </S.CommentSection>
                         </>
                     )}
-                </S.DetailPostUser>
-                <GradientButton gra={true} width={'80px'} padding={'5px 0'}>
-                    팔로우
-                </GradientButton>
-            </S.DetailPostHeader>
-            <S.DetailPostMain $isBottomSheet={isPostBottomSheet}>
-                {postData && ( // null이 아닌 경우에만 렌더링
-                    <>
-                        <S.ContentSection>
-                            <img
-                                src={postData.image}
-                                alt="데스크 셋업 이미지"
-                            />
-                            {markerData.map((key, index) => (
-                                <Marker
-                                    key={index}
-                                    markerLocation={{
-                                        left: key.location.x,
-                                        top: key.location.y,
-                                    }}
-                                    productItem={key}
-                                    deleteItem={deleteItem}
-                                />
-                            ))}
+                </S.DetailPostMain>
+                <S.CommentInputContainer>
+                    <S.CommentInputBox>
+                        <input
+                            type="text"
+                            placeholder="메시지를 입력하세요"
+                            className="input-text"
+                            value={newComment}
+                            onChange={e => setNewComment(e.target.value)}
+                        />
+                        <button onClick={handleCommentSubmit}>
+                            <p>등록</p>
+                        </button>
+                    </S.CommentInputBox>
+                </S.CommentInputContainer>
 
-                            <S.ContentButtonBox>
-                                <div>
-                                    <button>
-                                        <S.LikeIcon />
-                                    </button>
-                                    <button>
-                                        <S.CommentIcon />
-                                    </button>
-                                </div>
-                                <button onClick={handlePostBottomSheet}>
-                                    {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
-                                        <S.Dots_verticalIcon />
-                                    )}
-                                </button>
-                            </S.ContentButtonBox>
-                            <div className="user-name">
-                                {postData.author.username}
-                            </div>
-                            <p>{postContent?.deskoration.message}</p>
-                        </S.ContentSection>
-
-                        <S.CommentSection>
-                            <S.CommentCounter>
-                                총 {commentData?.length}개의 댓글
-                            </S.CommentCounter>
-                            {commentData?.map((comment, index) => (
-                                <S.CommentItem key={index}>
-                                    <S.ProfileImg
-                                        src={comment.author.image}
-                                        alt="사용자 이미지"
-                                    />
-                                    <div>
-                                        <div>{comment.author.username}</div>
-                                        <p>{comment.content}</p>
-                                    </div>
-                                    {comment.author._id === myId && (
-                                        <button
-                                            onClick={() =>
-                                                handleCommentBottomSheet(
-                                                    comment.id,
-                                                )
-                                            }
-                                        >
-                                            <S.Dots_verticalIcon />
-                                        </button>
-                                    )}
-                                </S.CommentItem>
-                            ))}
-                        </S.CommentSection>
-                    </>
-                )}
-            </S.DetailPostMain>
-            <S.CommentInputContainer>
-                <S.CommentInputBox>
-                    <input
-                        type="text"
-                        placeholder="메시지를 입력하세요"
-                        className="input-text"
-                        value={newComment}
-                        onChange={e => setNewComment(e.target.value)}
-                    />
-                    <button onClick={handleCommentSubmit}>
-                        <p>등록</p>
-                    </button>
-                </S.CommentInputBox>
-            </S.CommentInputContainer>
-
-            <BottomSheet
-                isBottomSheet={isPostBottomSheet}
-                hadleBottomSheet={handlePostBottomSheet}
-                editFn={e => editPost(e)}
-                deleteFn={e => deletePost(e)}
-            />
-            <BottomSheet
-                isBottomSheet={isCommentBottomSheet}
-                hadleBottomSheet={handleCommentBottomSheet}
-                editFn={e => editComment(e)}
-                deleteFn={e => deleteComment(e)}
-            />
-        </S.DetailPostCotainer>
+                <BottomSheet
+                    isBottomSheet={isPostBottomSheet}
+                    hadleBottomSheet={handlePostBottomSheet}
+                    editFn={e => editPost(e)}
+                    deleteFn={e => deletePost(e)}
+                />
+                <BottomSheet
+                    isBottomSheet={isCommentBottomSheet}
+                    hadleBottomSheet={handleCommentBottomSheet}
+                    editFn={e => editComment(e)}
+                    deleteFn={e => deleteComment(e)}
+                />
+            </S.DetailPostCotainer>
+            <S.FollowBtnBox>
+                <GradientButton
+                    children={'팔로우'}
+                    gra={true}
+                    width={'70px'}
+                    padding={'10px'}
+                />
+            </S.FollowBtnBox>
+        </>
     );
 };
 

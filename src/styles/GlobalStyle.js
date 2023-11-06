@@ -82,6 +82,7 @@ body{
 input{
 	outline: none;
   border: none;
+}
 
 
 svg, img{

@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import * as S from './Ballon.styled';
 
-const Ballon = ({ productItem, deleteProduct }) => {
+const Ballon = ({ productItem, deleteProduct, isEditing }) => {
     // 내 글이 아니고, 수정중이 아니라면 삭제하기 안보이게
     const navigate = useNavigate();
-
     const editProduct = () => {
         navigate(`/newboard/${productItem.detail.id}`, {
             state: { editProductItem: productItem },
@@ -52,17 +51,25 @@ const Ballon = ({ productItem, deleteProduct }) => {
                 style={{ left: calcArrowLeft(productItem.marker.x) }}
             />
             <S.Product>
-                <div onClick={editProduct}>
+                <div
+                    onClick={() => {
+                        if (isEditing) {
+                            editProduct();
+                        }
+                    }}
+                >
                     {productItem.detail.productName}
                 </div>
                 <div> {productItem.detail.price}</div>
             </S.Product>
-            <S.DeletItemButton
-                type="button"
-                onClick={() => deleteProduct(productItem.detail.id)}
-            >
-                <S.TrashIcon />
-            </S.DeletItemButton>
+            {isEditing && (
+                <S.DeletItemButton
+                    type="button"
+                    onClick={() => deleteProduct(productItem.detail.id)}
+                >
+                    <S.TrashIcon />
+                </S.DeletItemButton>
+            )}
         </S.Ballon>
     );
 };

@@ -6,7 +6,13 @@ import * as S from './Marker.styled';
 import markerImg from '../../assets/images/Marker.svg';
 
 export const Marker = React.forwardRef((props, markerRef) => {
-    const { onMouseDown, markerLocation, productItem, deleteProduct } = props;
+    const {
+        onMouseDown,
+        markerLocation,
+        productItem,
+        deleteProduct,
+        isEditing,
+    } = props;
 
     return (
         <S.MarkerContainer>
@@ -25,6 +31,7 @@ export const Marker = React.forwardRef((props, markerRef) => {
                 <Ballon
                     productItem={productItem}
                     deleteProduct={deleteProduct}
+                    isEditing={isEditing}
                 />
             )}
         </S.MarkerContainer>

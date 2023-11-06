@@ -105,18 +105,13 @@ export const UserDataList = styled.div`
 `;
 
 export const UserPostings = styled.div`
-    margin-top: 10px;
-    display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: auto;
-    height: auto;
     color: ${({ theme }) => theme.mainFont};
     overflow-y: hidden;
 
     img {
         width: 50%;
-        height: 50%;
         box-sizing: border-box;
         transition: border 0.1s ease;
         &:hover {

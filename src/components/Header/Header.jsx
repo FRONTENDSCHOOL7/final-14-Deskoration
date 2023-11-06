@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as S from './Header.styled';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -18,6 +18,10 @@ const Header = () => {
     const isChat = location.pathname.includes('/chat');
     const isMyProfile = location.pathname.includes('/profile');
     const isUserProfile = location.pathname.includes('/userProfile');
+
+    // useEffect(() => {
+    //     console.log(currentPage);
+    // });
 
     return (
         <>
@@ -42,11 +46,13 @@ const Header = () => {
                     )}
                     {currentPage.type === 'user' && (
                         <S.UserInfo>
-                            <img
-                                src={currentPage.value}
-                                alt=""
-                                className="user-img"
-                            />
+                            <Link to={`userprofile/${currentPage.accountname}`}>
+                                <img
+                                    src={currentPage.value}
+                                    alt=""
+                                    className="user-img"
+                                />
+                            </Link>
                             <h2>{currentPage.username}</h2>
                         </S.UserInfo>
                     )}

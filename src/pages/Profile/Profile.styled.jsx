@@ -102,24 +102,37 @@ export const UserDataList = styled.div`
 `;
 
 export const UserPostings = styled.div`
-    margin-top: 10px;
-    display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: auto;
-    height: auto;
     color: ${({ theme }) => theme.mainFont};
     overflow-y: hidden;
 
     img {
-        width: 50%;
-        height: 50%;
+        width: 50%; /* Fill the available width in each column */
         box-sizing: border-box;
         transition: border 0.1s ease;
         &:hover {
             border: 3px solid ${({ theme }) => theme.main};
         }
         border: 3px solid white;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: #f5f5f5;
         border-radius: 10px;
     }
 `;

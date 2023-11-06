@@ -7,12 +7,13 @@ import {
     postComment,
     deleteCommentAPI,
 } from '../../service/comment_service';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
+import Ballon from '../../components/Ballon/Ballon';
 
 const DetailPost = deleteItem => {
     const [postData, setPostData] = useState(null);
@@ -29,33 +30,11 @@ const DetailPost = deleteItem => {
     const postApi = async (id, token) => {
         try {
             const postResult = await fetchPosts(id, token);
-            const dataObject = JSON.parse(postResult.post.content);
 
             setPostContent(JSON.parse(postResult.post.content));
 
-            // setMakerData(
-            //     dataObject.deskoration.map(item => {
-            //         const {
-            //             category,
-            //             productName,
-            //             price,
-            //             store,
-            //             link,
-            //             id,
-            //             location,
-            //         } = item;
-            //         return {
-            //             category,
-            //             productName,
-            //             price,
-            //             store,
-            //             link,
-            //             id,
-            //             location,
-            //         };
-            //     }),
-            // );
             setPostData(postResult.post);
+            console.log(JSON.parse(postResult.post.content));
         } catch (error) {
             console.error('error');
         }
@@ -109,7 +88,12 @@ const DetailPost = deleteItem => {
         setIsCommentBottomSheet(!isCommentBottomSheet);
     };
 
-    usePageHandler('user', postData?.author.image, postData?.author.username);
+    usePageHandler(
+        'user',
+        postData?.author.image,
+        postData?.author.username,
+        postData?.author.accountname,
+    );
 
     const editPost = e => {
         e.stopPropagation();
@@ -150,21 +134,28 @@ const DetailPost = deleteItem => {
                     {postData && ( // null이 아닌 경우에만 렌더링
                         <>
                             <S.ContentSection>
-                                <img
-                                    src={postData.image}
-                                    alt="데스크 셋업 이미지"
-                                />
-                                {markerData.map((key, index) => (
-                                    <Marker
-                                        key={index}
-                                        markerLocation={{
-                                            left: key.location.x,
-                                            top: key.location.y,
-                                        }}
-                                        productItem={key}
-                                        deleteItem={deleteItem}
+                                <div
+                                    className="post"
+                                    style={{ position: 'relative' }}
+                                >
+                                    <img
+                                        src={postData?.image}
+                                        alt="데스크 셋업 이미지"
                                     />
-                                ))}
+                                    {postContent?.deskoration.productItems?.map(
+                                        (item, index) => (
+                                            <Marker
+                                                key={index}
+                                                markerLocation={{
+                                                    left: item.marker.x,
+                                                    top: item.marker.y,
+                                                }}
+                                                productItem={item}
+                                                isEditing={false}
+                                            />
+                                        ),
+                                    )}
+                                </div>
 
                                 <S.ContentButtonBox>
                                     <div>
@@ -246,14 +237,6 @@ const DetailPost = deleteItem => {
                     deleteFn={e => deleteComment(e)}
                 />
             </S.DetailPostCotainer>
-            <S.FollowBtnBox>
-                <GradientButton
-                    children={'팔로우'}
-                    gra={true}
-                    width={'70px'}
-                    padding={'10px'}
-                />
-            </S.FollowBtnBox>
         </>
     );
 };

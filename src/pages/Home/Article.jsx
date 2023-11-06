@@ -8,15 +8,14 @@ const Article = () => {
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null); // S.Section에 대한 참조 생성
-
     const token = sessionStorage.getItem('tempToken');
     const tempAccountName = sessionStorage.getItem('tempAccountName');
 
-    const tempApi = async (accountName, token) => {
+    const tempApi = async token => {
         try {
-            const result = await GetMyPost(accountName, token);
-            console.log('API보기2: ', result);
-            const deskoration = result.filter(post =>
+            const result = await GetAllPost(token);
+            // console.log('API보기2: ', result.posts);
+            const deskoration = result.posts.filter(post =>
                 post.content?.includes('"deskoration"'),
             );
             console.log('deskoration: ', deskoration);
@@ -28,7 +27,7 @@ const Article = () => {
 
     console.log('articles', articles);
     useEffect(() => {
-        const desk_result = tempApi(tempAccountName, token);
+        const desk_result = tempApi(token);
     }, []);
 
     const postImage = articles.map(item => item.image);
@@ -64,7 +63,7 @@ const Article = () => {
         <>
             <S.Section ref={sectionRef}>
                 {articles.map(article => (
-                    <Link key={article.id} to={`/detailpost/${article.id}`}>
+                    <Link key={article.id} to={`/detailpost/${article._id}`}>
                         <S.Article src={article.image}></S.Article>
                     </Link>
                 ))}

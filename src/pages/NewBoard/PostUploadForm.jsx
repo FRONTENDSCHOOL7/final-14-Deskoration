@@ -259,6 +259,7 @@ const PostUploadForm = ({
                                     }}
                                     productItem={item}
                                     deleteProduct={deleteProduct}
+                                    isEditing={true}
                                 />
                             ))
                         )}

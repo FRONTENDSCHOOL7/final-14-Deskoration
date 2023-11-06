@@ -57,8 +57,6 @@ const Header = () => {
                         </S.UserInfo>
                     )}
                 </div>
-                {/* <S.LogoIcon /> */}
-                {/* <S.SearchIcon /> */}
             </S.Headbar>
         </>
     );

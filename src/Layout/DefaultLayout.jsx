@@ -1,5 +1,6 @@
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
+import * as S from './LayoutStyle.styled';
 import { Outlet, useLocation } from 'react-router-dom';
 
 const DefaultLayout = () => {
@@ -11,9 +12,9 @@ const DefaultLayout = () => {
     return (
         <>
             <Header />
-            <main style={{ padding: '0 25px' }}>
+            <S.Main>
                 <Outlet />
-            </main>
+            </S.Main>
             {isDetailPost ? null : isChatRoom ? null : <Footer />}
         </>
     );

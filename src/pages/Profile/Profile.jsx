@@ -30,7 +30,6 @@ const Profile = () => {
 
     usePageHandler('text', '나의 프로필');
 
-
     useEffect(() => {
         // API 호출해서 데이터 받아오기
         GetMyProfile(token)
@@ -92,13 +91,13 @@ const Profile = () => {
                         <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
-                    <Link to="/follow-following-list">
+                    <Link to="/followerList">
                         <button className="user-follow">
                             <p>{profileData?.followerCount}</p>
                             <p>팔로우</p>
                         </button>
                     </Link>
-                    <Link to="/follow-following-list">
+                    <Link to="/followingList">
                         <button className="user-following">
                             <p>{profileData?.followingCount}</p>
                             <p>팔로잉</p>

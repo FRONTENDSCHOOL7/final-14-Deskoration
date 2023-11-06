@@ -13,7 +13,7 @@ const FollowerList = () => {
     const token = sessionStorage.getItem('tempToken');
     const myAccountName = sessionStorage.getItem('tempAccountName');
     const [followerData, setFollowerData] = useState([]);
-    const [follow, setFollow] = useState(true);
+    const [follow, setFollow] = useState(false);
     usePageHandler('text', '팔로워');
 
     // 팔로워 리스트 불러오기

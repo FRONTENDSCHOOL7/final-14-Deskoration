@@ -82,7 +82,7 @@ const NewBoard = () => {
 
     return (
         <S.NewBoardContainer>
-            {pathName === '/newboard' ? (
+            {pathName === '/postUpload' ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
                         productItems={productItems}

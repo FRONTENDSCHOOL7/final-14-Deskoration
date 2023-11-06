@@ -53,6 +53,7 @@ const Header = () => {
                                         : `/userprofile/${currentPage.accountname}`
                                 }
                             >
+
                                 <img
                                     src={currentPage.value}
                                     alt=""

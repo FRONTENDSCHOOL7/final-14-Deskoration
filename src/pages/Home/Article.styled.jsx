@@ -7,10 +7,9 @@ export const Section = styled.section`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    height: 575px;
     gap: 10px;
     color: ${theme.mainFont};
-    overflow-y: auto;
+    overflow: auto;
 `;
 
 export const Article = styled.article`

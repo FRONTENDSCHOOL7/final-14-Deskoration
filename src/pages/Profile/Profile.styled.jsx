@@ -1,24 +1,8 @@
 import styled from 'styled-components';
-import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 
-export const Backwardicon = styled(Backward)``;
-
-// export const ProfileHeader = styled.div`
-//     display: flex;
-//     width: 310px;
-//     height: 70px;
-//     padding-top: 20px;
-//     margin: 0 25px;
-
-//     font-size: 24px;
-//     align-items: center;
-// `;
 export const ProfileContainer = styled.div`
     width: 100%;
-    height: 640px;
-    /* padding: 10px 25px 0px 25px; */
-    overflow: hidden;
 `;
 
 export const UserInfo = styled.div`

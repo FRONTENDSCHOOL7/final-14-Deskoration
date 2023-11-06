@@ -3,15 +3,10 @@ import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 import { ReactComponent as Like } from '../../assets/images/Like.svg';
 import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
 
-export const FeedList = styled.ul`
-    height: 640px;
-    overflow-y: auto;
-`;
-
 export const FeedContainer = styled.article`
     display: flex;
     width: 100%;
-    margin: 20px 0;
+    margin-bottom: 20px;
     flex-direction: column;
     gap: 16px;
     .profile-img {

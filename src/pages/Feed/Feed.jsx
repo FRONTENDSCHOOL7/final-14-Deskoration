@@ -9,17 +9,17 @@ const Feed = () => {
     const navigate = useNavigate();
     // const { id } = useParams();
     const token = sessionStorage.getItem('tempToken');
-    const [like, setLike] = useState(false);
     const [feedData, setFeedData] = useState([]);
     const [feedContent, setFeedContent] = useState([]);
     const [createDate, setCreateDate] = useState([]);
-
-    const pathClassName = like ? 'like' : null;
+    const [likes, setLikes] = useState([]);
 
     usePageHandler('text', '팔로잉 피드');
 
-    const handleLike = () => {
-        setLike(!like);
+    const handleLike = index => {
+        const copyLikes = [...likes];
+        copyLikes[index] = !copyLikes[index];
+        setLikes(copyLikes);
     };
 
     const callFeedAPI = async token => {
@@ -43,8 +43,8 @@ const Feed = () => {
         setFeedContent(newFeedContent);
         setCreateDate(newCreateDate);
     };
-    console.log(feedData);
-    console.log(feedContent);
+    // console.log(feedData);
+    // console.log(feedContent);
 
     useEffect(() => {
         callFeedAPI(token);
@@ -90,8 +90,15 @@ const Feed = () => {
                                     alt="게시글 내용"
                                 />
                                 <S.BtnBox>
-                                    <button type="button" onClick={handleLike}>
-                                        <S.LikeIcon className={pathClassName}>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleLike(index)}
+                                    >
+                                        <S.LikeIcon
+                                            className={
+                                                likes[index] ? 'like' : null
+                                            }
+                                        >
                                             좋아요
                                         </S.LikeIcon>
                                     </button>

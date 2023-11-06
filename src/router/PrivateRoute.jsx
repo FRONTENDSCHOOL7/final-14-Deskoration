@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoutePage = () => {
-    const authenticated = sessionStorage.getItem('tempToken');
+    const authenticated = sessionStorage.getItem('Token');
 
     return !authenticated ? (
         // 로그아웃 상태라면 PrivateRoutePage 접근 방지

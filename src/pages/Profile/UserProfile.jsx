@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './UserProfile.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
-import { GetUserProfile } from '../../service/profile_service';
-import { GetMyPost, fetchPosts } from '../../service/post_service';
+import { getUserProfileApi } from '../../service/profile_service';
+import { getMyPostApi } from '../../service/post_service';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -11,24 +11,20 @@ const UserProfile = () => {
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
     const { username } = useParams(); //선택한 게시물 아이디 값
-    const token = sessionStorage.getItem('tempToken');
-
-    const navigate = useNavigate();
+    const token = sessionStorage.getItem('Token');
 
     usePageHandler('text', profileData?.accountname);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
-        GetUserProfile(username, token)
+        getUserProfileApi(username, token)
             .then(data => {
                 setProfileData(data.profile);
-                console.log(data.profile);
                 return data.profile.accountname;
             })
             .then(temp => {
-                GetMyPost(temp, token).then(data => {
+                getMyPostApi(temp, token).then(data => {
                     setUserPost(data);
-                    console.log(data);
                 });
             })
             .catch(error => {

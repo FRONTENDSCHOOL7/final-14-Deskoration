@@ -1,72 +1,59 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './DetailPost.styled';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import { deletePostAPI, fetchPosts } from '../../service/post_service';
+import { detialPostApi } from '../../service/post_service';
 import {
-    fetchcomment,
-    postComment,
-    deleteCommentAPI,
+    getCommentApi,
+    postCommentApi,
+    deleteCommentApi,
 } from '../../service/comment_service';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
-import Ballon from '../../components/Ballon/Ballon';
 
-const DetailPost = deleteItem => {
+const DetailPost = () => {
     const [postData, setPostData] = useState(null);
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
-    const [markerData, setMakerData] = useState([]);
 
-    const token = sessionStorage.getItem('tempToken');
-    const myId = sessionStorage.getItem('tempID');
+    const token = sessionStorage.getItem('Token');
+    const myId = sessionStorage.getItem('Id');
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
 
-    const postApi = async (id, token) => {
-        try {
-            const postResult = await fetchPosts(id, token);
-
-            setPostContent(JSON.parse(postResult.post.content));
-
-            setPostData(postResult.post);
-            console.log(JSON.parse(postResult.post.content));
-        } catch (error) {
-            console.error('error');
-        }
-    };
-
-    const commentApi = async (id, token) => {
-        try {
-            const commentResult = await fetchcomment(id, token);
-            setCommentData(commentResult.comments);
-        } catch (error) {
-            console.error('error');
-        }
-    };
-
     useEffect(() => {
-        postApi(id, token);
-        commentApi(id, token);
+        detialPostApi(id, token)
+            .then(postResult => {
+                setPostContent(JSON.parse(postResult.post.content));
+                setPostData(postResult.post);
+            })
+            .catch(error => {
+                console.error('error');
+            });
+        getCommentApi(id, token)
+            .then(commentResult => {
+                setCommentData(commentResult.comments);
+            })
+            .catch(error => {
+                console.error('error');
+            });
     }, [id, token]);
 
     const handleCommentSubmit = () => {
         // 새로운 댓글을 서버로 전송
-        postComment(id, newComment, token) // postComment 함수는 새 댓글을 작성하기 위한 API 요청을 보내야 합니다
+        postCommentApi(id, newComment, token) // postComment 함수는 새 댓글을 작성하기 위한 API 요청을 보내야 합니다
             .then(response => {
                 // 새 댓글이 성공적으로 작성되면, commentData를 업데이트하거나 다시 불러오도록 구현
-                fetchcomment(id, token)
+                getCommentApi(id, token)
                     .then(data => {
                         setCommentData(data.comments.reverse());
                     })
                     .catch(error => {
                         console.error('API 요청 중 오류 발생: ', error);
                     });
-
                 // 새로운 댓글 상태 초기화
                 setNewComment('');
             })
@@ -107,16 +94,16 @@ const DetailPost = deleteItem => {
     const deletePost = e => {
         e.stopPropagation();
         if (window.confirm('삭제고?')) {
-            deletePostAPI(postData.id, token);
+            deleteCommentApi(postData.id, token);
         }
         navigate(-1);
     };
     const deleteComment = e => {
         e.stopPropagation();
         if (window.confirm('삭제고?')) {
-            deleteCommentAPI(postData.id, commentID, token) //
+            deleteCommentApi(postData.id, commentID, token) //
                 .then(() =>
-                    fetchcomment(id, token)
+                    getCommentApi(id, token)
                         .then(data => {
                             setCommentData(data.comments);
                         })

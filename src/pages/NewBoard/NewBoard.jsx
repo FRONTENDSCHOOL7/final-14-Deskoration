@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { UploadPost } from '../../service/post_service';
+import { UploadPost, uploadPostApi } from '../../service/post_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -16,7 +16,7 @@ const NewBoard = () => {
     const location = useLocation();
     const pathName = location.pathname;
 
-    const token = sessionStorage.getItem('tempToken');
+    const token = sessionStorage.getItem('Token');
 
     const [apiContent, setApiContent] = useState();
 
@@ -47,7 +47,7 @@ const NewBoard = () => {
     };
 
     const deleteProduct = itemID => {
-        if (window.confirm('삭제 ㄱㄱ?')) {
+        if (window.confirm('상품을 삭제 하겠습니까?')) {
             const updatedProductItems = productItems.filter(
                 item => item.detail.id !== itemID,
             );
@@ -60,24 +60,28 @@ const NewBoard = () => {
         setApiContent({ message: textArea.message.trim(), productItems });
     }, [textArea.message, productItems]);
 
-    const submitPost = async event => {
+    const submitPost = event => {
         event.preventDefault();
         if (!textArea.message || !imageURL) {
             alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
         } else {
-            try {
-                const postData = await UploadPost(apiContent, imageFile, token);
-
-                if (postData.message === '내용 또는 이미지를 입력해주세요.') {
-                    alert(postData.message);
-                } else {
-                    console.log('성공', postData);
-                }
-            } catch (error) {
-                console.log('error', error);
-            }
+            uploadPostApi(apiContent, imageFile, token)
+                .then(postData => {
+                    if (
+                        postData.message === '내용 또는 이미지를 입력해주세요.'
+                    ) {
+                        alert(postData.message);
+                    } else {
+                        console.log('success', postData);
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error);
+                })
+                .finally(() => {
+                    navigate('/home');
+                });
         }
-        navigate('/home');
     };
 
     return (

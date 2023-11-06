@@ -29,6 +29,7 @@ const ChatListPage = lazy(() =>
 const ChatRoomPage = lazy(() =>
     import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
 );
+const HomeLayoutPage = lazy(() => import('../Layout/HomeLayout'));
 const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
 const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
 

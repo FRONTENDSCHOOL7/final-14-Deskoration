@@ -1,6 +1,6 @@
 const baseURL = 'https://api.mandarin.weniv.co.kr';
 
-export const UploadPost = async (content, image, token) => {
+export const uploadPostApi = async (content, image, token) => {
     try {
         const response = await fetch(`${baseURL}/post`, {
             method: 'POST',
@@ -27,7 +27,7 @@ export const UploadPost = async (content, image, token) => {
     }
 };
 
-export const GetAllPost = async token => {
+export const getAllPostApi = async token => {
     const number = 200;
     try {
         const response = await fetch(`${baseURL}/post?limit=${number}`, {
@@ -50,7 +50,7 @@ export const GetAllPost = async token => {
     }
 };
 
-export const GetMyPost = async (accountname, token) => {
+export const getMyPostApi = async (accountname, token) => {
     try {
         const response = await fetch(
             `${baseURL}/post/${accountname}/userpost`,
@@ -75,7 +75,7 @@ export const GetMyPost = async (accountname, token) => {
     }
 };
 
-export const fetchPosts = async (id, token) => {
+export const detialPostApi = async (id, token) => {
     try {
         const response = await fetch(`${baseURL}/post/${id}`, {
             method: 'GET',
@@ -115,7 +115,7 @@ export const deletePostAPI = async (postId, token) => {
     }
 };
 
-export const getFollowingFeed = async token => {
+export const getFollowingFeedApi = async token => {
     const reqURL = `${baseURL}/post/feed`;
     try {
         const response = await fetch(reqURL, {

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import * as S from './FollowingList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
-    followService,
-    followingService,
-    unFollowService,
+    followServiceApi,
+    followerServiceApi,
+    unFollowServiceApi,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -19,7 +19,7 @@ const FollowingList = () => {
     // 팔로잉 리스트 불러오기
     useEffect(() => {
         const fetchFollowing = async () => {
-            await followingService(baseURL, token, myAccountName)
+            await followerServiceApi(baseURL, token, myAccountName)
                 .then(data => {
                     setFollowingData(data);
                     // console.log('follower:', data);
@@ -31,15 +31,15 @@ const FollowingList = () => {
         fetchFollowing();
     }, []);
 
-    const followingList = followingData.map(data => data.accountname);
+    const followingList = followingData?.map(data => data.accountname);
     // console.log('followerList:', followerList);
 
     // 팔로우, 언팔로우 기능 구현
     useEffect(() => {
         // console.log('accountname:', followerData[0]?.accountname);
         console.log('accountname:', followingList);
-        followingList.map(follower => {
-            followService(baseURL, token, follower)
+        followingList?.map(follower => {
+            followServiceApi(baseURL, token, follower)
                 .then(data => {
                     setFollow(data.profile.isfollow);
                     // console.log('follower:', data);
@@ -61,13 +61,13 @@ const FollowingList = () => {
         if (following) {
             try {
                 if (following.isFollowing) {
-                    const result = await unFollowService(
+                    const result = await unFollowServiceApi(
                         baseURL,
                         token,
                         accountname,
                     );
                 } else {
-                    const result = await followService(
+                    const result = await followServiceApi(
                         baseURL,
                         token,
                         accountname,
@@ -88,7 +88,7 @@ const FollowingList = () => {
     return (
         <>
             <S.FollowingContainer>
-                {followingData.map(data => (
+                {followingData?.map(data => (
                     <S.FollowingList key={data._id}>
                         <S.FollowingInfo>
                             <img src={data?.image} className="follower-img" />

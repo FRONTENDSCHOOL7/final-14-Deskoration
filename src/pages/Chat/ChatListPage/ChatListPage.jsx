@@ -6,11 +6,9 @@ import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
-
     const date = new Date();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-
     const filteredProfiles = profile.filter(profile =>
         profile.username.toLowerCase().includes(searchQuery.toLowerCase()),
     );
@@ -43,7 +41,6 @@ const ChatListPage = () => {
                                         user: profile.username,
                                         message: [profile.messages],
                                         image: profile.image,
-                                        // 다른 데이터 필드들도 추가
                                     }}
                                 >
                                     <S.UserChatRoom>

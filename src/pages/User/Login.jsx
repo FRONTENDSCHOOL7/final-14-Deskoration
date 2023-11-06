@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
-import { AuthLogin } from '../../service/auth_service';
+import { authLoginApi } from '../../service/auth_service';
 import * as S from './User.styled';
 
 const Login = () => {
@@ -30,26 +30,27 @@ const Login = () => {
         const validPassword = checkPasswordFormat(passwordValue);
 
         if (validEmail && validPassword) {
-            try {
-                const result = await AuthLogin(emailValue, passwordValue);
-                if (
-                    result.message ===
-                    '이메일 또는 비밀번호가 일치하지 않습니다.'
-                ) {
-                    alert(result.message);
-                } else {
-                    // 임시변경
-                    sessionStorage.setItem('tempToken', result.user.token);
-                    sessionStorage.setItem(
-                        'tempAccountName',
-                        result.user.accountname,
-                    );
-                    sessionStorage.setItem('tempID', result.user._id);
-                    navigate('/home', { replace: true });
-                }
-            } catch (error) {
-                console.error('error');
-            }
+            authLoginApi(emailValue, passwordValue)
+                .then(result => {
+                    if (
+                        result.message ===
+                        '이메일 또는 비밀번호가 일치하지 않습니다.'
+                    ) {
+                        alert(result.message);
+                    } else {
+                        // 임시변경
+                        sessionStorage.setItem('Token', result.user.token);
+                        sessionStorage.setItem(
+                            'AccountName',
+                            result.user.accountname,
+                        );
+                        sessionStorage.setItem('Id', result.user._id);
+                        navigate('/home');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         } else {
             !validEmail ? setWarnEmail(true) : setWarnEmail(false);
             !validPassword ? setWarnPassword(true) : setWarnPassword(false);

@@ -1,7 +1,5 @@
 import React from 'react';
-
 import Ballon from '../Ballon/Ballon';
-
 import * as S from './Marker.styled';
 import markerImg from '../../assets/images/Marker.svg';
 

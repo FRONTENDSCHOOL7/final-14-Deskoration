@@ -3,58 +3,69 @@ import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 import { ReactComponent as Like } from '../../assets/images/Like.svg';
 import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
 
+export const FeedList = styled.ul`
+    height: 640px;
+    overflow-y: auto;
+`;
+
 export const FeedContainer = styled.article`
     display: flex;
     width: 100%;
     margin: 20px 0;
+    flex-direction: column;
+    gap: 16px;
     .profile-img {
         width: 42px;
         height: 42px;
         border-radius: 50%;
         border: 1px solid ${props => props.theme.border};
-        margin: 0 10px;
+        margin-right: 10px;
         flex-shrink: 0;
     }
 `;
 
-export const ContentBox = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-`;
-
-export const UserInfoBox = styled.div`
+export const FeedItemHeader = styled.div`
     display: flex;
     justify-content: space-between;
 
-    .user-name {
+    > div > h4 {
         font-weight: 700;
     }
 
-    .user-id {
+    p {
         color: ${props => props.theme.subFont};
     }
 `;
 
-export const MoreIcon = styled(More)`
-    width: 24px;
-    height: 24px;
-    transform: rotate(90deg);
+export const UserInfoBox = styled.div`
+    display: flex;
 `;
 
 export const FeedDetailBox = styled.div`
-    p {
-        margin-bottom: 16px;
-    }
+    margin-left: 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     img {
-        margin-bottom: 16px;
+        max-width: 100%;
+        border-radius: 10px;
+        border: 1px solid ${props => props.theme.border};
     }
 `;
 
 export const BtnBox = styled.div`
     button {
         margin-right: 10px;
+    }
+`;
+export const MoreIcon = styled(More)`
+    width: 24px;
+    height: 24px;
+    transform: rotate(90deg);
+    path {
+        fill: ${props => props.theme.subFont};
+        stroke: ${props => props.theme.subFont};
     }
 `;
 

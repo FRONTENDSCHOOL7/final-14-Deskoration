@@ -7,6 +7,14 @@ const PublicRoutePage = lazy(() => import('./PublicRoute'));
 const UserLayoutPage = lazy(() => import('../pages/User/User'));
 const LoginPage = lazy(() => import('../pages/User/Login'));
 const SignupPage = lazy(() => import('../pages/User/Signup'));
+const UserPage = lazy(() => import('../pages/User/User'));
+const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
+const FollowerListPage = lazy(() =>
+    import('../pages/FollowFollowingList/FollowerList'),
+);
+const FollowingListPage = lazy(() =>
+    import('../pages/FollowFollowingList/FollowingList'),
+);
 
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 
@@ -25,10 +33,6 @@ const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
 const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
 
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
-const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
-const FollowerListPage = lazy(() =>
-    import('../pages/FollowFollowingList/FollowerList'),
-);
 
 const NotFoundPage = lazy(() => import('../pages/404/NotFoundPage'));
 
@@ -89,6 +93,14 @@ const Router = () => {
                         <Route
                             path={'/profileUpload'}
                             element={<ProfileUploadPage />}
+                        />
+                        <Route
+                            path={'/followerList'}
+                            element={<FollowerListPage />}
+                        />
+                        <Route
+                            path={'/followingList'}
+                            element={<FollowingListPage />}
                         />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />

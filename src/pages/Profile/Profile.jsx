@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './Profile.styled';
-import Footer from '../../components/Footer/Footer';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import Article from '../Home/Article';
-import { GetMyProfile } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { GetMyProfile } from '../../service/profile_service';
 import { GetMyPost } from '../../service/post_service';
 import usePageHandler from '../../hooks/usePageHandler';
 
+import GradientButton from '../../components/GradientButton/GradientButton';
+
+import * as S from './Profile.styled';
+import BottomSheet from '../../components/BottomSheet/BottomSheet';
+
 const Profile = () => {
+    const navigate = useNavigate();
+
     const [profileData, setProfileData] = useState(null);
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
+    const [isBottomSheet, setIsBottomSheet] = useState(false);
+
+    const hadleBottomSheet = () => setIsBottomSheet(!isBottomSheet);
 
     const token = sessionStorage.getItem('tempToken');
     const tempAccountName = sessionStorage.getItem('tempAccountName');
-    const myId = sessionStorage.getItem('tempID');
 
-    const navigate = useNavigate();
+    const logOut = () => {
+        sessionStorage.clear();
+        navigate('/');
+    };
 
     usePageHandler('text', '나의 프로필');
+
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
@@ -39,7 +49,7 @@ const Profile = () => {
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
-    }, []);
+    }, [tempAccountName, token]);
 
     if (profileData === null || userPost === null) {
         return <div>Loading...</div>;
@@ -96,16 +106,23 @@ const Profile = () => {
                     </Link>
                 </S.UserDataList>
                 <S.UserPostings>
-                    {userPost?.map((post, index) => (
+                    {userPost?.map(post => (
                         <Link key={post.id} to={`/detailpost/${post.id}`}>
                             <img src={post.image} alt="게시물 목록" />
                         </Link>
                     ))}
                 </S.UserPostings>
             </S.ProfileContainer>
-            <S.MoreButton>
+            <S.MoreButton onClick={hadleBottomSheet}>
                 <S.MoreIcon />
             </S.MoreButton>
+            <BottomSheet
+                isBottomSheet={isBottomSheet}
+                hadleBottomSheet={hadleBottomSheet}
+                deleteFn={logOut}
+                oneButton
+                children={'로그아웃'}
+            />
         </>
     );
 };

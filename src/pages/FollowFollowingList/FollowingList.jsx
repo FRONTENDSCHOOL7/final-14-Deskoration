@@ -13,7 +13,7 @@ const FollowingList = () => {
     const token = sessionStorage.getItem('tempToken');
     const myAccountName = sessionStorage.getItem('tempAccountName');
     const [followingData, setFollowingData] = useState([]);
-    const [follow, setFollow] = useState(true);
+    const [follow, setFollow] = useState(false);
     usePageHandler('text', '팔로잉');
 
     // 팔로잉 리스트 불러오기
@@ -89,7 +89,7 @@ const FollowingList = () => {
         <>
             <S.FollowingContainer>
                 {followingData.map(data => (
-                    <S.FollowingList>
+                    <S.FollowingList key={data._id}>
                         <S.FollowingInfo>
                             <img src={data?.image} className="follower-img" />
                             <div>{data?.accountname}</div>

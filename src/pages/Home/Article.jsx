@@ -63,7 +63,7 @@ const Article = () => {
         <>
             <S.Section ref={sectionRef}>
                 {articles.map(article => (
-                    <Link key={article.id} to={`/detailpost/${article._id}`}>
+                    <Link key={article._id} to={`/detailpost/${article._id}`}>
                         <S.Article src={article.image}></S.Article>
                     </Link>
                 ))}

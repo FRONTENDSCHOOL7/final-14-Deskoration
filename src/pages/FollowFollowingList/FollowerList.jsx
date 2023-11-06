@@ -34,24 +34,6 @@ const FollowerList = () => {
     const followerList = followerData.map(data => data.accountname);
     // console.log('followerList:', followerList);
 
-    // 팔로우, 언팔로우 기능 구현
-    // useEffect(() => {
-    //     console.log('accountname:', followerData[0]?.accountname);
-    //     console.log('accountname:', followerList);
-    //     followerList.map(follower => {
-    //         followService(baseURL, token, follower)
-    //             .then(data => {
-    //                 setFollow(data.profile.isfollow);
-    //                 console.log('follower:', data);
-    //             })
-    //             .catch(error => {
-    //                 console.error('API 요청 중 오류 발생: ', error);
-    //             });
-    //     });
-    // }, []);
-
-    // console.log('follow:', follow);
-
     const handleFollowToggle = async accountname => {
         setFollow(!follow);
         console.log('클릭시 이름받아오기!:', accountname);
@@ -87,7 +69,7 @@ const FollowerList = () => {
         <>
             <S.FollowerContainer>
                 {followerData.map(data => (
-                    <S.FollowerList>
+                    <S.FollowerList key={data._id}>
                         <S.FollowerInfo>
                             <img src={data?.image} className="follower-img" />
                             <div>{data?.accountname}</div>

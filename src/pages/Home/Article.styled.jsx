@@ -9,7 +9,8 @@ export const Section = styled.section`
     width: 100%;
     gap: 10px;
     color: ${theme.mainFont};
-    overflow: auto;
+    overflow-y: auto;
+    height: calc(100vh - 248px);
 `;
 
 export const Article = styled.article`

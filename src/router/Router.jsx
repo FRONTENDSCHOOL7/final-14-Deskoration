@@ -22,8 +22,10 @@ const ChatRoomPage = lazy(() =>
 const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
 const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
 const DetailPostPage = lazy(() => import('../pages/DetailPost/DetailPost'));
+
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
+const HomeLayoutPage = lazy(() => import('../Layout/HomeLayout'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
 const token = sessionStorage.getItem('tempToken');
@@ -37,7 +39,7 @@ const Router = () => {
                         element={<Navigate to="/login" replace />}
                     />
                     {token ? (
-                        <Route element={<DefaultLayoutPage />}>
+                        <Route element={<HomeLayout />}>
                             <Route path={'/home/*'} element={<HomePage />} />
                         </Route>
                     ) : (

@@ -1,31 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
-import { GetAllPost } from '../../service/post_service';
+import DetailPost from '../DetailPost/DetailPost';
+import { GetMyPost } from '../../service/post_service';
 
-const Article = () => {
-    const [articles, setArticles] = useState([]);
+const Article = ({ articles, setArticles }) => {
     const [loading, setLoading] = useState(false);
-    const sectionRef = useRef(null);
-    const token = sessionStorage.getItem('tempToken');
+    const sectionRef = useRef(null); // S.Section에 대한 참조 생성
+    const tempAccountName = sessionStorage.getItem('tempAccountName');
 
-    const fetchAllPost = async token => {
-        try {
-            const result = await GetAllPost(token);
-            const deskoration = result.posts.filter(post =>
-                post.content?.includes('"deskoration"'),
-            );
-            console.log('deskoration: ', deskoration);
-            setArticles(deskoration);
-        } catch (error) {
-            console.error('error');
-        }
-    };
-
-    console.log('articles', articles);
-    useEffect(() => {
-        fetchAllPost(token);
-    }, []);
+    const postImage = articles.map(item => item.image);
 
     useEffect(() => {
         const handleScroll = () => {

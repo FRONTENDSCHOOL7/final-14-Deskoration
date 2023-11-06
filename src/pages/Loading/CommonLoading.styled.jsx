@@ -3,6 +3,10 @@ import styled, { css } from 'styled-components';
 export const TitleBox = styled.h1`
     font-size: 24px;
     font-weight: 700;
+    height: calc(100vh - 145px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const CharSpan = styled.span`
@@ -14,7 +18,7 @@ export const CharSpan = styled.span`
             : css`
                   color: ${props => props.theme.main};
               `}
-    transition: color 1.5s;
+    transition: color 0.8s;
     ${props =>
         props.$delay &&
         css`

@@ -11,7 +11,7 @@ const CommonLoading = () => {
 
             setTimeout(() => {
                 setToggleColor(false);
-            }, 2500);
+            }, 2000);
         };
         const intervalId = setInterval(textAnimationLoop, 5000);
         textAnimationLoop();

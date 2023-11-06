@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from '../../styles/theme';
 import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
 import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 
@@ -102,14 +103,18 @@ export const UserDataList = styled.div`
 `;
 
 export const UserPostings = styled.div`
+    width: 100%;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
     color: ${({ theme }) => theme.mainFont};
-    overflow-y: hidden;
 
     img {
-        width: 50%;
-        box-sizing: border-box;
+        width: 145px;
+        height: 145px;
+        object-fit: cover;
         transition: border 0.1s ease;
         &:hover {
             border: 3px solid ${({ theme }) => theme.main};

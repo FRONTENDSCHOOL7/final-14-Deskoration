@@ -48,7 +48,7 @@ export const CharSpan = styled.span`
                   color: #eee;
               `
             : css`
-                  color: ${props => props.theme.logo};
+                  color: ${props => props.theme.main};
               `}
     transition: color 1.5s;
     ${props =>

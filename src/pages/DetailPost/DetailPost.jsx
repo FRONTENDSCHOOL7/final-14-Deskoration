@@ -138,7 +138,7 @@ const DetailPost = () => {
                                                     top: item.marker.y,
                                                 }}
                                                 productItem={item}
-                                                isEditing={false}
+                                                isDetail={true}
                                             />
                                         ),
                                     )}

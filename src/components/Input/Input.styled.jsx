@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Select = styled.select`
     display: block;
@@ -16,6 +16,13 @@ export const Select = styled.select`
     &.warning {
         border-bottom: 1px solid ${({ theme }) => theme.repo.open};
     }
+    ${props =>
+        props.onMouseDown &&
+        css`
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        `}
 `;
 
 export const InputLabel = styled.label`

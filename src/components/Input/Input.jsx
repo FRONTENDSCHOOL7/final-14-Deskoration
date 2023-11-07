@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './Input.styled';
 
 const Input = props => {
-    const { label, inputRef, type, warning, placeholder } = props;
+    const { label, inputRef, type, warning, placeholder, readonly } = props;
 
     return (
         <>
@@ -13,12 +13,16 @@ const Input = props => {
                 ref={inputRef}
                 className={warning ? 'warning' : null}
                 placeholder={placeholder}
+                readOnly={readonly}
             />
         </>
     );
 };
 
-const SelectInput = ({ label, inputRef, warning, options }) => {
+const SelectInput = ({ label, inputRef, warning, options, readonly }) => {
+    const handleMouseDown = event => {
+        event.preventDefault();
+    };
     return (
         <>
             <S.InputLabel htmlFor={label}>{label}</S.InputLabel>
@@ -27,6 +31,7 @@ const SelectInput = ({ label, inputRef, warning, options }) => {
                 id={label}
                 ref={inputRef}
                 className={warning ? 'warning' : null}
+                onMouseDown={readonly ? handleMouseDown : null}
             >
                 {options.map((option, index) => {
                     return (

@@ -7,7 +7,6 @@ const PublicRoutePage = lazy(() => import('./PublicRoute'));
 const UserLayoutPage = lazy(() => import('../pages/User/User'));
 const LoginPage = lazy(() => import('../pages/User/Login'));
 const SignupPage = lazy(() => import('../pages/User/Signup'));
-const UserPage = lazy(() => import('../pages/User/User'));
 const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
 const FollowerListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowerList'),
@@ -29,7 +28,7 @@ const ChatListPage = lazy(() =>
 const ChatRoomPage = lazy(() =>
     import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
 );
-const HomeLayoutPage = lazy(() => import('../Layout/HomeLayout'));
+// const HomeLayoutPage = lazy(() => import('../Layout/HomeLayout'));
 const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
 const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
 
@@ -68,6 +67,10 @@ const Router = () => {
                             <Route
                                 path={'/detailPost/:id'}
                                 element={<DetailPostPage />}
+                            />
+                            <Route
+                                path={'/detailPost/:id/:itemCount'}
+                                element={<PostUploadPage />}
                             />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route

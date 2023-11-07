@@ -77,10 +77,6 @@ const Router = () => {
                                 path={'/profile'}
                                 element={<ProfilePage />}
                             />
-                            <Route
-                                path={'/profile/:username'}
-                                element={<UserProfilePage />}
-                            />
                         </Route>
                         <Route element={<NoFooterLayoutPage />}>
                             <Route
@@ -105,6 +101,10 @@ const Router = () => {
                         <Route
                             path={'/detailPost/:id'}
                             element={<DetailPostPage />}
+                        />
+                        <Route
+                            path={'/profile/:username'}
+                            element={<UserProfilePage />}
                         />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />

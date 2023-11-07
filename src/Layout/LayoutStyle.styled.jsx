@@ -12,3 +12,9 @@ export const HomeMain = styled.main`
     min-height: calc(100% - 145px);
     max-height: calc(100% - 145px);
 `;
+
+export const UserProfileMain = styled.main`
+    padding: 15px 25px 0;
+    min-height: 100%;
+    max-height: 100%;
+`;

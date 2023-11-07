@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 export const TitleBox = styled.h1`
     font-size: 24px;
     font-weight: 700;
-    height: calc(100vh - 145px);
+    height: calc(100vh - 162px);
     display: flex;
     justify-content: center;
     align-items: center;

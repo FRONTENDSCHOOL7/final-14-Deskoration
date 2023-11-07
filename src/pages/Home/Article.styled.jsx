@@ -12,7 +12,7 @@ export const Section = styled.section`
     color: ${theme.mainFont};
     overflow-y: auto;
     margin-top: 10px;
-    height: calc(100vh - 248px);
+    height: calc(100vh - 256px);
 `;
 
 export const Article = styled.article`

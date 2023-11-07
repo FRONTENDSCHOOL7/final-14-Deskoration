@@ -56,9 +56,6 @@ export const ProductName = styled.div`
     font-weight: 700;
 `;
 
-export const ProductPrice = styled.div`
-    color: ${props => props.theme.subFont};
-`;
 export const TrashIcon = styled(Trash)`
     path {
         fill: #fff;

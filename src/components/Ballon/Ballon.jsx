@@ -64,7 +64,7 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
                 >
                     {productItem.detail.productName}
                 </S.ProductName>
-                <S.ProductPrice> {productItem.detail.price}원</S.ProductPrice>
+                <div> {productItem.detail.price}원</div>
             </S.Product>
             {!isDetail && (
                 <S.DeletItemButton

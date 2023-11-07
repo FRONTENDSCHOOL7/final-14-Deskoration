@@ -14,6 +14,7 @@ const NewBoard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
+    const detailPost = pathName.includes('/detailPost');
 
     const token = sessionStorage.getItem('Token');
 
@@ -29,7 +30,7 @@ const NewBoard = () => {
         length: 0,
     });
 
-    usePageHandler('text', '게시글 작성');
+    usePageHandler('text', detailPost ? '게시글' : '게시글 작성');
 
     const trimTextArea = () => {
         setTextArea(prev => ({

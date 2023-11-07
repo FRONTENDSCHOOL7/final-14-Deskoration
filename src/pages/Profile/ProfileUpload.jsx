@@ -4,7 +4,11 @@ import basicImg from '../../assets/images/Profile.svg';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { uploadImgApi } from '../../service/img_service';
-import { validAccountNameApi } from '../../service/auth_service';
+import {
+    authLoginApi,
+    authSignUpApi,
+    validAccountNameApi,
+} from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +17,7 @@ import usePageHandler from '../../hooks/usePageHandler';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
-    const baseURL = 'https://api.mandarin.weniv.co.kr/';
+    const baseURL = 'https://api.mandarin.weniv.co.kr';
     const noImage = 'Ellipse.png';
 
     const [photoURL, setPhotoURL] = useState(basicImg);
@@ -121,31 +125,27 @@ export const ProfileUpload = () => {
 
         // 유효성 검사를 통과하면 post 요청
         if (validUserName && validID && !existID) {
-            const reqURL = `${baseURL}user`;
-            fetch(reqURL, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({
-                    user: {
-                        username: userNameValue,
-                        email: emailValue,
-                        password: passwordValue,
-                        accountname: idValue,
-                        intro: introValue,
-                        image: !file ? baseURL + noImage : baseURL + file,
-                    },
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            const userData = {
+                username: userNameValue,
+                email: emailValue,
+                password: passwordValue,
+                accountname: idValue,
+                intro: introValue,
+                image: !file ? baseURL + noImage : baseURL + file,
+            };
+            authSignUpApi(userData)
                 .then(result => {
                     if (result.message === '회원가입 성공') {
-                        navigate('/home');
-                        // login api
+                        authLoginApi(emailValue, passwordValue).then(data => {
+                            console.log(data);
+                            sessionStorage.setItem('Token', data.user.token);
+                            sessionStorage.setItem(
+                                'AccountName',
+                                data.user.accountname,
+                            );
+                            sessionStorage.setItem('Id', data.user._id);
+                            navigate('/home');
+                        });
                     } else {
                         throw new Error(result.message);
                     }

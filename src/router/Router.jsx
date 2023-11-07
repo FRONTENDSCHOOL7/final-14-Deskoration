@@ -65,10 +65,6 @@ const Router = () => {
                                 element={<PostUploadPage />}
                             />
                             <Route
-                                path={'/detailPost/:id'}
-                                element={<DetailPostPage />}
-                            />
-                            <Route
                                 path={'/detailPost/:id/:itemCount'}
                                 element={<PostUploadPage />}
                             />
@@ -80,10 +76,6 @@ const Router = () => {
                             <Route
                                 path={'/profile'}
                                 element={<ProfilePage />}
-                            />
-                            <Route
-                                path={'/profile/:username'}
-                                element={<UserProfilePage />}
                             />
                         </Route>
                         <Route element={<NoFooterLayoutPage />}>
@@ -105,6 +97,14 @@ const Router = () => {
                         <Route
                             path={'/followingList'}
                             element={<FollowingListPage />}
+                        />
+                        <Route
+                            path={'/detailPost/:id'}
+                            element={<DetailPostPage />}
+                        />
+                        <Route
+                            path={'/profile/:username'}
+                            element={<UserProfilePage />}
                         />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />

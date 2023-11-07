@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-
 import { ReactComponent as Trash } from '../../assets/images/Trash.svg';
 
 export const Ballon = styled.div`
@@ -7,9 +6,9 @@ export const Ballon = styled.div`
     width: 150px;
     height: 60px;
     padding: 12px;
-    color: ${props => props.theme.mainFont};
+    color: #fff;
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
-    background: #fff;
+    background: #f56d25;
     z-index: 101;
     display: none;
 `;
@@ -24,8 +23,8 @@ export const Arrow = styled.div`
     // 화살표 방향과 위치 조정
     ${({ $isAbove }) => css`
         border-color: ${$isAbove
-            ? '#fff transparent transparent transparent'
-            : 'transparent transparent #fff transparent'};
+            ? '#f56d25 transparent transparent transparent'
+            : 'transparent transparent #f56d25 transparent'};
         border-width: 10px 10px 10px 10px;
         ${$isAbove ? 'bottom: -20px;' : 'top: -20px;'}
     `}
@@ -44,14 +43,18 @@ export const Product = styled.div`
 
         cursor: pointer;
         &:hover {
-            border-bottom: 1px solid red;
+            border-bottom: 1px solid #fff;
         }
+    }
+
+    div:nth-child(2) {
+        font-family: 'PreBold';
     }
 `;
 
 export const TrashIcon = styled(Trash)`
     path {
-        fill: ${props => props.theme.subFont};
+        fill: #fff;
     }
 `;
 

@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const myacountName = sessionStorage.getItem('tempAccountName');
+    const myacountName = sessionStorage.getItem('AccountName');
     const handleGoBack = () => {
         navigate(-1);
     };

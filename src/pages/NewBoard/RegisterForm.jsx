@@ -148,6 +148,7 @@ const RegisterForm = ({
                     inputRef={priceRef}
                     warning={warnPrice}
                     readonly={showProduct}
+                    step={100}
                 />
                 {warnPrice && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
 

@@ -52,6 +52,10 @@ export const Product = styled.div`
     }
 `;
 
+export const ProductName = styled.div`
+    font-weight: 700;
+`;
+
 export const TrashIcon = styled(Trash)`
     path {
         fill: #fff;

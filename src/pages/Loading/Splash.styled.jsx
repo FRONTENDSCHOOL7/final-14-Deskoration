@@ -5,6 +5,7 @@ import { ReactComponent as Logo } from '../../assets/images/Loading.svg';
 export const LoadingImg = styled(Logo)`
     aspect-ratio: 94 / 124;
     height: 180px;
+    z-index: 1;
 
     .light {
         fill: var(--light-color, 'none');
@@ -19,7 +20,7 @@ export const LogoContainer = styled.div`
     align-items: center;
     position: relative;
 
-    &::after {
+    &::before {
         content: '';
         position: absolute;
         top: 0;
@@ -31,7 +32,6 @@ export const LogoContainer = styled.div`
         background-size: fill;
         background-position: 80%;
         opacity: 0.28;
-        z-index: -1;
     }
 `;
 
@@ -50,6 +50,7 @@ const changeColor = keyframes`
 `;
 
 export const CharSpan = styled.span`
+    z-index: 1;
     color: #eee;
     animation: ${changeColor} 2s ${props => props.$delay}s forwards;
 `;

@@ -49,7 +49,7 @@ export const NewBoardFileContainer = styled.div`
     align-items: center;
     justify-content: center;
 
-    height: ${props => (props.$hasPhoto ? 'auto' : '400px')};
+    height: ${props => (props.$hasPhoto ? 'auto' : '300px')};
 
     border: 1px solid ${props => props.theme.border};
     border-radius: 14px;

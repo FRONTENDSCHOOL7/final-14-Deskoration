@@ -57,14 +57,14 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
                 style={{ left: calcArrowLeft(productItem.marker.x) }}
             />
             <S.Product>
-                <div
+                <S.ProductName
                     onClick={() => {
                         !isDetail ? editProduct() : showProduct(itemCount);
                     }}
                 >
                     {productItem.detail.productName}
-                </div>
-                <div> {productItem.detail.price}</div>
+                </S.ProductName>
+                <div> {productItem.detail.price}원</div>
             </S.Product>
             {!isDetail && (
                 <S.DeletItemButton

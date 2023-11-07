@@ -2,7 +2,8 @@ import React from 'react';
 import * as S from './Input.styled';
 
 const Input = props => {
-    const { label, inputRef, type, warning, placeholder, readonly } = props;
+    const { label, inputRef, type, warning, placeholder, readonly, step } =
+        props;
 
     return (
         <>
@@ -14,6 +15,7 @@ const Input = props => {
                 className={warning ? 'warning' : null}
                 placeholder={placeholder}
                 readOnly={readonly}
+                step={step}
             />
         </>
     );

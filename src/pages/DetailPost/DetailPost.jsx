@@ -133,6 +133,7 @@ const DetailPost = () => {
                                         (item, index) => (
                                             <Marker
                                                 key={index}
+                                                itemCount={index}
                                                 markerLocation={{
                                                     left: item.marker.x,
                                                     top: item.marker.y,

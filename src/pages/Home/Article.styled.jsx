@@ -22,6 +22,7 @@ export const Article = styled.article`
     /* background-image: url(${props =>
         props.imageurl || './images/DeskSetup.jpg'}); */
     background-size: cover;
+    background-position: center;
     border: 1px solid ${props => props.theme.border};
     box-sizing: border-box;
     transition: border 0.1s ease;

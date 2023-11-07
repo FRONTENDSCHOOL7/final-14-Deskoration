@@ -87,7 +87,7 @@ const Profile = () => {
                         <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
-                    <Link to="/followerList">
+                    <Link to={`/followerList`}>
                         <button className="user-follow">
                             <p>{profileData?.followerCount}</p>
                             <p>팔로워</p>
@@ -115,7 +115,6 @@ const Profile = () => {
                 isBottomSheet={isBottomSheet}
                 hadleBottomSheet={hadleBottomSheet}
                 deleteFn={logOut}
-                oneButton
                 children={'로그아웃'}
             />
         </>

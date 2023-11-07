@@ -4,7 +4,7 @@ import basicImg from '../../assets/images/Profile.svg';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { uploadImgApi } from '../../service/img_service';
-import { validAccountNameApi } from '../../service/auth_service';
+import { signUpApi, validAccountNameApi } from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -122,27 +122,15 @@ export const ProfileUpload = () => {
 
         // 유효성 검사를 통과하면 post 요청
         if (validUserName && validID && !existID) {
-            const reqURL = `${baseURL}user`;
-            fetch(reqURL, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({
-                    user: {
-                        username: userNameValue,
-                        email: emailValue,
-                        password: passwordValue,
-                        accountname: idValue,
-                        intro: introValue,
-                        image: !file ? baseURL + noImage : baseURL + file,
-                    },
-                }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            const userData = {
+                username: userNameValue,
+                email: emailValue,
+                password: passwordValue,
+                accountname: idValue,
+                intro: introValue,
+                image: !file ? baseURL + noImage : baseURL + file,
+            };
+            signUpApi(userData)
                 .then(result => {
                     if (result.message === '회원가입 성공') {
                         navigate('/home');

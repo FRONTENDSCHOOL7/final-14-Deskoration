@@ -9,6 +9,19 @@ const Article = ({ articles, setArticles }) => {
     const token = sessionStorage.getItem('Token');
 
     useEffect(() => {
+        getAllPostApi(token)
+            .then(result => {
+                const deskoration = result.posts.filter(post =>
+                    post.content?.includes('deskoration'),
+                );
+                setArticles(deskoration);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
+
+    useEffect(() => {
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } =
                 sectionRef.current;

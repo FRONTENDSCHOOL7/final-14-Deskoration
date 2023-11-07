@@ -1,7 +1,7 @@
-const baseURL = 'https://api.mandarin.weniv.co.kr/';
+import baseUrl from './base_url';
 
 export const getUserProfileApi = async (username, token) => {
-    const reqURL = `${baseURL}profile/${username}`;
+    const reqURL = `${baseUrl}/profile/${username}`;
 
     try {
         const response = await fetch(reqURL, {
@@ -25,7 +25,7 @@ export const getUserProfileApi = async (username, token) => {
 };
 
 export const getMyProfileApi = async token => {
-    const reqUrl = `${baseURL}user/myinfo`;
+    const reqUrl = `${baseUrl}/user/myinfo`;
 
     try {
         const response = await fetch(reqUrl, {

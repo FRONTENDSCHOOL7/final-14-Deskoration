@@ -1,6 +1,7 @@
-export const followServiceApi = async (baseUrl, token, accountName) => {
-    const reqUrl = `${baseUrl}profile/${accountName}/follow`;
+import baseUrl from './base_url';
 
+export const postFollowApi = async (token, accountName) => {
+    const reqUrl = `${baseUrl}/profile/${accountName}/follow`;
     try {
         const response = await fetch(reqUrl, {
             method: 'POST',
@@ -9,7 +10,6 @@ export const followServiceApi = async (baseUrl, token, accountName) => {
                 'Content-Type': 'application/json',
             },
         });
-
         if (response.ok) {
             const result = await response.json();
             return result;
@@ -23,8 +23,8 @@ export const followServiceApi = async (baseUrl, token, accountName) => {
     }
 };
 
-export const unFollowServiceApi = async (baseURL, token, accountName) => {
-    const reqURL = `${baseURL}profile/${accountName}/unfollow`;
+export const deleteFollowApi = async (token, accountName) => {
+    const reqURL = `${baseUrl}/profile/${accountName}/unfollow`;
 
     try {
         const response = await fetch(reqURL, {
@@ -42,8 +42,30 @@ export const unFollowServiceApi = async (baseURL, token, accountName) => {
     }
 };
 
-export const followerServiceApi = async (baseUrl, token, myAccountName) => {
-    const reqUrl = `${baseUrl}profile/${myAccountName}/following`;
+export const getFollowerApi = async (token, myAccountName) => {
+    const reqURL = `${baseUrl}/profile/${myAccountName}/follower`;
+
+    try {
+        const response = await fetch(reqURL, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error('Error:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const getFollowingApi = async (token, myAccountName) => {
+    const reqUrl = `${baseUrl}/profile/${myAccountName}/following`;
 
     try {
         const response = await fetch(reqUrl, {

@@ -1,8 +1,9 @@
-const baseURL = 'https://api.mandarin.weniv.co.kr/';
+import baseUrl from './base_url';
 
 export const getCommentApi = async (id, token) => {
+    const reqURL = `${baseUrl}/post/${id}/comments`;
     try {
-        const response = await fetch(`${baseURL}post/${id}/comments`, {
+        const response = await fetch(reqURL, {
             method: 'GET',
             headers: {
                 authorization: `Bearer ${token}`,
@@ -22,7 +23,7 @@ export const getCommentApi = async (id, token) => {
 };
 
 export const postCommentApi = async (id, content, token) => {
-    const apiUrl = `${baseURL}post/${id}/comments`;
+    const apiUrl = `${baseUrl}/post/${id}/comments`;
 
     const commentData = {
         comment: {
@@ -52,7 +53,7 @@ export const postCommentApi = async (id, content, token) => {
 };
 
 export const deleteCommentApi = async (postID, commentID, token) => {
-    const apiUrl = `${baseURL}post/${postID}/comments/${commentID}`;
+    const apiUrl = `${baseUrl}/post/${postID}/comments/${commentID}`;
 
     try {
         const response = await fetch(apiUrl, {

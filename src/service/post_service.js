@@ -1,8 +1,9 @@
-const baseURL = 'https://api.mandarin.weniv.co.kr';
+import baseUrl from './base_url';
 
 export const uploadPostApi = async (content, image, token) => {
+    const reqURL = `${baseUrl}/post`;
     try {
-        const response = await fetch(`${baseURL}/post`, {
+        const response = await fetch(reqURL, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -11,7 +12,7 @@ export const uploadPostApi = async (content, image, token) => {
             body: JSON.stringify({
                 post: {
                     content: JSON.stringify({ deskoration: content }),
-                    image: `${baseURL}/${image}`,
+                    image: `${baseUrl}/${image}`,
                 },
             }),
         });
@@ -29,8 +30,9 @@ export const uploadPostApi = async (content, image, token) => {
 
 export const getAllPostApi = async token => {
     const number = 200;
+    const reqURL = `${baseUrl}/post?limit=${number}`;
     try {
-        const response = await fetch(`${baseURL}/post?limit=${number}`, {
+        const response = await fetch(reqURL, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -51,17 +53,15 @@ export const getAllPostApi = async token => {
 };
 
 export const getMyPostApi = async (accountname, token) => {
+    const reqURL = `${baseUrl}/post/${accountname}/userpost`;
     try {
-        const response = await fetch(
-            `${baseURL}/post/${accountname}/userpost`,
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-type': 'application/json',
-                },
+        const response = await fetch(reqURL, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
             },
-        );
+        });
 
         if (response.ok) {
             const data = await response.json();
@@ -76,8 +76,9 @@ export const getMyPostApi = async (accountname, token) => {
 };
 
 export const detialPostApi = async (id, token) => {
+    const reqURL = `${baseUrl}/post/${id}`;
     try {
-        const response = await fetch(`${baseURL}/post/${id}`, {
+        const response = await fetch(reqURL, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -96,8 +97,9 @@ export const detialPostApi = async (id, token) => {
 };
 
 export const deletePostAPI = async (postId, token) => {
+    const reqURL = `${baseUrl}/post/${postId}`;
     try {
-        const response = await fetch(`${baseURL}/post/${postId}`, {
+        const response = await fetch(reqURL, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -115,8 +117,8 @@ export const deletePostAPI = async (postId, token) => {
     }
 };
 
-export const getFollowingFeedApi = async token => {
-    const reqURL = `${baseURL}/post/feed`;
+export const getFeedApi = async token => {
+    const reqURL = `${baseUrl}/post/feed`;
     try {
         const response = await fetch(reqURL, {
             method: 'GET',

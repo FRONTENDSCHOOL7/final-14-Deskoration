@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
-import { getFollowingFeedApi } from '../../service/post_service';
+import { getFeedApi } from '../../service/post_service';
 import { Link } from 'react-router-dom';
 
 const Feed = () => {
@@ -20,10 +20,9 @@ const Feed = () => {
     };
 
     useEffect(() => {
-        getFollowingFeedApi(token)
+        getFeedApi(token)
             .then(result => {
                 setFeedData(result.posts);
-                console.log(result.posts);
 
                 const newFeedContent = [];
                 const newCreateDate = [];

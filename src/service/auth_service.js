@@ -1,7 +1,7 @@
-const baseURL = 'https://api.mandarin.weniv.co.kr';
+import baseUrl from './base_url';
 
 export const validEmailApi = async email => {
-    const reqURL = `${baseURL}/user/emailvalid`;
+    const reqURL = `${baseUrl}/user/emailvalid`;
 
     const response = await fetch(reqURL, {
         method: 'POST',
@@ -19,7 +19,7 @@ export const validEmailApi = async email => {
 };
 
 export const validAccountNameApi = async accountName => {
-    const reqURL = `${baseURL}/user/accountnamevalid`;
+    const reqURL = `${baseUrl}/user/accountnamevalid`;
 
     try {
         const response = await fetch(reqURL, {
@@ -42,7 +42,7 @@ export const validAccountNameApi = async accountName => {
 };
 
 export const authLoginApi = async (emailValue, passwordValue) => {
-    const reqUrl = `${baseURL}/user/login`;
+    const reqUrl = `${baseUrl}/user/login`;
 
     try {
         const response = await fetch(reqUrl, {
@@ -66,5 +66,27 @@ export const authLoginApi = async (emailValue, passwordValue) => {
     } catch (error) {
         console.error(error);
         throw new Error('Login request failed');
+    }
+};
+
+export const signUpApi = async userData => {
+    const reqURL = `${baseUrl}/user`;
+    try {
+        const response = await fetch(reqURL, {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify({
+                user: userData,
+            }),
+        });
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error(`Request failed with status: ${response.status}`);
+            throw new Error('Login request failed');
+        }
+    } catch (error) {
+        throw error;
     }
 };

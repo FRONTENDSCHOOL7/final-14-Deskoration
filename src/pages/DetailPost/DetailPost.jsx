@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './DetailPost.styled';
-import { detialPostApi } from '../../service/post_service';
+import { deletePostAPI, detialPostApi } from '../../service/post_service';
 import {
     getCommentApi,
     postCommentApi,
@@ -94,7 +94,7 @@ const DetailPost = () => {
     const deletePost = e => {
         e.stopPropagation();
         if (window.confirm('삭제고?')) {
-            deleteCommentApi(postData.id, token);
+            deletePostAPI(postData.id, token);
         }
         navigate(-1);
     };

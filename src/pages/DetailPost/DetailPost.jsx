@@ -35,7 +35,7 @@ const DetailPost = () => {
             });
         getCommentApi(id, token)
             .then(commentResult => {
-                setCommentData(commentResult.comments);
+                setCommentData(commentResult.comments.reverse());
             })
             .catch(error => {
                 console.error('error');
@@ -105,7 +105,7 @@ const DetailPost = () => {
                 .then(() =>
                     getCommentApi(id, token)
                         .then(data => {
-                            setCommentData(data.comments);
+                            setCommentData(data.comments.reverse());
                         })
                         .catch(error => {
                             console.error('API 요청 중 오류 발생: ', error);

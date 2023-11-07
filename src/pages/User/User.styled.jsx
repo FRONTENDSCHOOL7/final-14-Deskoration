@@ -113,6 +113,19 @@ export const InputBox = styled.div`
     margin-bottom: 20px;
 `;
 
+export const SampleLoginBox = styled.div`
+    margin-bottom: 20px;
+    color: ${props => props.theme.subFont};
+    input[type='checkbox'] {
+        cursor: pointer;
+        vertical-align: top;
+    }
+    label {
+        padding: 0 5px;
+        cursor: pointer;
+    }
+`;
+
 export const SocialLoginContainer = styled.section`
     position: relative;
 

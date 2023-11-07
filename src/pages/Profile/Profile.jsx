@@ -102,7 +102,7 @@ const Profile = () => {
                 </S.UserDataList>
                 <S.UserPostings>
                     {userPost?.map(post => (
-                        <Link key={post.id} to={`/detailpost/${post.id}`}>
+                        <Link key={post.id} to={`/detailPost/${post.id}`}>
                             <img src={post.image} alt="게시물 목록" />
                         </Link>
                     ))}

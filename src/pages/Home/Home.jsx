@@ -4,19 +4,19 @@ import logoImg from '../../assets/images/Logo.svg';
 import Article from './Article';
 import Slide from './Slide';
 import usePageHandler from '../../hooks/usePageHandler';
-import { GetAllPost } from '../../service/post_service';
+import { getAllPostApi } from '../../service/post_service';
 import CommonLoading from '../Loading/CommonLoading';
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
     const [isReady, setIsReady] = useState(false);
-    const token = sessionStorage.getItem('tempToken');
+    const token = sessionStorage.getItem('Token');
 
     console.log('articles', articles);
 
     const tempApi = async token => {
         try {
-            const result = await GetAllPost(token);
+            const result = await getAllPostApi(token);
             // console.log('API보기2: ', result.posts);
             const deskoration = result.posts.filter(post =>
                 post.content?.includes('"deskoration"'),

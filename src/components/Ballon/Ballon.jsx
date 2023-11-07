@@ -1,12 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import * as S from './Ballon.styled';
 
 const Ballon = ({ productItem, deleteProduct, isEditing }) => {
-    // 내 글이 아니고, 수정중이 아니라면 삭제하기 안보이게
     const navigate = useNavigate();
     const editProduct = () => {
-        navigate(`/newboard/${productItem.detail.id}`, {
+        navigate(`/postUpload/${productItem.detail.id}`, {
             state: { editProductItem: productItem },
         });
     };

@@ -12,8 +12,6 @@ const Home = () => {
     const [isReady, setIsReady] = useState(false);
     const token = sessionStorage.getItem('Token');
 
-    console.log('articles', articles);
-
     const tempApi = async token => {
         try {
             const result = await getAllPostApi(token);
@@ -21,7 +19,7 @@ const Home = () => {
             const deskoration = result.posts.filter(post =>
                 post.content?.includes('"deskoration"'),
             );
-            console.log('deskoration: ', deskoration);
+            // console.log('deskoration: ', deskoration);
             setArticles(deskoration); // Set the state with articles containing images
             setIsReady(true);
         } catch (error) {
@@ -30,10 +28,8 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const desk_result = tempApi(token);
-    }, []);
-
-    console.log(isReady);
+        tempApi(token);
+    }, [token]);
 
     usePageHandler('image', logoImg);
     return (

@@ -3,7 +3,7 @@ import * as S from './UserProfile.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { getUserProfileApi } from '../../service/profile_service';
 import { getMyPostApi } from '../../service/post_service';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import usePageHandler from '../../hooks/usePageHandler';
 
 const UserProfile = () => {
@@ -13,7 +13,7 @@ const UserProfile = () => {
     const { username } = useParams(); //선택한 게시물 아이디 값
     const token = sessionStorage.getItem('Token');
 
-    usePageHandler('text', profileData?.accountname);
+    usePageHandler('text', profileData?.username);
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
@@ -22,15 +22,15 @@ const UserProfile = () => {
                 setProfileData(data.profile);
                 return data.profile.accountname;
             })
-            .then(temp => {
-                getMyPostApi(temp, token).then(data => {
+            .then(name => {
+                getMyPostApi(name, token).then(data => {
                     setUserPost(data);
                 });
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
-    }, []);
+    }, [token, username]);
 
     if (profileData === null || userPost === null) {
         return <div>Loading...</div>;
@@ -44,10 +44,14 @@ const UserProfile = () => {
         <>
             <S.ProfileContainer>
                 <S.UserInfo>
-                    <img src={profileData?.image} alt="" className="user-img" />
+                    <img
+                        src={profileData?.image}
+                        alt="userImage"
+                        className="user-img"
+                    />
 
                     <div className="user-introduce">
-                        <p className="user-name">{profileData?.accountname}</p>
+                        <p className="user-name">{profileData?.username}</p>
                         <p className="user-info">
                             {expandedContent
                                 ? profileData.intro

@@ -93,14 +93,14 @@ const DetailPost = () => {
 
     const deletePost = e => {
         e.stopPropagation();
-        if (window.confirm('삭제고?')) {
+        if (window.confirm('삭제하시겠습니까?')) {
             deletePostAPI(postData.id, token);
         }
         navigate(-1);
     };
     const deleteComment = e => {
         e.stopPropagation();
-        if (window.confirm('삭제고?')) {
+        if (window.confirm('삭제하시겠습니까?')) {
             deleteCommentApi(postData.id, commentID, token) //
                 .then(() =>
                     getCommentApi(id, token)

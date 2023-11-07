@@ -12,6 +12,7 @@ const Login = () => {
 
     const [warmEmail, setWarnEmail] = useState(false);
     const [warnPassword, setWarnPassword] = useState(false);
+    const [isSampleLogin, setIsSampleLogin] = useState(false);
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -57,6 +58,18 @@ const Login = () => {
         }
     };
 
+    const handleSampleLoginChange = event => {
+        const { checked } = event.target;
+        setIsSampleLogin(checked);
+        if (!isSampleLogin) {
+            emailRef.current.value = 'test@deskoration.com';
+            passwordRef.current.value = 'test123';
+        } else {
+            emailRef.current.value = null;
+            passwordRef.current.value = null;
+        }
+    };
+
     return (
         <S.UserForm onSubmit={onSubmit}>
             <S.InputBox>
@@ -77,7 +90,15 @@ const Login = () => {
                     <WarningMsg msg={'6자 이상의 비밀번호를 입력하세요.'} />
                 )}
             </S.InputBox>
-
+            <S.SampleLoginBox>
+                <input
+                    type="checkbox"
+                    id="sampleLoginCheckbox"
+                    checked={isSampleLogin}
+                    onChange={handleSampleLoginChange}
+                />
+                <label htmlFor="sampleLoginCheckbox">체험하기</label>
+            </S.SampleLoginBox>
             <GradientButton
                 type={'submit'}
                 $gra={true}

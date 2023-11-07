@@ -233,6 +233,7 @@ const PostUploadForm = ({
                 {imageURL ? (
                     <>
                         <img
+                            style={{ cursor: 'cell' }}
                             src={imageURL}
                             alt="imageURL"
                             onLoad={handleImageLoad}

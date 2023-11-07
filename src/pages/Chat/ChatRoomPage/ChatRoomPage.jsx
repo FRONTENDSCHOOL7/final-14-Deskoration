@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatRoomPage = () => {
     const location = useLocation();
     const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
-    const navigate = useNavigate();
 
     const newData = new Date();
     let hours = newData.getHours();

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
-import { getFollowingFeed } from '../../service/post_service';
+import { getFeedApi } from '../../service/post_service';
 import { Link } from 'react-router-dom';
 
 const Feed = () => {
-    const token = sessionStorage.getItem('tempToken');
+    const token = sessionStorage.getItem('Token');
     const [feedData, setFeedData] = useState([]);
     const [feedContent, setFeedContent] = useState([]);
     const [createDate, setCreateDate] = useState([]);
@@ -19,31 +19,33 @@ const Feed = () => {
         setLikes(copyLikes);
     };
 
-    const callFeedAPI = async token => {
-        const result = await getFollowingFeed(token);
-        setFeedData(result.posts);
-        console.log(result.posts);
-
-        const newFeedContent = [];
-        const newCreateDate = [];
-        result.posts.forEach(post => {
-            const data = JSON.parse(post.content);
-            newFeedContent.push(data);
-
-            const dateObj = new Date(post.createdAt);
-            const convertDate = {
-                year: dateObj.getFullYear(),
-                month: dateObj.getMonth() + 1,
-                date: dateObj.getDate(),
-            };
-            newCreateDate.push(convertDate);
-        });
-        setFeedContent(newFeedContent);
-        setCreateDate(newCreateDate);
-    };
-
     useEffect(() => {
-        callFeedAPI(token);
+        getFeedApi(token)
+            .then(result => {
+                setFeedData(result.posts);
+
+                const newFeedContent = [];
+                const newCreateDate = [];
+
+                result.posts.forEach(post => {
+                    const data = JSON.parse(post.content);
+                    newFeedContent.push(data);
+
+                    const dateObj = new Date(post.createdAt);
+                    const convertDate = {
+                        year: dateObj.getFullYear(),
+                        month: dateObj.getMonth() + 1,
+                        date: dateObj.getDate(),
+                    };
+                    newCreateDate.push(convertDate);
+                });
+
+                setFeedContent(newFeedContent);
+                setCreateDate(newCreateDate);
+            })
+            .catch(error => {
+                console.error('Error calling the feed API: ', error);
+            });
     }, []);
 
     return (

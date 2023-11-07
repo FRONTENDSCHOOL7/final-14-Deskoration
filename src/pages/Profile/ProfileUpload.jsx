@@ -3,8 +3,12 @@ import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/Profile.svg';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
-import { UploadImg } from '../../service/img_service';
-import { ValidAccountName } from '../../service/auth_service';
+import { uploadImgApi } from '../../service/img_service';
+import {
+    authLoginApi,
+    authSignUpApi,
+    validAccountNameApi,
+} from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +65,7 @@ export const ProfileUpload = () => {
             reader.onloadend = () => {
                 const imgData = new FormData();
                 imgData.append('image', compressedFile);
-                UploadImg(imgData, setFile);
+                uploadImgApi(imgData, setFile);
                 setPhotoURL(reader.result);
             };
         } catch (e) {
@@ -99,52 +103,58 @@ export const ProfileUpload = () => {
 
         // 계정 ID 검사
         if (validID) {
-            try {
-                setWarnID(false);
-                const result = await ValidAccountName(idValue);
-                if (result.message === '사용 가능한 계정ID 입니다.') {
-                    setExistID(false);
-                } else if (result.message === '이미 가입된 계정ID 입니다.') {
-                    setExistID(true);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                console.error(error);
-            }
+            setWarnID(false);
+
+            validAccountNameApi(idValue)
+                .then(result => {
+                    if (result.message === '사용 가능한 계정ID 입니다.') {
+                        setExistID(false);
+                    } else if (
+                        result.message === '이미 가입된 계정ID 입니다.'
+                    ) {
+                        setExistID(true);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         } else {
             !validID ? setWarnID(true) : setWarnID(false);
         }
 
         // 유효성 검사를 통과하면 post 요청
         if (validUserName && validID && !existID) {
-            const reqURL = `${baseURL}user`;
-            try {
-                const response = await fetch(reqURL, {
-                    method: 'POST',
-                    headers: { 'Content-type': 'application/json' },
-                    body: JSON.stringify({
-                        user: {
-                            username: userNameValue,
-                            email: emailValue,
-                            password: passwordValue,
-                            accountname: idValue,
-                            intro: introValue,
-                            image: `${
-                                !file ? baseURL + noImage : baseURL + file
-                            }`,
-                        },
-                    }),
+            const userData = {
+                username: userNameValue,
+                email: emailValue,
+                password: passwordValue,
+                accountname: idValue,
+                intro: introValue,
+                image: !file ? baseURL + noImage : baseURL + file,
+            };
+            authSignUpApi(userData)
+                .then(result => {
+                    console.log(result);
+                    if (result.message === '회원가입 성공') {
+                        authLoginApi(emailValue, passwordValue).then(data => {
+                            console.log(data);
+                            sessionStorage.setItem('Token', data.user.token);
+                            sessionStorage.setItem(
+                                'AccountName',
+                                data.user.accountname,
+                            );
+                            sessionStorage.setItem('Id', data.user._id);
+                            navigate('/home');
+                        });
+                    } else {
+                        throw new Error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
                 });
-                const result = await response.json();
-                if (result.message === '회원가입 성공') {
-                    navigate('/home');
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                console.error(error);
-            }
         }
     };
 

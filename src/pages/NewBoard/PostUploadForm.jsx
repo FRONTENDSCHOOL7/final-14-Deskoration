@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { UploadImg } from '../../service/img_service';
+import { uploadImgApi } from '../../service/img_service';
 import imageCompression from 'browser-image-compression';
 
 import { Marker } from '../../components/Marker/Marker';
@@ -69,13 +69,13 @@ const PostUploadForm = ({
             reader.onloadend = () => {
                 const imgData = new FormData();
                 imgData.append('image', compressedFile);
-                UploadImg(imgData, setImageFile);
+                uploadImgApi(imgData, setImageFile);
                 setImageURL(reader.result);
             };
             setProductItems([]);
             setIsImageLoaded(false);
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.error(error);
         }
     };
 

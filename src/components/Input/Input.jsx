@@ -1,6 +1,5 @@
 import React from 'react';
 import * as S from './Input.styled';
-import { useEffect } from 'react';
 
 const Input = props => {
     const { label, inputRef, type, warning, placeholder } = props;

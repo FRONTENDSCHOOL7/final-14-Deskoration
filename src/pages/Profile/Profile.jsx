@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import * as S from './Profile.styled';
+import GradientButton from '../../components/GradientButton/GradientButton';
+import { getMyProfileApi } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
-
-import { GetMyProfile } from '../../service/profile_service';
-import { GetMyPost } from '../../service/post_service';
+import { getMyPostApi } from '../../service/post_service';
 import usePageHandler from '../../hooks/usePageHandler';
 
-import GradientButton from '../../components/GradientButton/GradientButton';
-
-import * as S from './Profile.styled';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 const Profile = () => {
@@ -20,8 +18,8 @@ const Profile = () => {
 
     const hadleBottomSheet = () => setIsBottomSheet(!isBottomSheet);
 
-    const token = sessionStorage.getItem('tempToken');
-    const tempAccountName = sessionStorage.getItem('tempAccountName');
+    const token = sessionStorage.getItem('Token');
+    const tempAccountName = sessionStorage.getItem('AccountName');
 
     const logOut = () => {
         sessionStorage.clear();
@@ -32,18 +30,16 @@ const Profile = () => {
 
     useEffect(() => {
         // API 호출해서 데이터 받아오기
-        GetMyProfile(token)
+        getMyProfileApi(token)
             .then(data => {
                 setProfileData(data.user);
-                console.log(data.user);
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
-        GetMyPost(tempAccountName, token)
+        getMyPostApi(tempAccountName, token)
             .then(data => {
                 setUserPost(data);
-                console.log(data);
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
@@ -91,7 +87,7 @@ const Profile = () => {
                         <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
-                    <Link to="/followerList">
+                    <Link to={`/followerList`}>
                         <button className="user-follow">
                             <p>{profileData?.followerCount}</p>
                             <p>팔로워</p>
@@ -106,7 +102,7 @@ const Profile = () => {
                 </S.UserDataList>
                 <S.UserPostings>
                     {userPost?.map(post => (
-                        <Link key={post.id} to={`/detailpost/${post.id}`}>
+                        <Link key={post.id} to={`/detailPost/${post.id}`}>
                             <img src={post.image} alt="게시물 목록" />
                         </Link>
                     ))}
@@ -119,7 +115,6 @@ const Profile = () => {
                 isBottomSheet={isBottomSheet}
                 hadleBottomSheet={hadleBottomSheet}
                 deleteFn={logOut}
-                oneButton
                 children={'로그아웃'}
             />
         </>

@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
-import { ValidEmail } from '../../service/auth_service';
+import { validEmailApi } from '../../service/auth_service';
 
 import * as S from './User.styled';
 
@@ -30,27 +29,27 @@ const Signup = () => {
         const validPassword = checkPasswordFormat(passwordValue);
 
         if (validEmail && validPassword) {
-            try {
-                const result = await ValidEmail(emailValue);
-
-                if (result.message === '사용 가능한 이메일 입니다.') {
-                    console.log('오케이');
-                    navigate('/profileUpload', {
-                        state: {
-                            emailValue: emailValue,
-                            passwordValue: passwordValue,
-                        },
-                    });
-                } else if (
-                    result.message === '이미 가입된 이메일 주소 입니다.'
-                ) {
-                    alert(result.message);
-                } else {
-                    throw new Error(result.message);
-                }
-            } catch (error) {
-                console.error('error');
-            }
+            validEmailApi(emailValue)
+                .then(result => {
+                    if (result.message === '사용 가능한 이메일 입니다.') {
+                        // alert(result.message);
+                        navigate('/profileUpload', {
+                            state: {
+                                emailValue: emailValue,
+                                passwordValue: passwordValue,
+                            },
+                        });
+                    } else if (
+                        result.message === '이미 가입된 이메일 주소 입니다.'
+                    ) {
+                        alert(result.message);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('error');
+                });
         } else {
             !validEmail ? setWarnEmail(true) : setWarnEmail(false);
             !validPassword ? setWarnPassword(true) : setWarnPassword(false);

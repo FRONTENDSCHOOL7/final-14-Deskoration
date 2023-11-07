@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as S from './Header.styled';
 import { useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -17,10 +17,6 @@ const Header = () => {
     const isPostUpload = location.pathname.includes('/postUpload');
     const isChat = /^\/chat\/?$/.test(location.pathname);
     const isMyProfile = /^\/profile\/?$/.test(location.pathname);
-
-    // useEffect(() => {
-    //     console.log(currentPage);
-    // });
 
     return (
         <>

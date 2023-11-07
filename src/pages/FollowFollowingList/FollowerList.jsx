@@ -2,56 +2,48 @@ import React, { useEffect, useState } from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
-    followService,
-    followerService,
-    unFollowService,
+    postFollowApi,
+    deleteFollowApi,
+    getFollowerApi,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 
 const FollowerList = () => {
-    const baseURL = 'https://api.mandarin.weniv.co.kr/';
-    const token = sessionStorage.getItem('tempToken');
-    const myAccountName = sessionStorage.getItem('tempAccountName');
+    const token = sessionStorage.getItem('Token');
+    const myAccountName = sessionStorage.getItem('AccountName');
     const [followerData, setFollowerData] = useState([]);
     const [follow, setFollow] = useState(false);
     usePageHandler('text', '팔로워');
 
     // 팔로워 리스트 불러오기
     useEffect(() => {
-        const fetchFollower = async () => {
-            await followerService(baseURL, token, myAccountName)
-                .then(data => {
-                    setFollowerData(data);
-                    // console.log('follower:', data);
-                })
-                .catch(error => {
-                    console.error('API 요청 중 오류 발생: ', error);
-                });
-        };
-        fetchFollower();
+        getFollowerApi(token, myAccountName)
+            .then(data => {
+                setFollowerData(data);
+                postFollowApi(token, data[0].accountname)
+                    .then(data => {
+                        setFollow(data.profile.isfollow);
+                    })
+                    .catch(error => {
+                        console.error('API 요청 중 오류 발생: ', error);
+                    });
+            })
+            .catch(error => {
+                console.error('API 요청 중 오류 발생: ', error);
+            });
     }, []);
-
-    const followerList = followerData.map(data => data.accountname);
-    // console.log('followerList:', followerList);
+    useEffect(() => {}, []);
 
     const handleFollowToggle = async accountname => {
         setFollow(!follow);
-        console.log('클릭시 이름받아오기!:', accountname);
+
         const follower = followerData.find(f => f.accountname === accountname);
         if (follower) {
             try {
                 if (follower.isFollowing) {
-                    const result = await unFollowService(
-                        baseURL,
-                        token,
-                        accountname,
-                    );
+                    await deleteFollowApi(token, accountname);
                 } else {
-                    const result = await followService(
-                        baseURL,
-                        token,
-                        accountname,
-                    );
+                    await postFollowApi(token, accountname);
                 }
                 const updatedFollowerData = followerData.map(f =>
                     f.accountname === accountname
@@ -71,7 +63,11 @@ const FollowerList = () => {
                 {followerData.map(data => (
                     <S.FollowerList key={data._id}>
                         <S.FollowerInfo>
-                            <img src={data?.image} className="follower-img" />
+                            <img
+                                src={data?.image}
+                                className="follower-img"
+                                alt="유저 프로필 이미지"
+                            />
                             <div>{data?.accountname}</div>
                         </S.FollowerInfo>
                         <GradientButton

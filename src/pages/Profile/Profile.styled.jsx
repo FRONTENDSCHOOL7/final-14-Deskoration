@@ -90,7 +90,7 @@ export const UserPostings = styled.div`
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     gap: 10px;
     margin-top: 10px;
     color: ${({ theme }) => theme.mainFont};

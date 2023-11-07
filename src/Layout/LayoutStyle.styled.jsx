@@ -11,10 +11,12 @@ export const HomeMain = styled.main`
     padding: 15px 25px 0;
     min-height: calc(100% - 145px);
     max-height: calc(100% - 145px);
+    overflow: auto;
 `;
 
 export const UserProfileMain = styled.main`
     padding: 15px 25px 0;
-    min-height: 100%;
-    max-height: 100%;
+    min-height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
+    overflow: auto;
 `;

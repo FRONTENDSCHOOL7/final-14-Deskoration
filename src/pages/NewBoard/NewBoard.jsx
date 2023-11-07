@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { UploadPost, uploadPostApi } from '../../service/post_service';
+import { uploadPostApi } from '../../service/post_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -10,7 +10,6 @@ import PostUploadForm from './PostUploadForm';
 
 import * as S from './NewBoard.styled';
 
-// trim 중
 const NewBoard = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -64,6 +63,7 @@ const NewBoard = () => {
         event.preventDefault();
         if (!textArea.message || !imageURL) {
             alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
+            return null;
         } else {
             uploadPostApi(apiContent, imageFile, token)
                 .then(postData => {

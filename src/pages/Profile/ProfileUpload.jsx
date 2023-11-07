@@ -4,11 +4,7 @@ import basicImg from '../../assets/images/Profile.svg';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { uploadImgApi } from '../../service/img_service';
-import {
-    authLoginApi,
-    authSignUpApi,
-    validAccountNameApi,
-} from '../../service/auth_service';
+import { validAccountNameApi } from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -104,7 +100,6 @@ export const ProfileUpload = () => {
         // 계정 ID 검사
         if (validID) {
             setWarnID(false);
-
             validAccountNameApi(idValue)
                 .then(result => {
                     if (result.message === '사용 가능한 계정ID 입니다.') {
@@ -126,28 +121,31 @@ export const ProfileUpload = () => {
 
         // 유효성 검사를 통과하면 post 요청
         if (validUserName && validID && !existID) {
-            const userData = {
-                username: userNameValue,
-                email: emailValue,
-                password: passwordValue,
-                accountname: idValue,
-                intro: introValue,
-                image: !file ? baseURL + noImage : baseURL + file,
-            };
-            authSignUpApi(userData)
+            const reqURL = `${baseURL}user`;
+            fetch(reqURL, {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({
+                    user: {
+                        username: userNameValue,
+                        email: emailValue,
+                        password: passwordValue,
+                        accountname: idValue,
+                        intro: introValue,
+                        image: !file ? baseURL + noImage : baseURL + file,
+                    },
+                }),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(result => {
-                    console.log(result);
                     if (result.message === '회원가입 성공') {
-                        authLoginApi(emailValue, passwordValue).then(data => {
-                            console.log(data);
-                            sessionStorage.setItem('Token', data.user.token);
-                            sessionStorage.setItem(
-                                'AccountName',
-                                data.user.accountname,
-                            );
-                            sessionStorage.setItem('Id', data.user._id);
-                            navigate('/home');
-                        });
+                        navigate('/home');
+                        // login api
                     } else {
                         throw new Error(result.message);
                     }

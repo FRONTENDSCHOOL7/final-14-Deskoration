@@ -89,19 +89,19 @@ const RegisterForm = ({
                 ]);
             }
             trimTextArea();
-            navigate(`/newboard`);
+            navigate(`/postUpload`);
             formRef.current.reset();
         }
     };
 
     useEffect(() => {
-        categoryRef.current.focus();
+        productNameRef.current.focus();
     }, []);
 
     useEffect(() => {
         categoryRef.current.value = editProductItemDetail
             ? editProductItemDetail.category
-            : null;
+            : '책상';
         productNameRef.current.value = editProductItemDetail
             ? editProductItemDetail.productName
             : null;
@@ -152,7 +152,7 @@ const RegisterForm = ({
                 <GradientButton
                     width={'40%'}
                     padding={'12px'}
-                    onClick={() => navigate(`/newboard`)}
+                    onClick={() => navigate(`/postUpload`)}
                 >
                     취소하기
                 </GradientButton>

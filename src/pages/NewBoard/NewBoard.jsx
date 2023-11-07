@@ -71,8 +71,6 @@ const NewBoard = () => {
                         postData.message === '내용 또는 이미지를 입력해주세요.'
                     ) {
                         alert(postData.message);
-                    } else {
-                        console.log('success', postData);
                     }
                 })
                 .catch(error => {

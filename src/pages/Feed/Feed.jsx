@@ -75,8 +75,8 @@ const Feed = () => {
                         </S.FeedItemHeader>
 
                         <S.FeedDetailBox>
-                            <p>{feedContent[index]?.deskoration.message}</p>
                             <img src={item.image} alt="게시글 내용" />
+                            <p>{feedContent[index]?.deskoration.message}</p>
                             <S.BtnBox>
                                 <button
                                     type="button"

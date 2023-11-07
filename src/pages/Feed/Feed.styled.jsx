@@ -37,7 +37,6 @@ export const UserInfoBox = styled.div`
 `;
 
 export const FeedDetailBox = styled.div`
-    margin-left: 45px;
     display: flex;
     flex-direction: column;
     gap: 10px;

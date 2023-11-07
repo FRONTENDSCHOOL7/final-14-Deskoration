@@ -30,7 +30,7 @@ const NewBoard = () => {
         length: 0,
     });
 
-    usePageHandler('text', detailPost ? '게시글' : '게시글 작성');
+    usePageHandler('text', detailPost ? '아이템 보기' : '게시글 작성');
 
     const trimTextArea = () => {
         setTextArea(prev => ({

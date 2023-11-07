@@ -14,9 +14,12 @@ const RegisterForm = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const editProductItem = location.state?.editProductItem;
 
-    const editProductItemDetail = editProductItem?.detail;
+    const showProduct = location.pathname.includes('/detailPost');
+
+    const defaultProductItem = location.state?.defaultProductItem;
+
+    const defaultProductItemDetail = defaultProductItem?.detail;
 
     const formRef = useRef(null);
     const categoryRef = useRef(null);
@@ -56,7 +59,7 @@ const RegisterForm = ({
             !priceValue ? setWarnPrice(true) : setWarnPrice(false);
         } else if (productItems.length <= 6) {
             const itemIndex = productItems.findIndex(
-                item => item.detail.id === editProductItemDetail?.id,
+                item => item.detail.id === defaultProductItemDetail?.id,
             );
 
             const newID = () => Math.random().toString(36).substring(2, 16);
@@ -67,7 +70,7 @@ const RegisterForm = ({
                 price: priceValue,
                 store: storeRef.current.value,
                 link: linkRef.current.value,
-                id: editProductItem ? editProductItemDetail.id : newID(),
+                id: defaultProductItem ? defaultProductItemDetail.id : newID(),
             };
 
             if (itemIndex !== -1) {
@@ -81,8 +84,8 @@ const RegisterForm = ({
                 setProductItems(prev => [
                     ...prev,
                     {
-                        marker: editProductItem
-                            ? editProductItem.marker
+                        marker: defaultProductItem
+                            ? defaultProductItem.marker
                             : offset,
                         detail: newData,
                     },
@@ -95,26 +98,26 @@ const RegisterForm = ({
     };
 
     useEffect(() => {
-        productNameRef.current.focus();
-    }, []);
+        !showProduct && productNameRef.current.focus();
+    }, [showProduct]);
 
     useEffect(() => {
-        categoryRef.current.value = editProductItemDetail
-            ? editProductItemDetail.category
+        categoryRef.current.value = defaultProductItemDetail
+            ? defaultProductItemDetail.category
             : '책상';
-        productNameRef.current.value = editProductItemDetail
-            ? editProductItemDetail.productName
+        productNameRef.current.value = defaultProductItemDetail
+            ? defaultProductItemDetail.productName
             : null;
-        priceRef.current.value = editProductItemDetail
-            ? editProductItemDetail.price
+        priceRef.current.value = defaultProductItemDetail
+            ? defaultProductItemDetail.price
             : null;
-        storeRef.current.value = editProductItemDetail
-            ? editProductItemDetail.store
+        storeRef.current.value = defaultProductItemDetail
+            ? defaultProductItemDetail.store
             : null;
-        linkRef.current.value = editProductItemDetail
-            ? editProductItemDetail.link
+        linkRef.current.value = defaultProductItemDetail
+            ? defaultProductItemDetail.link
             : null;
-    }, [editProductItemDetail]);
+    }, [defaultProductItemDetail]);
 
     return (
         <S.RegisterForm ref={formRef} onSubmit={submitProduct}>
@@ -124,6 +127,7 @@ const RegisterForm = ({
                     inputRef={categoryRef}
                     warning={warnCategory}
                     options={options}
+                    readonly={showProduct}
                 />
 
                 {warnCategory && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
@@ -132,6 +136,7 @@ const RegisterForm = ({
                     label="상품명"
                     inputRef={productNameRef}
                     warning={warnProductName}
+                    readonly={showProduct}
                 />
                 {warnProductName && (
                     <WarningMsg msg={'필수 정보를 입력하세요.'} />
@@ -142,24 +147,35 @@ const RegisterForm = ({
                     type={'number'}
                     inputRef={priceRef}
                     warning={warnPrice}
+                    readonly={showProduct}
                 />
                 {warnPrice && <WarningMsg msg={'필수 정보를 입력하세요.'} />}
 
-                <Input label="구매처" inputRef={storeRef} />
-                <Input label="구매링크" inputRef={linkRef} />
+                <Input
+                    label="구매처"
+                    inputRef={storeRef}
+                    readonly={showProduct}
+                />
+                <Input
+                    label="구매링크"
+                    inputRef={linkRef}
+                    readonly={showProduct}
+                />
             </fieldset>
-            <S.RegisterButtonBox>
-                <GradientButton
-                    width={'40%'}
-                    padding={'12px'}
-                    onClick={() => navigate(`/postUpload`)}
-                >
-                    취소하기
-                </GradientButton>
-                <GradientButton gra={'true'} type={'submit'} width={'40%'}>
-                    등록하기
-                </GradientButton>
-            </S.RegisterButtonBox>
+            {!showProduct && (
+                <S.RegisterButtonBox>
+                    <GradientButton
+                        width={'40%'}
+                        padding={'12px'}
+                        onClick={() => navigate(`/postUpload`)}
+                    >
+                        취소하기
+                    </GradientButton>
+                    <GradientButton gra={'true'} type={'submit'} width={'40%'}>
+                        등록하기
+                    </GradientButton>
+                </S.RegisterButtonBox>
+            )}
         </S.RegisterForm>
     );
 };

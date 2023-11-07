@@ -1,13 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import * as S from './Ballon.styled';
 
-const Ballon = ({ productItem, deleteProduct, isEditing }) => {
+const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const editProduct = () => {
         navigate(`/postUpload/${productItem.detail.id}`, {
-            state: { editProductItem: productItem },
+            state: { defaultProductItem: productItem },
+        });
+    };
+
+    const showProduct = itemCount => {
+        navigate(`/detailPost/${id}/${itemCount}`, {
+            state: { defaultProductItem: productItem },
         });
     };
 
@@ -52,16 +59,14 @@ const Ballon = ({ productItem, deleteProduct, isEditing }) => {
             <S.Product>
                 <div
                     onClick={() => {
-                        if (isEditing) {
-                            editProduct();
-                        }
+                        !isDetail ? editProduct() : showProduct(itemCount);
                     }}
                 >
                     {productItem.detail.productName}
                 </div>
                 <div> {productItem.detail.price}</div>
             </S.Product>
-            {isEditing && (
+            {!isDetail && (
                 <S.DeletItemButton
                     type="button"
                     onClick={() => deleteProduct(productItem.detail.id)}

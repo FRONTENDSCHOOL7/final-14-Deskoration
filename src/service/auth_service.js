@@ -69,7 +69,7 @@ export const authLoginApi = async (emailValue, passwordValue) => {
     }
 };
 
-export const signUpApi = async userData => {
+export const authSignUpApi = async userData => {
     const reqURL = `${baseUrl}/user`;
     try {
         const response = await fetch(reqURL, {

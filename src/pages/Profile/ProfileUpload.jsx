@@ -4,7 +4,11 @@ import basicImg from '../../assets/images/Profile.svg';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { uploadImgApi } from '../../service/img_service';
-import { signUpApi, validAccountNameApi } from '../../service/auth_service';
+import {
+    authLoginApi,
+    authSignUpApi,
+    validAccountNameApi,
+} from '../../service/auth_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -130,10 +134,20 @@ export const ProfileUpload = () => {
                 intro: introValue,
                 image: !file ? baseURL + noImage : baseURL + file,
             };
-            signUpApi(userData)
+            authSignUpApi(userData)
                 .then(result => {
+                    console.log(result);
                     if (result.message === '회원가입 성공') {
-                        navigate('/home');
+                        authLoginApi(emailValue, passwordValue).then(data => {
+                            console.log(data);
+                            sessionStorage.setItem('Token', data.user.token);
+                            sessionStorage.setItem(
+                                'AccountName',
+                                data.user.accountname,
+                            );
+                            sessionStorage.setItem('Id', data.user._id);
+                            navigate('/home');
+                        });
                     } else {
                         throw new Error(result.message);
                     }

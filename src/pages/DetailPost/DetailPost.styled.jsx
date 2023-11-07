@@ -9,7 +9,10 @@ export const LikeIcon = styled(Like)`
     margin-right: 10px;
 `;
 export const CommentIcon = styled(Comment)``;
-export const Dots_verticalIcon = styled(Dots_vertical)``;
+export const Dots_verticalIcon = styled(Dots_vertical)`
+    width: 24px;
+    height: 24px;
+`;
 
 export const DetailPostCotainer = styled.div`
     height: 100%;
@@ -44,7 +47,7 @@ export const ProfileImg = styled.img`
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    border: 1px solid black;
+    border: 1px solid ${props => props.theme.border};
     background-size: cover;
     background-position: center;
     box-sizing: border-box;

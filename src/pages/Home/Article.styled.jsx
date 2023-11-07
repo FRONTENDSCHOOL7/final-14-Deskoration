@@ -16,8 +16,8 @@ export const Section = styled.section`
 `;
 
 export const Article = styled.article`
-    width: 140px;
-    height: 140px;
+    width: 145px;
+    height: 145px;
     background-image: url(${props => props.src});
     /* background-image: url(${props =>
         props.imageurl || './images/DeskSetup.jpg'}); */

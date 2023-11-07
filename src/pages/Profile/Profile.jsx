@@ -115,6 +115,7 @@ const Profile = () => {
                 isBottomSheet={isBottomSheet}
                 hadleBottomSheet={hadleBottomSheet}
                 deleteFn={logOut}
+                oneButton
                 children={'로그아웃'}
             />
         </>

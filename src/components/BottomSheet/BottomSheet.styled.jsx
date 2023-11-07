@@ -41,7 +41,7 @@ export const BottomSheetBox = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: ${props => (props.oneButton ? '150px' : '200px')};
+    height: ${props => (props.$oneButton ? '150px' : '200px')};
 
     background: #fff;
 

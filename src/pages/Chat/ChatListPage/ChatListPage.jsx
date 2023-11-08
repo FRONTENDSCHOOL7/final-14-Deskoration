@@ -62,7 +62,9 @@ const ChatListPage = () => {
                                                         ]
                                                     }
                                                 </p>
-                                                <p className="user-date">{`${month}.${day}`}</p>
+                                                <p className="user-date">
+                                                    {profile.time}
+                                                </p>
                                             </div>
                                         </S.UserSimpleinfo>
                                     </S.UserChatRoom>

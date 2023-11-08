@@ -3,7 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import Splash from '../Loading/Splash';
-import AlertModal from '../../components/AlertModal/\bAlertModal';
+import AlertModal from '../../components/AlertModal/AlertModal';
 
 import * as S from './User.styled';
 import Logo from '../../assets/images/Logo.svg';

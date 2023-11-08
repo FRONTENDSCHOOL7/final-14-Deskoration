@@ -7,6 +7,10 @@ import imageCompression from 'browser-image-compression';
 import { Marker } from '../../components/Marker/Marker';
 
 import * as S from './PostUploadForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+
+import AlertModal from '../../components/AlertModal/AlertModal';
+import { openAlertModal } from '../../features/modal/alertModalSlice';
 
 const PostUploadForm = ({
     productItems,
@@ -18,6 +22,9 @@ const PostUploadForm = ({
     deleteProduct,
 }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { isOpen } = useSelector(store => store.alertModal);
 
     const hiddenFileInput = useRef(null);
 
@@ -80,18 +87,15 @@ const PostUploadForm = ({
     };
 
     const deleteFile = () => {
-        // 추후 컨펌 모달로 변경
-        if (window.confirm('삭제하시겠습니까?')) {
-            setImageURL('');
-            setProductItems([]);
-            setIsImageLoaded(false);
-        }
+        setImageURL('');
+        setProductItems([]);
+        setIsImageLoaded(false);
     };
 
     const checkProductsCount = () => {
         productItems.length < 5
             ? navigate(`/postUpload/${productItems.length}`)
-            : alert('상품은 최대 5개까지 추가할 수 있습니다.');
+            : dispatch(openAlertModal());
     };
 
     // 이미지 로드 함수
@@ -293,6 +297,9 @@ const PostUploadForm = ({
 
             {imageURL && (
                 <S.ExplainTagP>원하는 위치에 상품을 등록하세요.</S.ExplainTagP>
+            )}
+            {isOpen && (
+                <AlertModal alert={'상품은 최대 5개까지 추가할 수 있습니다.'} />
             )}
         </>
     );

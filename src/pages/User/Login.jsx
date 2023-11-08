@@ -13,6 +13,7 @@ const Login = () => {
     const [warmEmail, setWarnEmail] = useState(false);
     const [warnPassword, setWarnPassword] = useState(false);
     const [isSampleLogin, setIsSampleLogin] = useState(false);
+    const [isMatched, setIsMatched] = useState(null);
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -37,8 +38,10 @@ const Login = () => {
                         result.message ===
                         '이메일 또는 비밀번호가 일치하지 않습니다.'
                     ) {
-                        alert(result.message);
+                        // alert(result.message);
+                        setIsMatched(false);
                     } else {
+                        setIsMatched(true);
                         // 임시변경
                         sessionStorage.setItem('Token', result.user.token);
                         sessionStorage.setItem(
@@ -86,9 +89,13 @@ const Login = () => {
                     inputRef={passwordRef}
                     warning={warnPassword}
                 />
-                {warnPassword && (
+                {warnPassword ? (
                     <WarningMsg msg={'6자 이상의 비밀번호를 입력하세요.'} />
-                )}
+                ) : isMatched === false ? (
+                    <WarningMsg
+                        msg={'이메일 또는 비밀번호가 일치하지 않습니다.'}
+                    />
+                ) : null}
             </S.InputBox>
             <S.SampleLoginBox>
                 <input

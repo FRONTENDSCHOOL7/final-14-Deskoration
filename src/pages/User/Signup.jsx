@@ -9,7 +9,7 @@ import * as S from './User.styled';
 
 const Signup = () => {
     const navigate = useNavigate();
-
+    const [existID, setExistID] = useState(null);
     const [warmEmail, setWarnEmail] = useState(false);
     const [warnPassword, setWarnPassword] = useState(false);
 
@@ -33,6 +33,7 @@ const Signup = () => {
                 .then(result => {
                     if (result.message === '사용 가능한 이메일 입니다.') {
                         // alert(result.message);
+                        setExistID(false);
                         navigate('/profileUpload', {
                             state: {
                                 emailValue: emailValue,
@@ -42,7 +43,7 @@ const Signup = () => {
                     } else if (
                         result.message === '이미 가입된 이메일 주소 입니다.'
                     ) {
-                        alert(result.message);
+                        setExistID(true);
                     } else {
                         throw new Error(result.message);
                     }
@@ -62,11 +63,13 @@ const Signup = () => {
                 <Input
                     label={'email'}
                     inputRef={emailRef}
-                    warning={warmEmail}
+                    warning={warmEmail || existID}
                 />
-                {warmEmail && (
+                {warmEmail ? (
                     <WarningMsg msg={'이메일 형식이 올바르지 않습니다.'} />
-                )}
+                ) : existID ? (
+                    <WarningMsg msg={'이미 가입된 이메일 주소 입니다.'} />
+                ) : null}
                 <Input
                     label={'password'}
                     inputRef={passwordRef}

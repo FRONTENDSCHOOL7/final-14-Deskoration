@@ -16,17 +16,15 @@ PW : test123
 
 ## 팀원
 
+## 팀원
+
 |                                                                     이예진                                                                      |                                                                        문정민                                                                         |                                                                        우준하                                                                         |                                                                     최현진                                                                      |
 | :---------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------: |
 |            ![예니](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/108519185/2106ba6a-e625-4f5b-be7f-9829bc2acde5)             |              ![정민](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/108519185/dcd37cdc-375c-43bc-a420-dc609ee9aa4a)               |               ![준하](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/108519185/9030e323-defa-4b38-8bd3-0fe3a34c8ce8)               |           ![현진](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/108519185/d60c8a3d-7271-4b9c-ac4d-6144ff04494a)            |
 |                                                                      리더                                                                       |                                                                        디자인                                                                         |                                                                         기록                                                                          |                                                                       API                                                                       |
 | <a href="https://github.com/YennieJ"><img src="https://img.shields.io/badge/YennieJ-181717?style=flat-square&logo=github&logoColor=white"/></a> | <a href="https://github.com/jungmin801"><img src="https://img.shields.io/badge/jungmin801-181717?style=flat-square&logo=github&logoColor=white"/></a> | <a href="https://github.com/wooluck210"><img src="https://img.shields.io/badge/wooluck210-181717?style=flat-square&logo=github&logoColor=white"/></a> | <a href="https://github.com/Herrypi"><img src="https://img.shields.io/badge/Herrypi-181717?style=flat-square&logo=github&logoColor=white"/></a> |
 
-## 역할 분담
-
-![담당업무](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/53f03b6b-700a-481b-9e21-e99c88e07d78)
-
-## 📚 개발 환경 및 기술 스택
+## 📚 Stacks
 
 ### Development
 
@@ -203,44 +201,52 @@ src
 // 요소가 움직일 수 있는 최대 한계를 계산한다.
 // 마커가 컨테이너의 오른쪽 혹은 아래쪽의 경계를 넘지 않도록 한다.
 const calcEndPoint = (containerSize, markerSize) => {
-    return parseFloat(((containerSize - markerSize + markerPadding) / containerSize) * 100);
+  return parseFloat(
+    ((containerSize - markerSize + markerPadding) / containerSize) * 100
+  );
 };
 
 // 컨테이너 내에서 마커의 새 위치를 계산한다.
 // 마커가 컨테이너의 왼쪽 혹은 위쪽의 경계를 넘지 않도록 한다.
 const calcMarkerPosition = (position, containerSize) => {
-    return parseFloat((Math.max(-markerPadding, position) / containerSize) * 100);
+  return parseFloat((Math.max(-markerPadding, position) / containerSize) * 100);
 };
 
 // 드래그 동작 중 마커의 실제 움직임을 처리한다.
 // 마커가 컨테이너의 경계를 넘지 않도록 제한한다.
 const calcNewMarkerPosition = (event) => {
-    const diffX = event.clientX - originPosition.clientX;
-    const diffY = event.clientY - originPosition.clientY;
-    const endPointX = calcEndPoint(containerSize.width, markerSize.width);
-    const endPointY = calcEndPoint(containerSize.height, markerSize.height);
+  const diffX = event.clientX - originPosition.clientX;
+  const diffY = event.clientY - originPosition.clientY;
+  const endPointX = calcEndPoint(containerSize.width, markerSize.width);
+  const endPointY = calcEndPoint(containerSize.height, markerSize.height);
 
-    const newLeft = calcMarkerPosition(originPosition.left + diffX, containerSize.width);
-    const newTop = calcMarkerPosition(originPosition.top + diffY, containerSize.height);
+  const newLeft = calcMarkerPosition(
+    originPosition.left + diffX,
+    containerSize.width
+  );
+  const newTop = calcMarkerPosition(
+    originPosition.top + diffY,
+    containerSize.height
+  );
 
-    return {
-        x: Math.min(newLeft, endPointX),
-        y: Math.min(newTop, endPointY),
-    };
+  return {
+    x: Math.min(newLeft, endPointX),
+    y: Math.min(newTop, endPointY),
+  };
 };
 
 // 드래그 함수
 // 새로 계산한 마커의 위치를 productItems 상태에 업데이트합니다.
 const onMouseMove = (event) => {
-    if (isDragging) {
-        const newMarkerPostion = calcNewMarkerPosition(event);
+  if (isDragging) {
+    const newMarkerPostion = calcNewMarkerPosition(event);
 
-        if (selectedMarkerIndex !== null) {
-            const updatedProductItems = [...productItems];
-            updatedProductItems[selectedMarkerIndex].marker = newMarkerPostion;
-            setProductItems(updatedProductItems);
-        }
+    if (selectedMarkerIndex !== null) {
+      const updatedProductItems = [...productItems];
+      updatedProductItems[selectedMarkerIndex].marker = newMarkerPostion;
+      setProductItems(updatedProductItems);
     }
+  }
 };
 ```
 
@@ -253,34 +259,34 @@ const onMouseMove = (event) => {
 ```javascript
 // useQuery 커스텀 훅
 export const useFeedQueryData = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["getFeed"],
-        queryFn: () => getFeedAPI(),
-        select: (responseData) =>
-            responseData.posts.map((post) => {
-                const content = JSON.parse(post.content);
-                const createdAt = {
-                    year: new Date(post.createdAt).getFullYear(),
-                    month: new Date(post.createdAt).getMonth() + 1,
-                    date: new Date(post.createdAt).getDate(),
-                };
-                return { ...post, content: content, createdAt: createdAt };
-            }),
-    });
-    return { data, isLoading, error };
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["getFeed"],
+    queryFn: () => getFeedAPI(),
+    select: (responseData) =>
+      responseData.posts.map((post) => {
+        const content = JSON.parse(post.content);
+        const createdAt = {
+          year: new Date(post.createdAt).getFullYear(),
+          month: new Date(post.createdAt).getMonth() + 1,
+          date: new Date(post.createdAt).getDate(),
+        };
+        return { ...post, content: content, createdAt: createdAt };
+      }),
+  });
+  return { data, isLoading, error };
 };
 
 // API 호출 커스텀
 export const getFeedAPI = async () => {
-    const reqURL = `/post/feed`;
+  const reqURL = `/post/feed`;
 
-    try {
-        const response = await instance.get(reqURL);
+  try {
+    const response = await instance.get(reqURL);
 
-        return response.data;
-    } catch (error) {
-        throw new Error("피드 게시글을 가져올 수 없습니다.");
-    }
+    return response.data;
+  } catch (error) {
+    throw new Error("피드 게시글을 가져올 수 없습니다.");
+  }
 };
 ```
 
@@ -293,60 +299,61 @@ export const getFeedAPI = async () => {
 ```javascript
 // 실시간으로 채팅 가져오기
 useEffect(() => {
-    // 데이터를 가져오는 함수 호출
-    fetchData();
+  // 데이터를 가져오는 함수 호출
+  fetchData();
 
-    // 채팅 컬렉션에 대한 실시간 업데이트를 구독하고, 구독 해제 함수를 언마운트 시에 실행
-    const unsubscribe = onSnapshot(chatCollectionRef, (snapshot) => {
-        // 스냅샷의 변경 내용을 순회하면서 처리
-        snapshot.docChanges().forEach((change) => {
-            // 변경 유형이 'modified' 또는 'added'인 경우에만 처리
-            if (change.type === "modified" || change.type === "added") {
-                // 변경된 문서의 roomId가 현재 roomId와 일치하는 경우에만 메시지 업데이트
-                if (change.doc.data().roomId === roomId) setChatMessages(change.doc.data().messages);
-            }
-        });
+  // 채팅 컬렉션에 대한 실시간 업데이트를 구독하고, 구독 해제 함수를 언마운트 시에 실행
+  const unsubscribe = onSnapshot(chatCollectionRef, (snapshot) => {
+    // 스냅샷의 변경 내용을 순회하면서 처리
+    snapshot.docChanges().forEach((change) => {
+      // 변경 유형이 'modified' 또는 'added'인 경우에만 처리
+      if (change.type === "modified" || change.type === "added") {
+        // 변경된 문서의 roomId가 현재 roomId와 일치하는 경우에만 메시지 업데이트
+        if (change.doc.data().roomId === roomId)
+          setChatMessages(change.doc.data().messages);
+      }
     });
+  });
 
-    // 언마운트 시에 구독을 해제하여 메모리 누수 방지
-    return () => unsubscribe();
+  // 언마운트 시에 구독을 해제하여 메모리 누수 방지
+  return () => unsubscribe();
 }, [roomId]);
 
 // 실시간으로 채팅 보내며 업데이트하기
 const handleSendMessage = async (data) => {
-    // ... (이전 코드)
+  // ... (이전 코드)
 
-    try {
-        if (roomId !== undefined) {
-            // UpdateDoc 을 사용하여 메시지가 저장된 문서에 새 메시지를 추가
-            const docRef = doc(db, "messages", chatId);
-            await updateDoc(docRef, {
-                messages: arrayUnion(newMessage),
-            });
+  try {
+    if (roomId !== undefined) {
+      // UpdateDoc 을 사용하여 메시지가 저장된 문서에 새 메시지를 추가
+      const docRef = doc(db, "messages", chatId);
+      await updateDoc(docRef, {
+        messages: arrayUnion(newMessage),
+      });
 
-            // SetDoc을 사용하여 마지막 메시지 정보가 저장된 문서를 업데이트
-            const lastMsgRef = doc(db, "chatList", roomId);
-            await setDoc(lastMsgRef, {
-                createdAt: new Date(),
-                lastMessage: data.chatMsg,
-                participants: arrayUnion(participant1, participant2),
-            });
-        } else {
-            // ... (이전 코드)
+      // SetDoc을 사용하여 마지막 메시지 정보가 저장된 문서를 업데이트
+      const lastMsgRef = doc(db, "chatList", roomId);
+      await setDoc(lastMsgRef, {
+        createdAt: new Date(),
+        lastMessage: data.chatMsg,
+        participants: arrayUnion(participant1, participant2),
+      });
+    } else {
+      // ... (이전 코드)
 
-            // 새로운 채팅 방이 생성되었을 경우, 새로운 방으로 이동
-            navigate(`/chat/${newChatList.id}`, {
-                state: { roomId: newChatList.id, user: participant1 },
-                replace: true,
-            });
-        }
-    } catch (error) {
-        // 오류가 발생한 경우 콘솔에 오류 메시지 출력
-        console.error("메시지 추가 중 오류 발생: ", error);
+      // 새로운 채팅 방이 생성되었을 경우, 새로운 방으로 이동
+      navigate(`/chat/${newChatList.id}`, {
+        state: { roomId: newChatList.id, user: participant1 },
+        replace: true,
+      });
     }
+  } catch (error) {
+    // 오류가 발생한 경우 콘솔에 오류 메시지 출력
+    console.error("메시지 추가 중 오류 발생: ", error);
+  }
 
-    // 'chatMsg' 필드를 재설정하여 메시지 입력 필드를 초기화
-    resetField("chatMsg");
+  // 'chatMsg' 필드를 재설정하여 메시지 입력 필드를 초기화
+  resetField("chatMsg");
 };
 ```
 
@@ -363,56 +370,65 @@ import { uploadImgAPI } from "../service/img_service";
 
 // 이미지 업로드 커스텀 훅 정의
 export const useImgUpload = (
-    setImageFile, // 이미지 파일 상태 업데이트 함수
-    setImageURL, // 이미지 URL 상태 업데이트 함수
-    setProductItems, // 상품 목록 상태 업데이트 함수
-    setIsImageLoaded, // 이미지 로딩 여부 상태 업데이트 함수
-    setIsImageAdded // 이미지 추가 여부 상태 업데이트 함수
+  setImageFile, // 이미지 파일 상태 업데이트 함수
+  setImageURL, // 이미지 URL 상태 업데이트 함수
+  setProductItems, // 상품 목록 상태 업데이트 함수
+  setIsImageLoaded, // 이미지 로딩 여부 상태 업데이트 함수
+  setIsImageAdded // 이미지 추가 여부 상태 업데이트 함수
 ) => {
-    // 이미지 업로드 핸들러 함수 정의
-    const handleUploadImg = async (event) => {
-        // 지원하는 이미지 확장자 정규식
-        const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
+  // 이미지 업로드 핸들러 함수 정의
+  const handleUploadImg = async (event) => {
+    // 지원하는 이미지 확장자 정규식
+    const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
 
-        // 업로드한 파일 가져오기
-        const file = event.target.files[0];
+    // 업로드한 파일 가져오기
+    const file = event.target.files[0];
 
-        // 파일이 없을 경우 중단
-        if (!file) return;
+    // 파일이 없을 경우 중단
+    if (!file) return;
 
-        // 이미지 압축 옵션 설정
-        const options = {
-            maxSizeMB: 5,
-        };
-        const fileTypeOptions = { ...options, fileType: "image/jpeg" };
-
-        try {
-            // 이미지 압축 진행
-            const compressedBlob = await imageCompression(file, regex.test(file) ? options : fileTypeOptions);
-            // 압축된 파일로 새로운 File 객체 생성
-            const compressedFile = new File([compressedBlob], regex.test(file) ? compressedBlob.name : compressedBlob.name.split(".")[0] + ".jpeg", {
-                type: compressedBlob.type,
-            });
-            // 이미지를 Base64 형태로 변환하여 업로드 API 호출 및 이미지 상태 업데이트
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                const imgData = new FormData();
-                imgData.append("image", compressedFile);
-                uploadImgAPI(imgData, setImageFile);
-                setImageURL(reader.result);
-            };
-            // 기존 상태 초기화 및 로딩 및 추가 여부 업데이트
-            setProductItems([]);
-            setIsImageLoaded?.(false);
-            setIsImageAdded?.(true);
-        } catch (error) {
-            console.error(error);
-        }
+    // 이미지 압축 옵션 설정
+    const options = {
+      maxSizeMB: 5,
     };
+    const fileTypeOptions = { ...options, fileType: "image/jpeg" };
 
-    // 이미지 업로드 핸들러 함수 반환
-    return handleUploadImg;
+    try {
+      // 이미지 압축 진행
+      const compressedBlob = await imageCompression(
+        file,
+        regex.test(file) ? options : fileTypeOptions
+      );
+      // 압축된 파일로 새로운 File 객체 생성
+      const compressedFile = new File(
+        [compressedBlob],
+        regex.test(file)
+          ? compressedBlob.name
+          : compressedBlob.name.split(".")[0] + ".jpeg",
+        {
+          type: compressedBlob.type,
+        }
+      );
+      // 이미지를 Base64 형태로 변환하여 업로드 API 호출 및 이미지 상태 업데이트
+      const reader = new FileReader();
+      reader.readAsDataURL(compressedFile);
+      reader.onloadend = () => {
+        const imgData = new FormData();
+        imgData.append("image", compressedFile);
+        uploadImgAPI(imgData, setImageFile);
+        setImageURL(reader.result);
+      };
+      // 기존 상태 초기화 및 로딩 및 추가 여부 업데이트
+      setProductItems([]);
+      setIsImageLoaded?.(false);
+      setIsImageAdded?.(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 이미지 업로드 핸들러 함수 반환
+  return handleUploadImg;
 };
 ```
 
@@ -422,9 +438,9 @@ export const useImgUpload = (
 <summary>마커 플리커링</summary>
 <div markdown="1">
 
--   **문제**: 마커를 드래그앤드롭하여 위치를 이동시킬 때마다 화면이 깜빡이는 플리커링(flickering) 현상이 발생
--   **원인**: 마커의 위치를 동적으로 조정하기 위해 styled-components에 position 값을 props로 전달했을 때, 마커가 움직일 때마다 클래스명이 계속 변경되어 DOM 요소가 업데이트되었고, 이로 인해 과도한 DOM 렌더링이 발생
--   **해결**: 인라인 스타일을 사용하여 position 값을 업데이트함으로써, 마커의 위치 변경 시 클래스명이 동적으로 변경되는 것을 방지하고 DOM 요소의 스타일 속성만 업데이트. 이러한 방식은 CSSOM을 다시 계산하는 과정을 회피하여 스타일 계산 시간을 절약하고 메모리 사용량을 줄여 플리커링 현상을 해결
+- **문제**: 마커를 드래그앤드롭하여 위치를 이동시킬 때마다 화면이 깜빡이는 플리커링(flickering) 현상이 발생
+- **원인**: 마커의 위치를 동적으로 조정하기 위해 styled-components에 position 값을 props로 전달했을 때, 마커가 움직일 때마다 클래스명이 계속 변경되어 DOM 요소가 업데이트되었고, 이로 인해 과도한 DOM 렌더링이 발생
+- **해결**: 인라인 스타일을 사용하여 position 값을 업데이트함으로써, 마커의 위치 변경 시 클래스명이 동적으로 변경되는 것을 방지하고 DOM 요소의 스타일 속성만 업데이트. 이러한 방식은 CSSOM을 다시 계산하는 과정을 회피하여 스타일 계산 시간을 절약하고 메모리 사용량을 줄여 플리커링 현상을 해결
 
 </div>
 </details>
@@ -433,9 +449,9 @@ export const useImgUpload = (
 <summary>무한 스크롤</summary>
 <div markdown="1">
 
--   **문제**: 반응형 웹 구현하는 과정에서 태블릿 화면에서 스크롤이 생성되지 않아, 무한 스크롤 및 데이터 호출이 추가적으로 되지 않음. 또한 scroll 이벤트를 활용한 스크롤은 스크롤을 진행하는 순간마다 이벤트가 호출되어 메인 스레드 성능 저하.
--   **원인**: 태블릿 화면은 모바일보다 화면이 커지면서 처음 호출되는 데이터 개수가 화면을 가득 차지 하지 않아 화면에 스크롤 생성이 않음.
--   **해결**: Intersection Observer는 브라우저 뷰포트와 원하는 요소의 교차점을 관찰하며, 요소가 뷰포트에 포함되는지 아닌지 구별하는 기능을 제공. 즉, 특정 요소가 사용자 화면에 보이는지 안 보이는지 판단. 그리고 메인 스레드와 별개로 비동기적으로 실행되기 때문에 별도의 최적화가 없더라도 기본적으로 훨씬 빠르게 최적화.
+- **문제**: 반응형 웹 구현하는 과정에서 태블릿 화면에서 스크롤이 생성되지 않아, 무한 스크롤 및 데이터 호출이 추가적으로 되지 않음. 또한 scroll 이벤트를 활용한 스크롤은 스크롤을 진행하는 순간마다 이벤트가 호출되어 메인 스레드 성능 저하.
+- **원인**: 태블릿 화면은 모바일보다 화면이 커지면서 처음 호출되는 데이터 개수가 화면을 가득 차지 하지 않아 화면에 스크롤 생성이 않음.
+- **해결**: Intersection Observer는 브라우저 뷰포트와 원하는 요소의 교차점을 관찰하며, 요소가 뷰포트에 포함되는지 아닌지 구별하는 기능을 제공. 즉, 특정 요소가 사용자 화면에 보이는지 안 보이는지 판단. 그리고 메인 스레드와 별개로 비동기적으로 실행되기 때문에 별도의 최적화가 없더라도 기본적으로 훨씬 빠르게 최적화.
 
 </div>
 </details>
@@ -444,8 +460,8 @@ export const useImgUpload = (
 <summary>axios</summary>
 <div markdown="1">
 
--   **문제**: API를 호출할 때마다, 해당 API 요청에 필요한 토큰이 웹 브라우저의 session storage에 저장되어 있어야 하지만, 이로 인해 API 호출 코드에서 토큰을 매번 아규먼트로 전달하는 중복이 발생.
--   **해결**: 요청을 보내기 전에 호출되는 "요청 인터셉터(interceptor)"를 사용하여 session storage에 저장된 토큰을 확인하고, 있다면 해당 토큰을 요청의 헤더에 추가. 이를 통해 각 API 호출에서 토큰을 명시적으로 전달할 필요 없이 중복을 피할 수 있음.
+- **문제**: API를 호출할 때마다, 해당 API 요청에 필요한 토큰이 웹 브라우저의 session storage에 저장되어 있어야 하지만, 이로 인해 API 호출 코드에서 토큰을 매번 아규먼트로 전달하는 중복이 발생.
+- **해결**: 요청을 보내기 전에 호출되는 "요청 인터셉터(interceptor)"를 사용하여 session storage에 저장된 토큰을 확인하고, 있다면 해당 토큰을 요청의 헤더에 추가. 이를 통해 각 API 호출에서 토큰을 명시적으로 전달할 필요 없이 중복을 피할 수 있음.
 
 ```javascript
 import axios from "axios";
@@ -453,17 +469,17 @@ import axios from "axios";
 const accessToken = window.sessionStorage.getItem("Token");
 
 const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
-    headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-    },
+  baseURL: process.env.REACT_APP_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${accessToken}`,
+  },
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    accessToken && (config.headers.Authorization = `Bearer ${accessToken}`);
+  accessToken && (config.headers.Authorization = `Bearer ${accessToken}`);
 
-    return config;
+  return config;
 });
 
 export default axiosInstance;
@@ -476,9 +492,9 @@ export default axiosInstance;
 <summary>채팅</summary>
 <div markdown="1">
 
--   **문제**: 다른 유저와의 기존 채팅방과 신규 채팅방 구분이 어렵고, 신규 채팅방일 경우 메시지 전송을 해야 채팅방이 생성되는데, 기존 채팅방이 있는 유저도 신규 채팅방 처리가 되어, 동일한 채팅방이 계속 생성되는 문제가 발생.
--   **원인**: 유저 정보에 채팅방 정보가 저장되지 않아서, 채팅방 구분이 어려움. 그래서 채팅방마다 해당하는 채팅방에 참여하고 있는 유저의 정보가 필요했고, 채팅방마다 서로 다른 roomid 값으로 구분이 필요.
--   **해결**: firestore에 채팅방이 생성되면 room 정보를 따로 저장하여 해당하는 room의 유저들 정보와 roomId를 저장하였고, room 정보에 저장된 roomId와 채팅 메시지 정보에 저장된 roomId와 비교해 해당 룸이 있는지 없는지를 판별하여 채팅방을 생성 여부를 결정. 유저 프로필에서 메시지 보내기를 클릭할 경우 매번 해당 유저와 함께 있는 채팅 방이 있는지 없는지를 비교하게 되어 비용이 발생하겠지만, 다른 방법(ex. 채팅 내역에 room 정보를 넣는 등)들 중에서 가장 비용을 최소화할 수 있는 위와 같은 방법을 선택.
+- **문제**: 다른 유저와의 기존 채팅방과 신규 채팅방 구분이 어렵고, 신규 채팅방일 경우 메시지 전송을 해야 채팅방이 생성되는데, 기존 채팅방이 있는 유저도 신규 채팅방 처리가 되어, 동일한 채팅방이 계속 생성되는 문제가 발생.
+- **원인**: 유저 정보에 채팅방 정보가 저장되지 않아서, 채팅방 구분이 어려움. 그래서 채팅방마다 해당하는 채팅방에 참여하고 있는 유저의 정보가 필요했고, 채팅방마다 서로 다른 roomid 값으로 구분이 필요.
+- **해결**: firestore에 채팅방이 생성되면 room 정보를 따로 저장하여 해당하는 room의 유저들 정보와 roomId를 저장하였고, room 정보에 저장된 roomId와 채팅 메시지 정보에 저장된 roomId와 비교해 해당 룸이 있는지 없는지를 판별하여 채팅방을 생성 여부를 결정. 유저 프로필에서 메시지 보내기를 클릭할 경우 매번 해당 유저와 함께 있는 채팅 방이 있는지 없는지를 비교하게 되어 비용이 발생하겠지만, 다른 방법(ex. 채팅 내역에 room 정보를 넣는 등)들 중에서 가장 비용을 최소화할 수 있는 위와 같은 방법을 선택.
 
 </div>
 </details>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as S from './DetailPost.styled';
 import { deletePostAPI, detialPostApi } from '../../service/post_service';
 import {
@@ -18,11 +18,14 @@ const DetailPost = () => {
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
+    const [like, setLike] = useState(false);
 
     const token = sessionStorage.getItem('Token');
     const myId = sessionStorage.getItem('Id');
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
+
+    const inputRef = useRef(null);
 
     useEffect(() => {
         detialPostApi(id, token)
@@ -41,6 +44,14 @@ const DetailPost = () => {
                 console.error('error');
             });
     }, [id, token]);
+
+    const handleLike = () => {
+        setLike(!like);
+    };
+
+    const handleFocus = () => {
+        inputRef.current.focus();
+    };
 
     const handleCommentSubmit = () => {
         // 새로운 댓글을 서버로 전송
@@ -147,10 +158,18 @@ const DetailPost = () => {
 
                                 <S.ContentButtonBox>
                                     <div>
-                                        <button>
-                                            <S.LikeIcon />
+                                        <button
+                                            type="button"
+                                            onClick={handleLike}
+                                        >
+                                            <S.LikeIcon
+                                                className={like ? 'like' : null}
+                                            />
                                         </button>
-                                        <button>
+                                        <button
+                                            type="button"
+                                            onClick={handleFocus}
+                                        >
                                             <S.CommentIcon />
                                         </button>
                                     </div>
@@ -201,6 +220,7 @@ const DetailPost = () => {
                     <S.CommentInputBox>
                         <input
                             type="text"
+                            ref={inputRef}
                             placeholder="메시지를 입력하세요"
                             className="input-text"
                             value={newComment}

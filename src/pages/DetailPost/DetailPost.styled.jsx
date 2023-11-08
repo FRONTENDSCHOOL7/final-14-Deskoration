@@ -7,6 +7,12 @@ import { ReactComponent as Dots_vertical } from '../../assets/images/Dots_vertic
 
 export const LikeIcon = styled(Like)`
     margin-right: 10px;
+    &.like {
+        path {
+            fill: ${props => props.theme.repo.open};
+            stroke: ${props => props.theme.repo.open};
+        }
+    }
 `;
 export const CommentIcon = styled(Comment)``;
 export const Dots_verticalIcon = styled(Dots_vertical)`

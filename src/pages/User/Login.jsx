@@ -20,6 +20,7 @@ const Login = () => {
 
     const onSubmit = async event => {
         event.preventDefault();
+        setIsMatched(null);
         const emailValue = emailRef.current.value;
         const passwordValue = passwordRef.current.value;
 
@@ -89,13 +90,14 @@ const Login = () => {
                     inputRef={passwordRef}
                     warning={warnPassword}
                 />
-                {warnPassword ? (
-                    <WarningMsg msg={'6자 이상의 비밀번호를 입력하세요.'} />
-                ) : isMatched === false ? (
+                {isMatched === false && (
                     <WarningMsg
                         msg={'이메일 또는 비밀번호가 일치하지 않습니다.'}
                     />
-                ) : null}
+                )}
+                {warnPassword && isMatched !== false && (
+                    <WarningMsg msg={'6자 이상의 비밀번호를 입력하세요.'} />
+                )}
             </S.InputBox>
             <S.SampleLoginBox>
                 <input

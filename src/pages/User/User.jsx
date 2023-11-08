@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+import Splash from '../Loading/Splash';
+import AlertModal from '../../components/AlertModal/\bAlertModal';
+
 import * as S from './User.styled';
 import Logo from '../../assets/images/Logo.svg';
 import googleLogo from '../../assets/images/login/Google.png';
 import kakaoLogo from '../../assets/images/login/Kakao.png';
 import facebookLogo from '../../assets/images/login/Facebook.png';
-import { NavLink, Outlet } from 'react-router-dom';
-import Splash from '../Loading/Splash';
 
 const User = () => {
     const [isReady, setIsReady] = useState(false);
+
+    const { isOpen } = useSelector(store => store.alertModal);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -24,6 +30,11 @@ const User = () => {
                 <Splash />
             ) : (
                 <S.UserContainer>
+                    {isOpen && (
+                        <AlertModal
+                            alert={'이메일 또는 비밀번호가 일치하지 않습니다.'}
+                        />
+                    )}
                     <S.UserLogo>
                         <img src={Logo} alt="데스코레이션 로고" />
                     </S.UserLogo>

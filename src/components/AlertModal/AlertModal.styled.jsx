@@ -39,7 +39,7 @@ export const AlertModalInnerContainer = styled.div`
 `;
 
 export const AlertText = styled.h3`
-    font-size: 24px;
+    font-size: 16px;
     font-family: 'PreBold';
 
     margin-bottom: 20px;

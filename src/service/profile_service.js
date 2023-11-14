@@ -48,3 +48,29 @@ export const getMyProfileApi = async token => {
         throw new Error('An error occurred while fetching user profile');
     }
 };
+
+export const updateProfileApi = async (token, userData) => {
+    const reqUrl = `${baseUrl}/user`;
+
+    try {
+        const response = await fetch(reqUrl, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error(`Request failed with status: ${response.status}`);
+            throw new Error('Failed to fetch user profile');
+        }
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while fetching user profile');
+    }
+};

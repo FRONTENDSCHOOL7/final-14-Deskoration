@@ -82,6 +82,7 @@ const Login = () => {
                 <S.InputBox>
                     <Input
                         label={'email'}
+                        type={'email'}
                         inputRef={emailRef}
                         warning={warmEmail}
                     />
@@ -92,6 +93,7 @@ const Login = () => {
                     )}
                     <Input
                         label={'password'}
+                        type={'password'}
                         inputRef={passwordRef}
                         warning={warnPassword}
                     />

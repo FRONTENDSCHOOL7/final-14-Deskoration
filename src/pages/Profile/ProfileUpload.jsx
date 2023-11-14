@@ -232,7 +232,8 @@ export const ProfileUpload = () => {
                     if (result.message === '이미 사용중이 계정 ID입니다.') {
                         throw new Error(result.message);
                     } else {
-                        navigate('/home');
+                        sessionStorage.setItem('AccountName', idValue);
+                        navigate('/profile');
                     }
                 })
                 .catch(error => {

@@ -159,6 +159,7 @@ const RegisterForm = ({
                 />
                 <Input
                     label="구매링크"
+                    type={'url'}
                     inputRef={linkRef}
                     readonly={showProduct}
                 />

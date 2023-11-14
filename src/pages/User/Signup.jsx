@@ -64,6 +64,7 @@ const Signup = () => {
             <S.InputBox>
                 <Input
                     label={'email'}
+                    type={'email'}
                     inputRef={emailRef}
                     warning={warmEmail || existID}
                 />
@@ -74,6 +75,7 @@ const Signup = () => {
                 ) : null}
                 <Input
                     label={'password'}
+                    type={'password'}
                     inputRef={passwordRef}
                     warning={warnPassword}
                 />

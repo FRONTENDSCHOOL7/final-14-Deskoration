@@ -91,6 +91,10 @@ const Router = () => {
                             element={<ProfileUploadPage />}
                         />
                         <Route
+                            path={'/profileEdit'}
+                            element={<ProfileUploadPage />}
+                        />
+                        <Route
                             path={'/followerList'}
                             element={<FollowerListPage />}
                         />

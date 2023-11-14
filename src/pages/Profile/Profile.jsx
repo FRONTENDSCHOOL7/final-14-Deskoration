@@ -54,6 +54,10 @@ const Profile = () => {
         setExpandedContent(!expandedContent);
     };
 
+    const moveToEditProfile = () => {
+        navigate('/profileEdit');
+    };
+
     return (
         <>
             <S.ProfileContainer>
@@ -79,6 +83,7 @@ const Profile = () => {
                     gra={'true'}
                     width={'100%'}
                     padding={'10px'}
+                    onClick={moveToEditProfile}
                 >
                     프로필 편집
                 </GradientButton>

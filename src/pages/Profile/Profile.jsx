@@ -72,9 +72,12 @@ const Profile = () => {
                                 ? profileData?.intro
                                 : profileData?.intro.slice(0, 53)}
                             {profileData?.intro?.length > 30 && (
-                                <button onClick={toggleExpandedContent}>
-                                    {expandedContent ? '접기' : '더보기'}
-                                </button>
+                                <S.ToggleButton
+                                    type="button"
+                                    onClick={toggleExpandedContent}
+                                >
+                                    {expandedContent ? '접기' : '...더보기'}
+                                </S.ToggleButton>
                             )}
                         </p>
                     </div>

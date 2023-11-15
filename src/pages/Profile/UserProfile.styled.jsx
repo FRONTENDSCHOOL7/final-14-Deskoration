@@ -52,9 +52,8 @@ export const UserInfo = styled.div`
     }
 
     .user-info {
-        color: ${props => props.theme.subFont};
+        color: ${props => props.theme.mainFont};
         width: 215px;
-        /* border: 1px solid ${props => props.theme.border};  */
     }
 `;
 
@@ -137,4 +136,10 @@ export const MoreButton = styled.button`
 export const MoreIcon = styled(More)`
     width: 25px;
     height: 25px;
+`;
+
+export const ToggleButton = styled.button`
+    color: ${({ theme }) => theme.subFont};
+    padding-left: 4px;
+    font-weight: 700;
 `;

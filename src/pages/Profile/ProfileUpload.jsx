@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as S from './ProfileUpload.styled';
-import basicImg from '../../assets/images/Profile.svg';
+import basicImg from '../../assets/images/basicImg.png';
 import { Input } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
 import { uploadImgApi } from '../../service/img_service';
@@ -9,6 +9,10 @@ import {
     authSignUpApi,
     validAccountNameApi,
 } from '../../service/auth_service';
+import {
+    updateProfileApi,
+    getMyProfileApi,
+} from '../../service/profile_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +21,11 @@ import usePageHandler from '../../hooks/usePageHandler';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
-    const baseURL = 'https://api.mandarin.weniv.co.kr';
+    const location = useLocation();
+    const token = sessionStorage.getItem('Token');
+    const editPage = location.pathname.includes('/profileEdit');
+
+    const baseURL = 'https://api.mandarin.weniv.co.kr/';
     const noImage = 'Ellipse.png';
 
     const [photoURL, setPhotoURL] = useState(basicImg);
@@ -27,12 +35,38 @@ export const ProfileUpload = () => {
     const [warnID, setWarnID] = useState(false);
     const [file, setFile] = useState();
     const { emailValue, passwordValue } = useLocation().state || {};
+    const [profileData, setProfileData] = useState(null);
 
     const userNameEl = useRef(null);
     const idEl = useRef(null);
     const introEl = useRef(null);
 
+    // 헤더에 문구 넣기
     usePageHandler('text', '프로필 설정');
+
+    // 프로필 편집일 경우, API 호출해서 데이터 받아오기
+    useEffect(() => {
+        if (editPage) {
+            getMyProfileApi(token)
+                .then(data => {
+                    setProfileData(data.user);
+                    setPhotoURL(data.user.image);
+                    if (baseURL + noImage !== data.user.image)
+                        setIsImageAdded(true);
+
+                    // 불러온 데이터를 화면에 렌더링
+                    const userNameValue = data.user.username;
+                    const idValue = data.user.accountname;
+                    const introValue = data.user.intro;
+                    userNameEl.current.value = userNameValue;
+                    idEl.current.value = idValue;
+                    introEl.current.value = introValue;
+                })
+                .catch(error => {
+                    console.error('API 요청 중 오류 발생: ', error);
+                });
+        }
+    }, [token]);
 
     // 업로드한 이미지 url 저장
     const handleUploadImg = async event => {
@@ -68,6 +102,7 @@ export const ProfileUpload = () => {
                 uploadImgApi(imgData, setFile);
                 setPhotoURL(reader.result);
             };
+            setIsImageAdded(true);
         } catch (e) {
             console.log(e);
         }
@@ -82,18 +117,19 @@ export const ProfileUpload = () => {
     // submit 함수
     const dataSubmit = async event => {
         event.preventDefault();
+
         const userNameValue = userNameEl.current.value;
         const idValue = idEl.current.value;
         const introValue = introEl.current.value;
 
         // 유효성 검사
-        function checkValidUserName(userName) {
+        const checkValidUserName = userName => {
             return userName.length >= 2 && userName.length <= 10;
-        }
-        function checkValidID(id) {
+        };
+        const checkValidID = id => {
             const regex = /^[a-zA-Z0-9._]+$/;
             return id.length >= 2 && regex.test(id);
-        }
+        };
 
         const validID = checkValidID(idValue);
         const validUserName = checkValidUserName(userNameValue);
@@ -102,29 +138,41 @@ export const ProfileUpload = () => {
         setWarnUserName(!validUserName);
 
         // 계정 ID 검사
-        if (validID) {
-            setWarnID(false);
-            validAccountNameApi(idValue)
-                .then(result => {
-                    if (result.message === '사용 가능한 계정ID 입니다.') {
-                        setExistID(false);
-                    } else if (
-                        result.message === '이미 가입된 계정ID 입니다.'
-                    ) {
-                        setExistID(true);
-                    } else {
-                        throw new Error(result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        } else {
-            !validID ? setWarnID(true) : setWarnID(false);
-        }
+        const validateAccountName = id => {
+            return new Promise((resolve, reject) => {
+                if (!checkValidID(id)) {
+                    setWarnID(true);
+                    resolve(false); // 유효하지 않은 경우 false 반환
+                } else {
+                    validAccountNameApi(id)
+                        .then(result => {
+                            if (
+                                result.message === '사용 가능한 계정ID 입니다.'
+                            ) {
+                                setExistID(false);
+                                resolve(true); // 유효한 경우 true 반환
+                            } else if (
+                                result.message === '이미 가입된 계정ID 입니다.'
+                            ) {
+                                setExistID(true);
+                                resolve(false); // 이미 존재하는 경우 false 반환
+                            } else {
+                                reject(new Error(result.message)); // 예외 처리
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            reject(error); // 에러 처리
+                        });
+                }
+            });
+        };
+
+        const isIDValid = await validateAccountName(idValue);
 
         // 유효성 검사를 통과하면 post 요청
-        if (validUserName && validID && !existID) {
+        // 회원 가입 시 초기 프로필 설정일 경우
+        if (isIDValid && validUserName && !editPage) {
             const userData = {
                 username: userNameValue,
                 email: emailValue,
@@ -148,6 +196,35 @@ export const ProfileUpload = () => {
                         });
                     } else {
                         throw new Error(result.message);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+        // 프로필 편집일 경우
+        else if (isIDValid && validUserName && editPage) {
+            const userData = {
+                user: {
+                    username: userNameValue,
+                    accountname: idValue,
+                    intro: introValue,
+                    image:
+                        !file && photoURL === basicImg
+                            ? baseURL + noImage
+                            : !file && photoURL
+                            ? profileData.image
+                            : baseURL + file,
+                },
+            };
+
+            updateProfileApi(token, userData)
+                .then(result => {
+                    if (result.message === '이미 사용중이 계정 ID입니다.') {
+                        throw new Error(result.message);
+                    } else {
+                        sessionStorage.setItem('AccountName', idValue);
+                        navigate('/profile');
                     }
                 })
                 .catch(error => {
@@ -213,7 +290,11 @@ export const ProfileUpload = () => {
                         />
                     </S.InputBox>
                     <GradientButton
-                        children={'Deskoration 시작하기'}
+                        children={
+                            editPage
+                                ? '프로필 변경하기'
+                                : 'Deskoration 시작하기'
+                        }
                         type={'submit'}
                         gra={true}
                         width={'100%'}

@@ -4,6 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { getMyProfileApi } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
 import { getMyPostApi } from '../../service/post_service';
+import CommonLoading from '../Loading/CommonLoading';
 import usePageHandler from '../../hooks/usePageHandler';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -47,11 +48,15 @@ const Profile = () => {
     }, [tempAccountName, token]);
 
     if (profileData === null || userPost === null) {
-        return <div>Loading...</div>;
+        return <CommonLoading />;
     }
 
     const toggleExpandedContent = () => {
         setExpandedContent(!expandedContent);
+    };
+
+    const moveToEditProfile = () => {
+        navigate('/profileEdit');
     };
 
     return (
@@ -67,9 +72,12 @@ const Profile = () => {
                                 ? profileData?.intro
                                 : profileData?.intro.slice(0, 53)}
                             {profileData?.intro?.length > 30 && (
-                                <button onClick={toggleExpandedContent}>
-                                    {expandedContent ? '접기' : '더보기'}
-                                </button>
+                                <S.ToggleButton
+                                    type="button"
+                                    onClick={toggleExpandedContent}
+                                >
+                                    {expandedContent ? '접기' : '...더보기'}
+                                </S.ToggleButton>
                             )}
                         </p>
                     </div>
@@ -79,6 +87,7 @@ const Profile = () => {
                     gra={'true'}
                     width={'100%'}
                     padding={'10px'}
+                    onClick={moveToEditProfile}
                 >
                     프로필 편집
                 </GradientButton>

@@ -4,6 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { getUserProfileApi } from '../../service/profile_service';
 import { getMyPostApi } from '../../service/post_service';
 import { Link, useParams } from 'react-router-dom';
+import CommonLoading from '../Loading/CommonLoading';
 import usePageHandler from '../../hooks/usePageHandler';
 
 const UserProfile = () => {
@@ -33,7 +34,7 @@ const UserProfile = () => {
     }, [token, username]);
 
     if (profileData === null || userPost === null) {
-        return <div>Loading...</div>;
+        return <CommonLoading />;
     }
 
     const toggleExpandedContent = () => {
@@ -57,9 +58,12 @@ const UserProfile = () => {
                                 ? profileData.intro
                                 : profileData?.intro?.slice(0, 53)}
                             {profileData.intro?.length > 30 && (
-                                <button onClick={toggleExpandedContent}>
-                                    {expandedContent ? '접기' : '더보기'}
-                                </button>
+                                <S.ToggleButton
+                                    type="button"
+                                    onClick={toggleExpandedContent}
+                                >
+                                    {expandedContent ? '접기' : '...더보기'}
+                                </S.ToggleButton>
                             )}
                         </p>
                     </div>

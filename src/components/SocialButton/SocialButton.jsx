@@ -4,7 +4,7 @@ import * as S from './SocialButton.styled';
 // 좋아요, 댓글 버튼 컴포넌트
 const SocialButton = ({ type, onClick, isLike, likeCount, commentCount }) => {
     return (
-        <button type="button" onClick={onClick}>
+        <S.SocialButton type="button" onClick={onClick}>
             {type === 'like' ? (
                 <S.LikeIcon className={isLike ? 'like' : null} />
             ) : type === 'comment' ? (
@@ -17,7 +17,7 @@ const SocialButton = ({ type, onClick, isLike, likeCount, commentCount }) => {
                     ? commentCount
                     : null}
             </S.CountSpan>
-        </button>
+        </S.SocialButton>
     );
 };
 

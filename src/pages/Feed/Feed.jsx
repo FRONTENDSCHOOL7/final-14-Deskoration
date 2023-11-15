@@ -128,7 +128,7 @@ const Feed = () => {
                         <S.FeedDetailBox>
                             <img src={item.image} alt="게시글 내용" />
                             <p>{feedContent[index]?.deskoration.message}</p>
-                            <S.BtnBox>
+                            <div>
                                 <SocialButton
                                     type={'like'}
                                     onClick={() => handleLike(index)}
@@ -142,7 +142,7 @@ const Feed = () => {
                                     }}
                                     commentCount={commentCount[index]}
                                 />
-                            </S.BtnBox>
+                            </div>
                             <S.FeedDate>
                                 {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
                             </S.FeedDate>

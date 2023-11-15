@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { ReactComponent as Like } from '../../assets/images/Like.svg';
 import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
 
+export const SocialButton = styled.button`
+    margin-right: 10px;
+`;
+
 export const LikeIcon = styled(Like)`
     &.like {
         path {
@@ -10,11 +14,9 @@ export const LikeIcon = styled(Like)`
         }
     }
 `;
-export const CommentIcon = styled(Comment)`
-    margin-left: 5px;
-`;
+export const CommentIcon = styled(Comment)``;
 
 export const CountSpan = styled.span`
     display: inline-block;
-    padding: 8px 6px;
+    padding: 8px 3px 8px 6px;
 `;

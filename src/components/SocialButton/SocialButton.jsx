@@ -1,6 +1,7 @@
 import React from 'react';
 import * as S from './SocialButton.styled';
 
+// 좋아요, 댓글 버튼 컴포넌트
 const SocialButton = ({ type, onClick, isLike, likeCount, commentCount }) => {
     return (
         <button type="button" onClick={onClick}>

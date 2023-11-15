@@ -22,6 +22,8 @@ import usePageHandler from '../../hooks/usePageHandler';
 export const ProfileUpload = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const token = sessionStorage.getItem('Token');
+    const editPage = location.pathname.includes('/profileEdit');
 
     const baseURL = 'https://api.mandarin.weniv.co.kr/';
     const noImage = 'Ellipse.png';
@@ -34,9 +36,6 @@ export const ProfileUpload = () => {
     const [file, setFile] = useState();
     const { emailValue, passwordValue } = useLocation().state || {};
     const [profileData, setProfileData] = useState(null);
-    const [isEditPage, setIsEditPage] = useState(false);
-
-    const token = sessionStorage.getItem('Token');
 
     const userNameEl = useRef(null);
     const idEl = useRef(null);
@@ -45,17 +44,9 @@ export const ProfileUpload = () => {
     // 헤더에 문구 넣기
     usePageHandler('text', '프로필 설정');
 
+    // 프로필 편집일 경우, API 호출해서 데이터 받아오기
     useEffect(() => {
-        const editPage = location.pathname.includes('/profileEdit');
-
         if (editPage) {
-            setIsEditPage(true);
-        }
-    }, []);
-
-    // API 호출해서 데이터 받아오기
-    useEffect(() => {
-        if (isEditPage) {
             getMyProfileApi(token)
                 .then(data => {
                     setProfileData(data.user);
@@ -75,7 +66,7 @@ export const ProfileUpload = () => {
                     console.error('API 요청 중 오류 발생: ', error);
                 });
         }
-    }, [isEditPage, token]);
+    }, [token]);
 
     // 업로드한 이미지 url 저장
     const handleUploadImg = async event => {
@@ -181,7 +172,7 @@ export const ProfileUpload = () => {
 
         // 유효성 검사를 통과하면 post 요청
         // 회원 가입 시 초기 프로필 설정일 경우
-        if (isIDValid && validUserName && !isEditPage) {
+        if (isIDValid && validUserName && !editPage) {
             const userData = {
                 username: userNameValue,
                 email: emailValue,
@@ -212,7 +203,7 @@ export const ProfileUpload = () => {
                 });
         }
         // 프로필 편집일 경우
-        else if (isIDValid && validUserName && isEditPage) {
+        else if (isIDValid && validUserName && editPage) {
             const userData = {
                 user: {
                     username: userNameValue,
@@ -300,7 +291,7 @@ export const ProfileUpload = () => {
                     </S.InputBox>
                     <GradientButton
                         children={
-                            isEditPage
+                            editPage
                                 ? '프로필 변경하기'
                                 : 'Deskoration 시작하기'
                         }

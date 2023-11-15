@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './DetailPost.styled';
 import { deletePostAPI, detialPostApi } from '../../service/post_service';
+import { postLikeApi, deleteLikeApi } from '../../service/like_service';
 import {
     getCommentApi,
     postCommentApi,
@@ -32,6 +33,7 @@ const DetailPost = () => {
             .then(postResult => {
                 setPostContent(JSON.parse(postResult.post.content));
                 setPostData(postResult.post);
+                if (postResult.post.hearted) setLike(true);
             })
             .catch(error => {
                 console.error('error');
@@ -46,7 +48,25 @@ const DetailPost = () => {
     }, [id, token]);
 
     const handleLike = () => {
-        setLike(!like);
+        if (!like) {
+            postLikeApi(id, token)
+                .then(likeResult => {
+                    setLike(true);
+                    console.log(likeResult);
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        } else {
+            deleteLikeApi(id, token)
+                .then(unlikeResult => {
+                    setLike(false);
+                    console.log(unlikeResult);
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        }
     };
 
     const handleFocus = () => {

@@ -2,30 +2,30 @@ import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi } from '../../service/post_service';
-import { Link } from 'react-router-dom';
+import { postLikeApi, deleteLikeApi } from '../../service/like_service';
+import { Link, useNavigate } from 'react-router-dom';
+import SocialButton from '../../components/SocialButton/SocialButton';
 
 const Feed = () => {
+    const navigate = useNavigate();
     const token = sessionStorage.getItem('Token');
     const [feedData, setFeedData] = useState([]);
     const [feedContent, setFeedContent] = useState([]);
     const [createDate, setCreateDate] = useState([]);
-    const [likes, setLikes] = useState([]);
+    const [likesData, setLikesData] = useState([]);
+    const [commentCount, setCommentCount] = useState([]);
 
     usePageHandler('text', '팔로잉 피드');
-
-    const handleLike = index => {
-        const copyLikes = [...likes];
-        copyLikes[index] = !copyLikes[index];
-        setLikes(copyLikes);
-    };
 
     useEffect(() => {
         getFeedApi(token)
             .then(result => {
                 setFeedData(result.posts);
-
+                console.log(result.posts);
                 const newFeedContent = [];
                 const newCreateDate = [];
+                const newLikes = [];
+                const newCommentCount = [];
 
                 result.posts.forEach(post => {
                     const data = JSON.parse(post.content);
@@ -38,15 +38,66 @@ const Feed = () => {
                         date: dateObj.getDate(),
                     };
                     newCreateDate.push(convertDate);
+                    newLikes.push({
+                        isLike: post.hearted,
+                        likeCount: post.heartCount,
+                    });
+                    newCommentCount.push(post.commentCount);
                 });
 
                 setFeedContent(newFeedContent);
                 setCreateDate(newCreateDate);
+                setLikesData(newLikes);
+                setCommentCount(newCommentCount);
             })
             .catch(error => {
                 console.error('Error calling the feed API: ', error);
             });
-    }, []);
+    }, [token]);
+
+    const handleLike = index => {
+        const id = feedData[index].id;
+
+        if (!likesData[index].isLike) {
+            postLikeApi(id, token)
+                .then(likeResult => {
+                    setLikesData(likes => {
+                        const newLikes = [...likes];
+                        newLikes[index] = {
+                            ...newLikes[index],
+                            isLike: true,
+                            likeCount: likeResult.post.heartCount,
+                        };
+                        return newLikes;
+                    });
+                    console.log(likeResult);
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        } else {
+            deleteLikeApi(id, token)
+                .then(unlikeResult => {
+                    setLikesData(likes => {
+                        const newLikes = [...likes];
+                        newLikes[index] = {
+                            ...newLikes[index],
+                            isLike: false,
+                            likeCount: unlikeResult.post.heartCount,
+                        };
+                        return newLikes;
+                    });
+                    console.log(unlikeResult);
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        }
+    };
+
+    const moveToDetailPost = id => {
+        navigate(`/detailpost/${id}`);
+    };
 
     return (
         <ul>
@@ -77,25 +128,21 @@ const Feed = () => {
                         <S.FeedDetailBox>
                             <img src={item.image} alt="게시글 내용" />
                             <p>{feedContent[index]?.deskoration.message}</p>
-                            <S.BtnBox>
-                                <button
-                                    type="button"
+                            <div>
+                                <SocialButton
+                                    type={'like'}
                                     onClick={() => handleLike(index)}
-                                >
-                                    <S.LikeIcon
-                                        className={likes[index] ? 'like' : null}
-                                    >
-                                        좋아요
-                                    </S.LikeIcon>
-                                </button>
-                                <button type="button">
-                                    <Link
-                                        to={`/detailpost/${feedData[index].id}`}
-                                    >
-                                        <S.CommentIcon>댓글</S.CommentIcon>
-                                    </Link>
-                                </button>
-                            </S.BtnBox>
+                                    isLike={likesData[index].isLike}
+                                    likeCount={likesData[index].likeCount}
+                                />
+                                <SocialButton
+                                    type={'comment'}
+                                    onClick={() => {
+                                        moveToDetailPost(feedData[index].id);
+                                    }}
+                                    commentCount={commentCount[index]}
+                                />
+                            </div>
                             <S.FeedDate>
                                 {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
                             </S.FeedDate>

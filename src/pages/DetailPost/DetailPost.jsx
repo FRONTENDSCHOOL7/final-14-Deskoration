@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './DetailPost.styled';
 import { deletePostAPI, detialPostApi } from '../../service/post_service';
+import { postLikeApi, deleteLikeApi } from '../../service/like_service';
 import {
     getCommentApi,
     postCommentApi,
@@ -8,6 +9,7 @@ import {
 } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
+import SocialButton from '../../components/SocialButton/SocialButton';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
@@ -18,7 +20,7 @@ const DetailPost = () => {
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
-    const [like, setLike] = useState(false);
+    const [likeData, setLikeData] = useState({});
 
     const token = sessionStorage.getItem('Token');
     const myId = sessionStorage.getItem('Id');
@@ -32,6 +34,11 @@ const DetailPost = () => {
             .then(postResult => {
                 setPostContent(JSON.parse(postResult.post.content));
                 setPostData(postResult.post);
+                setLikeData(prev => ({
+                    ...prev,
+                    isLike: postResult.post.hearted,
+                    likeCount: postResult.post.heartCount,
+                }));
             })
             .catch(error => {
                 console.error('error');
@@ -46,7 +53,31 @@ const DetailPost = () => {
     }, [id, token]);
 
     const handleLike = () => {
-        setLike(!like);
+        if (!likeData.isLike) {
+            postLikeApi(id, token)
+                .then(likeResult => {
+                    setLikeData(prev => ({
+                        ...prev,
+                        isLike: true,
+                        likeCount: likeResult.post.heartCount,
+                    }));
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        } else {
+            deleteLikeApi(id, token)
+                .then(unlikeResult => {
+                    setLikeData(prev => ({
+                        ...prev,
+                        isLike: false,
+                        likeCount: unlikeResult.post.heartCount,
+                    }));
+                })
+                .catch(error => {
+                    console.error('error');
+                });
+        }
     };
 
     const handleFocus = () => {
@@ -158,20 +189,17 @@ const DetailPost = () => {
 
                                 <S.ContentButtonBox>
                                     <div>
-                                        <button
-                                            type="button"
+                                        <SocialButton
+                                            type={'like'}
                                             onClick={handleLike}
-                                        >
-                                            <S.LikeIcon
-                                                className={like ? 'like' : null}
-                                            />
-                                        </button>
-                                        <button
-                                            type="button"
+                                            isLike={likeData.isLike}
+                                            likeCount={likeData.likeCount}
+                                        />
+                                        <SocialButton
+                                            type={'comment'}
                                             onClick={handleFocus}
-                                        >
-                                            <S.CommentIcon />
-                                        </button>
+                                            commentCount={commentData?.length}
+                                        />
                                     </div>
                                     <button onClick={handlePostBottomSheet}>
                                         {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함

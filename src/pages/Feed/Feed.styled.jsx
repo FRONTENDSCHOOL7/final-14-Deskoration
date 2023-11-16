@@ -48,11 +48,6 @@ export const FeedDetailBox = styled.div`
     }
 `;
 
-export const BtnBox = styled.div`
-    button {
-        margin-right: 10px;
-    }
-`;
 export const MoreIcon = styled(More)`
     width: 24px;
     height: 24px;

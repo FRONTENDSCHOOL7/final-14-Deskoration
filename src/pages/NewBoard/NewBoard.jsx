@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { uploadPostApi } from '../../service/post_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
@@ -14,10 +14,14 @@ const NewBoard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
+    const { postData } = location.state;
+    // const { postId } = useParams();
+
+    const postOriginData = JSON.parse(postData.content);
+
     const detailPost = pathName.includes('/detailPost');
 
     const token = sessionStorage.getItem('Token');
-
     const [apiContent, setApiContent] = useState();
 
     const [imageURL, setImageURL] = useState();
@@ -58,7 +62,8 @@ const NewBoard = () => {
 
     useEffect(() => {
         setApiContent({ message: textArea.message.trim(), productItems });
-    }, [textArea.message, productItems]);
+        console.log(postOriginData);
+    }, [textArea.message, productItems, postData]);
 
     const submitPost = event => {
         event.preventDefault();
@@ -115,6 +120,36 @@ const NewBoard = () => {
                         />
                     </S.SubmitButtonBox>
                 </form>
+            ) : pathName.includes('/postEdit/') ? (
+                <form onSubmit={submitPost}>
+                    <PostUploadForm
+                        productItems={productItems}
+                        setProductItems={setProductItems}
+                        setOffset={setOffset}
+                        imageURL={postData.image}
+                        setImageURL={setImageURL}
+                        setImageFile={setImageFile}
+                        deleteProduct={deleteProduct}
+                    />
+                    <S.NewBoardTextarea
+                        value={postOriginData.deskoration.message}
+                        maxLength="100"
+                        placeholder="나의 데스크 셋업에 대해서 얘기해주세요."
+                        onChange={handleMessageChange}
+                    />
+                    <S.TextareaCounterP>
+                        {textArea.length}/100
+                    </S.TextareaCounterP>
+                    <S.SubmitButtonBox>
+                        <GradientButton
+                            type="submit"
+                            children={'수정하기'}
+                            gra={'true'}
+                            width={'70px'}
+                            padding={'10px'}
+                        />
+                    </S.SubmitButtonBox>
+                </form> // EditForm은 게시물 수정 화면을 렌더링하는 컴포넌트로 postId를 전달받아 사용 // 예: <EditForm postId={postId} /> // 여기에 수정 화면을 나타내는 코드를 추가
             ) : (
                 <RegisterForm
                     productItems={productItems}

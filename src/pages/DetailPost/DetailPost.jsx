@@ -141,7 +141,9 @@ const DetailPost = () => {
 
     const editPost = e => {
         e.stopPropagation();
-        console.log('edit post');
+        if (window.confirm('게시물을 수정 하시겠습니까?')) {
+            navigate(`/postEdit/${postData.id}`, { state: { postData } });
+        }
     };
 
     const deletePost = e => {

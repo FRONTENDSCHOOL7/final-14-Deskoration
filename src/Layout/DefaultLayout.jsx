@@ -8,13 +8,20 @@ const DefaultLayout = () => {
 
     const isDetailPost = location.pathname.includes('/detailpost/');
     const isChatRoom = location.pathname.includes('/chat/');
+    const isHome = location.pathname.includes('/home');
 
     return (
         <>
             <Header />
-            <S.Main>
-                <Outlet />
-            </S.Main>
+            {isHome ? (
+                <S.HomeMain>
+                    <Outlet />
+                </S.HomeMain>
+            ) : (
+                <S.Main>
+                    <Outlet />
+                </S.Main>
+            )}
             {isDetailPost ? null : isChatRoom ? null : <Footer />}
         </>
     );

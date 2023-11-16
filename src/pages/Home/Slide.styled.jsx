@@ -11,8 +11,8 @@ export const SlideSection = styled.section`
 `;
 
 export const Category = styled.div`
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     border: 1px solid ${({ theme }) => theme.border};
     border-radius: 50%;
     margin-bottom: 8px;
@@ -24,6 +24,7 @@ export const Category = styled.div`
 `;
 
 export const CateName = styled.p`
+    margin: auto;
     width: 50px;
     position: relative;
     /* top: %; */

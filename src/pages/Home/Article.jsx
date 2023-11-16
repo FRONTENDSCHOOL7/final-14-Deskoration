@@ -11,7 +11,10 @@ const Article = ({ articles, setArticles }) => {
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } =
                 sectionRef.current;
-            if (scrollTop + clientHeight >= scrollHeight && !loading) {
+            if (
+                Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
+                !loading
+            ) {
                 loadMoreArticles();
             }
         };
@@ -42,9 +45,6 @@ const Article = ({ articles, setArticles }) => {
                     </Link>
                 ))}
             </S.Section>
-            <S.SearchButton type="button">
-                <S.SearchIcon />
-            </S.SearchButton>
             {loading && <div>Loading...</div>}
         </>
     );

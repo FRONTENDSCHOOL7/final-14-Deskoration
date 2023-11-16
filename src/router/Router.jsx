@@ -75,6 +75,10 @@ const Router = () => {
                                 path={'/detailPost/:id/:itemCount'}
                                 element={<ProductPage />}
                             />
+                            <Route
+                                path={'/postEdit/:id'}
+                                element={<PostUploadPage />}
+                            />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route
                                 path={'/chat/:username'}

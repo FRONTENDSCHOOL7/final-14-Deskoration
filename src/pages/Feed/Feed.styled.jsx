@@ -34,6 +34,8 @@ export const FeedItemHeader = styled.div`
 
 export const UserInfoBox = styled.div`
     display: flex;
+    align-items: center;
+    cursor: pointer;
 `;
 
 export const FeedDetailBox = styled.div`
@@ -46,6 +48,14 @@ export const FeedDetailBox = styled.div`
         border-radius: 10px;
         border: 1px solid ${props => props.theme.border};
     }
+`;
+
+export const FeedDetailContentBox = styled.div`
+    cursor: pointer;
+`;
+
+export const DetailMsg = styled.p`
+    margin-top: 10px;
 `;
 
 export const MoreIcon = styled(More)`

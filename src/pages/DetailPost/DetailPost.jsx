@@ -254,9 +254,9 @@ const DetailPost = () => {
                             value={newComment}
                             onChange={e => setNewComment(e.target.value)}
                         />
-                        <button onClick={handleCommentSubmit}>
-                            <p>등록</p>
-                        </button>
+                        <S.CommentButton onClick={handleCommentSubmit}>
+                            등록
+                        </S.CommentButton>
                     </S.CommentInputBox>
                 </S.CommentInputContainer>
 

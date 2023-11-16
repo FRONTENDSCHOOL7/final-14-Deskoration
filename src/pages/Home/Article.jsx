@@ -11,7 +11,9 @@ const Article = ({ articles, setArticles }) => {
         const handleScroll = () => {
             const { scrollTop, scrollHeight, clientHeight } =
                 sectionRef.current;
-            if (scrollTop + clientHeight >= scrollHeight && !loading) {
+            if (
+                Math.ceil(scrollTop + clientHeight >= scrollHeight && !loading)
+            ) {
                 loadMoreArticles();
             }
         };

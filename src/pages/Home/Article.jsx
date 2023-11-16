@@ -42,9 +42,6 @@ const Article = ({ articles, setArticles }) => {
                     </Link>
                 ))}
             </S.Section>
-            <S.SearchButton type="button">
-                <S.SearchIcon />
-            </S.SearchButton>
             {loading && <div>Loading...</div>}
         </>
     );

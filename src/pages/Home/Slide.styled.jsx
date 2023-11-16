@@ -7,7 +7,7 @@ export const SlideSection = styled.section`
     justify-content: space-between;
     overflow-x: auto;
     white-space: nowrap;
-    gap: 15px;
+    gap: 20px;
 `;
 
 export const Category = styled.div`

@@ -34,6 +34,7 @@ export const FeedItemHeader = styled.div`
 
 export const UserInfoBox = styled.div`
     display: flex;
+    align-items: center;
 `;
 
 export const FeedDetailBox = styled.div`
@@ -43,9 +44,31 @@ export const FeedDetailBox = styled.div`
 
     img {
         max-width: 100%;
-        border-radius: 10px;
-        border: 1px solid ${props => props.theme.border};
+
+        transition: transform 0.3s ease;
+        &:hover {
+            transform: scale(1.03);
+        }
     }
+`;
+
+export const DetailImgBox = styled.div`
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid ${props => props.theme.border};
+    &:hover {
+    }
+`;
+
+export const DetailMsg = styled.p`
+    margin-top: 10px;
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+export const FeedDetailContentBox = styled.div`
+    cursor: pointer;
 `;
 
 export const MoreIcon = styled(More)`

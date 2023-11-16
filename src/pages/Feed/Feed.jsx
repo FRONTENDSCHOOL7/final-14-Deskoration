@@ -99,22 +99,27 @@ const Feed = () => {
         navigate(`/detailpost/${id}`);
     };
 
+    const moveToProfile = accountname => {
+        navigate(`/profile/${accountname}`);
+    };
     return (
-        <ul>
+        <>
             {feedData.map((item, index) => {
                 return (
                     <S.FeedContainer key={item.id}>
                         <S.FeedItemHeader>
-                            <S.UserInfoBox>
-                                <Link
-                                    to={`/profile/${feedData[index].author.accountname}`}
-                                >
-                                    <img
-                                        src={item?.author.image}
-                                        alt="이미지"
-                                        className="profile-img"
-                                    />
-                                </Link>
+                            <S.UserInfoBox
+                                onClick={() =>
+                                    moveToProfile(
+                                        feedData[index].author.accountname,
+                                    )
+                                }
+                            >
+                                <img
+                                    src={item?.author.image}
+                                    alt="이미지"
+                                    className="profile-img"
+                                />
                                 <div>
                                     <h4>{item?.author.username}</h4>
                                     <p>{item?.author.accountname}</p>
@@ -126,8 +131,16 @@ const Feed = () => {
                         </S.FeedItemHeader>
 
                         <S.FeedDetailBox>
-                            <img src={item.image} alt="게시글 내용" />
-                            <p>{feedContent[index]?.deskoration.message}</p>
+                            <S.FeedDetailContentBox
+                                onClick={() => {
+                                    moveToDetailPost(feedData[index].id);
+                                }}
+                            >
+                                <img src={item.image} alt="게시글 내용" />
+                                <S.DetailMsg>
+                                    {feedContent[index]?.deskoration.message}
+                                </S.DetailMsg>
+                            </S.FeedDetailContentBox>
                             <div>
                                 <SocialButton
                                     type={'like'}
@@ -150,7 +163,7 @@ const Feed = () => {
                     </S.FeedContainer>
                 );
             })}
-        </ul>
+        </>
     );
 };
 

@@ -67,6 +67,10 @@ export const DetailMsg = styled.p`
     }
 `;
 
+export const FeedDetailContentBox = styled.div`
+    cursor: pointer;
+`;
+
 export const MoreIcon = styled(More)`
     width: 24px;
     height: 24px;

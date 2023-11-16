@@ -95,6 +95,13 @@ const Feed = () => {
         }
     };
 
+    const moveToDetailPost = id => {
+        navigate(`/detailpost/${id}`);
+    };
+
+    const moveToProfile = accountname => {
+        navigate(`/profile/${accountname}`);
+    };
     return (
         <>
             {feedData.map((item, index) => {

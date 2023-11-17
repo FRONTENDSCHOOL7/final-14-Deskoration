@@ -33,7 +33,7 @@ const PostUploadForm = ({
     const [isDragging, setIsDragging] = useState(false);
     const [originPosition, setOriginPosition] = useState({});
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
-    const [markerSize] = useState({ width: 20, height: 20 });
+    const [markerSize] = useState({ width: 30, height: 30 });
     const [markerLocation, setMarkerLocation] = useState({
         left: 50,
         top: 50,
@@ -119,9 +119,8 @@ const PostUploadForm = ({
         if (isImageLoaded && Object.keys(containerSize).length !== 0) {
             setMarkerLocation(prev => ({
                 ...prev,
-                left: 50 - (markerSize.width / (2 * containerSize.width)) * 100,
-                top:
-                    50 - (markerSize.height / (2 * containerSize.height)) * 100,
+                left: 50 - (markerSize.width / containerSize.width) * 50,
+                top: 50 - (markerSize.height / containerSize.height) * 50,
             }));
         }
     }, [isImageLoaded, containerSize, markerSize.width, markerSize.height]);
@@ -129,11 +128,20 @@ const PostUploadForm = ({
     // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
     // 클릭한 좌표를 저장 & 아이템 카운트 체크
     const handleImageClick = event => {
+        const target = event.target.localName;
+
         if (!isDragging) {
-            const offsetX =
-                (event.nativeEvent.offsetX / containerSize.width) * 100;
-            const offsetY =
-                (event.nativeEvent.offsetY / containerSize.height) * 100;
+            let offsetX = 0;
+            let offsetY = 0;
+            if (target === 'img') {
+                offsetX =
+                    (event.nativeEvent.offsetX / containerSize.width) * 100;
+                offsetY =
+                    (event.nativeEvent.offsetY / containerSize.height) * 100;
+            } else {
+                offsetX = markerLocation.left;
+                offsetY = markerLocation.top;
+            }
 
             setOffset(prev => ({
                 ...prev,
@@ -150,7 +158,6 @@ const PostUploadForm = ({
             checkProductsCount();
         }
     };
-
     // 마우스다운 함수
     const onMouseDown = (event, index) => {
         event.preventDefault();
@@ -246,15 +253,16 @@ const PostUploadForm = ({
 
                         {productItems.length === 0 ? (
                             <Marker
-                                ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
+                                markerRef={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
                                 markerLocation={markerLocation}
-                                name="initialMarker"
+                                name={'initialMarker'}
+                                onClick={handleImageClick}
                             />
                         ) : (
                             productItems.map((item, index) => (
                                 <Marker
                                     key={index}
-                                    ref={ref =>
+                                    markerRef={ref =>
                                         (markerRefs.current[index] = ref)
                                     }
                                     onMouseDown={e => onMouseDown(e, index)}
@@ -296,7 +304,9 @@ const PostUploadForm = ({
             </S.NewBoardFileContainer>
 
             {imageURL && (
-                <S.ExplainTagP>원하는 위치에 상품을 등록하세요.</S.ExplainTagP>
+                <S.ExplainTagP>
+                    원하는 위치를 클릭하여 상품을 등록하세요.
+                </S.ExplainTagP>
             )}
             {isOpen && (
                 <AlertModal alert={'상품은 최대 5개까지 추가할 수 있습니다.'} />

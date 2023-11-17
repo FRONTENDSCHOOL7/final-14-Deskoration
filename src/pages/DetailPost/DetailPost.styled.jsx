@@ -56,7 +56,7 @@ export const DetailPostMain = styled.div`
 
 export const ContentSection = styled.section`
     margin-bottom: 10px;
-    img {
+    > div > img {
         width: 100%;
         margin-bottom: 10px;
         border-radius: 20px;

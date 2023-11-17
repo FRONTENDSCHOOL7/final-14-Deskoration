@@ -157,123 +157,119 @@ const DetailPost = () => {
         }
     };
     return (
-        <>
-            <S.DetailPostCotainer>
-                <S.DetailPostMain $isBottomSheet={isPostBottomSheet}>
-                    {postData && ( // null이 아닌 경우에만 렌더링
-                        <>
-                            <S.ContentSection>
-                                <div
-                                    className="post"
-                                    style={{ position: 'relative' }}
-                                >
-                                    <img
-                                        src={postData?.image}
-                                        alt="데스크 셋업 이미지"
+        <S.DetailPostCotainer>
+            <S.DetailPostMain $isBottomSheet={isPostBottomSheet}>
+                {postData && ( // null이 아닌 경우에만 렌더링
+                    <>
+                        <S.ContentSection>
+                            <div
+                                className="post"
+                                style={{ position: 'relative' }}
+                            >
+                                <img
+                                    src={postData?.image}
+                                    alt="데스크 셋업 이미지"
+                                />
+                                {postContent?.deskoration.productItems?.map(
+                                    (item, index) => (
+                                        <Marker
+                                            key={index}
+                                            itemNumer={index}
+                                            markerLocation={{
+                                                left: item.marker.x,
+                                                top: item.marker.y,
+                                            }}
+                                            productItem={item}
+                                            isDetail={true}
+                                        />
+                                    ),
+                                )}
+                            </div>
+
+                            <S.ContentButtonBox>
+                                <div>
+                                    <SocialButton
+                                        type={'like'}
+                                        onClick={handleLike}
+                                        isLike={likeData.isLike}
+                                        likeCount={likeData.likeCount}
                                     />
-                                    {postContent?.deskoration.productItems?.map(
-                                        (item, index) => (
-                                            <Marker
-                                                key={index}
-                                                itemCount={index}
-                                                markerLocation={{
-                                                    left: item.marker.x,
-                                                    top: item.marker.y,
-                                                }}
-                                                productItem={item}
-                                                isDetail={true}
-                                            />
-                                        ),
+                                    <SocialButton
+                                        type={'comment'}
+                                        onClick={handleFocus}
+                                        commentCount={commentData?.length}
+                                    />
+                                </div>
+                                <button onClick={handlePostBottomSheet}>
+                                    {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+                                        <S.Dots_verticalIcon />
                                     )}
-                                </div>
+                                </button>
+                            </S.ContentButtonBox>
+                            <div className="user-name">
+                                {postData.author.username}
+                            </div>
+                            <p>{postContent?.deskoration.message}</p>
+                        </S.ContentSection>
 
-                                <S.ContentButtonBox>
+                        <S.CommentSection>
+                            <S.CommentCounter>
+                                총 {commentData?.length}개의 댓글
+                            </S.CommentCounter>
+                            {commentData?.map((comment, index) => (
+                                <S.CommentItem key={index}>
+                                    <S.ProfileImg
+                                        src={comment.author.image}
+                                        alt="사용자 이미지"
+                                    />
                                     <div>
-                                        <SocialButton
-                                            type={'like'}
-                                            onClick={handleLike}
-                                            isLike={likeData.isLike}
-                                            likeCount={likeData.likeCount}
-                                        />
-                                        <SocialButton
-                                            type={'comment'}
-                                            onClick={handleFocus}
-                                            commentCount={commentData?.length}
-                                        />
+                                        <div>{comment.author.username}</div>
+                                        <p>{comment.content}</p>
                                     </div>
-                                    <button onClick={handlePostBottomSheet}>
-                                        {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+                                    {comment.author._id === myId && (
+                                        <button
+                                            onClick={() =>
+                                                handleCommentBottomSheet(
+                                                    comment.id,
+                                                )
+                                            }
+                                        >
                                             <S.Dots_verticalIcon />
-                                        )}
-                                    </button>
-                                </S.ContentButtonBox>
-                                <div className="user-name">
-                                    {postData.author.username}
-                                </div>
-                                <p>{postContent?.deskoration.message}</p>
-                            </S.ContentSection>
+                                        </button>
+                                    )}
+                                </S.CommentItem>
+                            ))}
+                        </S.CommentSection>
+                    </>
+                )}
+            </S.DetailPostMain>
+            <S.CommentInputContainer>
+                <S.CommentInputBox>
+                    <input
+                        type="text"
+                        ref={inputRef}
+                        placeholder="메시지를 입력하세요"
+                        className="input-text"
+                        value={newComment}
+                        onChange={e => setNewComment(e.target.value)}
+                    />
+                    <button onClick={handleCommentSubmit}>등록</button>
+                </S.CommentInputBox>
+            </S.CommentInputContainer>
 
-                            <S.CommentSection>
-                                <S.CommentCounter>
-                                    총 {commentData?.length}개의 댓글
-                                </S.CommentCounter>
-                                {commentData?.map((comment, index) => (
-                                    <S.CommentItem key={index}>
-                                        <S.ProfileImg
-                                            src={comment.author.image}
-                                            alt="사용자 이미지"
-                                        />
-                                        <div>
-                                            <div>{comment.author.username}</div>
-                                            <p>{comment.content}</p>
-                                        </div>
-                                        {comment.author._id === myId && (
-                                            <button
-                                                onClick={() =>
-                                                    handleCommentBottomSheet(
-                                                        comment.id,
-                                                    )
-                                                }
-                                            >
-                                                <S.Dots_verticalIcon />
-                                            </button>
-                                        )}
-                                    </S.CommentItem>
-                                ))}
-                            </S.CommentSection>
-                        </>
-                    )}
-                </S.DetailPostMain>
-                <S.CommentInputContainer>
-                    <S.CommentInputBox>
-                        <input
-                            type="text"
-                            ref={inputRef}
-                            placeholder="메시지를 입력하세요"
-                            className="input-text"
-                            value={newComment}
-                            onChange={e => setNewComment(e.target.value)}
-                        />
-                        <S.CommentButton onClick={handleCommentSubmit}>
-                            등록
-                        </S.CommentButton>
-                    </S.CommentInputBox>
-                </S.CommentInputContainer>
-
-                <BottomSheet
-                    isBottomSheet={isPostBottomSheet}
-                    hadleBottomSheet={handlePostBottomSheet}
-                    editFn={e => editPost(e)}
-                    deleteFn={e => deletePost(e)}
-                />
-                <BottomSheet
-                    isBottomSheet={isCommentBottomSheet}
-                    hadleBottomSheet={handleCommentBottomSheet}
-                    editFn={e => editComment(e)}
-                    deleteFn={e => deleteComment(e)}
-                />
-            </S.DetailPostCotainer>
-        </>
+            <BottomSheet
+                isBottomSheet={isPostBottomSheet}
+                hadleBottomSheet={handlePostBottomSheet}
+                editFn={e => editPost(e)}
+                deleteFn={e => deletePost(e)}
+            />
+            <BottomSheet
+                isBottomSheet={isCommentBottomSheet}
+                hadleBottomSheet={handleCommentBottomSheet}
+                editFn={e => editComment(e)}
+                deleteFn={e => deleteComment(e)}
+            />
+        </S.DetailPostCotainer>
     );
 };
 

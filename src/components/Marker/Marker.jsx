@@ -1,9 +1,8 @@
 import React from 'react';
 import Ballon from '../Ballon/Ballon';
 import * as S from './Marker.styled';
-import markerImg from '../../assets/images/Marker.svg';
 
-export const Marker = React.forwardRef((props, markerRef) => {
+export const Marker = props => {
     const {
         onMouseDown,
         markerLocation,
@@ -11,21 +10,23 @@ export const Marker = React.forwardRef((props, markerRef) => {
         deleteProduct,
         itemCount,
         isDetail,
+        markerRef,
+        name,
+        onClick,
     } = props;
 
     return (
-        <S.MarkerContainer>
-            <S.MarkerPointer
-                src={markerImg}
-                alt="마커"
-                className="marker"
-                ref={markerRef}
-                onMouseDown={onMouseDown}
-                style={{
-                    left: `${markerLocation.left}%`,
-                    top: `${markerLocation.top}%`,
-                }}
-            />
+        <S.MarkerContainer
+            ref={markerRef}
+            onMouseDown={onMouseDown}
+            style={{
+                left: `${markerLocation.left}%`,
+                top: `${markerLocation.top}%`,
+            }}
+            name={name}
+            onClick={onClick}
+        >
+            <S.MarkerPointer alt="마커" />
             {productItem && (
                 <Ballon
                     productItem={productItem}
@@ -36,6 +37,6 @@ export const Marker = React.forwardRef((props, markerRef) => {
             )}
         </S.MarkerContainer>
     );
-});
+};
 
 export default Marker;

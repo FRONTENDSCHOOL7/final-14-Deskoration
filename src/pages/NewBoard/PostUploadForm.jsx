@@ -26,7 +26,7 @@ const PostUploadForm = ({
 
     const { isOpen } = useSelector(store => store.alertModal);
 
-    const hiddenFileInput = useRef(null);
+    const markerPadding = 5;
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [containerSize, setContainerSize] = useState({});
@@ -40,6 +40,7 @@ const PostUploadForm = ({
     });
     const markerRefs = useRef([]);
     const containerEl = useRef();
+    const hiddenFileInput = useRef(null);
 
     const handleInputClick = event => {
         event.preventDefault();
@@ -175,7 +176,7 @@ const PostUploadForm = ({
         setSelectedMarkerIndex(index);
     };
 
-    // 마우스무드레그 함수
+    // 드래그 함수
     const onMouseMove = event => {
         if (isDragging) {
             const diffX = event.clientX - originPosition.x;
@@ -183,24 +184,24 @@ const PostUploadForm = ({
 
             // 컨테이너를 초과하지 않도록 x,y의 이동 범위를 제한
             const endPointX = parseFloat(
-                ((containerSize.width - markerSize.width) /
+                ((containerSize.width - markerSize.width + markerPadding) /
                     containerSize.width) *
                     100,
             );
             const endPointY = parseFloat(
-                ((containerSize.height - markerSize.height) /
+                ((containerSize.height - markerSize.height + markerPadding) /
                     containerSize.height) *
                     100,
             );
 
             // (마커의 위치 /컨테이너 크기) * 100
             const newLeft = parseFloat(
-                (Math.max(0, originPosition.left + diffX) /
+                (Math.max(-markerPadding, originPosition.left + diffX) /
                     containerSize.width) *
                     100,
             );
             const newTop = parseFloat(
-                (Math.max(0, originPosition.top + diffY) /
+                (Math.max(-markerPadding, originPosition.top + diffY) /
                     containerSize.height) *
                     100,
             );

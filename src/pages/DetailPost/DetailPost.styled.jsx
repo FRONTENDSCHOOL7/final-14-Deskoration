@@ -56,7 +56,7 @@ export const DetailPostMain = styled.div`
 
 export const ContentSection = styled.section`
     margin-bottom: 10px;
-    img {
+    > div > img {
         width: 100%;
         margin-bottom: 10px;
         border-radius: 20px;
@@ -138,9 +138,12 @@ export const CommentInputBox = styled.div`
     gap: 10px;
     padding: 15px;
 
+    &:focus-within {
+        outline: 2px solid ${theme.main};
+    }
+
     input {
         width: 100%;
-
         font-size: 14px;
     }
 
@@ -149,6 +152,10 @@ export const CommentInputBox = styled.div`
         font-weight: 700;
         width: 50px;
     }
+`;
+
+export const CommentButton = styled.button`
+    padding: 5px;
 `;
 
 export const FollowBtnBox = styled.div`

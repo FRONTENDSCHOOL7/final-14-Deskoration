@@ -117,6 +117,27 @@ export const deletePostAPI = async (postId, token) => {
     }
 };
 
+export const reportPostAPI = async (postId, token) => {
+    const reqURL = `${baseUrl}/post/${postId}/report`;
+    try {
+        const response = await fetch(reqURL, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            console.error('API 요청이 실패했습니다.');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export const getFeedApi = async token => {
     const reqURL = `${baseUrl}/post/feed`;
     try {

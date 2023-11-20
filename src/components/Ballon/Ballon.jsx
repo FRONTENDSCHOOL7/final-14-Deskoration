@@ -31,17 +31,11 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
     const calcTop = markerLocation => {
         return markerLocation.y > 48
             ? `calc(${markerLocation.y}% - 70px)` // Adjusted for balloon height
-            : `calc(${markerLocation.y}% + 40px)`;
+            : `calc(${markerLocation.y}% + 39px)`;
     };
 
     const calcArrowLeft = markerLocation => {
-        if (markerLocation.x < 25) {
-            return `${markerLocation.x * 2}%`;
-        } else if (markerLocation.x > 75) {
-            return `calc(50% + ${((markerLocation.x - 75) / 25) * 50}%)`;
-        } else {
-            return '50%';
-        }
+        return `calc(${markerLocation.x}% + 5px)`;
     };
 
     const calcArrowTop = markerLocation => {

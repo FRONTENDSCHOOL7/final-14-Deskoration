@@ -23,7 +23,8 @@ export const Arrow = styled.div`
     width: 0;
     height: 0;
     border-style: solid;
-    left: 50%;
+    left: 0;
+    /* left: 50%; */
 
     // 화살표 방향과 위치 조정
     ${({ $isAbove }) => css`

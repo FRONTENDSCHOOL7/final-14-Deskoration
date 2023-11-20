@@ -31,6 +31,7 @@ export const MarkerPointer = styled.img`
 `;
 
 export const MarkerContainer = styled.div`
+    cursor: pointer;
     &:hover {
         ${BallonContainer} {
             display: block;

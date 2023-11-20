@@ -129,19 +129,25 @@ const PostUploadForm = ({
     // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
     // 클릭한 좌표를 저장 & 아이템 카운트 체크
     const handleImageClick = event => {
-        const target = event.target.localName;
+        const target = event.target.alt;
 
         if (!isDragging) {
             let offsetX = 0;
             let offsetY = 0;
-            if (target === 'img') {
-                offsetX =
-                    (event.nativeEvent.offsetX / containerSize.width) * 100;
-                offsetY =
-                    (event.nativeEvent.offsetY / containerSize.height) * 100;
-            } else {
+            if (target === '마커') {
                 offsetX = markerLocation.left;
                 offsetY = markerLocation.top;
+            } else {
+                const clickOffsetX =
+                    (event.nativeEvent.offsetX / containerSize.width) * 100;
+                const clickOffsetY =
+                    (event.nativeEvent.offsetY / containerSize.height) * 100;
+
+                const markerOffsetX = (15 / containerSize.width) * 100;
+                const markerOffsetY = (15 / containerSize.height) * 100;
+
+                offsetX = clickOffsetX - markerOffsetX;
+                offsetY = clickOffsetY - markerOffsetY;
             }
 
             setOffset(prev => ({

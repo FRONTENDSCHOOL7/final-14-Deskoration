@@ -55,7 +55,7 @@ export const NewBoardFileContainer = styled.div`
     border-radius: 14px;
     margin-bottom: 20px;
 
-    img {
+    > img {
         width: 100%;
         border-radius: 14px;
     }

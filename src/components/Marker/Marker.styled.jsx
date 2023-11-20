@@ -1,6 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
-import { ReactComponent as markerIcon } from '../../assets/images/Marker.svg';
-import { Ballon } from '../Ballon/Ballon.styled';
+
+import { BallonContainer } from '../Ballon/Ballon.styled';
 
 const pulse = keyframes`
     0% {
@@ -17,26 +17,23 @@ const pulse = keyframes`
   }
 `;
 
-export const MarkerPointer = styled(markerIcon)`
-    width: 20px;
-    height: 20px;
-`;
-
-export const MarkerContainer = styled.div`
+export const MarkerPointer = styled.img`
     position: absolute;
     z-index: 100;
     padding: 5px;
+    width: 30px;
+    height: 30px;
     ${props =>
         props.name &&
         css`
             animation: ${pulse} 1.8s infinite;
         `}
+`;
 
-    cursor: pointer;
+export const MarkerContainer = styled.div`
     &:hover {
-        ${Ballon} {
-            display: flex;
-            justify-content: space-between;
+        ${BallonContainer} {
+            display: block;
         }
     }
 `;

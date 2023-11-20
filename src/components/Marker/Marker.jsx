@@ -1,6 +1,7 @@
 import React from 'react';
 import Ballon from '../Ballon/Ballon';
 import * as S from './Marker.styled';
+import markerImg from '../../assets/images/Marker.svg';
 
 export const Marker = props => {
     const {
@@ -16,17 +17,19 @@ export const Marker = props => {
     } = props;
 
     return (
-        <S.MarkerContainer
-            ref={markerRef}
-            onMouseDown={onMouseDown}
-            style={{
-                left: `${markerLocation.left}%`,
-                top: `${markerLocation.top}%`,
-            }}
-            name={name}
-            onClick={onClick}
-        >
-            <S.MarkerPointer alt="마커" />
+        <S.MarkerContainer>
+            <S.MarkerPointer
+                src={markerImg}
+                alt="마커"
+                ref={markerRef}
+                onMouseDown={onMouseDown}
+                style={{
+                    left: `${markerLocation.left}%`,
+                    top: `${markerLocation.top}%`,
+                }}
+                name={name}
+                onClick={onClick}
+            />
             {productItem && (
                 <Ballon
                     productItem={productItem}

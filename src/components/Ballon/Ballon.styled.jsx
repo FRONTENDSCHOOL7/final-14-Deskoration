@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components';
 import { ReactComponent as Trash } from '../../assets/images/Trash.svg';
 
+export const BallonContainer = styled.div`
+    display: block;
+`;
+
 export const Ballon = styled.div`
     position: absolute;
     width: 150px;
@@ -10,7 +14,8 @@ export const Ballon = styled.div`
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
     background: #f56d25;
     z-index: 101;
-    display: none;
+    display: flex;
+    justify-content: space-between;
 `;
 
 export const Arrow = styled.div`
@@ -26,7 +31,6 @@ export const Arrow = styled.div`
             ? '#f56d25 transparent transparent transparent'
             : 'transparent transparent #f56d25 transparent'};
         border-width: 10px 10px 10px 10px;
-        ${$isAbove ? 'bottom: -20px;' : 'top: -20px;'}
     `}
 `;
 

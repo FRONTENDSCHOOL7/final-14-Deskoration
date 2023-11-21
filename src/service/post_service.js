@@ -29,7 +29,7 @@ export const uploadPostApi = async (content, image, token) => {
 };
 
 export const getAllPostApi = async token => {
-    const number = 200;
+    const number = 1000;
     const reqURL = `${baseUrl}/post?limit=${number}`;
     try {
         const response = await fetch(reqURL, {

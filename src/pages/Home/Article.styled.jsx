@@ -11,7 +11,7 @@ export const Section = styled.section`
     gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;
-    margin-top: 10px;
+    padding: 10px 0px;
     height: calc(100vh - 246px);
 `;
 

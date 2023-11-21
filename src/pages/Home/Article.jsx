@@ -30,7 +30,7 @@ const Article = ({ articles, setArticles }) => {
         setTimeout(() => {
             setArticles(prevArticles => [
                 ...prevArticles,
-                ...Array(8).fill({}),
+                // ...Array(8).fill({}),
             ]);
             setLoading(false);
         }, 1000);

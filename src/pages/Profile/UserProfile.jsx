@@ -25,7 +25,10 @@ const UserProfile = () => {
             })
             .then(name => {
                 getMyPostApi(name, token).then(data => {
-                    setUserPost(data);
+                    const result = data.filter(item =>
+                        item.content.includes('"deskoration"'),
+                    );
+                    setUserPost(result);
                 });
             })
             .catch(error => {

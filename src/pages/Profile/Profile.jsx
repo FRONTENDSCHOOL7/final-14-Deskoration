@@ -40,7 +40,10 @@ const Profile = () => {
             });
         getMyPostApi(tempAccountName, token)
             .then(data => {
-                setUserPost(data);
+                const result = data.filter(item =>
+                    item.content.includes('"deskoration"'),
+                );
+                setUserPost(result);
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);

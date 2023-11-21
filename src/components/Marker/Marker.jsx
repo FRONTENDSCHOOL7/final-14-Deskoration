@@ -9,7 +9,7 @@ export const Marker = React.forwardRef((props, markerRef) => {
         markerLocation,
         productItem,
         deleteProduct,
-        itemNumer,
+        itemCount,
         isDetail,
     } = props;
 
@@ -30,7 +30,7 @@ export const Marker = React.forwardRef((props, markerRef) => {
                 <Ballon
                     productItem={productItem}
                     deleteProduct={deleteProduct}
-                    itemNumer={itemNumer}
+                    itemCount={itemCount}
                     isDetail={isDetail}
                 />
             )}

@@ -22,10 +22,6 @@ const HomePage = lazy(() => import('../pages/Home/Home'));
 const FeedPage = lazy(() => import('../pages/Feed/Feed'));
 const PostUploadPage = lazy(() => import('../pages/NewBoard/NewBoard'));
 const DetailPostPage = lazy(() => import('../pages/DetailPost/DetailPost'));
-const ShowProductPage = lazy(() =>
-    import('../components/ShowProduct/ShowProduct'),
-);
-
 const ChatListPage = lazy(() =>
     import('../pages/Chat/ChatListPage/ChatListPage'),
 );
@@ -70,7 +66,7 @@ const Router = () => {
                             />
                             <Route
                                 path={'/detailPost/:id/:itemCount'}
-                                element={<ShowProductPage />}
+                                element={<PostUploadPage />}
                             />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route

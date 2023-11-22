@@ -80,6 +80,10 @@ const Router = () => {
                                 path={'/postEdit/:id'}
                                 element={<PostUpdateForm />}
                             />
+                            <Route
+                                path={'/postEdit/:itemCount'}
+                                element={<PostUpdateForm />}
+                            />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route
                                 path={'/chat/:username'}

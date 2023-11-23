@@ -26,20 +26,21 @@ const PostUploadForm = ({
 
     const { isOpen } = useSelector(store => store.alertModal);
 
-    const hiddenFileInput = useRef(null);
+    const markerPadding = 5;
 
     const [isImageLoaded, setIsImageLoaded] = useState(false);
     const [containerSize, setContainerSize] = useState({});
     const [isDragging, setIsDragging] = useState(false);
     const [originPosition, setOriginPosition] = useState({});
     const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
-    const [markerSize] = useState({ width: 20, height: 20 });
+    const [markerSize] = useState({ width: 30, height: 30 });
     const [markerLocation, setMarkerLocation] = useState({
         left: 50,
         top: 50,
     });
     const markerRefs = useRef([]);
     const containerEl = useRef();
+    const hiddenFileInput = useRef(null);
 
     const handleInputClick = event => {
         event.preventDefault();
@@ -119,9 +120,8 @@ const PostUploadForm = ({
         if (isImageLoaded && Object.keys(containerSize).length !== 0) {
             setMarkerLocation(prev => ({
                 ...prev,
-                left: 50 - (markerSize.width / (2 * containerSize.width)) * 100,
-                top:
-                    50 - (markerSize.height / (2 * containerSize.height)) * 100,
+                left: 50 - (markerSize.width / containerSize.width) * 50,
+                top: 50 - (markerSize.height / containerSize.height) * 50,
             }));
         }
     }, [isImageLoaded, containerSize, markerSize.width, markerSize.height]);
@@ -129,11 +129,26 @@ const PostUploadForm = ({
     // 드래그 상태가 아닐 때(registerForm으로 넘어가는 클릭일 경우)
     // 클릭한 좌표를 저장 & 아이템 카운트 체크
     const handleImageClick = event => {
+        const target = event.target.alt;
+
         if (!isDragging) {
-            const offsetX =
-                (event.nativeEvent.offsetX / containerSize.width) * 100;
-            const offsetY =
-                (event.nativeEvent.offsetY / containerSize.height) * 100;
+            let offsetX = 0;
+            let offsetY = 0;
+            if (target === '마커') {
+                offsetX = markerLocation.left;
+                offsetY = markerLocation.top;
+            } else {
+                const clickOffsetX =
+                    (event.nativeEvent.offsetX / containerSize.width) * 100;
+                const clickOffsetY =
+                    (event.nativeEvent.offsetY / containerSize.height) * 100;
+
+                const markerOffsetX = (15 / containerSize.width) * 100;
+                const markerOffsetY = (15 / containerSize.height) * 100;
+
+                offsetX = clickOffsetX - markerOffsetX;
+                offsetY = clickOffsetY - markerOffsetY;
+            }
 
             setOffset(prev => ({
                 ...prev,
@@ -150,7 +165,6 @@ const PostUploadForm = ({
             checkProductsCount();
         }
     };
-
     // 마우스다운 함수
     const onMouseDown = (event, index) => {
         event.preventDefault();
@@ -168,7 +182,7 @@ const PostUploadForm = ({
         setSelectedMarkerIndex(index);
     };
 
-    // 마우스무드레그 함수
+    // 드래그 함수
     const onMouseMove = event => {
         if (isDragging) {
             const diffX = event.clientX - originPosition.x;
@@ -176,24 +190,24 @@ const PostUploadForm = ({
 
             // 컨테이너를 초과하지 않도록 x,y의 이동 범위를 제한
             const endPointX = parseFloat(
-                ((containerSize.width - markerSize.width) /
+                ((containerSize.width - markerSize.width + markerPadding) /
                     containerSize.width) *
                     100,
             );
             const endPointY = parseFloat(
-                ((containerSize.height - markerSize.height) /
+                ((containerSize.height - markerSize.height + markerPadding) /
                     containerSize.height) *
                     100,
             );
 
             // (마커의 위치 /컨테이너 크기) * 100
             const newLeft = parseFloat(
-                (Math.max(0, originPosition.left + diffX) /
+                (Math.max(-markerPadding, originPosition.left + diffX) /
                     containerSize.width) *
                     100,
             );
             const newTop = parseFloat(
-                (Math.max(0, originPosition.top + diffY) /
+                (Math.max(-markerPadding, originPosition.top + diffY) /
                     containerSize.height) *
                     100,
             );
@@ -246,15 +260,16 @@ const PostUploadForm = ({
 
                         {productItems.length === 0 ? (
                             <Marker
-                                ref={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
+                                markerRef={ref => (markerRefs.current[0] = ref)} // 첫 마커를 참조 배열의 첫 번째 위치에 저장
                                 markerLocation={markerLocation}
-                                name="initialMarker"
+                                name={'initialMarker'}
+                                onClick={handleImageClick}
                             />
                         ) : (
                             productItems.map((item, index) => (
                                 <Marker
                                     key={index}
-                                    ref={ref =>
+                                    markerRef={ref =>
                                         (markerRefs.current[index] = ref)
                                     }
                                     onMouseDown={e => onMouseDown(e, index)}
@@ -296,7 +311,9 @@ const PostUploadForm = ({
             </S.NewBoardFileContainer>
 
             {imageURL && (
-                <S.ExplainTagP>원하는 위치에 상품을 등록하세요.</S.ExplainTagP>
+                <S.ExplainTagP>
+                    원하는 위치를 클릭하여 상품을 등록하세요.
+                </S.ExplainTagP>
             )}
             {isOpen && (
                 <AlertModal alert={'상품은 최대 5개까지 추가할 수 있습니다.'} />

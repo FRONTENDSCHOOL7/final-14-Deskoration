@@ -30,51 +30,58 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
 
     const calcTop = markerLocation => {
         return markerLocation.y > 48
-            ? `calc(${markerLocation.y}% - 75px)` // Adjusted for balloon height
-            : `calc(${markerLocation.y}% + 34px)`;
+            ? `calc(${markerLocation.y}% - 70px)` // Adjusted for balloon height
+            : `calc(${markerLocation.y}% + 39px)`;
     };
 
-    const calcArrowLeft = markerLocationX => {
-        if (markerLocationX < 25) {
-            return `${markerLocationX * 2}%`;
-        } else if (markerLocationX > 75) {
-            return `calc(50% + ${((markerLocationX - 75) / 25) * 50}%)`;
+    const calcArrowLeft = markerLocation => {
+        return `calc(${markerLocation.x}% + 5px)`;
+    };
+
+    const calcArrowTop = markerLocation => {
+        if (markerLocation.y > 48) {
+            return `calc(${markerLocation.y}% - 10px)`;
         } else {
-            return '50%';
+            return `calc(${markerLocation.y}% + 20px)`;
         }
     };
 
     return (
-        <S.Ballon
-            $markerLocation={productItem.marker}
-            style={{
-                left: calcLeft(productItem.marker),
-                top: calcTop(productItem.marker),
-            }}
-        >
+        <S.BallonContainer>
             <S.Arrow
                 $isAbove={productItem.marker.y > 48}
-                style={{ left: calcArrowLeft(productItem.marker.x) }}
+                style={{
+                    left: calcArrowLeft(productItem.marker),
+                    top: calcArrowTop(productItem.marker),
+                }}
             />
-            <S.Product>
-                <S.ProductName
+            <S.Ballon
+                $markerLocation={productItem.marker}
+                style={{
+                    left: calcLeft(productItem.marker),
+                    top: calcTop(productItem.marker),
+                }}
+            >
+                <S.Product
                     onClick={() => {
                         !isDetail ? editProduct() : showProduct(itemCount);
                     }}
                 >
-                    {productItem.detail.productName}
-                </S.ProductName>
-                <div> {productItem.detail.price}원</div>
-            </S.Product>
-            {!isDetail && (
-                <S.DeletItemButton
-                    type="button"
-                    onClick={() => deleteProduct(productItem.detail.id)}
-                >
-                    <S.TrashIcon />
-                </S.DeletItemButton>
-            )}
-        </S.Ballon>
+                    <S.ProductName>
+                        {productItem.detail.productName}
+                    </S.ProductName>
+                    <div> {productItem.detail.price}원</div>
+                </S.Product>
+                {!isDetail && (
+                    <S.DeleteItemButton
+                        type="button"
+                        onClick={() => deleteProduct(productItem.detail.id)}
+                    >
+                        <S.TrashIcon />
+                    </S.DeleteItemButton>
+                )}
+            </S.Ballon>
+        </S.BallonContainer>
     );
 };
 

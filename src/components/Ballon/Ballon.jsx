@@ -62,23 +62,23 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
                     top: calcTop(productItem.marker),
                 }}
             >
-                <S.Product>
-                    <S.ProductName
-                        onClick={() => {
-                            !isDetail ? editProduct() : showProduct(itemCount);
-                        }}
-                    >
+                <S.Product
+                    onClick={() => {
+                        !isDetail ? editProduct() : showProduct(itemCount);
+                    }}
+                >
+                    <S.ProductName>
                         {productItem.detail.productName}
                     </S.ProductName>
                     <div> {productItem.detail.price}원</div>
                 </S.Product>
                 {!isDetail && (
-                    <S.DeletItemButton
+                    <S.DeleteItemButton
                         type="button"
                         onClick={() => deleteProduct(productItem.detail.id)}
                     >
                         <S.TrashIcon />
-                    </S.DeletItemButton>
+                    </S.DeleteItemButton>
                 )}
             </S.Ballon>
         </S.BallonContainer>

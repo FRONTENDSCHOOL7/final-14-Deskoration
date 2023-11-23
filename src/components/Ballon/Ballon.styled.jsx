@@ -16,6 +16,7 @@ export const Ballon = styled.div`
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.19);
     background: #f56d25;
     z-index: 101;
+    cursor: default;
 `;
 
 export const Arrow = styled.div`
@@ -37,6 +38,10 @@ export const Arrow = styled.div`
 
 export const Product = styled.div`
     width: 90px;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
 
     div:nth-child(1) {
         padding-bottom: 1px;
@@ -45,11 +50,6 @@ export const Product = styled.div`
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-        cursor: pointer;
-        &:hover {
-            border-bottom: 1px solid #fff;
-        }
     }
 
     div:nth-child(2) {
@@ -67,6 +67,6 @@ export const TrashIcon = styled(Trash)`
     }
 `;
 
-export const DeletItemButton = styled.button`
+export const DeleteItemButton = styled.button`
     padding: 0 6px;
 `;

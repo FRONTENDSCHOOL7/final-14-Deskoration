@@ -40,14 +40,17 @@ const FollowerList = () => {
         const follower = followerData.find(f => f.accountname === accountname);
         if (follower) {
             try {
-                if (follower.isFollowing) {
-                    await deleteFollowApi(token, accountname);
+                let updatedFollow;
+                if (follower.isfollow) {
+                    const response = await deleteFollowApi(token, accountname);
+                    updatedFollow = response.profile.isfollow;
                 } else {
-                    await postFollowApi(token, accountname);
+                    const response = await postFollowApi(token, accountname);
+                    updatedFollow = response.profile.isfollow;
                 }
                 const updatedFollowerData = followerData.map(f =>
                     f.accountname === accountname
-                        ? { ...f, isFollowing: !f.isFollowing }
+                        ? { ...f, isfollow: updatedFollow }
                         : f,
                 );
                 setFollowerData(updatedFollowerData);
@@ -75,9 +78,9 @@ const FollowerList = () => {
                             onClick={() =>
                                 handleFollowToggle(data?.accountname)
                             }
-                            gra={follow ? true : false}
+                            gra={!data.isfollow ? true : false}
                         >
-                            {follow ? '팔로우' : '팔로잉'}
+                            {!data.isfollow ? '팔로우' : '팔로잉'}
                         </GradientButton>
                     </S.FollowerList>
                 ))}

@@ -17,6 +17,10 @@ export const Ballon = styled.div`
     background: #f56d25;
     z-index: 101;
     cursor: default;
+
+    div:only-child {
+        width: 100%;
+    }
 `;
 
 export const Arrow = styled.div`

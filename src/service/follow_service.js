@@ -35,6 +35,7 @@ export const deleteFollowApi = async (token, accountName) => {
             },
         });
         const result = await response.json();
+        console.log('unfollow api:', result);
         return result;
     } catch (error) {
         console.error(error);

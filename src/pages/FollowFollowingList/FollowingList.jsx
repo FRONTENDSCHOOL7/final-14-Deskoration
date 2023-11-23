@@ -29,27 +29,41 @@ const FollowingList = () => {
         fetchFollowing();
     }, []);
 
+    const followingList = followingData?.map(data => data.accountname);
+
+    // 팔로우, 언팔로우 기능 구현
+    useEffect(() => {
+        console.log('accountname:', followingList);
+        followingList?.map(follower => {
+            postFollowApi(token, follower)
+                .then(data => {
+                    setFollow(data.profile.isfollow);
+                })
+                .catch(error => {
+                    console.error('API 요청 중 오류 발생: ', error);
+                });
+        });
+    }, []);
+
     const handleFollowToggle = async accountname => {
+        setFollow(!follow);
+        console.log('클릭시 이름받아오기!:', accountname);
         const following = followingData.find(
             f => f.accountname === accountname,
         );
         if (following) {
             try {
-                let updatedFollowing;
-                if (following.isfollow) {
-                    const response = await deleteFollowApi(token, accountname);
-                    updatedFollowing = response.profile.isfollow;
+                if (following.isFollowing) {
+                    await deleteFollowApi(token, accountname);
                 } else {
-                    const response = await postFollowApi(token, accountname);
-                    updatedFollowing = response.profile.isfollow;
+                    await postFollowApi(token, accountname);
                 }
-                const updatedFollowingData = followingData.map(f =>
+                const updatedFollowerData = followingData.map(f =>
                     f.accountname === accountname
-                        ? { ...f, isfollow: updatedFollowing }
+                        ? { ...f, isFollowing: !f.isFollowing }
                         : f,
                 );
-                setFollowingData(updatedFollowingData);
-                console.log(followingData);
+                setFollowingData(updatedFollowerData);
             } catch (error) {
                 console.error('API 요청 중 오류 발생:', error);
             }
@@ -74,9 +88,9 @@ const FollowingList = () => {
                             onClick={() =>
                                 handleFollowToggle(data?.accountname)
                             }
-                            gra={!data.isfollow ? true : false}
+                            gra={follow ? true : false}
                         >
-                            {!data.isfollow ? '팔로우' : '팔로잉'}
+                            {follow ? '팔로우' : '팔로잉'}
                         </GradientButton>
                     </S.FollowingList>
                 ))}

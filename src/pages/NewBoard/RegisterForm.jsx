@@ -15,7 +15,11 @@ const RegisterForm = ({
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams();
+    const { postData } = location.state;
+
     const showProduct = location.pathname.includes('/detailPost');
+
+    const editMode = location.pathname.includes('/postUpload');
 
     const defaultProductItem = location.state?.defaultProductItem;
 
@@ -45,6 +49,9 @@ const RegisterForm = ({
 
     const submitProduct = event => {
         event.preventDefault();
+
+        console.log(id);
+        console.log(editMode);
 
         const categoryValue = categoryRef.current.value;
         const productNameValue = productNameRef.current.value;
@@ -92,10 +99,11 @@ const RegisterForm = ({
                 ]);
             }
             trimTextArea();
-            if (!showProduct) {
-                navigate(`/postEdit/${id}`);
-            } else {
+            // navigate(`/postUpload`);
+            if (editMode === true) {
                 navigate(`/postUpload`);
+            } else if (editMode === false) {
+                navigate(`/postEdit/${id}`, { state: { postData } });
             }
             formRef.current.reset();
         }

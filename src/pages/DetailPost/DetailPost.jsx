@@ -10,6 +10,7 @@ import {
     getCommentApi,
     postCommentApi,
     deleteCommentApi,
+    reportCommentApi,
 } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
@@ -133,7 +134,7 @@ const DetailPost = () => {
 
     const deletePost = e => {
         e.stopPropagation();
-        if (window.confirm('삭제하시겠습니까?')) {
+        if (window.confirm('이 포스트를 삭제하시겠습니까?')) {
             deletePostAPI(postData.id, token);
             navigate(-1);
         }
@@ -142,7 +143,7 @@ const DetailPost = () => {
 
     const reportPost = e => {
         e.stopPropagation();
-        if (window.confirm('신고하시겠습니까?')) {
+        if (window.confirm('이 포스트를 신고하시겠습니까?')) {
             reportPostAPI(postData.id, token);
         }
         handleReportBottomSheet();
@@ -150,7 +151,7 @@ const DetailPost = () => {
 
     const deleteComment = (e, commentID) => {
         e.stopPropagation();
-        if (window.confirm('삭제하시겠습니까?')) {
+        if (window.confirm('이 댓글을 삭제하시겠습니까?')) {
             deleteCommentApi(postData.id, commentID, token) //
                 .then(() =>
                     getCommentApi(id, token)
@@ -161,6 +162,13 @@ const DetailPost = () => {
                             console.error('API 요청 중 오류 발생: ', error);
                         }),
                 );
+        }
+    };
+
+    const reportComment = (e, commentID) => {
+        e.stopPropagation();
+        if (window.confirm('이 댓글을 신고하시겠습니까?')) {
+            reportCommentApi(postData.id, commentID, token);
         }
     };
 
@@ -255,7 +263,13 @@ const DetailPost = () => {
                                                 삭제
                                             </button>
                                         ) : (
-                                            <button>신고</button>
+                                            <button
+                                                onClick={e =>
+                                                    reportComment(e, comment.id)
+                                                }
+                                            >
+                                                신고
+                                            </button>
                                         )}
                                     </S.CommentItem>
                                 ))}

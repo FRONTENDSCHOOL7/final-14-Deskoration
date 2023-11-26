@@ -52,6 +52,31 @@ export const postCommentApi = async (id, content, token) => {
     }
 };
 
+export const reportCommentApi = async (postID, commentID, token) => {
+    const apiUrl = `${baseUrl}/post/${postID}/comments/${commentID}/report`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error('API request failed');
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+};
+
 export const deleteCommentApi = async (postID, commentID, token) => {
     const apiUrl = `${baseUrl}/post/${postID}/comments/${commentID}`;
 

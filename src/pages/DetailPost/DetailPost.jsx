@@ -109,16 +109,9 @@ const DetailPost = () => {
     };
 
     // bottomsheet
-    const [commentID, setCommentID] = useState();
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
     const handlePostBottomSheet = () => {
         setIsPostBottomSheet(!isPostBottomSheet);
-    };
-    const [isCommentBottomSheet, setIsCommentBottomSheet] = useState(false);
-
-    const handleCommentBottomSheet = comment_id => {
-        setCommentID(comment_id);
-        setIsCommentBottomSheet(!isCommentBottomSheet);
     };
 
     const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
@@ -137,10 +130,6 @@ const DetailPost = () => {
         e.stopPropagation();
         console.log('edit post');
     };
-    const editComment = e => {
-        e.stopPropagation();
-        console.log('edit comment');
-    };
 
     const deletePost = e => {
         e.stopPropagation();
@@ -158,7 +147,8 @@ const DetailPost = () => {
         }
         handleReportBottomSheet();
     };
-    const deleteComment = e => {
+
+    const deleteComment = (e, commentID) => {
         e.stopPropagation();
         if (window.confirm('삭제하시겠습니까?')) {
             deleteCommentApi(postData.id, commentID, token) //
@@ -171,9 +161,9 @@ const DetailPost = () => {
                             console.error('API 요청 중 오류 발생: ', error);
                         }),
                 );
-            handleCommentBottomSheet();
         }
     };
+
     return (
         <>
             <S.DetailPostCotainer>
@@ -244,24 +234,28 @@ const DetailPost = () => {
                                 </S.CommentCounter>
                                 {commentData?.map((comment, index) => (
                                     <S.CommentItem key={index}>
-                                        <S.ProfileImg
-                                            src={comment.author.image}
-                                            alt="사용자 이미지"
-                                        />
-                                        <div>
-                                            <div>{comment.author.username}</div>
-                                            <p>{comment.content}</p>
-                                        </div>
-                                        {comment.author._id === myId && (
+                                        <S.CommentInfo>
+                                            <S.ProfileImg
+                                                src={comment.author.image}
+                                                alt="사용자 이미지"
+                                            />
+                                            <div>
+                                                <span>
+                                                    {comment.author.username}
+                                                </span>
+                                                <p>{comment.content}</p>
+                                            </div>
+                                        </S.CommentInfo>
+                                        {comment.author._id === myId ? (
                                             <button
-                                                onClick={() =>
-                                                    handleCommentBottomSheet(
-                                                        comment.id,
-                                                    )
+                                                onClick={e =>
+                                                    deleteComment(e, comment.id)
                                                 }
                                             >
-                                                <S.Dots_verticalIcon />
+                                                삭제
                                             </button>
+                                        ) : (
+                                            <button>신고</button>
                                         )}
                                     </S.CommentItem>
                                 ))}
@@ -297,12 +291,6 @@ const DetailPost = () => {
                     oneButton
                     children={'신고하기'}
                     deleteFn={e => reportPost(e)}
-                />
-                <BottomSheet
-                    isBottomSheet={isCommentBottomSheet}
-                    hadleBottomSheet={handleCommentBottomSheet}
-                    editFn={e => editComment(e)}
-                    deleteFn={e => deleteComment(e)}
                 />
             </S.DetailPostCotainer>
         </>

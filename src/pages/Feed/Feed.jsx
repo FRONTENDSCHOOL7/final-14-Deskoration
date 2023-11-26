@@ -21,7 +21,7 @@ const Feed = () => {
         getFeedApi(token)
             .then(result => {
                 setFeedData(result.posts);
-                console.log(result.posts);
+                // console.log(result.posts);
                 const newFeedContent = [];
                 const newCreateDate = [];
                 const newLikes = [];

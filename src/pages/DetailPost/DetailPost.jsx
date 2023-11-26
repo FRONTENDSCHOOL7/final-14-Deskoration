@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './DetailPost.styled';
-import { deletePostAPI, detialPostApi } from '../../service/post_service';
+import {
+    deletePostAPI,
+    detialPostApi,
+    reportPostAPI,
+} from '../../service/post_service';
 import { postLikeApi, deleteLikeApi } from '../../service/like_service';
 import {
     getCommentApi,
@@ -117,6 +121,11 @@ const DetailPost = () => {
         setIsCommentBottomSheet(!isCommentBottomSheet);
     };
 
+    const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
+    const handleReportBottomSheet = () => {
+        setIsReportBottomSheet(!isReportBottomSheet);
+    };
+
     usePageHandler(
         'user',
         postData?.author.image,
@@ -137,8 +146,17 @@ const DetailPost = () => {
         e.stopPropagation();
         if (window.confirm('삭제하시겠습니까?')) {
             deletePostAPI(postData.id, token);
+            navigate(-1);
         }
-        navigate(-1);
+        handlePostBottomSheet();
+    };
+
+    const reportPost = e => {
+        e.stopPropagation();
+        if (window.confirm('신고하시겠습니까?')) {
+            reportPostAPI(postData.id, token);
+        }
+        handleReportBottomSheet();
     };
     const deleteComment = e => {
         e.stopPropagation();
@@ -201,11 +219,18 @@ const DetailPost = () => {
                                             commentCount={commentData?.length}
                                         />
                                     </div>
-                                    <button onClick={handlePostBottomSheet}>
-                                        {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+
+                                    {postData.author._id === myId ? (
+                                        <button onClick={handlePostBottomSheet}>
                                             <S.Dots_verticalIcon />
-                                        )}
-                                    </button>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleReportBottomSheet}
+                                        >
+                                            <S.Dots_verticalIcon />
+                                        </button>
+                                    )}
                                 </S.ContentButtonBox>
                                 <div className="user-name">
                                     {postData.author.username}
@@ -265,6 +290,13 @@ const DetailPost = () => {
                     hadleBottomSheet={handlePostBottomSheet}
                     editFn={e => editPost(e)}
                     deleteFn={e => deletePost(e)}
+                />
+                <BottomSheet
+                    isBottomSheet={isReportBottomSheet}
+                    hadleBottomSheet={handleReportBottomSheet}
+                    oneButton
+                    children={'신고하기'}
+                    deleteFn={e => reportPost(e)}
                 />
                 <BottomSheet
                     isBottomSheet={isCommentBottomSheet}

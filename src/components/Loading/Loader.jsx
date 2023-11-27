@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './CommonLoading.styled';
+import * as S from './Loader.styled';
 
-const CommonLoading = () => {
+const Loader = () => {
     const text = 'Deskoration';
     const [toggleColor, setToggleColor] = useState(false);
 
@@ -33,4 +33,4 @@ const CommonLoading = () => {
     );
 };
 
-export default CommonLoading;
+export default Loader;

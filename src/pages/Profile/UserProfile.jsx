@@ -4,7 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { getUserProfileApi } from '../../service/profile_service';
 import { getMyPostApi } from '../../service/post_service';
 import { Link, useParams } from 'react-router-dom';
-import CommonLoading from '../Loading/CommonLoading';
+import Loader from '../../components/Loading/Loader';
 import usePageHandler from '../../hooks/usePageHandler';
 import {
     postFollowApi,
@@ -45,7 +45,7 @@ const UserProfile = () => {
     }, [token, username]);
 
     if (profileData === null || userPost === null) {
-        return <CommonLoading />;
+        return <Loader />;
     }
 
     const toggleExpandedContent = () => {

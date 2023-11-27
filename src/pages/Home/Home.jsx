@@ -5,7 +5,7 @@ import Article from './Article';
 import Slide from './Slide';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getAllPostApi } from '../../service/post_service';
-import CommonLoading from '../Loading/CommonLoading';
+import Loader from '../../components/Loading/Loader';
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
@@ -35,7 +35,7 @@ const Home = () => {
     return (
         <>
             {!isReady ? (
-                <CommonLoading />
+                <Loader />
             ) : (
                 <>
                     <Slide />

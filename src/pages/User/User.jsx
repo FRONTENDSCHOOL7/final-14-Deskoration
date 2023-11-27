@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Splash from '../Loading/Splash';
+import Splash from '../../components/Splash/Splash';
 import AlertModal from '../../components/AlertModal/AlertModal';
 
 import * as S from './User.styled';

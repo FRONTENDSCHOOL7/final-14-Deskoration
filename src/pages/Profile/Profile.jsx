@@ -4,7 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { getMyProfileApi } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
 import { getMyPostApi } from '../../service/post_service';
-import CommonLoading from '../Loading/CommonLoading';
+import Loader from '../../components/Loading/Loader';
 import usePageHandler from '../../hooks/usePageHandler';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -51,7 +51,7 @@ const Profile = () => {
     }, [tempAccountName, token]);
 
     if (profileData === null || userPost === null) {
-        return <CommonLoading />;
+        return <Loader />;
     }
 
     const toggleExpandedContent = () => {

@@ -14,6 +14,12 @@ const FollowerListPage = lazy(() =>
 const FollowingListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowingList'),
 );
+const UserFollowingListPage = lazy(() =>
+    import('../pages/FollowFollowingList/UserFollowingList'),
+);
+const UserFollowerListPage = lazy(() =>
+    import('../pages/FollowFollowingList/UserFollowerList'),
+);
 
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 
@@ -83,6 +89,18 @@ const Router = () => {
                                 path={'/followerList'}
                                 element={<FollowerListPage />}
                             />
+                            <Route
+                                path={'/followingList'}
+                                element={<FollowingListPage />}
+                            />
+                            <Route
+                                path={'/followerList/:username'}
+                                element={<UserFollowerListPage />}
+                            />
+                            <Route
+                                path={'/followingList/:username'}
+                                element={<UserFollowingListPage />}
+                            />
                         </Route>
                     </Route>
                     <Route element={<NoFooterLayoutPage />}>
@@ -94,14 +112,14 @@ const Router = () => {
                             path={'/profileEdit'}
                             element={<ProfileUploadPage />}
                         />
-                        <Route
+                        {/* <Route
                             path={'/followerList'}
                             element={<FollowerListPage />}
                         />
                         <Route
                             path={'/followingList'}
                             element={<FollowingListPage />}
-                        />
+                        /> */}
                         <Route
                             path={'/detailPost/:id'}
                             element={<DetailPostPage />}

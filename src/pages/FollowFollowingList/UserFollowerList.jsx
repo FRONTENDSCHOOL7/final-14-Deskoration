@@ -7,18 +7,20 @@ import {
     getFollowerApi,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
-const FollowerList = () => {
+const UserFollowerList = () => {
     const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
+    const { username } = useParams(); //선택한 게시물 아이디 값
     const [followerData, setFollowerData] = useState([]);
     const [follow, setFollow] = useState(false);
     usePageHandler('text', '팔로워');
+    console.log(username);
 
     // 팔로워 리스트 불러오기
     useEffect(() => {
-        getFollowerApi(token, myAccountName)
+        getFollowerApi(token, username)
             .then(data => {
                 setFollowerData(data);
                 postFollowApi(token, data[0].accountname)
@@ -36,8 +38,6 @@ const FollowerList = () => {
     useEffect(() => {}, []);
 
     const handleFollowToggle = async accountname => {
-        setFollow(!follow);
-
         const follower = followerData.find(f => f.accountname === accountname);
         if (follower) {
             try {
@@ -76,15 +76,17 @@ const FollowerList = () => {
                                 <div>{data?.accountname}</div>
                             </S.FollowerInfo>
                         </Link>
-                        <GradientButton
-                            width={'80px'}
-                            onClick={() =>
-                                handleFollowToggle(data?.accountname)
-                            }
-                            gra={!data.isfollow ? true : false}
-                        >
-                            {!data.isfollow ? '팔로우' : '팔로잉'}
-                        </GradientButton>
+                        {data.accountname !== myAccountName && (
+                            <GradientButton
+                                width={'80px'}
+                                onClick={() =>
+                                    handleFollowToggle(data?.accountname)
+                                }
+                                gra={!data.isfollow ? true : false}
+                            >
+                                {!data.isfollow ? '팔로우' : '팔로잉'}
+                            </GradientButton>
+                        )}
                     </S.FollowerList>
                 ))}
             </S.FollowerContainer>
@@ -92,4 +94,4 @@ const FollowerList = () => {
     );
 };
 
-export default FollowerList;
+export default UserFollowerList;

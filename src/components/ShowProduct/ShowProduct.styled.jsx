@@ -16,7 +16,10 @@ export const MapContianer = styled.div`
     background: rgba(0, 0, 0, 0.05);
 `;
 
-export const LinkButton = styled.a.attrs(props => ({ href: props.$link }))`
+export const LinkButton = styled.a.attrs(props => ({
+    href: props.$link,
+    target: '_blank',
+}))`
     padding: 15px 33px;
     border: 2px solid ${theme.main};
     border-radius: 10px;

@@ -20,13 +20,32 @@ const handleActive = (name, setActive) => {
     setActive(name);
 };
 
-export const HomeBtn = ({ hover, setHover, active, setActive }) => {
+const icons = {
+    home: S.HomeIcon,
+    feed: S.FeedIcon,
+    postUpload: S.PostUploadIcon,
+    chat: S.ChatIcon,
+    profile: S.ProfileIcon,
+};
+
+const iconNames = {
+    home: '홈',
+    feed: '피드',
+    postUpload: '글쓰기',
+    chat: '채팅',
+    profile: '프로필',
+};
+
+const GenericIconButton = ({ type, hover, setHover, active, setActive }) => {
     const handleNavigate = useNavigation();
+    const Icon = icons[type];
+    const iconName = iconNames[type];
+
     return (
         <S.IconButton
             type="button"
-            name="home"
-            $active={active === 'home'}
+            name={type}
+            $active={active === type}
             onMouseEnter={event =>
                 handleMouseEnter(event.currentTarget.name, setHover)
             }
@@ -35,117 +54,21 @@ export const HomeBtn = ({ hover, setHover, active, setActive }) => {
             }
             onClick={event => {
                 handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/home');
+                handleNavigate(`/${type}`);
             }}
         >
-            <S.HomeIcon $hover={hover.home} $active={active === 'home'} />
-            <S.IconNameSpan $hover={hover.home} $active={active === 'home'}>
-                홈
+            <Icon $hover={hover[type]} $active={active === type} />
+            <S.IconNameSpan $hover={hover[type]} $active={active === type}>
+                {iconName}
             </S.IconNameSpan>
         </S.IconButton>
     );
 };
 
-export const FeedBtn = ({ hover, setHover, active, setActive }) => {
-    const handleNavigate = useNavigation();
-    return (
-        <S.IconButton
-            type="button"
-            name="feed"
-            $active={active === 'feed'}
-            onMouseEnter={event =>
-                handleMouseEnter(event.currentTarget.name, setHover)
-            }
-            onMouseLeave={event =>
-                handleMouseLeave(event.currentTarget.name, setHover)
-            }
-            onClick={event => {
-                handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/feed');
-            }}
-        >
-            <S.FeedIcon $hover={hover.feed} $active={active === 'feed'} />
-            <S.IconNameSpan $hover={hover.feed} $active={active === 'feed'}>
-                피드
-            </S.IconNameSpan>
-        </S.IconButton>
-    );
-};
-
-export const AddBtn = ({ hover, setHover, active, setActive }) => {
-    const handleNavigate = useNavigation();
-    return (
-        <S.IconButton
-            type="button"
-            name="add"
-            $active={active === 'add'}
-            onMouseEnter={event =>
-                handleMouseEnter(event.currentTarget.name, setHover)
-            }
-            onMouseLeave={event =>
-                handleMouseLeave(event.currentTarget.name, setHover)
-            }
-            onClick={event => {
-                handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/postUpload');
-            }}
-        >
-            <S.AddIcon $hover={hover.add} $active={active === 'add'} />
-            <S.IconNameSpan $hover={hover.add} $active={active === 'add'}>
-                글쓰기
-            </S.IconNameSpan>
-        </S.IconButton>
-    );
-};
-
-export const ChatBtn = ({ hover, setHover, active, setActive }) => {
-    const handleNavigate = useNavigation();
-    return (
-        <S.IconButton
-            type="button"
-            name="chat"
-            $active={active === 'chat'}
-            onMouseEnter={event =>
-                handleMouseEnter(event.currentTarget.name, setHover)
-            }
-            onMouseLeave={event =>
-                handleMouseLeave(event.currentTarget.name, setHover)
-            }
-            onClick={event => {
-                handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/chat');
-            }}
-        >
-            <S.ChatIcon $hover={hover.chat} $active={active === 'chat'} />
-            <S.IconNameSpan $hover={hover.chat} $active={active === 'chat'}>
-                채팅
-            </S.IconNameSpan>
-        </S.IconButton>
-    );
-};
-
-export const UserBtn = ({ hover, setHover, active, setActive }) => {
-    const handleNavigate = useNavigation();
-    return (
-        <S.IconButton
-            type="button"
-            name="user"
-            $active={active === 'user'}
-            onMouseEnter={event =>
-                handleMouseEnter(event.currentTarget.name, setHover)
-            }
-            onMouseLeave={event =>
-                handleMouseLeave(event.currentTarget.name, setHover)
-            }
-            onClick={event => {
-                handleActive(event.currentTarget.name, setActive);
-                handleNavigate('/profile');
-            }}
-        >
-            <S.UserIcon $hover={hover.user} $active={active === 'user'} />
-            <S.IconNameSpan $hover={hover.user} $active={active === 'user'}>
-                프로필
-            </S.IconNameSpan>
-        </S.IconButton>
-    );
-};
+export const HomeBtn = props => <GenericIconButton type="home" {...props} />;
+export const FeedBtn = props => <GenericIconButton type="feed" {...props} />;
+export const AddBtn = props => (
+    <GenericIconButton type="postUpload" {...props} />
+);
+export const ChatBtn = props => <GenericIconButton type="chat" {...props} />;
+export const UserBtn = props => <GenericIconButton type="profile" {...props} />;

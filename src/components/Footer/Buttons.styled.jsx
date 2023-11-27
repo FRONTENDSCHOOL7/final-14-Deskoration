@@ -23,9 +23,7 @@ export const FeedIcon = styled(FeedFile)`
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
     }
 `;
-export const AddIcon = styled(AddFile)`
-    /* path {
-    } */
+export const PostUploadIcon = styled(AddFile)`
     rect {
         stroke: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
@@ -43,7 +41,7 @@ export const ChatIcon = styled(ChatFile)`
             $active ? theme.main : $hover ? theme.main : theme.mainFont};
     }
 `;
-export const UserIcon = styled(UserFile)`
+export const ProfileIcon = styled(UserFile)`
     path {
         stroke: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : theme.mainFont};

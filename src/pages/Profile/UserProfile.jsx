@@ -13,6 +13,7 @@ import {
 } from '../../service/follow_service';
 
 const UserProfile = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [profileData, setProfileData] = useState(null);
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
@@ -25,6 +26,7 @@ const UserProfile = () => {
     usePageHandler('text', profileData?.username);
 
     useEffect(() => {
+        setIsLoading(true);
         // API 호출해서 데이터 받아오기
         getUserProfileApi(username, token)
             .then(data => {
@@ -41,6 +43,9 @@ const UserProfile = () => {
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, [token, username]);
 

@@ -20,7 +20,8 @@ export const FollowingList = styled.li`
         height: 40px;
         border-radius: 50%;
         margin-right: 8px;
-        /* background-color: red; */
+        border: 1px ${({ theme }) => theme.border} solid;
+        object-fit: cover;
     }
 `;
 

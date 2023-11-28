@@ -6,6 +6,11 @@ import { getMyPostApi } from '../../service/post_service';
 import { Link, useParams } from 'react-router-dom';
 import CommonLoading from '../Loading/CommonLoading';
 import usePageHandler from '../../hooks/usePageHandler';
+import {
+    postFollowApi,
+    deleteFollowApi,
+    getFollowerApi,
+} from '../../service/follow_service';
 
 const UserProfile = () => {
     const [profileData, setProfileData] = useState(null);
@@ -13,6 +18,9 @@ const UserProfile = () => {
     const [expandedContent, setExpandedContent] = useState(false);
     const { username } = useParams(); //선택한 게시물 아이디 값
     const token = sessionStorage.getItem('Token');
+    const myAccountName = sessionStorage.getItem('AccountName');
+    const [followerData, setFollowerData] = useState([]);
+    const [follow, setFollow] = useState(false);
 
     usePageHandler('text', profileData?.username);
 
@@ -42,6 +50,28 @@ const UserProfile = () => {
 
     const toggleExpandedContent = () => {
         setExpandedContent(!expandedContent);
+    };
+
+    const userFollowToggle = async accountname => {
+        try {
+            let updatedFollow;
+            if (profileData.isfollow) {
+                const response = await deleteFollowApi(token, accountname);
+                updatedFollow = response.profile.isfollow;
+            } else {
+                const response = await postFollowApi(token, accountname);
+                updatedFollow = response.profile.isfollow;
+            }
+
+            const updatedFollowerData = {
+                ...profileData,
+                isfollow: updatedFollow,
+            };
+
+            setProfileData(updatedFollowerData);
+        } catch (error) {
+            console.error('API 요청 중 오류 발생:', error);
+        }
     };
 
     return (
@@ -74,11 +104,16 @@ const UserProfile = () => {
                 <div className="gradient_btn">
                     <GradientButton
                         type={'button'}
-                        gra={'true'}
+                        // gra={'true'}
+                        gra={!profileData.isfollow ? true : false}
                         width={'100%'}
                         padding={'10px'}
+                        onClick={() =>
+                            userFollowToggle(profileData?.accountname)
+                        }
                     >
-                        팔로우
+                        {/* 팔로우 */}
+                        {!profileData.isfollow ? '팔로우' : '팔로잉'}
                     </GradientButton>
                     <GradientButton
                         type={'button'}
@@ -94,13 +129,13 @@ const UserProfile = () => {
                         <p>{userPost?.length}</p>
                         <p>게시물</p>
                     </button>
-                    <Link to="/followerList">
+                    <Link to={`/followerList/${username}`}>
                         <button className="user-follow">
                             <p>{profileData?.followerCount}</p>
                             <p>팔로워</p>
                         </button>
                     </Link>
-                    <Link to="/followingList">
+                    <Link to={`/followingList/${username}`}>
                         <button className="user-following">
                             <p>{profileData?.followingCount}</p>
                             <p>팔로잉</p>

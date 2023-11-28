@@ -21,23 +21,13 @@ const FollowerList = () => {
         getFollowerApi(token, myAccountName)
             .then(data => {
                 setFollowerData(data);
-                postFollowApi(token, data[0].accountname)
-                    .then(data => {
-                        setFollow(data.profile.isfollow);
-                    })
-                    .catch(error => {
-                        console.error('API 요청 중 오류 발생: ', error);
-                    });
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
     }, []);
-    useEffect(() => {}, []);
 
     const handleFollowToggle = async accountname => {
-        setFollow(!follow);
-
         const follower = followerData.find(f => f.accountname === accountname);
         if (follower) {
             try {

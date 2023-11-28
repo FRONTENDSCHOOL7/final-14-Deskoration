@@ -31,7 +31,6 @@ const UserFollowingList = () => {
         };
         fetchFollowing();
     }, []);
-    console.log('following:', followingData);
 
     const handleFollowToggle = async accountname => {
         const following = followingData.find(

@@ -20,7 +20,13 @@ import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
 
+import AlertModal from '../../components/AlertModal/AlertModal';
+import { useDispatch } from 'react-redux';
+import { openAlertModal } from '../../features/modal/alertModalSlice';
+
 const DetailPost = () => {
+    const dispatch = useDispatch();
+
     const [postData, setPostData] = useState(null);
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
@@ -145,6 +151,7 @@ const DetailPost = () => {
         e.stopPropagation();
         if (window.confirm('이 포스트를 신고하시겠습니까?')) {
             reportPostAPI(postData.id, token);
+            dispatch(openAlertModal());
         }
         handleReportBottomSheet();
     };
@@ -169,6 +176,7 @@ const DetailPost = () => {
         e.stopPropagation();
         if (window.confirm('이 댓글을 신고하시겠습니까?')) {
             reportCommentApi(postData.id, commentID, token);
+            dispatch(openAlertModal());
         }
     };
 
@@ -306,6 +314,7 @@ const DetailPost = () => {
                     children={'신고하기'}
                     deleteFn={e => reportPost(e)}
                 />
+                <AlertModal alert={'신고가 완료되었습니다.'} />
             </S.DetailPostCotainer>
         </>
     );

@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as S from './DetailPost.styled';
-import { deletePostAPI, detialPostApi } from '../../service/post_service';
+import {
+    deletePostAPI,
+    detialPostApi,
+    reportPostAPI,
+} from '../../service/post_service';
 import { postLikeApi, deleteLikeApi } from '../../service/like_service';
 import {
     getCommentApi,
     postCommentApi,
     deleteCommentApi,
+    reportCommentApi,
 } from '../../service/comment_service';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
@@ -15,7 +20,13 @@ import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
 
+import AlertModal from '../../components/AlertModal/AlertModal';
+import { useDispatch } from 'react-redux';
+import { openAlertModal } from '../../features/modal/alertModalSlice';
+
 const DetailPost = () => {
+    const dispatch = useDispatch();
+
     const [postData, setPostData] = useState(null);
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
@@ -105,16 +116,14 @@ const DetailPost = () => {
     };
 
     // bottomsheet
-    const [commentID, setCommentID] = useState();
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
     const handlePostBottomSheet = () => {
         setIsPostBottomSheet(!isPostBottomSheet);
     };
-    const [isCommentBottomSheet, setIsCommentBottomSheet] = useState(false);
 
-    const handleCommentBottomSheet = comment_id => {
-        setCommentID(comment_id);
-        setIsCommentBottomSheet(!isCommentBottomSheet);
+    const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
+    const handleReportBottomSheet = () => {
+        setIsReportBottomSheet(!isReportBottomSheet);
     };
 
     usePageHandler(
@@ -128,21 +137,28 @@ const DetailPost = () => {
         e.stopPropagation();
         console.log('edit post');
     };
-    const editComment = e => {
-        e.stopPropagation();
-        console.log('edit comment');
-    };
 
     const deletePost = e => {
         e.stopPropagation();
-        if (window.confirm('삭제하시겠습니까?')) {
+        if (window.confirm('이 포스트를 삭제하시겠습니까?')) {
             deletePostAPI(postData.id, token);
+            navigate(-1);
         }
-        navigate(-1);
+        handlePostBottomSheet();
     };
-    const deleteComment = e => {
+
+    const reportPost = e => {
         e.stopPropagation();
-        if (window.confirm('삭제하시겠습니까?')) {
+        if (window.confirm('이 포스트를 신고하시겠습니까?')) {
+            reportPostAPI(postData.id, token);
+            dispatch(openAlertModal());
+        }
+        handleReportBottomSheet();
+    };
+
+    const deleteComment = (e, commentID) => {
+        e.stopPropagation();
+        if (window.confirm('이 댓글을 삭제하시겠습니까?')) {
             deleteCommentApi(postData.id, commentID, token) //
                 .then(() =>
                     getCommentApi(id, token)
@@ -153,9 +169,17 @@ const DetailPost = () => {
                             console.error('API 요청 중 오류 발생: ', error);
                         }),
                 );
-            handleCommentBottomSheet();
         }
     };
+
+    const reportComment = (e, commentID) => {
+        e.stopPropagation();
+        if (window.confirm('이 댓글을 신고하시겠습니까?')) {
+            reportCommentApi(postData.id, commentID, token);
+            dispatch(openAlertModal());
+        }
+    };
+
     return (
         <>
             <S.DetailPostCotainer>
@@ -201,11 +225,18 @@ const DetailPost = () => {
                                             commentCount={commentData?.length}
                                         />
                                     </div>
-                                    <button onClick={handlePostBottomSheet}>
-                                        {postData.author._id === myId && ( // post.author._id와 myId가 동일한 경우에만 보이게 함
+
+                                    {postData.author._id === myId ? (
+                                        <button onClick={handlePostBottomSheet}>
                                             <S.Dots_verticalIcon />
-                                        )}
-                                    </button>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleReportBottomSheet}
+                                        >
+                                            <S.Dots_verticalIcon />
+                                        </button>
+                                    )}
                                 </S.ContentButtonBox>
                                 <div className="user-name">
                                     {postData.author.username}
@@ -219,23 +250,33 @@ const DetailPost = () => {
                                 </S.CommentCounter>
                                 {commentData?.map((comment, index) => (
                                     <S.CommentItem key={index}>
-                                        <S.ProfileImg
-                                            src={comment.author.image}
-                                            alt="사용자 이미지"
-                                        />
-                                        <div>
-                                            <div>{comment.author.username}</div>
-                                            <p>{comment.content}</p>
-                                        </div>
-                                        {comment.author._id === myId && (
+                                        <S.CommentInfo>
+                                            <S.ProfileImg
+                                                src={comment.author.image}
+                                                alt="사용자 이미지"
+                                            />
+                                            <div>
+                                                <span>
+                                                    {comment.author.username}
+                                                </span>
+                                                <p>{comment.content}</p>
+                                            </div>
+                                        </S.CommentInfo>
+                                        {comment.author._id === myId ? (
                                             <button
-                                                onClick={() =>
-                                                    handleCommentBottomSheet(
-                                                        comment.id,
-                                                    )
+                                                onClick={e =>
+                                                    deleteComment(e, comment.id)
                                                 }
                                             >
-                                                <S.Dots_verticalIcon />
+                                                삭제
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={e =>
+                                                    reportComment(e, comment.id)
+                                                }
+                                            >
+                                                신고
                                             </button>
                                         )}
                                     </S.CommentItem>
@@ -267,11 +308,13 @@ const DetailPost = () => {
                     deleteFn={e => deletePost(e)}
                 />
                 <BottomSheet
-                    isBottomSheet={isCommentBottomSheet}
-                    hadleBottomSheet={handleCommentBottomSheet}
-                    editFn={e => editComment(e)}
-                    deleteFn={e => deleteComment(e)}
+                    isBottomSheet={isReportBottomSheet}
+                    hadleBottomSheet={handleReportBottomSheet}
+                    oneButton
+                    children={'신고하기'}
+                    deleteFn={e => reportPost(e)}
                 />
+                <AlertModal alert={'신고가 완료되었습니다.'} />
             </S.DetailPostCotainer>
         </>
     );

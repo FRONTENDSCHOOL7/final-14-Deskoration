@@ -14,7 +14,7 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
 
     const showProduct = itemCount => {
         navigate(`/detailPost/${id}/${itemCount}`, {
-            state: { defaultProductItem: productItem },
+            state: { showProduct: productItem },
         });
     };
 

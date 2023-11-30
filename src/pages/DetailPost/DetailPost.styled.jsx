@@ -45,7 +45,7 @@ export const ProfileImg = styled.img`
     background-size: cover;
     background-position: center;
     box-sizing: border-box;
-    margin-right: 10px;
+    margin-right: 7px;
 `;
 
 export const DetailPostMain = styled.div`
@@ -92,34 +92,30 @@ export const CommentCounter = styled.div`
 
 export const CommentItem = styled.div`
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 8px;
 
     &:last-child {
         margin-bottom: 0;
     }
 
+    div {
+        width: 100%;
+        div {
+            font-family: 'PreBold';
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 12px;
+        }
+    }
+
     button {
-        color: ${theme.subFont};
-        font-size: 10px;
-        padding: 10px 0 10px 10px;
-    }
-`;
-
-export const CommentInfo = styled.div`
-    display: flex;
-    align-items: center;
-    span {
-        font-family: 'PreBold';
-        font-size: 12px;
-        margin-bottom: 5px;
-    }
-
-    p {
-        width: 200px;
-        font-size: 12px;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        svg {
+            vertical-align: top;
+        }
     }
 `;
 

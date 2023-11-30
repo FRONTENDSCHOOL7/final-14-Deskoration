@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
-import { getFeedApi, reportPostAPI } from '../../service/post_service';
+import { getFeedApi } from '../../service/post_service';
 import { postLikeApi, deleteLikeApi } from '../../service/like_service';
 import { Link, useNavigate } from 'react-router-dom';
 import SocialButton from '../../components/SocialButton/SocialButton';
-import BottomSheet from '../../components/BottomSheet/BottomSheet';
-import { useDispatch, useSelector } from 'react-redux';
-import { openAlertModal } from '../../features/modal/alertModalSlice';
-import AlertModal from '../../components/AlertModal/AlertModal';
 
 const Feed = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
     const [feedData, setFeedData] = useState([]);
     const [feedContent, setFeedContent] = useState([]);
@@ -20,45 +15,13 @@ const Feed = () => {
     const [likesData, setLikesData] = useState([]);
     const [commentCount, setCommentCount] = useState([]);
 
-    // 신고후에 보여줄 alertModal message
-    const [reportMessage, setReportMessage] = useState('');
-    const { isOpen } = useSelector(store => store.alertModal);
-
-    // 신고하기를 위한 postId
-    const [postId, setPostId] = useState();
-
-    // 신고하기 bootomsheet
-    const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
-    const handleReportBottomSheet = itemId => {
-        setPostId(itemId);
-        setIsReportBottomSheet(!isReportBottomSheet);
-    };
-
-    // 신고하기
-    const reportPost = e => {
-        e.stopPropagation();
-        reportPostAPI(postId, token) //
-            .then(result => {
-                if (result.message === '존재하지 않는 게시글입니다.') {
-                    setReportMessage('게시글을 찾을 수 없습니다.');
-                    dispatch(openAlertModal());
-                } else {
-                    setReportMessage('신고가 완료되었습니다.');
-                    dispatch(openAlertModal());
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        handleReportBottomSheet();
-    };
-
     usePageHandler('text', '팔로잉 피드');
 
     useEffect(() => {
         getFeedApi(token)
             .then(result => {
                 setFeedData(result.posts);
+                // console.log(result.posts);
                 const newFeedContent = [];
                 const newCreateDate = [];
                 const newLikes = [];
@@ -139,7 +102,6 @@ const Feed = () => {
     const moveToProfile = accountname => {
         navigate(`/profile/${accountname}`);
     };
-
     return (
         <>
             {feedData.map((item, index) => {
@@ -161,9 +123,7 @@ const Feed = () => {
                                     </div>
                                 </S.UserInfoBox>
                             </Link>
-                            <button
-                                onClick={() => handleReportBottomSheet(item.id)}
-                            >
+                            <button>
                                 <S.MoreIcon />
                             </button>
                         </S.FeedItemHeader>
@@ -198,14 +158,6 @@ const Feed = () => {
                     </S.FeedContainer>
                 );
             })}
-            <BottomSheet
-                isBottomSheet={isReportBottomSheet}
-                hadleBottomSheet={handleReportBottomSheet}
-                oneButton
-                children={'신고하기'}
-                deleteFn={e => reportPost(e)}
-            />
-            {isOpen && <AlertModal alert={reportMessage} />}
         </>
     );
 };

@@ -48,53 +48,75 @@ const Router = () => {
     return (
         <Suspense>
             <BrowserRouter>
-                <Routes>
-                    <Route element={<PublicRoutePage />}>
-                        <Route path="/" element={<UserLayoutPage />}>
-                            <Route
-                                path="/"
-                                element={<Navigate to="/login" replace />}
-                            />
-                            <Route path="/login" element={<LoginPage />} />
-                            <Route path="/signup" element={<SignupPage />} />
+                    <Routes>
+                        <Route element={<PublicRoutePage />}>
+                            <Route path="/" element={<UserLayoutPage />}>
+                                <Route
+                                    path="/"
+                                    element={<Navigate to="/login" replace />}
+                                />
+                                <Route path="/login" element={<LoginPage />} />
+                                <Route
+                                    path="/signup"
+                                    element={<SignupPage />}
+                                />
+                            </Route>
                         </Route>
-                    </Route>
 
-                    <Route element={<PrivateRoutePage />}>
-                        <Route element={<DefaultLayoutPage />}>
-                            <Route path={'/home'} element={<HomePage />} />
-                            <Route path={'/feed'} element={<FeedPage />} />
-                            <Route
-                                path={'/postUpload'}
-                                element={<PostUploadPage />}
-                            />
-                            <Route
-                                path={'/postUpload/:itemCount'}
-                                element={<PostUploadPage />}
-                            />
-                            <Route
-                                path={'/detailPost/:id/:itemCount'}
-                                element={<ProductPage />}
-                            />
-                            <Route
-                                path={'/postEdit/:id'}
-                                element={<PostUpdateForm />}
-                            />
-                            <Route
-                                path={'/postEdit/:id/:itemCount'}
-                                element={<PostUploadPage />}
-                            />
-                            <Route path={'/chat'} element={<ChatListPage />} />
-                            <Route
-                                path={'/chat/:username'}
-                                element={<ChatRoomPage />}
-                            />
-                            <Route
-                                path={'/profile'}
-                                element={<ProfilePage />}
-                            />
+                        <Route element={<PrivateRoutePage />}>
+                            <Route element={<DefaultLayoutPage />}>
+                                <Route path={'/home'} element={<HomePage />} />
+                                <Route path={'/feed'} element={<FeedPage />} />
+
+                                <Route
+                                    path={'/postUpload'}
+                                    element={<PostUploadPage />}
+                                />
+                                <Route
+                                    path={'/postUpload/:itemCount'}
+                                    element={<PostUploadPage />}
+                                />
+                                <Route
+                                    path={'/detailPost/:id/:itemCount'}
+                                    element={<PostUploadPage />}
+                                />
+                                <Route
+                                    path={'/postEdit/:id'}
+                                    element={<PostUpdateForm />}
+                                />
+                                <Route
+                                    path={'/postEdit/:id/:itemCount'}
+                                    element={<PostUpdateForm />}
+                                />
+                                <Route
+                                    path={'/chat'}
+                                    element={<ChatListPage />}
+                                />
+                                <Route
+                                    path={'/chat/:username'}
+                                    element={<ChatRoomPage />}
+                                />
+                                <Route
+                                    path={'/profile'}
+                                    element={<ProfilePage />}
+                                />
+                            </Route>
+                            <Route element={<NoFooterLayoutPage />}>
+                                <Route
+                                    path={'/followerList'}
+                                    element={<FollowerListPage />}
+                                />
+                            </Route>
                         </Route>
                         <Route element={<NoFooterLayoutPage />}>
+                            <Route
+                                path={'/profileUpload'}
+                                element={<ProfileUploadPage />}
+                            />
+                            <Route
+                                path={'/profileEdit'}
+                                element={<ProfileUploadPage />}
+                            />
                             <Route
                                 path={'/followerList'}
                                 element={<FollowerListPage />}
@@ -104,43 +126,16 @@ const Router = () => {
                                 element={<FollowingListPage />}
                             />
                             <Route
-                                path={'/followerList/:username'}
-                                element={<UserFollowerListPage />}
+                                path={'/detailPost/:id'}
+                                element={<DetailPostPage />}
                             />
                             <Route
-                                path={'/followingList/:username'}
-                                element={<UserFollowingListPage />}
+                                path={'/profile/:username'}
+                                element={<UserProfilePage />}
                             />
                         </Route>
-                    </Route>
-                    <Route element={<NoFooterLayoutPage />}>
-                        <Route
-                            path={'/profileUpload'}
-                            element={<ProfileUploadPage />}
-                        />
-                        <Route
-                            path={'/profileEdit'}
-                            element={<ProfileUploadPage />}
-                        />
-                        {/* <Route
-                            path={'/followerList'}
-                            element={<FollowerListPage />}
-                        />
-                        <Route
-                            path={'/followingList'}
-                            element={<FollowingListPage />}
-                        /> */}
-                        <Route
-                            path={'/detailPost/:id'}
-                            element={<DetailPostPage />}
-                        />
-                        <Route
-                            path={'/profile/:username'}
-                            element={<UserProfilePage />}
-                        />
-                    </Route>
-                    <Route path="*" element={<NotFoundPage />} />
-                </Routes>
+                        <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
             </BrowserRouter>
         </Suspense>
     );

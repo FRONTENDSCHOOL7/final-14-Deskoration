@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { uploadImgApi } from '../../service/img_service';
 import imageCompression from 'browser-image-compression';
@@ -23,8 +23,10 @@ const PostUploadForm = ({
 }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+    const currentPath = window.location.pathname;
     const { isOpen } = useSelector(store => store.alertModal);
+    const location = useLocation();
+    const postData = location.state?.postData;
 
     const markerPadding = 5;
 
@@ -94,9 +96,15 @@ const PostUploadForm = ({
     };
 
     const checkProductsCount = () => {
-        productItems.length < 5
-            ? navigate(`/postUpload/${productItems.length}`)
-            : dispatch(openAlertModal());
+        if (currentPath.includes('/postEdit')) {
+            productItems.length < 5
+                ? navigate(`/postEdit/${postData.id}/${productItems.length}`)
+                : dispatch(openAlertModal());
+        } else if (currentPath.includes('/postUpload')) {
+            productItems.length < 5
+                ? navigate(`/postUpload/${productItems.length}`)
+                : dispatch(openAlertModal());
+        }
     };
 
     // 이미지 로드 함수

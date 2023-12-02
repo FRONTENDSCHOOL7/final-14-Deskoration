@@ -15,11 +15,9 @@ const RegisterForm = ({
     const navigate = useNavigate();
     const location = useLocation();
     const { id } = useParams();
-    const { postData } = location.state;
-
     const showProduct = location.pathname.includes('/detailPost');
 
-    const editMode = location.pathname.includes('/postUpload');
+    const currentPath = window.location.pathname;
 
     const defaultProductItem = location.state?.defaultProductItem;
 
@@ -51,7 +49,7 @@ const RegisterForm = ({
         event.preventDefault();
 
         console.log(id);
-        console.log(editMode);
+        console.log(currentPath);
 
         const categoryValue = categoryRef.current.value;
         const productNameValue = productNameRef.current.value;
@@ -100,10 +98,10 @@ const RegisterForm = ({
             }
             trimTextArea();
             // navigate(`/postUpload`);
-            if (editMode === true) {
+            if (currentPath.includes('/postUpload')) {
                 navigate(`/postUpload`);
-            } else if (editMode === false) {
-                navigate(`/postEdit/${id}`, { state: { postData } });
+            } else if (currentPath.includes('/postEdit')) {
+                navigate(-1);
             }
             formRef.current.reset();
         }

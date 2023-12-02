@@ -11,7 +11,6 @@ import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
 import Loader from '../../components/Loading/Loader';
 const Feed = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
     const [feedData, setFeedData] = useState([]);

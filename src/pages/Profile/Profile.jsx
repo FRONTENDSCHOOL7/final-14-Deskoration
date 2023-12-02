@@ -4,7 +4,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { getMyProfileApi } from '../../service/profile_service';
 import { Link, useNavigate } from 'react-router-dom';
 import { getMyPostApi } from '../../service/post_service';
-import CommonLoading from '../Loading/CommonLoading';
+import Loader from '../../components/Loading/Loader';
 import usePageHandler from '../../hooks/usePageHandler';
 
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -16,7 +16,7 @@ const Profile = () => {
     const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
     const [isBottomSheet, setIsBottomSheet] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
     const hadleBottomSheet = () => setIsBottomSheet(!isBottomSheet);
 
     const token = sessionStorage.getItem('Token');
@@ -30,15 +30,16 @@ const Profile = () => {
     usePageHandler('text', '나의 프로필');
 
     useEffect(() => {
+        setIsLoading(true);
         // API 호출해서 데이터 받아오기
-        getMyProfileApi(token)
+        const fetchProfileData = getMyProfileApi(token)
             .then(data => {
                 setProfileData(data.user);
             })
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
-        getMyPostApi(tempAccountName, token)
+        const fetchPostData = getMyPostApi(tempAccountName, token)
             .then(data => {
                 const result = data.filter(item =>
                     item.content.includes('"deskoration"'),
@@ -48,11 +49,11 @@ const Profile = () => {
             .catch(error => {
                 console.error('API 요청 중 오류 발생: ', error);
             });
-    }, [tempAccountName, token]);
 
-    if (profileData === null || userPost === null) {
-        return <CommonLoading />;
-    }
+        Promise.all([fetchProfileData, fetchPostData]).finally(() => {
+            setIsLoading(false);
+        });
+    }, [tempAccountName, token]);
 
     const toggleExpandedContent = () => {
         setExpandedContent(!expandedContent);
@@ -62,6 +63,9 @@ const Profile = () => {
         navigate('/profileEdit');
     };
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <>
             <S.ProfileContainer>

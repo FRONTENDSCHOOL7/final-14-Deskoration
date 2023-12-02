@@ -3,13 +3,13 @@ import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi, reportPostAPI } from '../../service/post_service';
 import { postLikeApi, deleteLikeApi } from '../../service/like_service';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
-
+import Loader from '../../components/Loading/Loader';
 const Feed = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const Feed = () => {
     const [createDate, setCreateDate] = useState([]);
     const [likesData, setLikesData] = useState([]);
     const [commentCount, setCommentCount] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     // 신고후에 보여줄 alertModal message
     const [reportMessage, setReportMessage] = useState('');
@@ -56,6 +57,7 @@ const Feed = () => {
     usePageHandler('text', '팔로잉 피드');
 
     useEffect(() => {
+        setIsLoading(true);
         getFeedApi(token)
             .then(result => {
                 setFeedData(result.posts);
@@ -81,7 +83,6 @@ const Feed = () => {
                     });
                     newCommentCount.push(post.commentCount);
                 });
-
                 setFeedContent(newFeedContent);
                 setCreateDate(newCreateDate);
                 setLikesData(newLikes);
@@ -89,7 +90,8 @@ const Feed = () => {
             })
             .catch(error => {
                 console.error('Error calling the feed API: ', error);
-            });
+            })
+            .finally(() => setIsLoading(false));
     }, [token]);
 
     const handleLike = index => {
@@ -132,13 +134,9 @@ const Feed = () => {
         }
     };
 
-    const moveToDetailPost = id => {
-        navigate(`/detailpost/${id}`);
-    };
-
-    const moveToProfile = accountname => {
-        navigate(`/profile/${accountname}`);
-    };
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
         <>

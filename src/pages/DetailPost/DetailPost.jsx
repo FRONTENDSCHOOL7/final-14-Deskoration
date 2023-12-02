@@ -15,7 +15,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 import SocialButton from '../../components/SocialButton/SocialButton';
-
+import Loader from '../../components/Loading/Loader';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 
 import usePageHandler from '../../hooks/usePageHandler';
@@ -32,6 +32,7 @@ const DetailPost = () => {
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
     const [likeData, setLikeData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const token = sessionStorage.getItem('Token');
     const myId = sessionStorage.getItem('Id');
@@ -41,7 +42,8 @@ const DetailPost = () => {
     const inputRef = useRef(null);
 
     useEffect(() => {
-        detialPostApi(id, token)
+        setIsLoading(true);
+        const fetchDetailPostData = detialPostApi(id, token)
             .then(postResult => {
                 setPostContent(JSON.parse(postResult.post.content));
                 setPostData(postResult.post);
@@ -54,13 +56,17 @@ const DetailPost = () => {
             .catch(error => {
                 console.error('error');
             });
-        getCommentApi(id, token)
+        const fetchCommentData = getCommentApi(id, token)
             .then(commentResult => {
                 setCommentData(commentResult.comments.reverse());
             })
             .catch(error => {
                 console.error('error');
             });
+
+        Promise.all([fetchDetailPostData, fetchCommentData]).finally(() => {
+            setIsLoading(false);
+        });
     }, [id, token]);
 
     const handleLike = () => {
@@ -180,6 +186,9 @@ const DetailPost = () => {
         }
     };
 
+    if (isLoading) {
+        return <Loader />;
+    }
     return (
         <>
             <S.DetailPostCotainer>

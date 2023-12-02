@@ -5,15 +5,18 @@ import Article from './Article';
 import Slide from './Slide';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getAllPostApi } from '../../service/post_service';
-import CommonLoading from '../Loading/CommonLoading';
+import Loader from '../../components/Loading/Loader';
 
 const Home = () => {
     const [articles, setArticles] = useState([]);
-    const [isReady, setIsReady] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const token = sessionStorage.getItem('Token');
+
+    usePageHandler('image', logoImg);
 
     const tempApi = async token => {
         try {
+            setIsLoading(true);
             const result = await getAllPostApi(token);
             // console.log('API보기2: ', result.posts);
             const deskoration = result.posts.filter(post =>
@@ -21,9 +24,10 @@ const Home = () => {
             );
             // console.log('deskoration: ', deskoration);
             setArticles(deskoration); // Set the state with articles containing images
-            setIsReady(true);
         } catch (error) {
             console.error('error');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -31,17 +35,14 @@ const Home = () => {
         tempApi(token);
     }, [token]);
 
-    usePageHandler('image', logoImg);
+    if (isLoading) {
+        return <Loader></Loader>;
+    }
+
     return (
         <>
-            {!isReady ? (
-                <CommonLoading />
-            ) : (
-                <>
-                    <Slide />
-                    <Article articles={articles} setArticles={setArticles} />
-                </>
-            )}
+            <Slide />
+            <Article articles={articles} setArticles={setArticles} />
         </>
     );
 };

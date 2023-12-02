@@ -238,7 +238,7 @@ const DetailPost = () => {
                                         />
                                     </div>
 
-                                    {postData.author._id === myId ? (
+                                    {postData.author?._id === myId ? (
                                         <button onClick={handlePostBottomSheet}>
                                             <S.Dots_verticalIcon />
                                         </button>
@@ -333,3 +333,5 @@ const DetailPost = () => {
 };
 
 export default DetailPost;
+
+

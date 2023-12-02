@@ -28,6 +28,34 @@ export const uploadPostApi = async (content, image, token) => {
     }
 };
 
+export const updatePostApi = async (token, postId, postData) => {
+    const reqUrl = `${baseUrl}/post/${postId}`;
+
+    try {
+        const response = await fetch(reqUrl, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                post: postData,
+            }),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            return result;
+        } else {
+            console.error(`Request failed with status: ${response.status}`);
+            throw new Error('Failed to update post');
+        }
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while updating post');
+    }
+};
+
 export const getAllPostApi = async token => {
     const number = 1000;
     const reqURL = `${baseUrl}/post?limit=${number}`;

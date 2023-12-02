@@ -1,6 +1,7 @@
 import { React, lazy, Suspense } from 'react';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import PostUpdateForm from '../pages/NewBoard/UpdateBoard';
 
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
 
@@ -75,6 +76,14 @@ const Router = () => {
                                 path={'/detailPost/:id/:itemCount'}
                                 element={<ProductPage />}
                             />
+                            <Route
+                                    path={'/postEdit/:id'}
+                                    element={<PostUpdateForm />}
+                                />
+                                <Route
+                                    path={'/postEdit/:id/:itemCount'}
+                                    element={<PostUpdateForm />}
+                                />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route
                                 path={'/chat/:username'}

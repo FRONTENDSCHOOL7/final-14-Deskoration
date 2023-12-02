@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input, SelectInput } from '../../components/Input/Input';
 import { WarningMsg } from '../../components/Input/WarningMsg';
@@ -14,8 +14,10 @@ const RegisterForm = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-
+    const { id } = useParams();
     const showProduct = location.pathname.includes('/detailPost');
+
+    const currentPath = window.location.pathname;
 
     const defaultProductItem = location.state?.defaultProductItem;
 
@@ -45,6 +47,9 @@ const RegisterForm = ({
 
     const submitProduct = event => {
         event.preventDefault();
+
+        console.log(id);
+        console.log(currentPath);
 
         const categoryValue = categoryRef.current.value;
         const productNameValue = productNameRef.current.value;
@@ -92,7 +97,12 @@ const RegisterForm = ({
                 ]);
             }
             trimTextArea();
-            navigate(`/postUpload`);
+            // navigate(`/postUpload`);
+            if (currentPath.includes('/postUpload')) {
+                navigate(`/postUpload`);
+            } else if (currentPath.includes('/postEdit')) {
+                navigate(-1);
+            }
             formRef.current.reset();
         }
     };
@@ -169,7 +179,7 @@ const RegisterForm = ({
                     <GradientButton
                         width={'40%'}
                         padding={'12px'}
-                        onClick={() => navigate(`/postUpload`)}
+                        onClick={() => navigate(-1)}
                     >
                         취소하기
                     </GradientButton>

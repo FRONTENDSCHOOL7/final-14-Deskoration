@@ -16,6 +16,7 @@ import {
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
+import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import imageCompression from 'browser-image-compression';
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -40,6 +41,20 @@ export const ProfileUpload = () => {
     const userNameEl = useRef(null);
     const idEl = useRef(null);
     const introEl = useRef(null);
+
+    const {
+        register,
+        handleSubmit,
+        setFocus,
+        formState: { errors },
+    } = useForm({
+        mode: 'onSubmit',
+        defaultValues: {
+            userName: '',
+            userID: '',
+            intro: '',
+        },
+    });
 
     // 헤더에 문구 넣기
     usePageHandler('text', '프로필 설정');
@@ -114,129 +129,130 @@ export const ProfileUpload = () => {
         setPhotoURL(basicImg);
     };
 
+    console.log(errors);
+
     // submit 함수
-    const dataSubmit = async event => {
-        event.preventDefault();
+    const dataSubmit = data => {
+        console.log(data);
+        // const userNameValue = userNameEl.current.value;
+        // const idValue = idEl.current.value;
+        // const introValue = introEl.current.value;
 
-        const userNameValue = userNameEl.current.value;
-        const idValue = idEl.current.value;
-        const introValue = introEl.current.value;
+        // // 유효성 검사
+        // const checkValidUserName = userName => {
+        //     return userName.length >= 2 && userName.length <= 10;
+        // };
+        // const checkValidID = id => {
+        //     const regex = /^[a-zA-Z0-9._]+$/;
+        //     return id.length >= 2 && regex.test(id);
+        // };
 
-        // 유효성 검사
-        const checkValidUserName = userName => {
-            return userName.length >= 2 && userName.length <= 10;
-        };
-        const checkValidID = id => {
-            const regex = /^[a-zA-Z0-9._]+$/;
-            return id.length >= 2 && regex.test(id);
-        };
+        // const validID = checkValidID(idValue);
+        // const validUserName = checkValidUserName(userNameValue);
 
-        const validID = checkValidID(idValue);
-        const validUserName = checkValidUserName(userNameValue);
+        // // 사용자 이름에 따른 state 변경
+        // setWarnUserName(!validUserName);
 
-        // 사용자 이름에 따른 state 변경
-        setWarnUserName(!validUserName);
+        // // 계정 ID 검사
+        // const validateAccountName = id => {
+        //     return new Promise((resolve, reject) => {
+        //         if (!checkValidID(id)) {
+        //             setWarnID(true);
+        //             resolve(false); // 유효하지 않은 경우 false 반환
+        //         } else {
+        //             validAccountNameApi(id)
+        //                 .then(result => {
+        //                     if (
+        //                         result.message === '사용 가능한 계정ID 입니다.'
+        //                     ) {
+        //                         setExistID(false);
+        //                         resolve(true); // 유효한 경우 true 반환
+        //                     } else if (
+        //                         result.message === '이미 가입된 계정ID 입니다.'
+        //                     ) {
+        //                         setExistID(true);
+        //                         resolve(false); // 이미 존재하는 경우 false 반환
+        //                     } else {
+        //                         reject(new Error(result.message)); // 예외 처리
+        //                     }
+        //                 })
+        //                 .catch(error => {
+        //                     console.error(error);
+        //                     reject(error); // 에러 처리
+        //                 });
+        //         }
+        //     });
+        // };
 
-        // 계정 ID 검사
-        const validateAccountName = id => {
-            return new Promise((resolve, reject) => {
-                if (!checkValidID(id)) {
-                    setWarnID(true);
-                    resolve(false); // 유효하지 않은 경우 false 반환
-                } else {
-                    validAccountNameApi(id)
-                        .then(result => {
-                            if (
-                                result.message === '사용 가능한 계정ID 입니다.'
-                            ) {
-                                setExistID(false);
-                                resolve(true); // 유효한 경우 true 반환
-                            } else if (
-                                result.message === '이미 가입된 계정ID 입니다.'
-                            ) {
-                                setExistID(true);
-                                resolve(false); // 이미 존재하는 경우 false 반환
-                            } else {
-                                reject(new Error(result.message)); // 예외 처리
-                            }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                            reject(error); // 에러 처리
-                        });
-                }
-            });
-        };
+        // const isIDValid = await validateAccountName(idValue);
 
-        const isIDValid = await validateAccountName(idValue);
+        // // 유효성 검사를 통과하면 post 요청
+        // // 회원 가입 시 초기 프로필 설정일 경우
+        // if (isIDValid && validUserName && !editPage) {
+        //     const userData = {
+        //         username: userNameValue,
+        //         email: emailValue,
+        //         password: passwordValue,
+        //         accountname: idValue,
+        //         intro: introValue,
+        //         image: !file ? baseURL + noImage : baseURL + file,
+        //     };
+        //     authSignUpApi(userData)
+        //         .then(result => {
+        //             if (result.message === '회원가입 성공') {
+        //                 authLoginApi(emailValue, passwordValue).then(data => {
+        //                     console.log(data);
+        //                     sessionStorage.setItem('Token', data.user.token);
+        //                     sessionStorage.setItem(
+        //                         'AccountName',
+        //                         data.user.accountname,
+        //                     );
+        //                     sessionStorage.setItem('Id', data.user._id);
+        //                     navigate('/home');
+        //                 });
+        //             } else {
+        //                 throw new Error(result.message);
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error(error);
+        //         });
+        // }
+        // // 프로필 편집일 경우
+        // else if (isIDValid && validUserName && editPage) {
+        //     const userData = {
+        //         user: {
+        //             username: userNameValue,
+        //             accountname: idValue,
+        //             intro: introValue,
+        //             image:
+        //                 !file && photoURL === basicImg
+        //                     ? baseURL + noImage
+        //                     : !file && photoURL
+        //                       ? profileData.image
+        //                       : baseURL + file,
+        //         },
+        //     };
 
-        // 유효성 검사를 통과하면 post 요청
-        // 회원 가입 시 초기 프로필 설정일 경우
-        if (isIDValid && validUserName && !editPage) {
-            const userData = {
-                username: userNameValue,
-                email: emailValue,
-                password: passwordValue,
-                accountname: idValue,
-                intro: introValue,
-                image: !file ? baseURL + noImage : baseURL + file,
-            };
-            authSignUpApi(userData)
-                .then(result => {
-                    if (result.message === '회원가입 성공') {
-                        authLoginApi(emailValue, passwordValue).then(data => {
-                            console.log(data);
-                            sessionStorage.setItem('Token', data.user.token);
-                            sessionStorage.setItem(
-                                'AccountName',
-                                data.user.accountname,
-                            );
-                            sessionStorage.setItem('Id', data.user._id);
-                            navigate('/home');
-                        });
-                    } else {
-                        throw new Error(result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-        // 프로필 편집일 경우
-        else if (isIDValid && validUserName && editPage) {
-            const userData = {
-                user: {
-                    username: userNameValue,
-                    accountname: idValue,
-                    intro: introValue,
-                    image:
-                        !file && photoURL === basicImg
-                            ? baseURL + noImage
-                            : !file && photoURL
-                            ? profileData.image
-                            : baseURL + file,
-                },
-            };
-
-            updateProfileApi(token, userData)
-                .then(result => {
-                    if (result.message === '이미 사용중이 계정 ID입니다.') {
-                        throw new Error(result.message);
-                    } else {
-                        sessionStorage.setItem('AccountName', idValue);
-                        navigate('/profile');
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+        //     updateProfileApi(token, userData)
+        //         .then(result => {
+        //             if (result.message === '이미 사용중이 계정 ID입니다.') {
+        //                 throw new Error(result.message);
+        //             } else {
+        //                 sessionStorage.setItem('AccountName', idValue);
+        //                 navigate('/profile');
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error(error);
+        //         });
+        // }
     };
 
     return (
         <section>
             <S.ProfileContainer>
-                <form onSubmit={dataSubmit}>
+                <form onSubmit={handleSubmit(dataSubmit)}>
                     <S.ProfileImgBox>
                         <S.ProfileImg src={photoURL} alt="프로필 이미지" />
                         {isImageAdded && (
@@ -257,24 +273,39 @@ export const ProfileUpload = () => {
                         </S.ImgUploadBox>
                     </S.ProfileImgBox>
                     <S.InputBox>
-                        <Input
-                            label="사용자 이름"
-                            inputRef={userNameEl}
-                            warning={warnUserName}
+                        <S.InputLabel htmlFor={'사용자 이름'}>
+                            사용자 이름
+                        </S.InputLabel>
+                        <S.Input
+                            id={'사용자 이름'}
+                            {...register('userName', {
+                                required: '2~10자 이내여야 합니다.',
+                                minLength: 2,
+                                maxLength: 10,
+                            })}
+                            className={errors.userName ? 'warning' : null}
                             placeholder={'2~10자 이내여야 합니다.'}
                         />
-                        {warnUserName && (
-                            <WarningMsg msg={'2~10자 이내여야 합니다.'} />
+                        {errors.userName && (
+                            <WarningMsg msg={errors.userName.message} />
                         )}
-                        <Input
-                            label="계정 ID"
-                            inputRef={idEl}
-                            warning={warnID || existID}
+                        <S.InputLabel htmlFor={'계정 ID'}>계정 ID</S.InputLabel>
+                        <S.Input
+                            id={'계정 ID'}
+                            {...register('userID', {
+                                required:
+                                    '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.',
+                                pattern: /^[a-zA-Z0-9._]+$/,
+                            })}
+                            className={errors.userID ? 'warning' : null}
                             placeholder={
                                 '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
                             }
                         />
-                        {warnID ? (
+                        {errors.userID && (
+                            <WarningMsg msg={errors.userID.message} />
+                        )}
+                        {/* {warnID ? (
                             <WarningMsg
                                 msg={
                                     '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
@@ -282,11 +313,12 @@ export const ProfileUpload = () => {
                             />
                         ) : existID ? (
                             <WarningMsg msg="이미 가입된 계정ID 입니다." />
-                        ) : null}
-                        <Input
-                            label="소개"
-                            inputRef={introEl}
+                        ) : null} */}
+                        <S.InputLabel htmlFor={'소개'}>소개</S.InputLabel>
+                        <S.Input
+                            id={'소개'}
                             placeholder={'자신을 소개해주세요.'}
+                            {...register('intro')}
                         />
                     </S.InputBox>
                     <GradientButton

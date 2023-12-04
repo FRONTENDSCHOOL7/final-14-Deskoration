@@ -15,6 +15,7 @@ const Header = () => {
     const isHome = location.pathname.includes('/home');
     const isFeed = location.pathname.includes('/feed');
     const isPostUpload = location.pathname.includes('/postUpload');
+    const isPostUpdate = location.pathname.includes('/postEdit');
     const isChat = /^\/chat\/?$/.test(location.pathname);
     const isMyProfile = /^\/profile\/?$/.test(location.pathname);
 
@@ -24,6 +25,7 @@ const Header = () => {
                 {isHome ||
                 isFeed ||
                 isPostUpload ||
+                isPostUpdate ||
                 isChat ||
                 isMyProfile ? null : (
                     <button type="button" onClick={handleGoBack}>

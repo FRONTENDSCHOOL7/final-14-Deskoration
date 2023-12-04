@@ -1,35 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import * as S from './UpdateBoard.styled';
+import { updatePostApi, detialPostApi } from '../../service/post_service';
+import GradientButton from '../../components/GradientButton/GradientButton';
+import PostUploadForm from './PostUploadForm';
+import usePageHandler from '../../hooks/usePageHandler';
+import RegisterForm from './RegisterForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { uploadPostApi } from '../../service/post_service';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import usePageHandler from '../../hooks/usePageHandler';
-
-import RegisterForm from './RegisterForm';
-import PostUploadForm from './PostUploadForm';
-
-import * as S from './NewBoard.styled';
-
-const NewBoard = () => {
+const PostUpdateForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
-    const detailPost = pathName.includes('/detailPost');
+    const postData = location.state?.postData;
     const token = sessionStorage.getItem('Token');
 
-    const [apiContent, setApiContent] = useState();
-
-    const [imageURL, setImageURL] = useState();
+    const [imageURL, setImageURL] = useState('');
     const [imageFile, setImageFile] = useState();
-
     const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const [textArea, setTextArea] = useState({
-        message: '',
-        length: 0,
-    });
+    const [textArea, setTextArea] = useState({});
 
-    usePageHandler('text', detailPost ? '아이템 보기' : '게시글 작성');
+    usePageHandler('text', '게시물 수정');
+
+    // console.log(postData.id);
 
     const trimTextArea = () => {
         setTextArea(prev => ({
@@ -38,12 +31,26 @@ const NewBoard = () => {
             length: prev.message.trim().length,
         }));
     };
-    const handleMessageChange = e => {
-        setTextArea({
-            message: e.target.value,
-            length: e.target.value.length,
-        });
-    };
+
+    useEffect(() => {
+        console.log(postData)
+        detialPostApi(postData.id, token)
+            .then(response => {
+                const resData = JSON.parse(response.post.content);
+                const contentData = resData.deskoration;
+                setImageURL(postData.image || '');
+                setProductItems(contentData.productItems || []);
+                setTextArea({
+                    message: contentData.message || '',
+                    length: contentData.message
+                        ? contentData.message.length
+                        : 0,
+                });
+            })
+            .catch(error => {
+                console.log('error', error);
+            });
+    }, [token]);
 
     const deleteProduct = itemID => {
         if (window.confirm('상품을 삭제 하겠습니까?')) {
@@ -52,39 +59,55 @@ const NewBoard = () => {
             );
             setProductItems(updatedProductItems);
         }
-        return;
     };
 
-    useEffect(() => {
-        setApiContent({ message: textArea.message.trim(), productItems });
-    }, [textArea.message, productItems]);
+    const handleMessageChange = e => {
+        setTextArea({
+            message: e.target.value,
+            length: e.target.value.length,
+        });
+    };
 
-    const submitPost = event => {
+    const updateData = {
+        content: JSON.stringify({
+            deskoration: {
+                message: textArea.message?.trim(),
+                productItems: productItems.map(item => ({
+                    marker: item.marker,
+                    detail: item.detail,
+                })),
+            },
+        }),
+    };
+
+    const submitPost = async event => {
         event.preventDefault();
-        if (!textArea.message || !imageURL) {
-            alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
-            return null;
-        } else {
-            uploadPostApi(apiContent, imageFile, token)
-                .then(postData => {
-                    if (
-                        postData.message === '내용 또는 이미지를 입력해주세요.'
-                    ) {
-                        alert(postData.message);
-                    }
-                })
-                .catch(error => {
-                    console.log('error', error);
-                })
-                .finally(() => {
-                    navigate('/home');
-                });
+
+        try {
+            if (!textArea.message || !imageURL) {
+                alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
+                return;
+            }
+            // console.log(postData?.id);
+
+            const responseData = await updatePostApi(
+                token,
+                postData?.id,
+                updateData,
+                imageFile
+            );
+
+            console.log('Post updated successfully:', responseData);
+
+            navigate('/home');
+        } catch (error) {
+            console.error('Error updating post:', error);
         }
     };
 
     return (
         <S.NewBoardContainer>
-            {pathName === '/postUpload' ? (
+            {pathName === `/postEdit/${postData?.id}` ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
                         productItems={productItems}
@@ -107,7 +130,7 @@ const NewBoard = () => {
                     <S.SubmitButtonBox>
                         <GradientButton
                             type="submit"
-                            children={'올리기'}
+                            children={'수정하기'}
                             gra={'true'}
                             width={'70px'}
                             padding={'10px'}
@@ -126,4 +149,4 @@ const NewBoard = () => {
     );
 };
 
-export default NewBoard;
+export default PostUpdateForm;

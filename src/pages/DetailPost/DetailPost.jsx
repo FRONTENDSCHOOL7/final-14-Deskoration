@@ -12,7 +12,7 @@ import {
     deleteCommentApi,
     reportCommentApi,
 } from '../../service/comment_service';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import Loader from '../../components/Loading/Loader';
@@ -26,8 +26,7 @@ import { openAlertModal } from '../../features/modal/alertModalSlice';
 
 const DetailPost = () => {
     const dispatch = useDispatch();
-
-    const [postData, setPostData] = useState(null);
+    const [postData, setPostData] = useState([]);
     const [postContent, setPostContent] = useState('');
     const [commentData, setCommentData] = useState(null);
     const [newComment, setNewComment] = useState(''); // 새로운 댓글을 저장할 상태 추가
@@ -38,7 +37,7 @@ const DetailPost = () => {
     const myId = sessionStorage.getItem('Id');
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
-
+    const location = useLocation();
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -47,11 +46,13 @@ const DetailPost = () => {
             .then(postResult => {
                 setPostContent(JSON.parse(postResult.post.content));
                 setPostData(postResult.post);
+                // console.log(JSON.parse(postResult.post.content));
                 setLikeData(prev => ({
                     ...prev,
                     isLike: postResult.post.hearted,
                     likeCount: postResult.post.heartCount,
                 }));
+                console.log(postResult.post);
             })
             .catch(error => {
                 console.error('error');
@@ -134,14 +135,16 @@ const DetailPost = () => {
 
     usePageHandler(
         'user',
-        postData?.author.image,
-        postData?.author.username,
-        postData?.author.accountname,
+        postData?.author?.image,
+        postData?.author?.username,
+        postData?.author?.accountname,
     );
 
     const editPost = e => {
         e.stopPropagation();
-        console.log('edit post');
+        if (window.confirm('게시물을 수정 하시겠습니까?')) {
+            navigate(`/postEdit/${postData.id}`, { state: { postData } });
+        }
     };
 
     const deletePost = e => {
@@ -204,7 +207,7 @@ const DetailPost = () => {
                                         src={postData?.image}
                                         alt="데스크 셋업 이미지"
                                     />
-                                    {postContent?.deskoration.productItems?.map(
+                                    {postContent?.deskoration?.productItems?.map(
                                         (item, index) => (
                                             <Marker
                                                 key={index}
@@ -235,7 +238,7 @@ const DetailPost = () => {
                                         />
                                     </div>
 
-                                    {postData.author._id === myId ? (
+                                    {postData.author?._id === myId ? (
                                         <button onClick={handlePostBottomSheet}>
                                             <S.Dots_verticalIcon />
                                         </button>
@@ -248,9 +251,9 @@ const DetailPost = () => {
                                     )}
                                 </S.ContentButtonBox>
                                 <div className="user-name">
-                                    {postData.author.username}
+                                    {postData.author?.username}
                                 </div>
-                                <p>{postContent?.deskoration.message}</p>
+                                <p>{postContent?.deskoration?.message}</p>
                             </S.ContentSection>
 
                             <S.CommentSection>
@@ -330,3 +333,5 @@ const DetailPost = () => {
 };
 
 export default DetailPost;
+
+

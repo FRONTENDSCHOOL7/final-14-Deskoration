@@ -238,10 +238,10 @@ export const ProfileUpload = () => {
                         </S.ImgUploadBox>
                     </S.ProfileImgBox>
                     <S.InputBox>
-                        <S.InputLabel htmlFor={'사용자 이름'}>
+                        <S.ProfileInputLabel htmlFor={'사용자 이름'}>
                             사용자 이름
-                        </S.InputLabel>
-                        <S.Input
+                        </S.ProfileInputLabel>
+                        <S.ProfileInput
                             id={'사용자 이름'}
                             {...register('userName', {
                                 required: '필수 정보를 입력하세요.',
@@ -260,8 +260,10 @@ export const ProfileUpload = () => {
                         {errors.userName && (
                             <WarningMsg msg={errors.userName.message} />
                         )}
-                        <S.InputLabel htmlFor={'계정 ID'}>계정 ID</S.InputLabel>
-                        <S.Input
+                        <S.ProfileInputLabel htmlFor={'계정 ID'}>
+                            계정 ID
+                        </S.ProfileInputLabel>
+                        <S.ProfileInput
                             id={'계정 ID'}
                             {...register('userID', {
                                 required: '필수 정보를 입력하세요.',
@@ -285,8 +287,10 @@ export const ProfileUpload = () => {
                         {errors.userID && (
                             <WarningMsg msg={errors.userID.message} />
                         )}
-                        <S.InputLabel htmlFor={'소개'}>소개</S.InputLabel>
-                        <S.Input
+                        <S.ProfileInputLabel htmlFor={'소개'}>
+                            소개
+                        </S.ProfileInputLabel>
+                        <S.ProfileInput
                             id={'소개'}
                             placeholder={'자신을 소개해주세요.'}
                             {...register('intro')}

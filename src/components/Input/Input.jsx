@@ -43,7 +43,7 @@ const SelectInput = ({
         <>
             <S.InputLabel htmlFor={id}>{label}</S.InputLabel>
             <S.Select
-                name={'cate'}
+                name={id}
                 id={id}
                 className={error ? 'warning' : null}
                 placeholder={placeholder}
@@ -57,7 +57,6 @@ const SelectInput = ({
                     );
                 })}
             </S.Select>
-            {error && <WarningMsg msg={error.message} />}
         </>
     );
 };

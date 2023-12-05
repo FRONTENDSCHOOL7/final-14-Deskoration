@@ -84,8 +84,8 @@ const ChatRoomPage = () => {
                     ))}
                 </S.ChatRoomMain>
             </S.ChatRoomPageContainer>
-            <S.ChatRoomPageFooter>
-                <S.ChatInput>
+            <S.ChatInputContainer>
+                <S.ChatInputBox>
                     <input
                         type="text"
                         value={newMessage}
@@ -93,11 +93,11 @@ const ChatRoomPage = () => {
                         className="chat-input"
                         placeholder="메세지를 입력하세요"
                     />
-                    <button onClick={handleSendMessage}>
-                        <S.Sendicon className="chat-send" />
+                    <button type="button" onClick={handleSendMessage}>
+                        <S.Sendicon />
                     </button>
-                </S.ChatInput>
-            </S.ChatRoomPageFooter>
+                </S.ChatInputBox>
+            </S.ChatInputContainer>
         </>
     );
 };

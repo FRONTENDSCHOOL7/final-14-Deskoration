@@ -29,9 +29,9 @@ export const ChatlistPageMain = styled.div`
 export const SearchBar = styled.div`
     width: 100%;
     padding: 10px;
-    background-color: ${props => props.theme.border};
+    background-color: ${props => props.theme.bgSecondary};
     border: none;
-    border-radius: 30px;
+    border-radius: 10px;
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
@@ -47,7 +47,7 @@ export const SearchUsernameInput = styled.input`
     height: 24px;
     border: none;
     outline: none;
-    background-color: ${props => props.theme.border};
+    background-color: ${props => props.theme.bgSecondary};
 `;
 
 export const UserChatList = styled.ul`
@@ -69,6 +69,7 @@ export const UserChatRoom = styled.div`
         border-radius: 100%;
         margin-right: 8px;
         border: 1px solid ${props => props.theme.border};
+        object-fit: cover;
     }
 `;
 
@@ -76,7 +77,9 @@ export const UserSimpleinfo = styled.div`
     flex-grow: 1;
     .user-name {
         font-size: 14px;
+        font-weight: 700;
         color: ${props => props.theme.mainFont};
+        margin-bottom: 5px;
     }
 
     .user-msg-time {
@@ -94,7 +97,7 @@ export const UserSimpleinfo = styled.div`
         /* 너비를 넘는 부분은 숨김 */
         text-overflow: ellipsis;
         /* 넘치는 부분을 ...으로 표시 */
-        width: 150px;
+        width: 200px;
     }
 
     .user-date {

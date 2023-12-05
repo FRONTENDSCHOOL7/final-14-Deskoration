@@ -40,5 +40,6 @@ export const UserInfo = styled.div`
         border-radius: 100%;
         margin-right: 8px;
         border: 1px solid ${props => props.theme.border};
+        object-fit: cover;
     }
 `;

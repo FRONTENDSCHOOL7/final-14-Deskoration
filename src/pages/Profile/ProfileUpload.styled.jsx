@@ -83,7 +83,7 @@ export const InputBox = styled.div`
     margin: 30px 0;
 `;
 
-export const InputLabel = styled.label`
+export const ProfileInputLabel = styled.label`
     display: inline-block;
     color: ${({ theme }) => theme.subFont};
     font-size: ${({ theme }) => theme.fontSize.sm};
@@ -91,7 +91,7 @@ export const InputLabel = styled.label`
     margin-bottom: 10px;
 `;
 
-export const Input = styled.input.attrs(props => ({
+export const ProfileInput = styled.input.attrs(props => ({
     type: props.type || 'text',
 }))`
     width: 100%;

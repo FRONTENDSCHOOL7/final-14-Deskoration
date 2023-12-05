@@ -66,7 +66,7 @@ export const ChatBubble = styled.div`
             ? '15px 0 15px 15px'
             : '0 15px 15px 15px'}; // 문자열 비교
     color: ${props => props.theme.mainFont}; /* 말풍선 텍스트 색상 */
-    padding: 10px 20px; /* 말풍선 안의 여백 */
+    padding: 8px 12px; /* 말풍선 안의 여백 */
     /* margin: 5px 0; 말풍선 간격 설정 */
     margin-bottom: 5px;
 `;

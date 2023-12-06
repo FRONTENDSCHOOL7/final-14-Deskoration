@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import { authLoginApi } from '../../service/auth_service';
 
@@ -8,7 +9,6 @@ import { openAlertModal } from '../../features/modal/alertModalSlice';
 
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input } from '../../components/Input/Input';
-import { WarningMsg } from '../../components/Input/WarningMsg';
 
 import * as S from './User.styled';
 
@@ -16,28 +16,21 @@ const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [warmEmail, setWarnEmail] = useState(false);
-    const [warnPassword, setWarnPassword] = useState(false);
-    const [isSampleLogin, setIsSampleLogin] = useState(false);
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+        setValue,
+        watch,
+        setError,
+        clearErrors,
+    } = useForm();
 
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const checkboxValue = watch('checkbox');
 
-    const onSubmit = async event => {
-        event.preventDefault();
-        const emailValue = emailRef.current.value;
-        const passwordValue = passwordRef.current.value;
-
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        function checkPasswordFormat(password) {
-            return password.length >= 6;
-        }
-
-        const validEmail = emailRegex.test(emailValue);
-        const validPassword = checkPasswordFormat(passwordValue);
-
-        if (validEmail && validPassword) {
-            authLoginApi(emailValue, passwordValue)
+    const submitLogin = async data => {
+        if (data.email && data.password) {
+            authLoginApi(data.email, data.password)
                 .then(result => {
                     if (
                         result.message ===
@@ -45,7 +38,6 @@ const Login = () => {
                     ) {
                         dispatch(openAlertModal());
                     } else {
-                        // 임시변경
                         sessionStorage.setItem('Token', result.user.token);
                         sessionStorage.setItem(
                             'AccountName',
@@ -58,56 +50,69 @@ const Login = () => {
                 .catch(error => {
                     console.error(error);
                 });
-        } else {
-            !validEmail ? setWarnEmail(true) : setWarnEmail(false);
-            !validPassword ? setWarnPassword(true) : setWarnPassword(false);
         }
     };
 
-    const handleSampleLoginChange = event => {
-        const { checked } = event.target;
-        setIsSampleLogin(checked);
-        if (!isSampleLogin) {
-            emailRef.current.value = 'test@deskoration.com';
-            passwordRef.current.value = 'test123';
+    const handleSampleLoginChange = e => {
+        const isChecked = e.target.checked;
+        setValue('email', isChecked ? 'test@deskoration.com' : '');
+        setValue('password', isChecked ? 'test123' : '');
+
+        if (isChecked) {
+            clearErrors('email');
+            clearErrors('password');
         } else {
-            emailRef.current.value = null;
-            passwordRef.current.value = null;
+            // 체크박스가 체크되지 않았을 때 에러 메시지를 추가
+            setError('email', {
+                type: 'email',
+                message: '이메일을 입력해주세요.',
+            });
+            setError('password', {
+                type: 'password',
+                message: '비밀번호를 입력해주세요.',
+            });
         }
     };
 
     return (
         <>
-            <S.UserForm onSubmit={onSubmit}>
+            <S.UserForm onSubmit={handleSubmit(submitLogin)}>
                 <S.InputBox>
                     <Input
                         label={'email'}
+                        id={'email'}
                         type={'email'}
-                        inputRef={emailRef}
-                        warning={warmEmail}
+                        register={register}
+                        error={errors.email}
+                        registerOptions={{
+                            required: '이메일을 입력해주세요.',
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: '올바른 형식의 이메일을 입력해주세요.',
+                            },
+                        }}
+                        onChange={e => {
+                            if (!checkboxValue)
+                                setValue('email', e.target.value);
+                        }}
                     />
-                    {warmEmail && (
-                        <WarningMsg
-                            msg={'올바른 형식의 이메일을 입력하세요.'}
-                        />
-                    )}
                     <Input
                         label={'password'}
+                        id={'password'}
                         type={'password'}
-                        inputRef={passwordRef}
-                        warning={warnPassword}
+                        register={register}
+                        error={errors.password}
+                        registerOptions={{
+                            required: '비밀번호를 입력해주세요.',
+                            minLength: {
+                                value: 6,
+                                message: '6자 이상의 비밀번호를 입력하세요.',
+                            },
+                        }}
                     />
-                    {warnPassword && (
-                        <WarningMsg msg={'6자 이상의 비밀번호를 입력하세요.'} />
-                    )}
                 </S.InputBox>
                 <S.SampleLoginBox>
-                    <input
-                        type="checkbox"
-                        id="sampleLoginCheckbox"
-                        checked={isSampleLogin}
-                        onChange={handleSampleLoginChange}
-                    />
+                    <input type="checkbox" onChange={handleSampleLoginChange} />
                     <label htmlFor="sampleLoginCheckbox">체험하기</label>
                 </S.SampleLoginBox>
                 <GradientButton

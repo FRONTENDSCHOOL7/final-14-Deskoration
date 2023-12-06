@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/basicImg.png';
-// import { Input } from '../../components/Input/Input';
-import { WarningMsg } from '../../components/Input/WarningMsg';
+import { Input } from '../../components/Input/Input';
 import { uploadImgApi } from '../../service/img_service';
 import {
     authLoginApi,
@@ -167,7 +166,6 @@ export const ProfileUpload = () => {
                 .then(result => {
                     if (result.message === '회원가입 성공') {
                         authLoginApi(emailValue, passwordValue).then(data => {
-                            console.log(data);
                             sessionStorage.setItem('Token', data.user.token);
                             sessionStorage.setItem(
                                 'AccountName',
@@ -238,12 +236,13 @@ export const ProfileUpload = () => {
                         </S.ImgUploadBox>
                     </S.ProfileImgBox>
                     <S.InputBox>
-                        <S.ProfileInputLabel htmlFor={'사용자 이름'}>
-                            사용자 이름
-                        </S.ProfileInputLabel>
-                        <S.ProfileInput
-                            id={'사용자 이름'}
-                            {...register('userName', {
+                        <Input
+                            label={'사용자 이름'}
+                            id={'userName'}
+                            error={errors.userName}
+                            placeholder={'2~10자 이내여야 합니다.'}
+                            register={register}
+                            registerOptions={{
                                 required: '필수 정보를 입력하세요.',
                                 minLength: {
                                     value: 2,
@@ -253,19 +252,17 @@ export const ProfileUpload = () => {
                                     value: 10,
                                     message: '2~10자 이내여야 합니다.',
                                 },
-                            })}
-                            className={errors.userName ? 'warning' : null}
-                            placeholder={'2~10자 이내여야 합니다.'}
+                            }}
                         />
-                        {errors.userName && (
-                            <WarningMsg msg={errors.userName.message} />
-                        )}
-                        <S.ProfileInputLabel htmlFor={'계정 ID'}>
-                            계정 ID
-                        </S.ProfileInputLabel>
-                        <S.ProfileInput
-                            id={'계정 ID'}
-                            {...register('userID', {
+                        <Input
+                            label={'계정 ID'}
+                            id={'userID'}
+                            error={errors.userID}
+                            placeholder={
+                                '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
+                            }
+                            register={register}
+                            registerOptions={{
                                 required: '필수 정보를 입력하세요.',
                                 pattern: {
                                     value: /^[a-zA-Z0-9._]+$/,
@@ -278,22 +275,14 @@ export const ProfileUpload = () => {
                                         result || '이미 존재하는 계정 ID입니다.'
                                     );
                                 },
-                            })}
-                            className={errors.userID ? 'warning' : null}
-                            placeholder={
-                                '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.'
-                            }
+                            }}
                         />
-                        {errors.userID && (
-                            <WarningMsg msg={errors.userID.message} />
-                        )}
-                        <S.ProfileInputLabel htmlFor={'소개'}>
-                            소개
-                        </S.ProfileInputLabel>
-                        <S.ProfileInput
-                            id={'소개'}
+                        <Input
+                            label={'소개'}
+                            id={'intro'}
+                            error={errors.intro}
                             placeholder={'자신을 소개해주세요.'}
-                            {...register('intro')}
+                            register={register}
                         />
                     </S.InputBox>
                     <GradientButton

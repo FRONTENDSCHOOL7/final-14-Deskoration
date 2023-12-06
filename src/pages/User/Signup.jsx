@@ -1,93 +1,89 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input } from '../../components/Input/Input';
-import { WarningMsg } from '../../components/Input/WarningMsg';
-import { GradientButton } from '../../components/GradientButton/GradientButton.styled';
+import { useForm } from 'react-hook-form';
+
 import { validEmailApi } from '../../service/auth_service';
+
+import GradientButton from '../../components/GradientButton/GradientButton';
+import { Input } from '../../components/Input/Input';
 
 import * as S from './User.styled';
 
 const Signup = () => {
     const navigate = useNavigate();
-    const [existID, setExistID] = useState(null);
-    const [warmEmail, setWarnEmail] = useState(false);
-    const [warnPassword, setWarnPassword] = useState(false);
 
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const {
+        handleSubmit,
+        register,
+        formState: { errors },
+        setError,
+    } = useForm();
 
-    const onSubmit = async event => {
-        event.preventDefault();
-        setWarnEmail(false);
-        setWarnPassword(false);
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        function checkPasswordFormat(password) {
-            return password.length >= 6;
-        }
-        const emailValue = emailRef.current.value;
-        const passwordValue = passwordRef.current.value;
-
-        const validEmail = emailRegex.test(emailValue);
-        const validPassword = checkPasswordFormat(passwordValue);
-
-        if (validEmail && validPassword) {
-            validEmailApi(emailValue)
+    const submitSignup = async data => {
+        if (data.email && data.password) {
+            validEmailApi(data.email)
                 .then(result => {
                     if (result.message === '사용 가능한 이메일 입니다.') {
-                        // alert(result.message);
-                        setExistID(false);
                         navigate('/profileUpload', {
                             state: {
-                                emailValue: emailValue,
-                                passwordValue: passwordValue,
+                                emailValue: data.email,
+                                passwordValue: data.password,
                             },
                         });
                     } else if (
                         result.message === '이미 가입된 이메일 주소 입니다.'
                     ) {
-                        setExistID(true);
+                        setError('email', {
+                            type: 'email',
+                            message: '이미 가입된 이메일 주소 입니다.',
+                        });
                     } else {
                         throw new Error(result.message);
                     }
                 })
                 .catch(error => {
-                    console.error('error');
+                    console.error(error);
                 });
-        } else {
-            !validEmail ? setWarnEmail(true) : setWarnEmail(false);
-            !validPassword ? setWarnPassword(true) : setWarnPassword(false);
         }
     };
 
     return (
-        <S.UserForm onSubmit={onSubmit}>
+        <S.UserForm onSubmit={handleSubmit(submitSignup)}>
             <S.InputBox>
                 <Input
                     label={'email'}
+                    id={'email'}
                     type={'email'}
-                    inputRef={emailRef}
-                    warning={warmEmail || existID}
+                    register={register}
+                    error={errors.email}
+                    registerOptions={{
+                        required: '사용할 이메일을 입력해주세요.',
+                        pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: '올바른 형식의 이메일을 입력해주세요.',
+                        },
+                    }}
                 />
-                {warmEmail ? (
-                    <WarningMsg msg={'이메일 형식이 올바르지 않습니다.'} />
-                ) : existID ? (
-                    <WarningMsg msg={'이미 가입된 이메일 주소 입니다.'} />
-                ) : null}
                 <Input
                     label={'password'}
+                    id={'password'}
                     type={'password'}
-                    inputRef={passwordRef}
-                    warning={warnPassword}
+                    register={register}
+                    error={errors.password}
+                    registerOptions={{
+                        required: '사용할 비밀번호를 입력해주세요.',
+                        minLength: {
+                            value: 6,
+                            message: '6자 이상의 비밀번호를 입력하세요.',
+                        },
+                    }}
                 />
-                {warnPassword && (
-                    <WarningMsg msg={'비밀번호는 6자 이상이여야 합니다.'} />
-                )}
             </S.InputBox>
             <GradientButton
                 type={'submit'}
-                $gra={true}
+                gra={true}
                 width={'100%'}
-                $padding={'20px'}
+                padding={'20px'}
             >
                 회원가입
             </GradientButton>

@@ -1,41 +1,55 @@
 import React from 'react';
 import * as S from './Input.styled';
+import { WarningMsg } from './WarningMsg';
 
 const Input = props => {
-    const { label, inputRef, type, warning, placeholder, readonly, step } =
-        props;
+    const {
+        label,
+        id,
+        type,
+        error,
+        placeholder,
+        step,
+        register,
+        registerOptions,
+    } = props;
 
     return (
         <>
-            <S.InputLabel htmlFor={label}>{label}</S.InputLabel>
+            <S.InputLabel htmlFor={id}>{label}</S.InputLabel>
             <S.InputText
-                id={label}
-                type={type}
-                ref={inputRef}
-                className={warning ? 'warning' : null}
+                id={id}
+                type={type || 'text'}
+                className={error ? 'warning' : null}
                 placeholder={placeholder}
-                readOnly={readonly}
                 step={step}
+                {...register(id, registerOptions)}
             />
+            {error && <WarningMsg msg={error.message} />}
         </>
     );
 };
 
-const SelectInput = ({ label, inputRef, warning, options, readonly }) => {
-    const handleMouseDown = event => {
-        event.preventDefault();
-    };
+const SelectInput = ({
+    label,
+    id,
+    error,
+    placeholder,
+    selectOptions,
+    register,
+    registerOptions,
+}) => {
     return (
         <>
-            <S.InputLabel htmlFor={label}>{label}</S.InputLabel>
+            <S.InputLabel htmlFor={id}>{label}</S.InputLabel>
             <S.Select
-                name="cate"
-                id={label}
-                ref={inputRef}
-                className={warning ? 'warning' : null}
-                onMouseDown={readonly ? handleMouseDown : null}
+                name={id}
+                id={id}
+                className={error ? 'warning' : null}
+                placeholder={placeholder}
+                {...register(id, registerOptions)}
             >
-                {options.map((option, index) => {
+                {selectOptions.map((option, index) => {
                     return (
                         <option value={option} key={index}>
                             {option}

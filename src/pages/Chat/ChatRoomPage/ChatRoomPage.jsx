@@ -3,6 +3,17 @@ import * as S from './ChatRoomPage.styled';
 import { useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import usePageHandler from '../../../hooks/usePageHandler';
+import {
+    collection,
+    doc,
+    getDocs,
+    query,
+    orderBy,
+    onSnapshot,
+    addDoc,
+    serverTimestamp,
+} from 'firebase/firestore'; // Firestore 함수들을 임포트
+import { db } from '../../../firebase';
 
 const ChatRoomPage = () => {
     const location = useLocation();
@@ -47,12 +58,19 @@ const ChatRoomPage = () => {
     };
 
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
-    useEffect(() => {
-        if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop =
-                chatContainerRef.current.scrollHeight;
-        }
-    }, [chatMessages]);
+    // useEffect(() => {
+    //     if (chatContainerRef.current) {
+    //         chatContainerRef.current.scrollTop =
+    //             chatContainerRef.current.scrollHeight;
+    //     }
+    // }, [chatMessages]);
+
+    useEffect(async () => {
+        console.log(db);
+        const docRef = doc(db, 'chat', '3MbDM0H5SiWB3x8MfrGG');
+        const querry = await getDocs(collection(db, 'bucket'));
+        console.log(querry);
+    }, []);
 
     usePageHandler('user', image, user);
 

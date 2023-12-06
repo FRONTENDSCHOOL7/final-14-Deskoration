@@ -10,12 +10,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const PostUpdateForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const baseURL = 'https://api.mandarin.weniv.co.kr/';
+    const baseUrlLength = baseURL.length;
     const pathName = location.pathname;
     const postData = location.state?.postData;
     const token = sessionStorage.getItem('Token');
-
+    const [updateData, setUpdateData] = useState();
     const [imageURL, setImageURL] = useState('');
-    const [imageFile, setImageFile] = useState();
+    const [imageFile, setImageFile] = useState(
+        postData?.image.substring(baseUrlLength),
+    );
     const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [textArea, setTextArea] = useState({});
@@ -33,11 +37,11 @@ const PostUpdateForm = () => {
     };
 
     useEffect(() => {
-        console.log(postData)
-        detialPostApi(postData.id, token)
+        console.log(postData);
+        detialPostApi(postData?.id, token)
             .then(response => {
                 const resData = JSON.parse(response.post.content);
-                const contentData = resData.deskoration;
+                const contentData = resData?.deskoration || {};
                 setImageURL(postData.image || '');
                 setProductItems(contentData.productItems || []);
                 setTextArea({
@@ -55,7 +59,7 @@ const PostUpdateForm = () => {
     const deleteProduct = itemID => {
         if (window.confirm('상품을 삭제 하겠습니까?')) {
             const updatedProductItems = productItems.filter(
-                item => item.detail.id !== itemID,
+                item => item.detail?.id !== itemID,
             );
             setProductItems(updatedProductItems);
         }
@@ -68,17 +72,12 @@ const PostUpdateForm = () => {
         });
     };
 
-    const updateData = {
-        content: JSON.stringify({
-            deskoration: {
-                message: textArea.message?.trim(),
-                productItems: productItems.map(item => ({
-                    marker: item.marker,
-                    detail: item.detail,
-                })),
-            },
-        }),
-    };
+    useEffect(() => {
+        setUpdateData({
+            message: textArea.message?.trim(),
+            productItems,
+        });
+    }, [textArea.message, productItems]);
 
     const submitPost = async event => {
         event.preventDefault();
@@ -88,13 +87,12 @@ const PostUpdateForm = () => {
                 alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
                 return;
             }
-            // console.log(postData?.id);
 
             const responseData = await updatePostApi(
                 token,
                 postData?.id,
                 updateData,
-                imageFile
+                imageFile,
             );
 
             console.log('Post updated successfully:', responseData);

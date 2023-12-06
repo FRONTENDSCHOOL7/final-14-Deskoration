@@ -82,30 +82,3 @@ export const ImgUploadBox = styled.div`
 export const InputBox = styled.div`
     margin: 30px 0;
 `;
-
-export const ProfileInputLabel = styled.label`
-    display: inline-block;
-    color: ${({ theme }) => theme.subFont};
-    font-size: ${({ theme }) => theme.fontSize.sm};
-    font-weight: 700;
-    margin-bottom: 10px;
-`;
-
-export const ProfileInput = styled.input.attrs(props => ({
-    type: props.type || 'text',
-}))`
-    width: 100%;
-    padding: 2.5px 0;
-    border-style: none;
-    border-bottom: 1px solid ${({ theme }) => theme.border};
-    margin-bottom: 10px;
-
-    &:focus {
-        outline: none;
-        border-bottom: 1px solid ${({ theme }) => theme.mainFont};
-    }
-
-    &.warning {
-        border-bottom: 1px solid ${({ theme }) => theme.repo.open};
-    }
-`;

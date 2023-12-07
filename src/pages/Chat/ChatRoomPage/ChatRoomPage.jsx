@@ -6,7 +6,7 @@ import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatRoomPage = () => {
     const location = useLocation();
-    const { register, handleSubmit, setFocus, resetField } = useForm({
+    const { register, handleSubmit, resetField } = useForm({
         mode: 'onSubmit',
         defaultValues: {
             chatMsg: '',
@@ -35,13 +35,15 @@ const ChatRoomPage = () => {
         }
 
         // 새 메시지를 배열에 추가
-        setChatMessages(prevMessages => [
-            ...prevMessages,
-            { text: data.chatMsg, isSentByUser: true },
-        ]);
+        if (data.chatMsg !== '') {
+            setChatMessages(prevMessages => [
+                ...prevMessages,
+                { text: data.chatMsg, isSentByUser: true },
+            ]);
 
-        // 메시지 입력 필드 초기화
-        resetField('chatMsg');
+            // 메시지 입력 필드 초기화
+            resetField('chatMsg');
+        }
     };
 
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동

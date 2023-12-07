@@ -71,7 +71,7 @@ export const ChatBubble = styled.div`
     margin-bottom: 5px;
 `;
 
-export const ChatInputContainer = styled.div`
+export const ChatInputForm = styled.form`
     position: absolute;
     bottom: 0;
     left: 0;
@@ -90,6 +90,10 @@ export const ChatInputBox = styled.div`
     padding: 15px;
     border: 1px solid ${props => props.theme.border};
     border-radius: 5px;
+
+    &:focus-within {
+        outline: 2px solid ${props => props.theme.main};
+    }
 
     .chat-input {
         width: 100%;

@@ -123,7 +123,7 @@ export const CommentInfo = styled.div`
     }
 `;
 
-export const CommentInputContainer = styled.div`
+export const CommentInputForm = styled.form`
     position: absolute;
     bottom: 0;
     left: 0;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as S from './DetailPost.styled';
 import {
     deletePostAPI,
@@ -13,7 +13,7 @@ import {
     reportCommentApi,
 } from '../../service/comment_service';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Marker } from '../../components/Marker/Marker';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import Loader from '../../components/Loading/Loader';
@@ -36,7 +36,6 @@ const DetailPost = () => {
     const myId = sessionStorage.getItem('Id');
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { register, handleSubmit, reset, setFocus } = useForm({
         mode: 'onSubmit',

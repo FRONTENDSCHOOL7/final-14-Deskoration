@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input, SelectInput } from '../../components/Input/Input';
-import { WarningMsg } from '../../components/Input/WarningMsg';
 
 import * as S from './RegisterForm.styled';
 
@@ -15,15 +14,11 @@ const RegisterForm = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id } = useParams();
     const showProduct = location.pathname.includes('/detailPost');
     const currentPath = window.location.pathname;
     const defaultProductItem = location.state?.defaultProductItem;
     const defaultProductItemDetail = defaultProductItem?.detail;
 
-    const [warnCategory, setWarnCategory] = useState(false);
-    const [warnProductName, setWarnProductName] = useState(false);
-    const [warnPrice, setWarnPrice] = useState(false);
     const options = [
         '책상',
         '의자',

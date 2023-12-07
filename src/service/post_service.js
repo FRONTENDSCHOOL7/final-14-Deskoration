@@ -28,7 +28,7 @@ export const uploadPostApi = async (content, image, token) => {
     }
 };
 
-export const updatePostApi = async (token, postId, postData) => {
+export const updatePostApi = async (token, postId, postData, image) => {
     const reqUrl = `${baseUrl}/post/${postId}`;
 
     try {
@@ -39,7 +39,10 @@ export const updatePostApi = async (token, postId, postData) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                post: postData,
+                post: {
+                    content: JSON.stringify({ deskoration: postData }),
+                    image: `${baseUrl}/${image}`,
+                },
             }),
         });
 

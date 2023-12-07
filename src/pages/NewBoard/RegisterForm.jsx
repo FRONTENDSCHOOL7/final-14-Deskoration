@@ -17,11 +17,8 @@ const RegisterForm = ({
     const location = useLocation();
     const { id } = useParams();
     const showProduct = location.pathname.includes('/detailPost');
-
     const currentPath = window.location.pathname;
-
     const defaultProductItem = location.state?.defaultProductItem;
-
     const defaultProductItemDetail = defaultProductItem?.detail;
 
     const [warnCategory, setWarnCategory] = useState(false);
@@ -68,7 +65,7 @@ const RegisterForm = ({
         if (isSubmitted) {
             trigger(['store', 'link']);
         }
-    }, [storeInput, linkInput, isSubmitted]);
+    }, [storeInput, linkInput, isSubmitted, trigger]);
 
     const submitProduct = data => {
         if (productItems.length <= 6) {
@@ -126,32 +123,12 @@ const RegisterForm = ({
             setValue('store', defaultProductItemDetail?.store);
             setValue('link', defaultProductItemDetail?.link);
         }
-    }, [defaultProductItemDetail]);
+    }, [defaultProductItemDetail, setValue]);
 
     return (
         <S.RegisterForm onSubmit={handleSubmit(submitProduct)}>
             <fieldset>
-                <S.InputLabel htmlFor={'category'}>카테고리</S.InputLabel>
-                <S.Select
-                    id="category"
-                    className={errors.category ? 'warning' : null}
-                    {...register('category', {
-                        required: '필수 정보를 입력하세요.',
-                    })}
-                >
-                    {options.map((item, index) => {
-                        return (
-                            <option value={item} key={index}>
-                                {item}
-                            </option>
-                        );
-                    })}
-                </S.Select>
-                {errors.category && (
-                    <WarningMsg msg={errors.category.message} />
-                )}
-
-                <S.InputLabel htmlFor={'productName'}>상품명</S.InputLabel>
+                /<S.InputLabel htmlFor={'productName'}>상품명</S.InputLabel>
                 <S.Input
                     type={'text'}
                     id={'productName'}
@@ -163,7 +140,6 @@ const RegisterForm = ({
                 {errors.productName && (
                     <WarningMsg msg={errors.productName.message} />
                 )}
-
                 <S.InputLabel htmlFor={'price'}>구매가격</S.InputLabel>
                 <S.Input
                     type={'number'}
@@ -176,7 +152,6 @@ const RegisterForm = ({
                     step={10}
                 />
                 {errors.price && <WarningMsg msg={errors.price.message} />}
-
                 <S.InputLabel htmlFor={'store'}>구매처</S.InputLabel>
                 <S.Input
                     type={'text'}
@@ -191,7 +166,6 @@ const RegisterForm = ({
                     })}
                 />
                 {errors.store && <WarningMsg msg={errors.store.message} />}
-
                 <S.InputLabel htmlFor={'link'}>구매링크</S.InputLabel>
                 <S.Input
                     type={'url'}

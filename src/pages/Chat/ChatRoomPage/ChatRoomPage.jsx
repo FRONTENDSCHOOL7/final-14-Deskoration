@@ -25,14 +25,8 @@ const ChatRoomPage = () => {
         hours = 12;
     }
     const formattedTime = `${hours}:${minutes} ${amPm}`;
-
     const { user, message, image } = location.state;
     const [chatMessages, setChatMessages] = useState([]);
-
-    // 초기 접속 시 댓글 창에 포커스
-    useEffect(() => {
-        setFocus('chatMsg');
-    }, [setFocus]);
 
     const handleSendMessage = data => {
         // 빈 메세지 전송 시 경고

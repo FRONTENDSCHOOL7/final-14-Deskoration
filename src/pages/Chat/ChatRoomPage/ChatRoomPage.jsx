@@ -1,16 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
 import { useLocation } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import usePageHandler from '../../../hooks/usePageHandler';
 
 const ChatRoomPage = () => {
     const location = useLocation();
+    const { register, handleSubmit, setFocus, resetField } = useForm({
+        mode: 'onSubmit',
+        defaultValues: {
+            chatMsg: '',
+        },
+    });
     const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
 
     const newData = new Date();
     let hours = newData.getHours();
     const minutes = newData.getMinutes().toString().padStart(2, '0');
-
     const amPm = hours >= 12 ? 'PM' : 'AM';
 
     if (hours > 12) {
@@ -18,28 +24,30 @@ const ChatRoomPage = () => {
     } else if (hours === 0) {
         hours = 12;
     }
-
     const formattedTime = `${hours}:${minutes} ${amPm}`;
 
     const { user, message, image } = location.state;
-
-    const [newMessage, setNewMessage] = useState(''); // 문자열로 초기화
-
     const [chatMessages, setChatMessages] = useState([]);
 
-    const handleSendMessage = () => {
-        if (newMessage.trim() === '') {
-            return; // 빈 메시지 전송 방지
+    // 초기 접속 시 댓글 창에 포커스
+    useEffect(() => {
+        setFocus('chatMsg');
+    }, [setFocus]);
+
+    const handleSendMessage = data => {
+        // 빈 메세지 전송 시 경고
+        if (data.chatMsg.trim() === '') {
+            alert('메세지를 입력하세요.');
         }
 
         // 새 메시지를 배열에 추가
         setChatMessages(prevMessages => [
             ...prevMessages,
-            { text: newMessage, isSentByUser: true },
+            { text: data.chatMsg, isSentByUser: true },
         ]);
 
         // 메시지 입력 필드 초기화
-        setNewMessage('');
+        resetField('chatMsg');
     };
 
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
@@ -84,20 +92,19 @@ const ChatRoomPage = () => {
                     ))}
                 </S.ChatRoomMain>
             </S.ChatRoomPageContainer>
-            <S.ChatInputContainer>
+            <S.ChatInputForm onSubmit={handleSubmit(handleSendMessage)}>
                 <S.ChatInputBox>
                     <input
                         type="text"
-                        value={newMessage}
-                        onChange={e => setNewMessage(e.target.value)}
                         className="chat-input"
                         placeholder="메세지를 입력하세요"
+                        {...register('chatMsg')}
                     />
-                    <button type="button" onClick={handleSendMessage}>
+                    <button>
                         <S.Sendicon />
                     </button>
                 </S.ChatInputBox>
-            </S.ChatInputContainer>
+            </S.ChatInputForm>
         </>
     );
 };

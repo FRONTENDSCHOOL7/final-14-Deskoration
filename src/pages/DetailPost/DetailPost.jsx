@@ -37,7 +37,7 @@ const DetailPost = () => {
     const { id } = useParams(); //선택한 게시물 아이디 값
     const navigate = useNavigate();
 
-    const { register, handleSubmit, reset, setFocus } = useForm({
+    const { register, handleSubmit, resetField, setFocus } = useForm({
         mode: 'onSubmit',
         defaultValues: {
             comment: '',
@@ -117,7 +117,7 @@ const DetailPost = () => {
             .catch(error => {
                 console.error('댓글 작성 중 오류 발생:', error);
             });
-        reset();
+        resetField('comment');
     };
 
     // bottomsheet

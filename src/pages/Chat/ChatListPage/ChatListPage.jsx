@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './ChatListPage.styled';
-import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
 import usePageHandler from '../../../hooks/usePageHandler';
 import { collection, getDocs } from 'firebase/firestore';
@@ -8,14 +7,23 @@ import { db } from '../../../firebase';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const filteredProfiles = profile.filter(profile =>
-        profile.username.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    const [chatData, setChatData] = useState(null);
+    const myId = sessionStorage.getItem('AccountName');
 
     usePageHandler('text', '채팅');
+
+    useEffect(() => {
+        getDocs(collection(db, 'chatList'))
+            .then(snapshot => {
+                const chatList = snapshot.docs.map(doc => ({
+                    roomId: doc.id,
+                    ...doc.data(),
+                }));
+                setChatData(chatList);
+                console.log(chatList);
+            })
+            .catch(error => console.error(error));
+    }, []);
 
     return (
         <>
@@ -35,44 +43,47 @@ const ChatListPage = () => {
                     </S.SearchBar>
 
                     <S.UserChatList>
-                        {filteredProfiles.map((profile, index) => (
-                            <li key={profile._id}>
-                                <Link
-                                    to={`/chat/${profile.username}`}
-                                    state={{
-                                        user: profile.username,
-                                        message: [profile.messages],
-                                        image: profile.image,
-                                    }}
-                                >
-                                    <S.UserChatRoom>
-                                        <img
-                                            src={profile.image}
-                                            className="user-img"
-                                            alt=""
-                                        />
-                                        <S.UserSimpleinfo>
-                                            <h2 className="user-name">
-                                                {profile.username}
-                                            </h2>
-                                            <div className="user-msg-time">
-                                                <p className="user-lastMeassage">
-                                                    {
-                                                        profile.messages[
-                                                            profile.messages
-                                                                .length - 1
-                                                        ]
-                                                    }
-                                                </p>
-                                                <p className="user-date">
-                                                    {profile.time}
-                                                </p>
-                                            </div>
-                                        </S.UserSimpleinfo>
-                                    </S.UserChatRoom>
-                                </Link>
-                            </li>
-                        ))}
+                        {chatData?.map((chat, index) => {
+                            const filteredUser = chat.participants.filter(
+                                user => user.accountname !== myId,
+                            )[0];
+
+                            const convertedDate = chat.createdAt.toDate();
+                            const createdMonth = convertedDate.getMonth() + 1;
+                            const createdDate = convertedDate.getDate();
+
+                            return (
+                                <li key={index}>
+                                    <Link
+                                        to={`/chat/${chat.roomId}`}
+                                        state={{
+                                            roomId: chat.roomId,
+                                        }}
+                                    >
+                                        <S.UserChatRoom>
+                                            <img
+                                                src={filteredUser.image}
+                                                className="user-img"
+                                                alt="대화 상대"
+                                            />
+                                            <S.UserSimpleinfo>
+                                                <h2 className="user-name">
+                                                    {filteredUser.username}
+                                                </h2>
+                                                <div className="user-msg-time">
+                                                    <p className="user-lastMeassage">
+                                                        {chat.lastMessage}
+                                                    </p>
+                                                    <p className="user-date">
+                                                        {`${createdMonth}.${createdDate}`}
+                                                    </p>
+                                                </div>
+                                            </S.UserSimpleinfo>
+                                        </S.UserChatRoom>
+                                    </Link>
+                                </li>
+                            );
+                        })}
                     </S.UserChatList>
                 </S.ChatlistPageMain>
             </S.ChatListPageContainer>

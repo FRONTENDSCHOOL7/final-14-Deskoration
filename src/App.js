@@ -6,15 +6,22 @@ import theme from './styles/theme';
 import './App.css';
 
 import Router from './router/Router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
     return (
-        <div className="container">
-            <ThemeProvider theme={theme}>
-                <GlobalStyle />
-                <Router />
-            </ThemeProvider>
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <div className="container">
+                <ThemeProvider theme={theme}>
+                    <GlobalStyle />
+                    <Router />
+                </ThemeProvider>
+            </div>
+            <ReactQueryDevtools />
+        </QueryClientProvider>
     );
 }
 

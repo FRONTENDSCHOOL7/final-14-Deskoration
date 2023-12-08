@@ -6,43 +6,36 @@ import Slide from './Slide';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getAllPostApi } from '../../service/post_service';
 import Loader from '../../components/Loading/Loader';
+import { useQuery } from '@tanstack/react-query';
 
 const Home = () => {
-    const [articles, setArticles] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [articles, setArticles] = useState([]);
+    // const [isLoading, setIsLoading] = useState(false);
     const token = sessionStorage.getItem('Token');
 
     usePageHandler('image', logoImg);
 
-    const tempApi = async token => {
-        try {
-            setIsLoading(true);
-            const result = await getAllPostApi(token);
-            // console.log('API보기2: ', result.posts);
-            const deskoration = result.posts.filter(post =>
-                post.content?.includes('"deskoration"'),
-            );
-            // console.log('deskoration: ', deskoration);
-            setArticles(deskoration); // Set the state with articles containing images
-        } catch (error) {
-            console.error('error');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        tempApi(token);
-    }, [token]);
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['getAllPosts', token],
+        queryFn: () => getAllPostApi(token),
+    });
 
     if (isLoading) {
-        return <Loader></Loader>;
+        return <Loader />;
     }
+
+    if (error) {
+        console.error(error);
+    }
+
+    const articles = data?.posts?.filter(post =>
+        post.content?.includes('"deskoration"'),
+    );
 
     return (
         <>
             <Slide />
-            <Article articles={articles} setArticles={setArticles} />
+            <Article articles={articles} />
         </>
     );
 };

@@ -3,6 +3,8 @@ import * as S from './ChatRoomPage.styled';
 import { useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import usePageHandler from '../../../hooks/usePageHandler';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const ChatRoomPage = () => {
     const location = useLocation();

@@ -3,6 +3,8 @@ import * as S from './ChatListPage.styled';
 import { profile } from '../../../mock/mockData';
 import { Link } from 'react-router-dom';
 import usePageHandler from '../../../hooks/usePageHandler';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');

@@ -2,29 +2,55 @@ import React, { useState, useEffect } from 'react';
 import * as S from './ChatListPage.styled';
 import { Link } from 'react-router-dom';
 import usePageHandler from '../../../hooks/usePageHandler';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../firebase';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [chatData, setChatData] = useState(null);
-    const myId = sessionStorage.getItem('AccountName');
+    const [searchData, setSearchData] = useState(null);
+    const myAccountName = sessionStorage.getItem('AccountName');
 
     usePageHandler('text', '채팅');
 
+    // fetch
     useEffect(() => {
-        getDocs(collection(db, 'chatList'))
-            .then(snapshot => {
-                const chatList = snapshot.docs.map(doc => ({
+        const fetchData = async () => {
+            try {
+                const chatCollectionRef = collection(db, 'chatList');
+                const chatSnapshot = await getDocs(
+                    query(chatCollectionRef, orderBy('createdAt', 'desc')),
+                );
+                const chatList = chatSnapshot.docs.map(doc => ({
                     roomId: doc.id,
                     ...doc.data(),
                 }));
                 setChatData(chatList);
-                console.log(chatList);
-            })
-            .catch(error => console.error(error));
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
     }, []);
 
+    // 유저 검색
+    useEffect(() => {
+        if (searchQuery) {
+            let searchArr = [];
+            for (let chat of chatData) {
+                chat.participants.forEach(user => {
+                    const matchedUser = user.username.includes(searchQuery);
+                    if (matchedUser) searchArr.push(chat);
+                });
+            }
+            setSearchData(searchArr);
+        } else {
+            setSearchData([]);
+        }
+    }, [chatData, searchQuery]);
+
+    // 날짜 변환
     const formatDate = date => {
         const convertedDate = date.toDate();
         const month = convertedDate.getMonth() + 1;
@@ -46,14 +72,22 @@ const ChatListPage = () => {
                             type="text"
                             placeholder="Search user"
                             value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
+                            onChange={event =>
+                                setSearchQuery(event.target.value)
+                            }
                         />
                     </S.SearchBar>
 
                     <S.UserChatList>
-                        {chatData?.map(chat => {
+                        {(searchQuery ? searchData : chatData)?.map(chat => {
                             const filteredUser = chat.participants.filter(
-                                user => user.accountname !== myId,
+                                user => {
+                                    console.log(
+                                        user.accountname,
+                                        myAccountName,
+                                    );
+                                    return user.accountname !== myAccountName;
+                                },
                             )[0];
 
                             const formattedDate = formatDate(chat.createdAt);

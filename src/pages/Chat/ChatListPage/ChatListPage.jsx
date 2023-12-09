@@ -30,7 +30,6 @@ const ChatListPage = () => {
                 console.error(error);
             }
         };
-
         fetchData();
     }, []);
 
@@ -59,6 +58,45 @@ const ChatListPage = () => {
         return `${month}.${day}`;
     };
 
+    // 채팅목록 렌더링
+    const renderChatList = chatList => {
+        return chatList.map(chat => {
+            const filteredUser = chat.participants.filter(
+                user => user.accountname !== myAccountName,
+            )[0];
+
+            const formattedDate = formatDate(chat.createdAt);
+
+            return (
+                <li key={chat.roomId}>
+                    <Link
+                        to={`/chat/${chat.roomId}`}
+                        state={{ roomId: chat.roomId }}
+                    >
+                        <S.UserChatRoom>
+                            <img
+                                src={filteredUser.image}
+                                className="user-img"
+                                alt="대화 상대"
+                            />
+                            <S.UserSimpleinfo>
+                                <h2 className="user-name">
+                                    {filteredUser.username}
+                                </h2>
+                                <div className="user-msg-time">
+                                    <p className="user-lastMeassage">
+                                        {chat.lastMessage}
+                                    </p>
+                                    <p className="user-date">{formattedDate}</p>
+                                </div>
+                            </S.UserSimpleinfo>
+                        </S.UserChatRoom>
+                    </Link>
+                </li>
+            );
+        });
+    };
+
     return (
         <>
             <S.ChatListPageContainer>
@@ -79,51 +117,15 @@ const ChatListPage = () => {
                     </S.SearchBar>
 
                     <S.UserChatList>
-                        {(searchQuery ? searchData : chatData)?.map(chat => {
-                            const filteredUser = chat.participants.filter(
-                                user => {
-                                    console.log(
-                                        user.accountname,
-                                        myAccountName,
-                                    );
-                                    return user.accountname !== myAccountName;
-                                },
-                            )[0];
-
-                            const formattedDate = formatDate(chat.createdAt);
-
-                            return (
-                                <li key={chat.roomId}>
-                                    <Link
-                                        to={`/chat/${chat.roomId}`}
-                                        state={{
-                                            roomId: chat.roomId,
-                                        }}
-                                    >
-                                        <S.UserChatRoom>
-                                            <img
-                                                src={filteredUser.image}
-                                                className="user-img"
-                                                alt="대화 상대"
-                                            />
-                                            <S.UserSimpleinfo>
-                                                <h2 className="user-name">
-                                                    {filteredUser.username}
-                                                </h2>
-                                                <div className="user-msg-time">
-                                                    <p className="user-lastMeassage">
-                                                        {chat.lastMessage}
-                                                    </p>
-                                                    <p className="user-date">
-                                                        {formattedDate}
-                                                    </p>
-                                                </div>
-                                            </S.UserSimpleinfo>
-                                        </S.UserChatRoom>
-                                    </Link>
-                                </li>
-                            );
-                        })}
+                        {!searchQuery ? (
+                            renderChatList(chatData)
+                        ) : searchData.length > 0 ? (
+                            renderChatList(searchData)
+                        ) : (
+                            <S.NoResultParagraph>
+                                검색 결과가 없습니다.
+                            </S.NoResultParagraph>
+                        )}
                     </S.UserChatList>
                 </S.ChatlistPageMain>
             </S.ChatListPageContainer>

@@ -105,4 +105,9 @@ export const UserSimpleinfo = styled.div`
     }
 `;
 
+export const NoResultParagraph = styled.p`
+    color: ${props => props.theme.subFont};
+    text-align: center;
+`;
+
 // 별개 css

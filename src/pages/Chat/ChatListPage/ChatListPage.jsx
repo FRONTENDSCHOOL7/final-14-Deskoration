@@ -25,6 +25,14 @@ const ChatListPage = () => {
             .catch(error => console.error(error));
     }, []);
 
+    const formatDate = date => {
+        const convertedDate = date.toDate();
+        const month = convertedDate.getMonth() + 1;
+        const day = convertedDate.getDate();
+
+        return `${month}.${day}`;
+    };
+
     return (
         <>
             <S.ChatListPageContainer>
@@ -43,17 +51,15 @@ const ChatListPage = () => {
                     </S.SearchBar>
 
                     <S.UserChatList>
-                        {chatData?.map((chat, index) => {
+                        {chatData?.map(chat => {
                             const filteredUser = chat.participants.filter(
                                 user => user.accountname !== myId,
                             )[0];
 
-                            const convertedDate = chat.createdAt.toDate();
-                            const createdMonth = convertedDate.getMonth() + 1;
-                            const createdDate = convertedDate.getDate();
+                            const formattedDate = formatDate(chat.createdAt);
 
                             return (
-                                <li key={index}>
+                                <li key={chat.roomId}>
                                     <Link
                                         to={`/chat/${chat.roomId}`}
                                         state={{
@@ -75,7 +81,7 @@ const ChatListPage = () => {
                                                         {chat.lastMessage}
                                                     </p>
                                                     <p className="user-date">
-                                                        {`${createdMonth}.${createdDate}`}
+                                                        {formattedDate}
                                                     </p>
                                                 </div>
                                             </S.UserSimpleinfo>

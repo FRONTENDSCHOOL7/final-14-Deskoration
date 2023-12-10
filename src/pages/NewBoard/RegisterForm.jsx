@@ -130,7 +130,7 @@ const RegisterForm = ({
                     selectOptions={options}
                     register={register}
                     registerOptions={{
-                        required: '필수 정보를 입력하세요.',
+                        required: '카테고리를 입력하세요.',
                     }}
                 />
                 <Input
@@ -139,7 +139,7 @@ const RegisterForm = ({
                     error={errors.productName}
                     register={register}
                     registerOptions={{
-                        required: '필수 정보를 입력하세요.',
+                        required: '상품명을 입력하세요.',
                     }}
                 />
                 <Input
@@ -149,7 +149,7 @@ const RegisterForm = ({
                     error={errors.price}
                     register={register}
                     registerOptions={{
-                        required: '필수 정보를 입력하세요.',
+                        required: '구매 가격을 입력하세요.',
                         min: 0,
                     }}
                     step={10}

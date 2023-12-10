@@ -144,9 +144,10 @@ const RegisterForm = ({
 
     const handleSelectedPlace = data => {
         // data는 AddMap 컴포넌트에서 전달한 선택한 장소의 정보
+        const nullData = data === null;
         setSelectedPlace(data);
 
-        selectedPlace
+        nullData
             ? setError('store', { message: '구매 장소를 선택해주세요.' })
             : clearErrors('store');
     };

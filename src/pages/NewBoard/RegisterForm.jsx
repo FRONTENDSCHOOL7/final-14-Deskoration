@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input, SelectInput } from '../../components/Input/Input';
 
@@ -14,10 +14,10 @@ const RegisterForm = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const showProduct = location.pathname.includes('/detailPost');
+
     const currentPath = window.location.pathname;
-    const defaultProductItem = location.state?.defaultProductItem;
-    const defaultProductItemDetail = defaultProductItem?.detail;
+    const editProductItem = location.state?.editProduct;
+    const editProductItemDetail = editProductItem?.detail;
 
     const options = [
         '책상',
@@ -65,7 +65,7 @@ const RegisterForm = ({
     const submitProduct = data => {
         if (productItems.length <= 6) {
             const itemIndex = productItems.findIndex(
-                item => item.detail.id === defaultProductItemDetail?.id,
+                item => item.detail.id === editProductItemDetail?.id,
             );
 
             const newID = () => Math.random().toString(36).substring(2, 16);
@@ -76,7 +76,7 @@ const RegisterForm = ({
                 price: data.price,
                 store: data.store,
                 link: data.link,
-                id: defaultProductItem ? defaultProductItemDetail.id : newID(),
+                id: editProductItemDetail ? editProductItemDetail.id : newID(),
             };
 
             if (itemIndex !== -1) {
@@ -90,8 +90,8 @@ const RegisterForm = ({
                 setProductItems(prev => [
                     ...prev,
                     {
-                        marker: defaultProductItem
-                            ? defaultProductItem.marker
+                        marker: editProductItemDetail
+                            ? editProductItemDetail.marker
                             : offset,
                         detail: newData,
                     },
@@ -107,18 +107,18 @@ const RegisterForm = ({
     };
 
     useEffect(() => {
-        !showProduct && setFocus('productName');
-    }, [setFocus, showProduct]);
+        setFocus('productName');
+    }, [setFocus]);
 
     useEffect(() => {
-        if (defaultProductItemDetail) {
-            setValue('category', defaultProductItemDetail?.category);
-            setValue('productName', defaultProductItemDetail?.productName);
-            setValue('price', defaultProductItemDetail?.price);
-            setValue('store', defaultProductItemDetail?.store);
-            setValue('link', defaultProductItemDetail?.link);
+        if (editProductItemDetail) {
+            setValue('category', editProductItemDetail?.category);
+            setValue('productName', editProductItemDetail?.productName);
+            setValue('price', editProductItemDetail?.price);
+            setValue('store', editProductItemDetail?.store);
+            setValue('link', editProductItemDetail?.link);
         }
-    }, [defaultProductItemDetail, setValue]);
+    }, [editProductItemDetail, setValue]);
 
     return (
         <S.RegisterForm onSubmit={handleSubmit(submitProduct)}>
@@ -181,20 +181,19 @@ const RegisterForm = ({
                     }}
                 />
             </fieldset>
-            {!showProduct && (
-                <S.RegisterButtonBox>
-                    <GradientButton
-                        width={'40%'}
-                        padding={'12px'}
-                        onClick={() => navigate(-1)}
-                    >
-                        취소하기
-                    </GradientButton>
-                    <GradientButton gra={'true'} type={'submit'} width={'40%'}>
-                        등록하기
-                    </GradientButton>
-                </S.RegisterButtonBox>
-            )}
+
+            <S.RegisterButtonBox>
+                <GradientButton
+                    width={'40%'}
+                    padding={'12px'}
+                    onClick={() => navigate(-1)}
+                >
+                    취소하기
+                </GradientButton>
+                <GradientButton gra={'true'} type={'submit'} width={'40%'}>
+                    등록하기
+                </GradientButton>
+            </S.RegisterButtonBox>
         </S.RegisterForm>
     );
 };

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { StaticMap } from 'react-kakao-maps-sdk';
+
 import * as S from './ShowProduct.styled';
 
 const ShowProduct = () => {
@@ -43,8 +45,28 @@ const ShowProduct = () => {
                         상품 보러가기
                     </S.LinkButton>
                 ) : (
-                    // 지도 api
-                    <div> {productDetail.store}</div>
+                    <>
+                        <StaticMap // 지도를 표시할 Container
+                            center={{
+                                lat: productDetail.store.position.lat,
+                                lng: productDetail.store.position.lng,
+                            }}
+                            style={{
+                                // 지도의 크기
+                                width: '100%',
+                                height: '300px',
+                            }}
+                            marker={{
+                                lat: productDetail.store.position.lat,
+                                lng: productDetail.store.position.lng,
+                            }}
+                            level={3} // 지도의 확대 레벨
+                        />
+                        <S.MapBox>
+                            <span>{productDetail.store.name}</span>
+                            <address>{productDetail.store.address}</address>
+                        </S.MapBox>
+                    </>
                 )}
             </S.MapContianer>
             <S.ProductBox>

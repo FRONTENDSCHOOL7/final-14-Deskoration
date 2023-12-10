@@ -60,7 +60,7 @@ const ChatListPage = () => {
 
     // 채팅목록 렌더링
     const renderChatList = chatList => {
-        return chatList.map(chat => {
+        return chatList?.map(chat => {
             const filteredUser = chat.participants.filter(
                 user => user.accountname !== myAccountName,
             )[0];

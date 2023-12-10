@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input, SelectInput } from '../../components/Input/Input';

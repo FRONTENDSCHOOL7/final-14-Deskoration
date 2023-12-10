@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import * as S from './Article.styled';
 
-const Article = ({ articles, setArticles }) => {
+const Article = ({ articles }) => {
     const [loading, setLoading] = useState(false);
     const sectionRef = useRef(null); // S.Section에 대한 참조 생성
     const token = sessionStorage.getItem('Token');
@@ -15,7 +15,7 @@ const Article = ({ articles, setArticles }) => {
                 Math.ceil(scrollTop + clientHeight) >= scrollHeight &&
                 !loading
             ) {
-                loadMoreArticles();
+                // loadMoreArticles();
             }
         };
 
@@ -23,18 +23,6 @@ const Article = ({ articles, setArticles }) => {
         sectionElement.addEventListener('scroll', handleScroll);
         return () => sectionElement.removeEventListener('scroll', handleScroll);
     }, [loading]);
-
-    const loadMoreArticles = () => {
-        setLoading(true);
-
-        setTimeout(() => {
-            setArticles(prevArticles => [
-                ...prevArticles,
-                // ...Array(8).fill({}),
-            ]);
-            setLoading(false);
-        }, 1000);
-    };
 
     return (
         <>

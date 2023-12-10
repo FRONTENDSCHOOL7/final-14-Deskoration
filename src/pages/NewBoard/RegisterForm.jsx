@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
 import GradientButton from '../../components/GradientButton/GradientButton';
-// import { Input, SelectInput } from '../../components/Input/Input';
-import { WarningMsg } from '../../components/Input/WarningMsg';
+import { Input, SelectInput } from '../../components/Input/Input';
 
 import * as S from './RegisterForm.styled';
 
@@ -15,18 +14,11 @@ const RegisterForm = ({
 }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id } = useParams();
     const showProduct = location.pathname.includes('/detailPost');
-
     const currentPath = window.location.pathname;
-
     const defaultProductItem = location.state?.defaultProductItem;
-
     const defaultProductItemDetail = defaultProductItem?.detail;
 
-    const [warnCategory, setWarnCategory] = useState(false);
-    const [warnProductName, setWarnProductName] = useState(false);
-    const [warnPrice, setWarnPrice] = useState(false);
     const options = [
         '책상',
         '의자',
@@ -68,7 +60,7 @@ const RegisterForm = ({
         if (isSubmitted) {
             trigger(['store', 'link']);
         }
-    }, [storeInput, linkInput, isSubmitted]);
+    }, [storeInput, linkInput, isSubmitted, trigger]);
 
     const submitProduct = data => {
         if (productItems.length <= 6) {
@@ -126,86 +118,68 @@ const RegisterForm = ({
             setValue('store', defaultProductItemDetail?.store);
             setValue('link', defaultProductItemDetail?.link);
         }
-    }, [defaultProductItemDetail]);
+    }, [defaultProductItemDetail, setValue]);
 
     return (
         <S.RegisterForm onSubmit={handleSubmit(submitProduct)}>
             <fieldset>
-                <S.InputLabel htmlFor={'category'}>카테고리</S.InputLabel>
-                <S.Select
-                    id="category"
-                    className={errors.category ? 'warning' : null}
-                    {...register('category', {
-                        required: '필수 정보를 입력하세요.',
-                    })}
-                >
-                    {options.map((item, index) => {
-                        return (
-                            <option value={item} key={index}>
-                                {item}
-                            </option>
-                        );
-                    })}
-                </S.Select>
-                {errors.category && (
-                    <WarningMsg msg={errors.category.message} />
-                )}
-
-                <S.InputLabel htmlFor={'productName'}>상품명</S.InputLabel>
-                <S.Input
-                    type={'text'}
-                    id={'productName'}
-                    className={errors.productName ? 'warning' : null}
-                    {...register('productName', {
-                        required: '필수 정보를 입력하세요.',
-                    })}
+                <SelectInput
+                    label={'카테고리'}
+                    id={'category'}
+                    error={errors.category}
+                    selectOptions={options}
+                    register={register}
+                    registerOptions={{
+                        required: '카테고리를 입력하세요.',
+                    }}
                 />
-                {errors.productName && (
-                    <WarningMsg msg={errors.productName.message} />
-                )}
-
-                <S.InputLabel htmlFor={'price'}>구매가격</S.InputLabel>
-                <S.Input
+                <Input
+                    label={'상품명'}
+                    id={'productName'}
+                    error={errors.productName}
+                    register={register}
+                    registerOptions={{
+                        required: '상품명을 입력하세요.',
+                    }}
+                />
+                <Input
                     type={'number'}
+                    label={'구매가격'}
                     id={'price'}
-                    className={errors.price ? 'warning' : null}
-                    min={0}
-                    {...register('price', {
-                        required: '필수 정보를 입력하세요.',
-                    })}
+                    error={errors.price}
+                    register={register}
+                    registerOptions={{
+                        required: '구매 가격을 입력하세요.',
+                        min: 0,
+                    }}
                     step={10}
                 />
-                {errors.price && <WarningMsg msg={errors.price.message} />}
-
-                <S.InputLabel htmlFor={'store'}>구매처</S.InputLabel>
-                <S.Input
-                    type={'text'}
+                <Input
+                    label={'구매처'}
                     id={'store'}
-                    className={errors.store ? 'warning' : null}
-                    {...register('store', {
+                    error={errors.store}
+                    register={register}
+                    registerOptions={{
                         validate: value => {
                             return !value && !linkInput
                                 ? '구매처 또는 구매링크를 입력하세요.'
                                 : null;
                         },
-                    })}
+                    }}
                 />
-                {errors.store && <WarningMsg msg={errors.store.message} />}
-
-                <S.InputLabel htmlFor={'link'}>구매링크</S.InputLabel>
-                <S.Input
-                    type={'url'}
+                <Input
+                    label={'구매링크'}
                     id={'link'}
-                    className={errors.link ? 'warning' : null}
-                    {...register('link', {
+                    error={errors.link}
+                    register={register}
+                    registerOptions={{
                         validate: value => {
                             return !value && !storeInput
                                 ? '구매처 또는 구매링크를 입력하세요.'
                                 : null;
                         },
-                    })}
+                    }}
                 />
-                {errors.link && <WarningMsg msg={errors.link.message} />}
             </fieldset>
             {!showProduct && (
                 <S.RegisterButtonBox>

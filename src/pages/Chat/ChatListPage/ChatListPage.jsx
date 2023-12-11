@@ -13,6 +13,14 @@ const ChatListPage = () => {
 
     usePageHandler('text', '채팅');
 
+    const filterChats = (chats, condition) => {
+        return chats.reduce((acc, chat) => {
+            const isMatch = chat.participants.some(condition);
+            if (isMatch) acc.push(chat);
+            return acc;
+        }, []);
+    };
+
     // fetch
     useEffect(() => {
         const fetchData = async () => {
@@ -26,13 +34,9 @@ const ChatListPage = () => {
                     ...doc.data(),
                 }));
 
-                let originList = [];
-                for (let chat of chatList) {
-                    chat.participants.forEach(user => {
-                        const myself = user.accountname.includes(myAccountName);
-                        if (myself) originList.push(chat);
-                    });
-                }
+                const originList = filterChats(chatList, user =>
+                    user.accountname.includes(myAccountName),
+                );
                 setChatData(originList);
             } catch (error) {
                 console.error(error);
@@ -44,13 +48,9 @@ const ChatListPage = () => {
     // 유저 검색
     useEffect(() => {
         if (searchQuery) {
-            let searchArr = [];
-            for (let chat of chatData) {
-                chat.participants.forEach(user => {
-                    const matchedUser = user.username.includes(searchQuery);
-                    if (matchedUser) searchArr.push(chat);
-                });
-            }
+            let searchArr = filterChats(chatData, user =>
+                user.username.includes(searchQuery),
+            );
             setSearchData(searchArr);
         } else {
             setSearchData([]);

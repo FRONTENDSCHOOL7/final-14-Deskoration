@@ -25,7 +25,15 @@ const ChatListPage = () => {
                     roomId: doc.id,
                     ...doc.data(),
                 }));
-                setChatData(chatList);
+
+                let originList = [];
+                for (let chat of chatList) {
+                    chat.participants.forEach(user => {
+                        const myself = user.accountname.includes(myAccountName);
+                        if (myself) originList.push(chat);
+                    });
+                }
+                setChatData(originList);
             } catch (error) {
                 console.error(error);
             }

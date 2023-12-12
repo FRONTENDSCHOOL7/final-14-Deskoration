@@ -77,16 +77,20 @@ const Router = () => {
                                 element={<ProductPage />}
                             />
                             <Route
-                                    path={'/postEdit/:id'}
-                                    element={<PostUpdateForm />}
-                                />
-                                <Route
-                                    path={'/postEdit/:id/:itemCount'}
-                                    element={<PostUpdateForm />}
-                                />
+                                path={'/postEdit/:id'}
+                                element={<PostUpdateForm />}
+                            />
+                            <Route
+                                path={'/postEdit/:id/:itemCount'}
+                                element={<PostUpdateForm />}
+                            />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route
                                 path={'/chat/:username'}
+                                element={<ChatRoomPage />}
+                            />
+                            <Route
+                                path={'/chat/:id'}
                                 element={<ChatRoomPage />}
                             />
                             <Route

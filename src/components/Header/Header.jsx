@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const myacountName = sessionStorage.getItem('AccountName');
+    const myAccountName = sessionStorage.getItem('AccountName');
     const handleGoBack = () => {
         navigate(-1);
     };
@@ -15,7 +15,6 @@ const Header = () => {
     const isHome = location.pathname.includes('/home');
     const isFeed = location.pathname.includes('/feed');
     const isPostUpload = location.pathname.includes('/postUpload');
-    const isPostUpdate = location.pathname.includes('/postEdit');
     const isChat = /^\/chat\/?$/.test(location.pathname);
     const isMyProfile = /^\/profile\/?$/.test(location.pathname);
 
@@ -25,7 +24,6 @@ const Header = () => {
                 {isHome ||
                 isFeed ||
                 isPostUpload ||
-                isPostUpdate ||
                 isChat ||
                 isMyProfile ? null : (
                     <button type="button" onClick={handleGoBack}>
@@ -44,7 +42,7 @@ const Header = () => {
                         <S.UserInfo>
                             <Link
                                 to={
-                                    currentPage.accountname === myacountName
+                                    currentPage.accountname === myAccountName
                                         ? '/profile'
                                         : `/profile/${currentPage.accountname}`
                                 }

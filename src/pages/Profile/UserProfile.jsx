@@ -3,14 +3,12 @@ import * as S from './UserProfile.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { getUserProfileApi } from '../../service/profile_service';
 import { getMyPostApi } from '../../service/post_service';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loading/Loader';
 import usePageHandler from '../../hooks/usePageHandler';
-import {
-    postFollowApi,
-    deleteFollowApi,
-    getFollowerApi,
-} from '../../service/follow_service';
+import { postFollowApi, deleteFollowApi } from '../../service/follow_service';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 const UserProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,9 +18,8 @@ const UserProfile = () => {
     const { username } = useParams(); //선택한 게시물 아이디 값
     const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
-    const [followerData, setFollowerData] = useState([]);
-    const [follow, setFollow] = useState(false);
 
+    const navigate = useNavigate();
     usePageHandler('text', profileData?.username);
 
     useEffect(() => {
@@ -79,6 +76,55 @@ const UserProfile = () => {
         }
     };
 
+    const fetchRoomId = async () => {
+        try {
+            let chatRoomId = '';
+            const roomRef = collection(db, 'rooms');
+            const roomSnapshot = await getDocs(
+                query(
+                    roomRef,
+                    where('participants', 'array-contains', myAccountName),
+                ),
+            );
+
+            for (let room of roomSnapshot.docs) {
+                const data = room.data();
+                let result = data.participants.includes(
+                    profileData.accountname,
+                );
+                if (result) {
+                    chatRoomId = data.roomId;
+                    break;
+                }
+            }
+
+            if (chatRoomId) {
+                navigate(`/chat/${chatRoomId}`, {
+                    state: {
+                        roomId: chatRoomId,
+                        user: {
+                            accountname: profileData.accountname,
+                            username: profileData.username,
+                            image: profileData.image,
+                        },
+                    },
+                });
+            } else {
+                navigate(`/chat/${profileData.accountname}`, {
+                    state: {
+                        user: {
+                            accountname: profileData.accountname,
+                            username: profileData.username,
+                            image: profileData.image,
+                        },
+                    },
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <>
             <S.ProfileContainer>
@@ -125,6 +171,7 @@ const UserProfile = () => {
                         gra={''}
                         width={'100%'}
                         padding={'10px'}
+                        onClick={fetchRoomId}
                     >
                         메시지 보내기
                     </GradientButton>

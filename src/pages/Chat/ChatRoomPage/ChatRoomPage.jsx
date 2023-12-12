@@ -3,7 +3,7 @@ import * as S from './ChatRoomPage.styled';
 import { useLocation } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import usePageHandler from '../../../hooks/usePageHandler';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../../../firebase';
 
 const ChatRoomPage = () => {
@@ -26,9 +26,13 @@ const ChatRoomPage = () => {
     } else if (hours === 0) {
         hours = 12;
     }
-    const formattedTime = `${hours}:${minutes} ${amPm}`;
-    const { user, message, image } = location.state;
+    const { user, message, image, roomId } = location.state;
     const [chatMessages, setChatMessages] = useState([]);
+    const [firebaseMessage, setFirebaseMessage] = useState([]);
+    const [participants, setParticipants] = useState([]);
+    const myAccountName = sessionStorage.getItem('AccountName');
+    const formattedTime = `${hours}:${minutes} ${amPm}`;
+    // const [formattedTime, setFormattedTime] = useState()
 
     const handleSendMessage = data => {
         // 빈 메세지 전송 시 경고
@@ -56,6 +60,41 @@ const ChatRoomPage = () => {
         }
     }, [chatMessages]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const chatCollectionRef = collection(db, 'messages');
+                const chatSnapshot = await getDocs(
+                    query(chatCollectionRef, orderBy('messages')),
+                );
+                const chatMessageList = chatSnapshot.docs.map(doc => ({
+                    ...doc.data(),
+                }));
+                chatMessageList.map(info => {
+                    if (info.roomId === roomId) {
+                        setFirebaseMessage(info.messages);
+                        setParticipants(info.participants);
+                    }
+                });
+                // console.log(roomId);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, []);
+    console.log(firebaseMessage);
+    console.log(participants);
+    console.log(myAccountName);
+
+    const formatDate = data => {
+        const convertedDate = data.toDate();
+        const hour = convertedDate.getHours();
+        const min = convertedDate.getMinutes();
+
+        return `${hour}:${min > 0 ? min : '00'}`;
+    };
+
     usePageHandler('user', image, user);
 
     return (
@@ -63,18 +102,36 @@ const ChatRoomPage = () => {
             <S.ChatRoomPageContainer>
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
-                    {message[0].map((receivedMessage, index) => (
-                        <S.ChatContent key={index} $issentbyuser="false">
-                            <img src={image} alt="" className="userChat-img" />
-                            <div>
-                                <S.ChatBubble $issentbyuser="false">
-                                    <p>{receivedMessage}</p>
-                                </S.ChatBubble>
-                                <S.ChatTime>{formattedTime}</S.ChatTime>
-                            </div>
-                        </S.ChatContent>
-                    ))}
-
+                    {firebaseMessage?.map((receivedMessage, index) =>
+                        receivedMessage.accountname !== myAccountName ? (
+                            <S.ChatContent key={index} $issentbyuser="false">
+                                <img
+                                    src={image}
+                                    alt=""
+                                    className="userChat-img"
+                                />
+                                <div>
+                                    <S.ChatBubble $issentbyuser="false">
+                                        <p>{receivedMessage.content}</p>
+                                    </S.ChatBubble>
+                                    <S.ChatTime>
+                                        {formatDate(receivedMessage?.createdAt)}
+                                    </S.ChatTime>
+                                </div>
+                            </S.ChatContent>
+                        ) : (
+                            <S.ChatContent key={index} $issentbyuser="true">
+                                <div>
+                                    <S.ChatBubble $issentbyuser="true">
+                                        <p>{receivedMessage.content}</p>
+                                    </S.ChatBubble>
+                                    <S.ChatTime className="my-time">
+                                        {formatDate(receivedMessage?.createdAt)}
+                                    </S.ChatTime>
+                                </div>
+                            </S.ChatContent>
+                        ),
+                    )}
                     {/* 나의 채팅 */}
                     {chatMessages.map((chat, index) => (
                         <S.ChatContent key={index} $issentbyuser="true">

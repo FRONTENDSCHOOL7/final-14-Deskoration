@@ -72,14 +72,17 @@ const ChatListPage = () => {
             const filteredUser = chat.participants.filter(
                 user => user.accountname !== myAccountName,
             )[0];
-
+            console.log(chat.roomId);
             const formattedDate = formatDate(chat.createdAt);
 
             return (
                 <li key={chat.roomId}>
                     <Link
                         to={`/chat/${chat.roomId}`}
-                        state={{ roomId: chat.roomId }}
+                        state={{
+                            roomId: chat.roomId,
+                            image: filteredUser.image,
+                        }}
                     >
                         <S.UserChatRoom>
                             <img

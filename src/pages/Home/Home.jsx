@@ -9,9 +9,8 @@ import Loader from '../../components/Loading/Loader';
 import { useQuery } from '@tanstack/react-query';
 
 const Home = () => {
-    // const [articles, setArticles] = useState([]);
-    // const [isLoading, setIsLoading] = useState(false);
     const token = sessionStorage.getItem('Token');
+    const [category, setCategory] = useState(null);
 
     usePageHandler('image', logoImg);
 
@@ -28,13 +27,34 @@ const Home = () => {
         console.error(error);
     }
 
-    const articles = data?.posts?.filter(post =>
-        post.content?.includes('"deskoration"'),
-    );
+    const handleCategory = selectedCategory => {
+        if (category !== selectedCategory) {
+            setCategory(selectedCategory);
+        }
+    };
+
+    let articles = [];
+    if (data) {
+        if (category) {
+            articles = data?.posts?.filter(post =>
+                post.content?.includes('"deskoration"'),
+            );
+            articles = articles.filter(article => {
+                const content = JSON.parse(article.content);
+                return content.deskoration.productItems.some(
+                    item => item.detail.category === category,
+                );
+            });
+        } else {
+            articles = data?.posts?.filter(post =>
+                post.content?.includes('"deskoration"'),
+            );
+        }
+    }
 
     return (
         <>
-            <Slide />
+            <Slide category={handleCategory} />
             <Article articles={articles} />
         </>
     );

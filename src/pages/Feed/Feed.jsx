@@ -10,15 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
 import Loader from '../../components/Loading/Loader';
+import { useQuery } from '@tanstack/react-query';
+
 const Feed = () => {
     const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
-    const [feedData, setFeedData] = useState([]);
-    const [feedContent, setFeedContent] = useState([]);
-    const [createDate, setCreateDate] = useState([]);
-    const [likesData, setLikesData] = useState([]);
-    const [commentCount, setCommentCount] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     // 신고후에 보여줄 alertModal message
     const [reportMessage, setReportMessage] = useState('');
@@ -55,141 +51,127 @@ const Feed = () => {
 
     usePageHandler('text', '팔로잉 피드');
 
-    useEffect(() => {
-        setIsLoading(true);
-        getFeedApi(token)
-            .then(result => {
-                setFeedData(result.posts);
-                const newFeedContent = [];
-                const newCreateDate = [];
-                const newLikes = [];
-                const newCommentCount = [];
+    const {
+        data: feedData,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ['getFeedApi', token],
+        queryFn: () => getFeedApi(token),
+        select: responseData =>
+            responseData.posts.map(post => {
+                const content = JSON.parse(post.content);
+                const createdAt = {
+                    year: new Date(post.createdAt).getFullYear(),
+                    month: new Date(post.createdAt).getMonth() + 1,
+                    date: new Date(post.createdAt).getDate(),
+                };
+                return { ...post, content: content, createdAt: createdAt };
+            }),
+    });
 
-                result.posts.forEach(post => {
-                    const data = JSON.parse(post.content);
-                    newFeedContent.push(data);
-
-                    const dateObj = new Date(post.createdAt);
-                    const convertDate = {
-                        year: dateObj.getFullYear(),
-                        month: dateObj.getMonth() + 1,
-                        date: dateObj.getDate(),
-                    };
-                    newCreateDate.push(convertDate);
-                    newLikes.push({
-                        isLike: post.hearted,
-                        likeCount: post.heartCount,
-                    });
-                    newCommentCount.push(post.commentCount);
-                });
-                setFeedContent(newFeedContent);
-                setCreateDate(newCreateDate);
-                setLikesData(newLikes);
-                setCommentCount(newCommentCount);
-            })
-            .catch(error => {
-                console.error('Error calling the feed API: ', error);
-            })
-            .finally(() => setIsLoading(false));
-    }, [token]);
-
-    const handleLike = index => {
-        const id = feedData[index].id;
-
-        if (!likesData[index].isLike) {
-            postLikeApi(id, token)
-                .then(likeResult => {
-                    setLikesData(likes => {
-                        const newLikes = [...likes];
-                        newLikes[index] = {
-                            ...newLikes[index],
-                            isLike: true,
-                            likeCount: likeResult.post.heartCount,
-                        };
-                        return newLikes;
-                    });
-                    console.log(likeResult);
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        } else {
-            deleteLikeApi(id, token)
-                .then(unlikeResult => {
-                    setLikesData(likes => {
-                        const newLikes = [...likes];
-                        newLikes[index] = {
-                            ...newLikes[index],
-                            isLike: false,
-                            likeCount: unlikeResult.post.heartCount,
-                        };
-                        return newLikes;
-                    });
-                    console.log(unlikeResult);
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        }
-    };
+    console.log(feedData);
 
     if (isLoading) {
         return <Loader />;
     }
 
+    if (isError) {
+        console.error(error);
+    }
+
+    // const handleLike = index => {
+    //     const id = feedData[index].id;
+
+    //     if (!likesData[index].isLike) {
+    //         postLikeApi(id, token)
+    //             .then(likeResult => {
+    //                 setLikesData(likes => {
+    //                     const newLikes = [...likes];
+    //                     newLikes[index] = {
+    //                         ...newLikes[index],
+    //                         isLike: true,
+    //                         likeCount: likeResult.post.heartCount,
+    //                     };
+    //                     return newLikes;
+    //                 });
+    //                 console.log(likeResult);
+    //             })
+    //             .catch(error => {
+    //                 console.error('error');
+    //             });
+    //     } else {
+    //         deleteLikeApi(id, token)
+    //             .then(unlikeResult => {
+    //                 setLikesData(likes => {
+    //                     const newLikes = [...likes];
+    //                     newLikes[index] = {
+    //                         ...newLikes[index],
+    //                         isLike: false,
+    //                         likeCount: unlikeResult.post.heartCount,
+    //                     };
+    //                     return newLikes;
+    //                 });
+    //                 console.log(unlikeResult);
+    //             })
+    //             .catch(error => {
+    //                 console.error('error');
+    //             });
+    //     }
+    // };
+
     return (
         <>
-            {feedData.map((item, index) => {
+            {feedData.map((post, index) => {
                 return (
-                    <S.FeedContainer key={item.id}>
+                    <S.FeedContainer key={post.id}>
                         <S.FeedItemHeader>
-                            <Link
-                                to={`/profile/${feedData[index].author.accountname}`}
-                            >
+                            <Link to={`/profile/${post.author.accountname}`}>
                                 <S.UserInfoBox>
                                     <img
-                                        src={item?.author.image}
+                                        src={post.author.image}
                                         alt="이미지"
                                         className="profile-img"
                                     />
                                     <div>
-                                        <h4>{item?.author.username}</h4>
-                                        <p>{item?.author.accountname}</p>
+                                        <h4>{post.author.username}</h4>
+                                        <p>{post.author.accountname}</p>
                                     </div>
                                 </S.UserInfoBox>
                             </Link>
                             <button
-                                onClick={() => handleReportBottomSheet(item.id)}
+                                onClick={() => handleReportBottomSheet(post.id)}
                             >
                                 <S.MoreIcon />
                             </button>
                         </S.FeedItemHeader>
 
                         <S.FeedDetailBox>
-                            <Link to={`/detailpost/${feedData[index].id}`}>
+                            <Link to={`/detailpost/${post.id}`}>
                                 <S.DetailImgBox>
-                                    <img src={item.image} alt="게시글 이미지" />
+                                    <img src={post.image} alt="게시글 이미지" />
                                 </S.DetailImgBox>
                                 <S.DetailMsg>
-                                    {feedContent[index]?.deskoration.message}
+                                    {post.content.deskoration.message}
                                 </S.DetailMsg>
                             </Link>
                             <div>
                                 <SocialButton
                                     type={'like'}
-                                    onClick={() => handleLike(index)}
-                                    isLike={likesData[index].isLike}
-                                    likeCount={likesData[index].likeCount}
+                                    // onClick={() => handleLike(index)}
+                                    isLike={post.hearted}
+                                    likeCount={post.heartCount}
                                 />
-                                <Link to={`/detailpost/${feedData[index].id}`}>
+                                <Link to={`/detailpost/${post.id}`}>
                                     <SocialButton
                                         type={'comment'}
-                                        commentCount={commentCount[index]}
+                                        commentCount={post.commentCount}
                                     />
                                 </Link>
                             </div>
                             <S.FeedDate>
-                                {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
+                                {`${post.createdAt.year}년 ${post.createdAt.month}월 ${post.createdAt.date}일`}
                             </S.FeedDate>
                         </S.FeedDetailBox>
                     </S.FeedContainer>

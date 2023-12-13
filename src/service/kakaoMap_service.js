@@ -1,6 +1,6 @@
 const { kakao } = window;
 
-export const searchPlaces = async searchKeyword => {
+export const searchPlacesAPI = async searchKeyword => {
     const ps = new kakao.maps.services.Places();
 
     return new Promise(resolve => {
@@ -16,7 +16,7 @@ export const searchPlaces = async searchKeyword => {
     });
 };
 
-export const selectedPlacePosition = async (selectedPlace, map) => {
+export const selectedPlacePositionAPI = async (selectedPlace, map) => {
     const bounds = new kakao.maps.LatLngBounds();
     if (selectedPlace) {
         bounds.extend(

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Map, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import {
-    searchPlaces,
-    selectedPlacePosition,
+    searchPlacesAPI,
+    selectedPlacePositionAPI,
 } from '../../../service/kakaoMap_service';
 
 import * as S from './AddMap.styled';
@@ -15,7 +15,7 @@ const AddMap = ({ searchKeyword, selectedPlace, handleSelectedPlace }) => {
     // 검색한 데이터 배열에 담기
     useEffect(() => {
         if (searchKeyword) {
-            searchPlaces(searchKeyword) //
+            searchPlacesAPI(searchKeyword) //
                 .then(data => {
                     const setData = data.map(item => ({
                         position: {
@@ -40,7 +40,7 @@ const AddMap = ({ searchKeyword, selectedPlace, handleSelectedPlace }) => {
 
     // 선택한 데이터 위치 재 설정
     useEffect(() => {
-        selectedPlacePosition(selectedPlace, map);
+        selectedPlacePositionAPI(selectedPlace, map);
     }, [map, selectedPlace]);
     return (
         <>

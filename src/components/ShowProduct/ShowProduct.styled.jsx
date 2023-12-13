@@ -5,6 +5,8 @@ import { ReactComponent as Share } from '../../assets/images/Share.svg';
 export const ShareIcon = styled(Share)``;
 
 export const MapContianer = styled.div`
+    position: relative;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,6 +16,8 @@ export const MapContianer = styled.div`
     border: 1px solid ${theme.border};
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.05);
+
+    overflow: hidden;
 `;
 
 export const LinkButton = styled.a.attrs(props => ({
@@ -27,6 +31,32 @@ export const LinkButton = styled.a.attrs(props => ({
 
     &:hover {
         border: 5px solid ${theme.main};
+    }
+`;
+
+export const MapBox = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    padding: 10px;
+
+    background-color: #fff;
+
+    box-shadow: 0 -3px 5px rgba(0, 0, 0, 0.1);
+
+    span {
+        display: inline-block;
+
+        margin-bottom: 4px;
+
+        font-size: 16px;
+        font-family: 'PreBold';
+    }
+    address {
+        color: ${theme.subFont};
     }
 `;
 

@@ -8,7 +8,7 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
     const { id } = useParams();
     const editProduct = () => {
         navigate(`${productItem.detail.id}`, {
-            state: { defaultProductItem: productItem },
+            state: { editProduct: productItem },
         });
     };
 
@@ -16,7 +16,6 @@ const Ballon = ({ productItem, deleteProduct, itemCount, isDetail }) => {
         navigate(`/detailPost/${id}/${itemCount}`, {
             state: { showProduct: productItem },
         });
-        console.log(id);
     };
 
     const calcLeft = markerLocation => {

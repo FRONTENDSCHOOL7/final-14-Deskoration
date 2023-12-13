@@ -17,7 +17,24 @@ const Home = () => {
     const { data, error, isLoading } = useQuery({
         queryKey: ['getAllPosts', token],
         queryFn: () => getAllPostApi(token),
+        select: dataAll => {
+            let result = dataAll?.posts?.filter(post =>
+                post.content?.includes('"deskoration"'),
+            );
+
+            if (category) {
+                return result.filter(article => {
+                    const content = JSON.parse(article.content);
+                    return content.deskoration.productItems.some(
+                        item => item.detail.category === category,
+                    );
+                });
+            } else {
+                return result;
+            }
+        },
     });
+    console.log(data);
 
     if (isLoading) {
         return <Loader />;
@@ -33,29 +50,10 @@ const Home = () => {
         }
     };
 
-    let articles = [];
-    if (data) {
-        if (category) {
-            articles = data?.posts?.filter(post =>
-                post.content?.includes('"deskoration"'),
-            );
-            articles = articles.filter(article => {
-                const content = JSON.parse(article.content);
-                return content.deskoration.productItems.some(
-                    item => item.detail.category === category,
-                );
-            });
-        } else {
-            articles = data?.posts?.filter(post =>
-                post.content?.includes('"deskoration"'),
-            );
-        }
-    }
-
     return (
         <>
             <Slide category={handleCategory} />
-            <Article articles={articles} />
+            <Article articles={data} />
         </>
     );
 };

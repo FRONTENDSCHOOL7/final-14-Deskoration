@@ -16,7 +16,7 @@ const Feed = () => {
     const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
     const queryClient = useQueryClient();
-
+    const queryKey = ['getFeedApi', token];
     // // 신고후에 보여줄 alertModal message
     // const [reportMessage, setReportMessage] = useState('');
     // const { isOpen } = useSelector(store => store.alertModal);
@@ -58,7 +58,7 @@ const Feed = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['getFeedApi', token],
+        queryKey: queryKey,
         queryFn: () => getFeedApi(token),
         select: responseData =>
             responseData.posts.map(post => {
@@ -76,14 +76,14 @@ const Feed = () => {
         mutationFn: ({ id, token }) => postLikeApi(id, token),
         onMutate: async ({ id }) => {
             await queryClient.cancelQueries({
-                queryKey: ['getFeedApi', token],
+                queryKey: queryKey,
             });
             const previousFeedData = queryClient.getQueryData([
                 'getFeedApi',
                 token,
             ]);
 
-            queryClient.setQueryData(['getFeedApi', token], oldData => {
+            queryClient.setQueryData(queryKey, oldData => {
                 return {
                     ...oldData,
                     posts: oldData.posts.map(post => {
@@ -100,29 +100,12 @@ const Feed = () => {
             });
             return { previousFeedData };
         },
-        onError: (error, variables, context) => {
-            queryClient.setQueryData(
-                ['getFeedApi', token],
-                context.previousFeedData,
-            );
+        onError: (error, _, context) => {
+            queryClient.setQueryData(queryKey, context.previousFeedData);
+            console.error('다시 시도해주세요.', error);
         },
-        onSuccess: (data, { id }) => {
-            console.log(data);
-            queryClient.setQueryData(['getFeedApi', token], oldData => {
-                return {
-                    ...oldData,
-                    posts: oldData.posts.map(post => {
-                        if (post.id === id) {
-                            return {
-                                ...post,
-                                hearted: data.post.hearted,
-                                heartCount: data.post.heartCount,
-                            };
-                        }
-                        return post;
-                    }),
-                };
-            });
+        onSettled: () => {
+            queryClient.invalidateQueries(queryKey);
         },
     });
 
@@ -130,14 +113,14 @@ const Feed = () => {
         mutationFn: ({ id, token }) => deleteLikeApi(id, token),
         onMutate: async ({ id }) => {
             await queryClient.cancelQueries({
-                queryKey: ['getFeedApi', token],
+                queryKey: queryKey,
             });
             const previousFeedData = queryClient.getQueryData([
                 'getFeedApi',
                 token,
             ]);
 
-            queryClient.setQueryData(['getFeedApi', token], oldData => {
+            queryClient.setQueryData(queryKey, oldData => {
                 return {
                     ...oldData,
                     posts: oldData.posts.map(post => {
@@ -154,28 +137,12 @@ const Feed = () => {
             });
             return { previousFeedData };
         },
-        onError: (error, variables, context) => {
-            queryClient.setQueryData(
-                ['getFeedApi', token],
-                context.previousFeedData,
-            );
+        onError: (error, _, context) => {
+            queryClient.setQueryData(queryKey, context.previousFeedData);
+            console.error('다시 시도해주세요.', error);
         },
-        onSuccess: (data, { id }) => {
-            queryClient.setQueryData(['getFeedApi', token], oldData => {
-                return {
-                    ...oldData,
-                    posts: oldData.posts.map(post => {
-                        if (post.id === id) {
-                            return {
-                                ...post,
-                                hearted: data.post.hearted,
-                                heartCount: data.post.heartCount,
-                            };
-                        }
-                        return post;
-                    }),
-                };
-            });
+        onSettled: () => {
+            queryClient.invalidateQueries(queryKey);
         },
     });
 

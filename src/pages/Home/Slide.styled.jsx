@@ -28,7 +28,6 @@ export const CateName = styled.p`
     margin: auto;
     width: 50px;
     position: relative;
-    /* top: %; */
     text-align: center;
     font-size: 10px;
     color: ${({ theme }) => theme.mainFont};

@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
 import Loader from '../../components/Loading/Loader';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -37,14 +37,16 @@ const Feed = () => {
 
     // 신고하기
     const reportMutation = useMutation({
-        mutationFn: async ({ postId, token }) => {
-            await reportPostAPI(postId, token);
+        mutationFn: ({ postId, token }) => reportPostAPI(postId, token),
+        onSuccess: data => {
+            if (data.message === '존재하지 않는 게시글입니다.') {
+                setReportMessage('게시글을 찾을 수 없습니다.');
+                dispatch(openAlertModal());
+            } else {
+                setReportMessage('신고가 완료되었습니다.');
+                dispatch(openAlertModal());
+            }
         },
-        onSuccess: () => {
-            setReportMessage('신고가 완료되었습니다.');
-            dispatch(openAlertModal());
-        },
-        onError: error => console.error(error),
     });
 
     const reportPost = (e, postId, token) => {
@@ -54,12 +56,7 @@ const Feed = () => {
     };
 
     // 피드 데이터 가져오기
-    const {
-        data: feedData,
-        isLoading,
-        isError,
-        error,
-    } = useQuery({
+    const { data: feedData, isLoading } = useQuery({
         queryKey: queryKey,
         queryFn: () => getFeedApi(token),
         select: responseData =>
@@ -75,11 +72,7 @@ const Feed = () => {
     });
 
     const likeMutation = useLikeUpdate(queryKey, true);
-    const unLikeMutation = useLikeUpdate(queryKey, false);
-
-    if (isError) {
-        console.error(error);
-    }
+    const cancelLikeMutation = useLikeUpdate(queryKey, false);
 
     if (isLoading) {
         return <Loader />;
@@ -132,7 +125,7 @@ const Feed = () => {
                                             ? likeMutation.mutate(
                                                   mutationParams,
                                               )
-                                            : unLikeMutation.mutate(
+                                            : cancelLikeMutation.mutate(
                                                   mutationParams,
                                               )
                                     }

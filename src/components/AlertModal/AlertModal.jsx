@@ -5,15 +5,15 @@ import GradientButton from '../GradientButton/GradientButton';
 
 import * as S from './AlertModal.styled';
 
-const AlertModal = ({ alert }) => {
+const AlertModal = () => {
     const dispatch = useDispatch();
-    const { isOpen } = useSelector(store => store.alertModal);
+    const { isOpen, modalContent } = useSelector(store => store.alertModal);
 
     return (
         <S.Dialog open={isOpen}>
             <S.AlertModalContainer>
                 <S.AlertModalInnerContainer>
-                    <S.AlertText>{alert}</S.AlertText>
+                    <S.AlertText>{modalContent}</S.AlertText>
                     <S.AlertmModalButtonBox>
                         <GradientButton
                             gra="true"

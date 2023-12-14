@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi, reportPostAPI } from '../../service/post_service';
@@ -29,29 +29,27 @@ const Feed = () => {
 
     // 신고하기 bootomsheet
     const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
+
     const handleReportBottomSheet = itemId => {
         setPostId(itemId);
         setIsReportBottomSheet(!isReportBottomSheet);
     };
 
     // 신고하기
-    const reportPost = e => {
+    const reportMutation = useMutation({
+        mutationFn: ({ postId, token }) => {
+            reportPostAPI(postId, token);
+        },
+        onSuccess: () => {
+            setReportMessage('신고가 완료되었습니다.');
+            dispatch(openAlertModal());
+        },
+        onError: error => console.error(error),
+    });
+
+    const reportPost = (e, postId, token) => {
         e.stopPropagation();
-
-        reportPostAPI(postId, token) //
-            .then(result => {
-                if (result.message === '존재하지 않는 게시글입니다.') {
-                    setReportMessage('게시글을 찾을 수 없습니다.');
-                    dispatch(openAlertModal());
-                } else {
-                    setReportMessage('신고가 완료되었습니다.');
-                    dispatch(openAlertModal());
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
+        reportMutation.mutate({ postId, token });
         handleReportBottomSheet();
     };
 
@@ -198,7 +196,7 @@ const Feed = () => {
                 hadleBottomSheet={handleReportBottomSheet}
                 oneButton
                 children={'신고하기'}
-                deleteFn={e => reportPost(e)}
+                deleteFn={e => reportPost(e, postId, token)}
             />
             {isOpen && <AlertModal alert={reportMessage} />}
         </>

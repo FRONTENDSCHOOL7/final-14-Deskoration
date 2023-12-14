@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi, reportPostAPI } from '../../service/post_service';
-import { postLikeApi, deleteLikeApi } from '../../service/like_service';
+import { useLikeUpdate } from '../../hooks/useLikeUpdate';
 import { Link } from 'react-router-dom';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -15,8 +15,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 const Feed = () => {
     const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
-    const queryClient = useQueryClient();
     const queryKey = ['getFeedApi', token];
+
     // header dispatch
     usePageHandler('text', '팔로잉 피드');
 
@@ -37,8 +37,8 @@ const Feed = () => {
 
     // 신고하기
     const reportMutation = useMutation({
-        mutationFn: ({ postId, token }) => {
-            reportPostAPI(postId, token);
+        mutationFn: async ({ postId, token }) => {
+            await reportPostAPI(postId, token);
         },
         onSuccess: () => {
             setReportMessage('신고가 완료되었습니다.');
@@ -73,44 +73,6 @@ const Feed = () => {
                 return { ...post, content: content, createdAt: createdAt };
             }),
     });
-
-    // 좋아요 데이터 전송하기
-    const useLikeUpdate = (queryKey, isLike) => {
-        return useMutation({
-            mutationFn: ({ id, token }) =>
-                isLike ? postLikeApi(id, token) : deleteLikeApi(id, token),
-            onMutate: async ({ id }) => {
-                await queryClient.cancelQueries(queryKey);
-                const previousFeedData = queryClient.getQueryData(queryKey);
-
-                queryClient.setQueryData(queryKey, oldData => {
-                    return {
-                        ...oldData,
-                        posts: oldData.posts.map(post => {
-                            if (post.id === id) {
-                                return {
-                                    ...post,
-                                    hearted: isLike,
-                                    heartCount: isLike
-                                        ? post.heartCount + 1
-                                        : post.heartCount - 1,
-                                };
-                            }
-                            return post;
-                        }),
-                    };
-                });
-                return { previousFeedData };
-            },
-            onError: (error, _, context) => {
-                queryClient.setQueryData(queryKey, context.previousFeedData);
-                console.error('다시 시도해주세요.', error);
-            },
-            onSettled: () => {
-                queryClient.invalidateQueries(queryKey);
-            },
-        });
-    };
 
     const likeMutation = useLikeUpdate(queryKey, true);
     const unLikeMutation = useLikeUpdate(queryKey, false);

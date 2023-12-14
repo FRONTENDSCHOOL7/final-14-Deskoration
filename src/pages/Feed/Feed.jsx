@@ -17,41 +17,45 @@ const Feed = () => {
     const token = sessionStorage.getItem('Token');
     const queryClient = useQueryClient();
     const queryKey = ['getFeedApi', token];
-    // // 신고후에 보여줄 alertModal message
-    // const [reportMessage, setReportMessage] = useState('');
-    // const { isOpen } = useSelector(store => store.alertModal);
+    // header dispatch
+    usePageHandler('text', '팔로잉 피드');
+
+    // 신고후에 보여줄 alertModal message
+    const [reportMessage, setReportMessage] = useState('');
+    const { isOpen } = useSelector(store => store.alertModal);
 
     // 신고하기를 위한 postId
     const [postId, setPostId] = useState();
 
-    // // 신고하기 bootomsheet
-    // const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
-    // const handleReportBottomSheet = itemId => {
-    //     setPostId(itemId);
-    //     setIsReportBottomSheet(!isReportBottomSheet);
-    // };
+    // 신고하기 bootomsheet
+    const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
+    const handleReportBottomSheet = itemId => {
+        setPostId(itemId);
+        setIsReportBottomSheet(!isReportBottomSheet);
+    };
 
-    // // 신고하기
-    // const reportPost = e => {
-    //     e.stopPropagation();
-    //     reportPostAPI(postId, token) //
-    //         .then(result => {
-    //             if (result.message === '존재하지 않는 게시글입니다.') {
-    //                 setReportMessage('게시글을 찾을 수 없습니다.');
-    //                 dispatch(openAlertModal());
-    //             } else {
-    //                 setReportMessage('신고가 완료되었습니다.');
-    //                 dispatch(openAlertModal());
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error(error);
-    //         });
-    //     handleReportBottomSheet();
-    // };
+    // 신고하기
+    const reportPost = e => {
+        e.stopPropagation();
 
-    usePageHandler('text', '팔로잉 피드');
+        reportPostAPI(postId, token) //
+            .then(result => {
+                if (result.message === '존재하지 않는 게시글입니다.') {
+                    setReportMessage('게시글을 찾을 수 없습니다.');
+                    dispatch(openAlertModal());
+                } else {
+                    setReportMessage('신고가 완료되었습니다.');
+                    dispatch(openAlertModal());
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
+        handleReportBottomSheet();
+    };
+
+    // 피드 데이터 가져오기
     const {
         data: feedData,
         isLoading,
@@ -72,87 +76,46 @@ const Feed = () => {
             }),
     });
 
-    const likeMutation = useMutation({
-        mutationFn: ({ id, token }) => postLikeApi(id, token),
-        onMutate: async ({ id }) => {
-            await queryClient.cancelQueries({
-                queryKey: queryKey,
-            });
-            const previousFeedData = queryClient.getQueryData([
-                'getFeedApi',
-                token,
-            ]);
+    // 좋아요 데이터 전송하기
+    const useLikeUpdate = (queryKey, isLike) => {
+        return useMutation({
+            mutationFn: ({ id, token }) =>
+                isLike ? postLikeApi(id, token) : deleteLikeApi(id, token),
+            onMutate: async ({ id }) => {
+                await queryClient.cancelQueries(queryKey);
+                const previousFeedData = queryClient.getQueryData(queryKey);
 
-            queryClient.setQueryData(queryKey, oldData => {
-                return {
-                    ...oldData,
-                    posts: oldData.posts.map(post => {
-                        if (post.id === id) {
-                            return {
-                                ...post,
-                                hearted: true,
-                                heartCount: post.heartCount + 1,
-                            };
-                        }
-                        return post;
-                    }),
-                };
-            });
-            return { previousFeedData };
-        },
-        onError: (error, _, context) => {
-            queryClient.setQueryData(queryKey, context.previousFeedData);
-            console.error('다시 시도해주세요.', error);
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(queryKey);
-        },
-    });
-
-    const unLikeMutation = useMutation({
-        mutationFn: ({ id, token }) => deleteLikeApi(id, token),
-        onMutate: async ({ id }) => {
-            await queryClient.cancelQueries({
-                queryKey: queryKey,
-            });
-            const previousFeedData = queryClient.getQueryData([
-                'getFeedApi',
-                token,
-            ]);
-
-            queryClient.setQueryData(queryKey, oldData => {
-                return {
-                    ...oldData,
-                    posts: oldData.posts.map(post => {
-                        if (post.id === id) {
-                            return {
-                                ...post,
-                                hearted: false,
-                                heartCount: post.heartCount - 1,
-                            };
-                        }
-                        return post;
-                    }),
-                };
-            });
-            return { previousFeedData };
-        },
-        onError: (error, _, context) => {
-            queryClient.setQueryData(queryKey, context.previousFeedData);
-            console.error('다시 시도해주세요.', error);
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(queryKey);
-        },
-    });
-
-    const handleLike = (id, token, index) => {
-        if (!feedData[index].hearted) {
-            likeMutation.mutate({ id: id, token: token });
-        } else {
-            unLikeMutation.mutate({ id: id, token: token });
-        }
+                queryClient.setQueryData(queryKey, oldData => {
+                    return {
+                        ...oldData,
+                        posts: oldData.posts.map(post => {
+                            if (post.id === id) {
+                                return {
+                                    ...post,
+                                    hearted: isLike,
+                                    heartCount: isLike
+                                        ? post.heartCount + 1
+                                        : post.heartCount - 1,
+                                };
+                            }
+                            return post;
+                        }),
+                    };
+                });
+                return { previousFeedData };
+            },
+            onError: (error, _, context) => {
+                queryClient.setQueryData(queryKey, context.previousFeedData);
+                console.error('다시 시도해주세요.', error);
+            },
+            onSettled: () => {
+                queryClient.invalidateQueries(queryKey);
+            },
+        });
     };
+
+    const likeMutation = useLikeUpdate(queryKey, true);
+    const unLikeMutation = useLikeUpdate(queryKey, false);
 
     if (isError) {
         console.error(error);
@@ -164,7 +127,11 @@ const Feed = () => {
 
     return (
         <>
-            {feedData.map((post, index) => {
+            {feedData.map(post => {
+                const mutationParams = {
+                    id: post.id,
+                    token: token,
+                };
                 return (
                     <S.FeedContainer key={post.id}>
                         <S.FeedItemHeader>
@@ -182,7 +149,7 @@ const Feed = () => {
                                 </S.UserInfoBox>
                             </Link>
                             <button
-                            // onClick={() => handleReportBottomSheet(post.id)}
+                                onClick={() => handleReportBottomSheet(post.id)}
                             >
                                 <S.MoreIcon />
                             </button>
@@ -201,7 +168,13 @@ const Feed = () => {
                                 <SocialButton
                                     type={'like'}
                                     onClick={() =>
-                                        handleLike(post.id, token, index)
+                                        !post.hearted
+                                            ? likeMutation.mutate(
+                                                  mutationParams,
+                                              )
+                                            : unLikeMutation.mutate(
+                                                  mutationParams,
+                                              )
                                     }
                                     isLike={post.hearted}
                                     likeCount={post.heartCount}
@@ -220,14 +193,14 @@ const Feed = () => {
                     </S.FeedContainer>
                 );
             })}
-            {/* <BottomSheet
+            <BottomSheet
                 isBottomSheet={isReportBottomSheet}
                 hadleBottomSheet={handleReportBottomSheet}
                 oneButton
                 children={'신고하기'}
                 deleteFn={e => reportPost(e)}
             />
-            {isOpen && <AlertModal alert={reportMessage} />} */}
+            {isOpen && <AlertModal alert={reportMessage} />}
         </>
     );
 };

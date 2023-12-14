@@ -12,7 +12,7 @@ import logoImg from '../../assets/images/Logo.svg';
 
 const Home = () => {
     const token = sessionStorage.getItem('Token');
-    const [category, setCategory] = useState(null);
+    const [category, setCategory] = useState('All');
 
     usePageHandler('image', logoImg);
 
@@ -24,18 +24,18 @@ const Home = () => {
         queryKey: ['getAllPosts', token],
         queryFn: () => getAllPostApi(token),
         select: data =>
-            category
-                ? data?.posts
+            category === 'All'
+                ? data?.posts?.filter(post =>
+                      post.content?.includes('"deskoration"'),
+                  )
+                : data?.posts
                       ?.filter(post => post.content?.includes('"deskoration"'))
                       .filter(article => {
                           const content = JSON.parse(article.content);
                           return content.deskoration.productItems.some(
                               item => item.detail.category === category,
                           );
-                      })
-                : data?.posts?.filter(post =>
-                      post.content?.includes('"deskoration"'),
-                  ),
+                      }),
     });
 
     if (isLoading) {

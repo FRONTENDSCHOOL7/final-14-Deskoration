@@ -74,7 +74,7 @@ const ShowPostPage = () => {
                     />
                 </>
             )}
-            <AlertModal alert={'신고가 완료되었습니다.'} />
+            <AlertModal />
             {(postError || commentError) && <NotFoundPage />}
         </>
     );

@@ -36,6 +36,9 @@ const Comment = props => {
                 queryKey: ['getAllComment', id, token],
             });
         },
+        onError() {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
+        },
     });
 
     const deleteMutation = useMutation({
@@ -45,11 +48,19 @@ const Comment = props => {
                 queryKey: ['getAllComment', postDataID, token],
             });
         },
+        onError() {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
+        },
     });
 
     const reporteMutation = useMutation({
         mutationFn: commentID => reportCommentApi(postDataID, commentID, token),
-        // openAlertModal 수정 후 성공, 실패 나누기
+        onSuccess() {
+            dispatch(openAlertModal('댓글이 신고되었습니다.'));
+        },
+        onError() {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
+        },
     });
 
     const handleCommentSubmit = commentData => {
@@ -63,12 +74,11 @@ const Comment = props => {
         }
     };
 
-    // 컨펌 모달 사용 + 알럿 삭제
+    // 컨펌 모달 사용
     const reportComment = (e, commentID) => {
         e.stopPropagation();
         if (window.confirm('이 댓글을 신고하시겠습니까?')) {
             reporteMutation.mutate(commentID);
-            dispatch(openAlertModal());
         }
     };
 
@@ -76,9 +86,9 @@ const Comment = props => {
         <>
             <S.CommentSection>
                 <S.CommentCounter>
-                    총 {commentData?.length}개의 댓글
+                    총 {commentData.length}개의 댓글
                 </S.CommentCounter>
-                {commentData?.map((comment, index) => (
+                {commentData.map((comment, index) => (
                     <S.CommentItem key={index}>
                         <S.CommentInfo>
                             <S.ProfileImg

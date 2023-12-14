@@ -28,8 +28,8 @@ const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
 const HomePage = lazy(() => import('../pages/Home/Home'));
 const FeedPage = lazy(() => import('../pages/Feed/Feed'));
 const PostUploadPage = lazy(() => import('../pages/NewBoard/NewBoard'));
-const ShowPostPage = lazy(() =>
-    import('../pages/PostPage/ShowPostPage/ShowPostPage'),
+const DetailPostPage = lazy(() =>
+    import('../pages/PostPage/DetailPostPage/DetailPostPage'),
 );
 const ProductPage = lazy(() => import('../components/ShowProduct/ShowProduct'));
 const ChatListPage = lazy(() =>
@@ -138,7 +138,7 @@ const Router = () => {
                         /> */}
                         <Route
                             path={'/detailPost/:id'}
-                            element={<ShowPostPage />}
+                            element={<DetailPostPage />}
                         />
                         <Route
                             path={'/profile/:username'}

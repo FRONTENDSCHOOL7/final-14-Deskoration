@@ -8,12 +8,12 @@ import { getCommentApi } from '../../../service/comment_service';
 
 import usePageHandler from '../../../hooks/usePageHandler';
 import AlertModal from '../../../components/AlertModal/AlertModal';
-import DetailPost from '../../../components/ShowPost/DetailPost/DetailPost';
-import Comment from '../../../components/ShowPost/Comment/Comment';
+import DetailPost from '../../../components/PostDetail/DetailPost/DetailPost';
+import Comment from '../../../components/PostDetail/Comment/Comment';
 import Loader from '../../../components/Loading/Loader';
 import NotFoundPage from '../../404/NotFoundPage';
 
-const ShowPostPage = () => {
+const DetailPostPage = () => {
     const token = sessionStorage.getItem('Token');
     const { id } = useParams();
     const {
@@ -80,4 +80,4 @@ const ShowPostPage = () => {
     );
 };
 
-export default ShowPostPage;
+export default DetailPostPage;

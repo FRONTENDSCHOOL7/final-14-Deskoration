@@ -13,7 +13,7 @@ import speakerImg from '../../assets/images/category/speaker.jpg';
 import homeImg from '../../assets/images/category/home.jpg';
 
 const Slide = ({ category }) => {
-    const [clickedCategory, setClickedCategory] = useState('');
+    const [clickedCategory, setClickedCategory] = useState('All');
 
     const categoryClick = cat => {
         setClickedCategory(cat);
@@ -22,10 +22,10 @@ const Slide = ({ category }) => {
     return (
         <>
             <S.SlideSection>
-                <button onClick={() => categoryClick('')}>
+                <button onClick={() => categoryClick('All')}>
                     <S.Category
                         $url={homeImg}
-                        selected={clickedCategory === ''}
+                        selected={clickedCategory === 'All'}
                     ></S.Category>
                     <S.CateName>ALL</S.CateName>
                 </button>

@@ -19,17 +19,26 @@ export const CommentItem = styled.div`
         margin-bottom: 0;
     }
 
-    button {
+    > button {
         color: ${theme.subFont};
         font-size: 10px;
         padding: 10px 0 10px 10px;
+        display: flex;
     }
 `;
 
-export const CommentInfo = styled.div`
+export const CommentBox = styled.div`
     display: flex;
-    align-items: center;
-    span {
+`;
+export const CommentInfo = styled.div`
+    & > button {
+        width: 100%;
+        color: ${theme.subFont};
+        background-color: #fff;
+        padding: 5px;
+    }
+
+    div {
         font-family: 'PreBold';
         font-size: 12px;
         margin-bottom: 5px;
@@ -40,6 +49,14 @@ export const CommentInfo = styled.div`
         font-size: 12px;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        overflow: hidden;
+
+        height: ${props => (props.$initHeight ? '30px' : 'auto')};
+        ${props => props.$clicked && 'height: auto; '};
+
+        /* display: -webkit-box;
+        -webkit-line-clamp: ${props => (props.$clicked ? '0' : '2')};
+        -webkit-box-orient: vertical; */
     }
 `;
 

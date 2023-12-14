@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -82,6 +82,26 @@ const Comment = props => {
         }
     };
 
+    const liRefs = useRef(commentData.map(() => React.createRef()));
+
+    const [commentHeight, setCommentHeight] = useState([]);
+    const [clickedIndices, setClickedIndices] = useState([]);
+
+    useEffect(() => {
+        const newHeights = liRefs.current.map(ref =>
+            ref.current ? ref.current.offsetHeight : 0,
+        );
+        setCommentHeight(newHeights);
+    }, [commentData]);
+
+    const handleReadMore = index => {
+        setClickedIndices(prevIndices => {
+            return prevIndices.includes(index)
+                ? prevIndices.filter(i => i !== index)
+                : [...prevIndices, index];
+        });
+    };
+
     return (
         <>
             <S.CommentSection>
@@ -90,16 +110,28 @@ const Comment = props => {
                 </S.CommentCounter>
                 {commentData.map((comment, index) => (
                     <S.CommentItem key={index}>
-                        <S.CommentInfo>
+                        <S.CommentBox>
                             <S.ProfileImg
                                 src={comment.author.image}
                                 alt="사용자 이미지"
                             />
-                            <div>
-                                <span>{comment.author.username}</span>
+                            <S.CommentInfo
+                                ref={liRefs.current[index]}
+                                $initHeight={commentHeight[index] > 49}
+                                $clicked={clickedIndices.includes(index)}
+                            >
+                                <div>{comment.author.username}</div>
                                 <p>{comment.content}</p>
-                            </div>
-                        </S.CommentInfo>
+                                {commentHeight[index] > 49 && (
+                                    <button
+                                        onClick={() => handleReadMore(index)}
+                                    >
+                                        {clickedIndices.includes(index) ||
+                                            '더보기'}
+                                    </button>
+                                )}
+                            </S.CommentInfo>
+                        </S.CommentBox>
                         {comment.author._id === myId ? (
                             <button onClick={() => deleteComment(comment.id)}>
                                 삭제

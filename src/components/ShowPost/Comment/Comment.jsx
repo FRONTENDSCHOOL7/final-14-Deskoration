@@ -1,10 +1,11 @@
 import React from 'react';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import { useDispatch } from 'react-redux';
 import { openAlertModal } from '../../../features/modal/alertModalSlice';
 
 import {
-    getCommentApi,
     postCommentApi,
     deleteCommentApi,
     reportCommentApi,
@@ -22,52 +23,51 @@ const Comment = props => {
         handleSubmit,
         resetField,
     } = props;
-    const myId = sessionStorage.getItem('Id');
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
 
-    // mutation으로 사용해야 돼
-    const handleCommentSubmit = commentData => {
-        // 새로운 댓글을 서버로 전송
-        postCommentApi(id, commentData.comment, token) // postComment 함수는 새 댓글을 작성하기 위한 API 요청을 보내야 합니다
-            .then(response => {
-                // 새 댓글이 성공적으로 작성되면, commentData를 업데이트하거나 다시 불러오도록 구현
-                getCommentApi(id, token)
-                    .then(data => {
-                        // setCommentData(data.comments.reverse());
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error('API 요청 중 오류 발생: ', error);
-                    });
-            })
-            .catch(error => {
-                console.error('댓글 작성 중 오류 발생:', error);
+    const myId = sessionStorage.getItem('Id');
+
+    const submitMutation = useMutation({
+        mutationFn: commentData =>
+            postCommentApi(id, commentData.comment, token),
+        onSuccess() {
+            queryClient.invalidateQueries({
+                queryKey: ['getAllComment', id, token],
             });
+        },
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: commentID => deleteCommentApi(postDataID, commentID, token),
+        onSuccess() {
+            queryClient.invalidateQueries({
+                queryKey: ['getAllComment', postDataID, token],
+            });
+        },
+    });
+
+    const reporteMutation = useMutation({
+        mutationFn: commentID => reportCommentApi(postDataID, commentID, token),
+        // openAlertModal 수정 후 성공, 실패 나누기
+    });
+
+    const handleCommentSubmit = commentData => {
+        submitMutation.mutate(commentData);
         resetField('comment');
     };
 
-    // mutation으로 사용해야 돼
-    const deleteComment = (e, commentID) => {
-        e.stopPropagation();
+    const deleteComment = commentID => {
         if (window.confirm('이 댓글을 삭제하시겠습니까?')) {
-            deleteCommentApi(postDataID, commentID, token) //
-                .then(() =>
-                    getCommentApi(id, token)
-                        .then(data => {
-                            // setCommentData(data.comments.reverse());
-                            console.log(data);
-                        })
-                        .catch(error => {
-                            console.error('API 요청 중 오류 발생: ', error);
-                        }),
-                );
+            deleteMutation.mutate(commentID);
         }
     };
 
+    // 컨펌 모달 사용 + 알럿 삭제
     const reportComment = (e, commentID) => {
         e.stopPropagation();
         if (window.confirm('이 댓글을 신고하시겠습니까?')) {
-            reportCommentApi(postDataID, commentID, token);
+            reporteMutation.mutate(commentID);
             dispatch(openAlertModal());
         }
     };
@@ -91,7 +91,7 @@ const Comment = props => {
                             </div>
                         </S.CommentInfo>
                         {comment.author._id === myId ? (
-                            <button onClick={e => deleteComment(e, comment.id)}>
+                            <button onClick={() => deleteComment(comment.id)}>
                                 삭제
                             </button>
                         ) : (

@@ -49,6 +49,20 @@ export const ChatContent = styled.div`
                 ? 'flex-end'
                 : 'flex-start'}; // 문자열 비교
     }
+    display: flex;
+    position: relative;
+    transform: translateX(1000px);
+    animation: translate ease 0.6s forwards;
+    @keyframes translate {
+        from {
+            transform: translateY(1000px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
 `;
 
 export const ChatBubble = styled.div`
@@ -107,4 +121,9 @@ export const ChatInputBox = styled.div`
 export const ChatTime = styled.p`
     font-size: ${props => props.theme.fontSize.sm};
     color: ${props => props.theme.subFont};
+`;
+export const NoResultParagraph = styled.p`
+    color: ${props => props.theme.subFont};
+    text-align: center;
+    margin: 0 auto;
 `;

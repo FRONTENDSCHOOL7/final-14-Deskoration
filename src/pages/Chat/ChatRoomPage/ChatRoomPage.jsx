@@ -59,14 +59,12 @@ const ChatRoomPage = () => {
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
 
     useEffect(() => {
-        console.log(user);
-        console.log(chatCollectionRef.id);
-
         const fetchData = async () => {
             try {
                 const chatSnapshot = await getDocs(
                     query(chatCollectionRef, orderBy('messages')),
                 );
+
                 const chatMessageList = chatSnapshot.docs.map(doc => ({
                     chatId: doc.id,
                     ...doc.data(),
@@ -79,6 +77,8 @@ const ChatRoomPage = () => {
                         setChatId(info.chatId);
                     }
                 });
+                const chatContainer = chatContainerRef.current;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             } catch (error) {
                 console.error(error);
             }
@@ -92,6 +92,8 @@ const ChatRoomPage = () => {
                     // console.log('Modified message:', change.doc.data());
                     if (change.doc.data().roomId === roomId)
                         setChatMessages(change.doc.data().messages);
+                    chatContainerRef.current.scrollTop =
+                        chatContainerRef.current.scrollHeight;
                 }
             });
         });
@@ -149,13 +151,17 @@ const ChatRoomPage = () => {
                 await addDoc(
                     chatRoomsCollectionRef,
                     {
-                        participants: arrayUnion(user.username, myUserName),
+                        participants: arrayUnion(
+                            user.accountname,
+                            myAccountName,
+                        ),
                         roomId: newChatList.id,
                     },
                     newChatList.id,
                 );
                 navigate(`/chat/${newChatList.id}`, {
                     state: { roomId: newChatList.id, user: participants },
+                    replace: true,
                 });
             }
         } catch (error) {
@@ -183,6 +189,16 @@ const ChatRoomPage = () => {
             <S.ChatRoomPageContainer>
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
+                    {roomId === undefined && (
+                        <S.ChatContent
+                            $issentbyuser="false"
+                            className="first-conversation"
+                        >
+                            <S.NoResultParagraph>
+                                {user.username}과 첫 대화를 시작해 보세요!
+                            </S.NoResultParagraph>
+                        </S.ChatContent>
+                    )}
                     {chatMessages?.map((receivedMessage, index) =>
                         receivedMessage.accountname !== myAccountName ? (
                             <S.ChatContent key={index} $issentbyuser="false">

@@ -176,7 +176,9 @@ const ChatRoomPage = () => {
         const hour = convertedDate.getHours();
         const min = convertedDate.getMinutes();
 
-        return `${hour}:${min > 0 ? min : '00'}`;
+        return `${hour}:${
+            min === 0 ? '00' : min > 0 && min < 10 ? '0' + min : min
+        }`;
     };
 
     // console.log(chatId);

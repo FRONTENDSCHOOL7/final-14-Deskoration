@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import usePageHandler from '../../../hooks/usePageHandler';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import {
+    collection,
+    getDocs,
+    query,
+    orderBy,
+    updateDoc,
+    doc,
+    onSnapshot,
+    arrayUnion,
+    addDoc,
+    getDoc,
+    setDoc,
+} from 'firebase/firestore';
 import { db } from '../../../firebase';
 
 const ChatRoomPage = () => {
@@ -16,9 +28,9 @@ const ChatRoomPage = () => {
     });
     const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
 
-    const newData = new Date();
-    let hours = newData.getHours();
-    const minutes = newData.getMinutes().toString().padStart(2, '0');
+    const newDate = new Date();
+    let hours = newDate.getHours();
+    const minutes = newDate.getMinutes().toString().padStart(2, '0');
     const amPm = hours >= 12 ? 'PM' : 'AM';
 
     if (hours > 12) {
@@ -26,66 +38,132 @@ const ChatRoomPage = () => {
     } else if (hours === 0) {
         hours = 12;
     }
-    const { user, message, image, roomId } = location.state;
+    const { roomId, user } = location.state;
     const [chatMessages, setChatMessages] = useState([]);
     const [firebaseMessage, setFirebaseMessage] = useState([]);
     const [participants, setParticipants] = useState([]);
     const myAccountName = sessionStorage.getItem('AccountName');
+    const myProfileImage = sessionStorage.getItem('Image');
+    const myUserName = sessionStorage.getItem('Username');
+    const navigate = useNavigate();
+
     const formattedTime = `${hours}:${minutes} ${amPm}`;
+
+    const [chatId, setChatId] = useState('');
     // const [formattedTime, setFormattedTime] = useState()
 
-    const handleSendMessage = data => {
-        // 빈 메세지 전송 시 경고
-        if (data.chatMsg.trim() === '') {
-            alert('메세지를 입력하세요.');
-        }
-
-        // 새 메시지를 배열에 추가
-        if (data.chatMsg !== '') {
-            setChatMessages(prevMessages => [
-                ...prevMessages,
-                { text: data.chatMsg, isSentByUser: true },
-            ]);
-
-            // 메시지 입력 필드 초기화
-            resetField('chatMsg');
-        }
-    };
+    const chatCollectionRef = collection(db, 'messages');
+    const chatListCollectionRef = collection(db, 'chatList');
+    const chatRoomsCollectionRef = collection(db, 'rooms');
 
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
-    useEffect(() => {
-        if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop =
-                chatContainerRef.current.scrollHeight;
-        }
-    }, [chatMessages]);
 
     useEffect(() => {
+        console.log(user);
+        console.log(chatCollectionRef.id);
+
         const fetchData = async () => {
             try {
-                const chatCollectionRef = collection(db, 'messages');
                 const chatSnapshot = await getDocs(
                     query(chatCollectionRef, orderBy('messages')),
                 );
                 const chatMessageList = chatSnapshot.docs.map(doc => ({
+                    chatId: doc.id,
                     ...doc.data(),
                 }));
                 chatMessageList.map(info => {
                     if (info.roomId === roomId) {
                         setFirebaseMessage(info.messages);
                         setParticipants(info.participants);
+                        setChatMessages(info.messages);
+                        setChatId(info.chatId);
                     }
                 });
-                // console.log(roomId);
             } catch (error) {
                 console.error(error);
             }
         };
+
         fetchData();
-    }, []);
-    console.log(firebaseMessage);
-    console.log(participants);
-    console.log(myAccountName);
+
+        const unsubscribe = onSnapshot(chatCollectionRef, snapshot => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === 'modified' || change.type === 'added') {
+                    // console.log('Modified message:', change.doc.data());
+                    if (change.doc.data().roomId === roomId)
+                        setChatMessages(change.doc.data().messages);
+                }
+            });
+        });
+
+        return () => unsubscribe();
+    }, [roomId, chatContainerRef]);
+
+    const handleSendMessage = async data => {
+        // 빈 메세지 전송 시 경고
+        if (data.chatMsg.trim() === '') {
+            alert('메세지를 입력하세요.');
+            return;
+        }
+
+        // 새 메시지를 생성
+        const newMessage = {
+            content: data.chatMsg,
+            createdAt: new Date(),
+            accountname: myAccountName,
+        };
+
+        const participants = {
+            image: user.image,
+            accountname: user.accountname,
+            username: user.username,
+        };
+        const participants2 = {
+            image: myProfileImage,
+            accountname: myAccountName,
+            username: myUserName,
+        };
+
+        try {
+            if (roomId !== undefined) {
+                const docRef = doc(db, 'messages', chatId);
+                await updateDoc(docRef, {
+                    // participants: participants,
+                    messages: arrayUnion(newMessage), // Add the new message to the existing array
+                });
+                console.log('Message added successfully');
+            } else {
+                const newChatList = await addDoc(chatListCollectionRef, {
+                    createdAt: new Date(),
+                    lastMessage: newMessage.content,
+                    participants: arrayUnion(participants, participants2),
+                });
+                await addDoc(
+                    chatCollectionRef,
+                    {
+                        messages: [newMessage],
+                        roomId: newChatList.id,
+                    },
+                    newChatList.id,
+                );
+                await addDoc(
+                    chatRoomsCollectionRef,
+                    {
+                        participants: arrayUnion(user.username, myUserName),
+                        roomId: newChatList.id,
+                    },
+                    newChatList.id,
+                );
+                navigate(`/chat/${newChatList.id}`, {
+                    state: { roomId: newChatList.id, user: participants },
+                });
+            }
+        } catch (error) {
+            console.error('Error adding message: ', error);
+        }
+        // 메시지 입력 필드 초기화
+        resetField('chatMsg');
+    };
 
     const formatDate = data => {
         const convertedDate = data.toDate();
@@ -95,18 +173,21 @@ const ChatRoomPage = () => {
         return `${hour}:${min > 0 ? min : '00'}`;
     };
 
-    usePageHandler('user', image, user);
+    // console.log(chatId);
+    // console.log(firebaseMessage);
+
+    usePageHandler('user', user?.image, user?.username);
 
     return (
         <>
             <S.ChatRoomPageContainer>
                 <S.ChatRoomMain ref={chatContainerRef}>
                     {/* 상대 채팅 */}
-                    {firebaseMessage?.map((receivedMessage, index) =>
+                    {chatMessages?.map((receivedMessage, index) =>
                         receivedMessage.accountname !== myAccountName ? (
                             <S.ChatContent key={index} $issentbyuser="false">
                                 <img
-                                    src={image}
+                                    src={user.image}
                                     alt=""
                                     className="userChat-img"
                                 />
@@ -132,19 +213,6 @@ const ChatRoomPage = () => {
                             </S.ChatContent>
                         ),
                     )}
-                    {/* 나의 채팅 */}
-                    {chatMessages.map((chat, index) => (
-                        <S.ChatContent key={index} $issentbyuser="true">
-                            <div>
-                                <S.ChatBubble $issentbyuser="true">
-                                    <p>{chat.text}</p>
-                                </S.ChatBubble>
-                                <S.ChatTime className="my-time">
-                                    {formattedTime}
-                                </S.ChatTime>
-                            </div>
-                        </S.ChatContent>
-                    ))}
                 </S.ChatRoomMain>
             </S.ChatRoomPageContainer>
             <S.ChatInputForm onSubmit={handleSubmit(handleSendMessage)}>

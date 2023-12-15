@@ -40,6 +40,11 @@ const Login = () => {
                     } else {
                         sessionStorage.setItem('Token', result.user.token);
                         sessionStorage.setItem(
+                            'Username',
+                            result.user.username,
+                        );
+                        sessionStorage.setItem('Image', result.user.image);
+                        sessionStorage.setItem(
                             'AccountName',
                             result.user.accountname,
                         );

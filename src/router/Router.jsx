@@ -86,7 +86,7 @@ const Router = () => {
                             />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route
-                                path={'/chat/:username'}
+                                path={'/chat/:roomId'}
                                 element={<ChatRoomPage />}
                             />
                             <Route

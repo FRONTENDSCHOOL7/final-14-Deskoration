@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi, reportPostAPI } from '../../service/post_service';
-import { postLikeApi, deleteLikeApi } from '../../service/like_service';
+import { useLikeUpdate } from '../../hooks/useLikeUpdate';
 import { Link } from 'react-router-dom';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -10,15 +10,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
 import Loader from '../../components/Loading/Loader';
+import { useQuery, useMutation } from '@tanstack/react-query';
+
 const Feed = () => {
     const dispatch = useDispatch();
     const token = sessionStorage.getItem('Token');
-    const [feedData, setFeedData] = useState([]);
-    const [feedContent, setFeedContent] = useState([]);
-    const [createDate, setCreateDate] = useState([]);
-    const [likesData, setLikesData] = useState([]);
-    const [commentCount, setCommentCount] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const queryKey = ['getFeedApi', token];
+
+    // header dispatch
+    usePageHandler('text', '팔로잉 피드');
 
     // 신고후에 보여줄 alertModal message
     const [reportMessage, setReportMessage] = useState('');
@@ -29,109 +29,50 @@ const Feed = () => {
 
     // 신고하기 bootomsheet
     const [isReportBottomSheet, setIsReportBottomSheet] = useState(false);
+
     const handleReportBottomSheet = itemId => {
         setPostId(itemId);
         setIsReportBottomSheet(!isReportBottomSheet);
     };
 
     // 신고하기
-    const reportPost = e => {
+    const reportMutation = useMutation({
+        mutationFn: ({ postId, token }) => reportPostAPI(postId, token),
+        onSuccess: data => {
+            if (data.message === '존재하지 않는 게시글입니다.') {
+                setReportMessage('게시글을 찾을 수 없습니다.');
+                dispatch(openAlertModal());
+            } else {
+                setReportMessage('신고가 완료되었습니다.');
+                dispatch(openAlertModal());
+            }
+        },
+    });
+
+    const reportPost = (e, postId, token) => {
         e.stopPropagation();
-        reportPostAPI(postId, token) //
-            .then(result => {
-                if (result.message === '존재하지 않는 게시글입니다.') {
-                    setReportMessage('게시글을 찾을 수 없습니다.');
-                    dispatch(openAlertModal());
-                } else {
-                    setReportMessage('신고가 완료되었습니다.');
-                    dispatch(openAlertModal());
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        reportMutation.mutate({ postId, token });
         handleReportBottomSheet();
     };
 
-    usePageHandler('text', '팔로잉 피드');
+    // 피드 데이터 가져오기
+    const { data: feedData, isLoading } = useQuery({
+        queryKey: queryKey,
+        queryFn: () => getFeedApi(token),
+        select: responseData =>
+            responseData.posts.map(post => {
+                const content = JSON.parse(post.content);
+                const createdAt = {
+                    year: new Date(post.createdAt).getFullYear(),
+                    month: new Date(post.createdAt).getMonth() + 1,
+                    date: new Date(post.createdAt).getDate(),
+                };
+                return { ...post, content: content, createdAt: createdAt };
+            }),
+    });
 
-    useEffect(() => {
-        setIsLoading(true);
-        getFeedApi(token)
-            .then(result => {
-                setFeedData(result.posts);
-                const newFeedContent = [];
-                const newCreateDate = [];
-                const newLikes = [];
-                const newCommentCount = [];
-
-                result.posts.forEach(post => {
-                    const data = JSON.parse(post.content);
-                    newFeedContent.push(data);
-
-                    const dateObj = new Date(post.createdAt);
-                    const convertDate = {
-                        year: dateObj.getFullYear(),
-                        month: dateObj.getMonth() + 1,
-                        date: dateObj.getDate(),
-                    };
-                    newCreateDate.push(convertDate);
-                    newLikes.push({
-                        isLike: post.hearted,
-                        likeCount: post.heartCount,
-                    });
-                    newCommentCount.push(post.commentCount);
-                });
-                setFeedContent(newFeedContent);
-                setCreateDate(newCreateDate);
-                setLikesData(newLikes);
-                setCommentCount(newCommentCount);
-            })
-            .catch(error => {
-                console.error('Error calling the feed API: ', error);
-            })
-            .finally(() => setIsLoading(false));
-    }, [token]);
-
-    const handleLike = index => {
-        const id = feedData[index].id;
-
-        if (!likesData[index].isLike) {
-            postLikeApi(id, token)
-                .then(likeResult => {
-                    setLikesData(likes => {
-                        const newLikes = [...likes];
-                        newLikes[index] = {
-                            ...newLikes[index],
-                            isLike: true,
-                            likeCount: likeResult.post.heartCount,
-                        };
-                        return newLikes;
-                    });
-                    console.log(likeResult);
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        } else {
-            deleteLikeApi(id, token)
-                .then(unlikeResult => {
-                    setLikesData(likes => {
-                        const newLikes = [...likes];
-                        newLikes[index] = {
-                            ...newLikes[index],
-                            isLike: false,
-                            likeCount: unlikeResult.post.heartCount,
-                        };
-                        return newLikes;
-                    });
-                    console.log(unlikeResult);
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        }
-    };
+    const likeMutation = useLikeUpdate(queryKey, true);
+    const cancelLikeMutation = useLikeUpdate(queryKey, false);
 
     if (isLoading) {
         return <Loader />;
@@ -139,57 +80,67 @@ const Feed = () => {
 
     return (
         <>
-            {feedData.map((item, index) => {
+            {feedData.map(post => {
+                const mutationParams = {
+                    id: post.id,
+                    token: token,
+                };
                 return (
-                    <S.FeedContainer key={item.id}>
+                    <S.FeedContainer key={post.id}>
                         <S.FeedItemHeader>
-                            <Link
-                                to={`/profile/${feedData[index].author.accountname}`}
-                            >
+                            <Link to={`/profile/${post.author.accountname}`}>
                                 <S.UserInfoBox>
                                     <img
-                                        src={item?.author.image}
+                                        src={post.author.image}
                                         alt="이미지"
                                         className="profile-img"
                                     />
                                     <div>
-                                        <h4>{item?.author.username}</h4>
-                                        <p>{item?.author.accountname}</p>
+                                        <h4>{post.author.username}</h4>
+                                        <p>{post.author.accountname}</p>
                                     </div>
                                 </S.UserInfoBox>
                             </Link>
                             <button
-                                onClick={() => handleReportBottomSheet(item.id)}
+                                onClick={() => handleReportBottomSheet(post.id)}
                             >
                                 <S.MoreIcon />
                             </button>
                         </S.FeedItemHeader>
 
                         <S.FeedDetailBox>
-                            <Link to={`/detailpost/${feedData[index].id}`}>
+                            <Link to={`/detailpost/${post.id}`}>
                                 <S.DetailImgBox>
-                                    <img src={item.image} alt="게시글 이미지" />
+                                    <img src={post.image} alt="게시글 이미지" />
                                 </S.DetailImgBox>
                                 <S.DetailMsg>
-                                    {feedContent[index]?.deskoration.message}
+                                    {post.content.deskoration.message}
                                 </S.DetailMsg>
                             </Link>
                             <div>
                                 <SocialButton
                                     type={'like'}
-                                    onClick={() => handleLike(index)}
-                                    isLike={likesData[index].isLike}
-                                    likeCount={likesData[index].likeCount}
+                                    onClick={() =>
+                                        !post.hearted
+                                            ? likeMutation.mutate(
+                                                  mutationParams,
+                                              )
+                                            : cancelLikeMutation.mutate(
+                                                  mutationParams,
+                                              )
+                                    }
+                                    isLike={post.hearted}
+                                    likeCount={post.heartCount}
                                 />
-                                <Link to={`/detailpost/${feedData[index].id}`}>
+                                <Link to={`/detailpost/${post.id}`}>
                                     <SocialButton
                                         type={'comment'}
-                                        commentCount={commentCount[index]}
+                                        commentCount={post.commentCount}
                                     />
                                 </Link>
                             </div>
                             <S.FeedDate>
-                                {`${createDate[index]?.year}년 ${createDate[index]?.month}월 ${createDate[index]?.date}일`}
+                                {`${post.createdAt.year}년 ${post.createdAt.month}월 ${post.createdAt.date}일`}
                             </S.FeedDate>
                         </S.FeedDetailBox>
                     </S.FeedContainer>
@@ -200,7 +151,7 @@ const Feed = () => {
                 hadleBottomSheet={handleReportBottomSheet}
                 oneButton
                 children={'신고하기'}
-                deleteFn={e => reportPost(e)}
+                deleteFn={e => reportPost(e, postId, token)}
             />
             {isOpen && <AlertModal alert={reportMessage} />}
         </>

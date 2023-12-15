@@ -16,6 +16,7 @@ export const FeedContainer = styled.article`
         border: 1px solid ${props => props.theme.border};
         margin-right: 10px;
         flex-shrink: 0;
+        object-fit: cover;
     }
 `;
 

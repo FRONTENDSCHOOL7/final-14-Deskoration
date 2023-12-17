@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import imageCompression from 'browser-image-compression';
 import usePageHandler from '../../hooks/usePageHandler';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
@@ -34,6 +35,9 @@ export const ProfileUpload = () => {
     const { emailValue, passwordValue } = useLocation().state || {};
     const [profileData, setProfileData] = useState(null);
 
+    // 헤더에 문구 넣기
+    usePageHandler('text', '프로필 설정');
+
     const {
         register,
         handleSubmit,
@@ -49,38 +53,32 @@ export const ProfileUpload = () => {
         },
     });
 
-    // 헤더에 문구 넣기
-    usePageHandler('text', '프로필 설정');
-
     // 초기 렌더링 시에 포커스
     useEffect(() => {
         setFocus('userName');
     }, [setFocus]);
 
     // 프로필 편집일 경우, API 호출해서 데이터 받아오기
+    const { data: myProfileData } = useQuery({
+        queryKey: ['getMyProfileApi', token],
+        queryFn: () => getMyProfileApi(token),
+        enabled: !!editPage,
+    });
+
     useEffect(() => {
-        if (editPage) {
-            getMyProfileApi(token)
-                .then(data => {
-                    setProfileData(data.user);
-                    setPhotoURL(data.user.image);
-                    if (baseURL + noImage !== data.user.image)
-                        setIsImageAdded(true);
+        if (myProfileData) {
+            const userData = myProfileData.user;
+            setPhotoURL(userData.image);
+            if (baseURL + noImage !== userData.image) {
+                setIsImageAdded(true);
+            }
 
-                    // 불러온 데이터를 화면에 렌더링
-                    const userNameValue = data.user.username;
-                    const idValue = data.user.accountname;
-                    const introValue = data.user.intro;
-
-                    setValue('userName', userNameValue);
-                    setValue('userID', idValue);
-                    setValue('intro', introValue);
-                })
-                .catch(error => {
-                    console.error('API 요청 중 오류 발생: ', error);
-                });
+            // 불러온 데이터를 화면에 렌더링
+            setValue('userName', userData.username);
+            setValue('userID', userData.accountname);
+            setValue('intro', userData.intro);
         }
-    }, [editPage, setValue, token]);
+    }, [myProfileData, setValue]);
 
     // 업로드한 이미지 url 저장
     const handleUploadImg = async event => {
@@ -269,8 +267,8 @@ export const ProfileUpload = () => {
                                     message:
                                         '영문, 숫자, 특수문자(.),(_)만 사용 가능합니다.',
                                 },
-                                validate: async value => {
-                                    const result = await validateUserID(value);
+                                validate: async id => {
+                                    const result = await validateUserID(id);
                                     return (
                                         result || '이미 존재하는 계정 ID입니다.'
                                     );

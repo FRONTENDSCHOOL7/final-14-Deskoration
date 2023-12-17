@@ -217,21 +217,21 @@ export const ProfileUpload = () => {
             <S.ProfileContainer>
                 <form onSubmit={handleSubmit(dataSubmit)}>
                     <S.ProfileImgBox>
-                        <S.ProfileImg src={photoURL} alt="프로필 이미지" />
+                        <img src={photoURL} alt="프로필 이미지" />
                         {isImageAdded && (
-                            <S.DeleteButton type="button" onClick={deleteImg}>
+                            <button type="button" onClick={deleteImg}>
                                 <S.DeleteIcon />
-                            </S.DeleteButton>
+                            </button>
                         )}
                         <S.ImgUploadBox>
-                            <S.ImgUploadInput
+                            <input
                                 type="file"
                                 id="profileUpload"
                                 onChange={handleUploadImg}
                             />
-                            <S.ImgUploadLabel htmlFor="profileUpload">
+                            <label htmlFor="profileUpload">
                                 <S.ImgUploadIcon />
-                            </S.ImgUploadLabel>
+                            </label>
                         </S.ImgUploadBox>
                     </S.ProfileImgBox>
                     <S.InputBox>

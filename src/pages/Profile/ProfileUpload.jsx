@@ -33,7 +33,6 @@ export const ProfileUpload = () => {
     const [isImageAdded, setIsImageAdded] = useState(false);
     const [file, setFile] = useState();
     const { emailValue, passwordValue } = useLocation().state || {};
-    const [profileData, setProfileData] = useState(null);
 
     // 헤더에 문구 넣기
     usePageHandler('text', '프로필 설정');
@@ -126,87 +125,90 @@ export const ProfileUpload = () => {
         setPhotoURL(basicImg);
     };
 
-    // 계정 ID 검사
+    //계정 ID 검사
     const validateUserID = id => {
-        return new Promise((resolve, reject) => {
-            validAccountNameApi(id)
-                .then(result => {
-                    if (result.message === '사용 가능한 계정ID 입니다.') {
-                        resolve(true); // 유효한 경우 true 반환
-                    } else if (
-                        result.message === '이미 가입된 계정ID 입니다.'
-                    ) {
-                        resolve(false); // 이미 존재하는 경우 false 반환
-                    } else {
-                        reject(new Error(result.message)); // 예외 처리
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                    reject(error); // 에러 처리
-                });
-        });
+        return validAccountNameApi(id)
+            .then(result => {
+                if (result.message === '사용 가능한 계정ID 입니다.') {
+                    return true;
+                } else if (result.message === '이미 가입된 계정ID 입니다.') {
+                    return false;
+                } else {
+                    throw new Error(result.message);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return false;
+            });
     };
 
+    // 로그인 API
+    const logInMutation = useMutation({
+        mutationFn: ({ emailValue, passwordValue }) =>
+            authLoginApi(emailValue, passwordValue),
+        onSuccess: data => {
+            sessionStorage.setItem('Token', data.user.token);
+            sessionStorage.setItem('AccountName', data.user.accountname);
+            sessionStorage.setItem('Id', data.user._id);
+            navigate('/home');
+        },
+    });
+
+    // 회원가입 API
+    const signUpMutation = useMutation({
+        mutationFn: userData => authSignUpApi(userData),
+        onSuccess: data => {
+            if (data.message === '회원가입 성공') {
+                logInMutation.mutate({ emailValue, passwordValue });
+            } else {
+                console.error(data.message);
+            }
+        },
+    });
+
+    // 프로필 편집 API
+    const profileUpdateMutation = useMutation({
+        mutationFn: ({ token, userData }) => updateProfileApi(token, userData),
+        onSuccess: data => {
+            sessionStorage.setItem('AccountName', data.user.accountname);
+            navigate('/profile');
+        },
+    });
+
     // submit 함수
-    const dataSubmit = async data => {
+    const dataSubmit = async submitData => {
+        console.log(isValid);
         //회원 가입 시 초기 프로필 설정일 경우
         if (isValid && !editPage) {
             const userData = {
-                username: data.userName,
-                email: emailValue,
-                password: passwordValue,
-                accountname: data.userID,
-                intro: data.intro,
-                image: !file ? baseURL + noImage : baseURL + file,
+                user: {
+                    username: submitData.userName,
+                    email: emailValue,
+                    password: passwordValue,
+                    accountname: submitData.userID,
+                    intro: submitData.intro,
+                    image: !file ? baseURL + noImage : baseURL + file,
+                },
             };
-            authSignUpApi(userData)
-                .then(result => {
-                    if (result.message === '회원가입 성공') {
-                        authLoginApi(emailValue, passwordValue).then(data => {
-                            sessionStorage.setItem('Token', data.user.token);
-                            sessionStorage.setItem(
-                                'AccountName',
-                                data.user.accountname,
-                            );
-                            sessionStorage.setItem('Id', data.user._id);
-                            navigate('/home');
-                        });
-                    } else {
-                        throw new Error(result.message);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            signUpMutation.mutate(userData);
         }
         // 프로필 편집일 경우
-        else if (isValid && editPage) {
+        if (isValid && editPage) {
             const userData = {
                 user: {
-                    username: data.userName,
-                    accountname: data.userID,
-                    intro: data.intro,
+                    username: submitData.userName,
+                    accountname: submitData.userID,
+                    intro: submitData.intro,
                     image:
                         !file && photoURL === basicImg
                             ? baseURL + noImage
                             : !file && photoURL
-                            ? profileData.image
+                            ? myProfileData.user.image
                             : baseURL + file,
                 },
             };
-            updateProfileApi(token, userData)
-                .then(result => {
-                    if (result.message === '이미 사용중이 계정 ID입니다.') {
-                        throw new Error(result.message);
-                    } else {
-                        sessionStorage.setItem('AccountName', data.userID);
-                        navigate('/profile');
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            profileUpdateMutation.mutate({ token, userData });
         }
     };
 
@@ -221,7 +223,6 @@ export const ProfileUpload = () => {
                                 <S.DeleteIcon />
                             </S.DeleteButton>
                         )}
-
                         <S.ImgUploadBox>
                             <S.ImgUploadInput
                                 type="file"
@@ -270,7 +271,7 @@ export const ProfileUpload = () => {
                                 validate: async id => {
                                     const result = await validateUserID(id);
                                     return (
-                                        result || '이미 존재하는 계정 ID입니다.'
+                                        result || '이미 가입된 계정ID 입니다.'
                                     );
                                 },
                             }}

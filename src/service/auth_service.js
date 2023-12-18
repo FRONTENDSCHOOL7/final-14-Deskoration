@@ -75,9 +75,7 @@ export const authSignUpApi = async userData => {
         const response = await fetch(reqURL, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify({
-                user: userData,
-            }),
+            body: JSON.stringify(userData),
         });
         if (response.ok) {
             const result = await response.json();

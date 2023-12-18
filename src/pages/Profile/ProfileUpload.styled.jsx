@@ -20,19 +20,26 @@ export const ProfileImgBox = styled.div`
     margin: 0 auto;
     &::before {
     }
-`;
 
-export const DeleteButton = styled.button`
-    width: 34px;
-    height: 34px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-color: ${({ theme }) => theme.point};
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    img {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        border: 1px solid ${({ theme }) => theme.border};
+        object-fit: cover;
+    }
+    button {
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: ${({ theme }) => theme.point};
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 export const DeleteIcon = styled(Delete)`
@@ -49,22 +56,6 @@ export const ProfileImg = styled.img`
     object-fit: cover;
 `;
 
-export const ImgUploadInput = styled.input`
-    display: none;
-`;
-
-export const ImgUploadLabel = styled.label`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 34px;
-    height: 34px;
-    padding: 4px;
-    background-color: ${({ theme }) => theme.point};
-    border-radius: 50%;
-    cursor: pointer;
-`;
-
 export const ImgUploadIcon = styled(ImgUploadFile)`
     width: 24px;
     height: 24px;
@@ -77,6 +68,21 @@ export const ImgUploadBox = styled.div`
     position: absolute;
     bottom: 0;
     right: 0;
+
+    input {
+        display: none;
+    }
+    label {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 34px;
+        height: 34px;
+        padding: 4px;
+        background-color: ${({ theme }) => theme.point};
+        border-radius: 50%;
+        cursor: pointer;
+    }
 `;
 
 export const InputBox = styled.div`

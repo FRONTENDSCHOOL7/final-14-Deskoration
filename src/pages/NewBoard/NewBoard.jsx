@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadPostApi } from '../../service/post_service';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import usePageHandler from '../../hooks/usePageHandler';
@@ -18,16 +18,16 @@ const NewBoard = () => {
     const token = sessionStorage.getItem('Token');
 
     const [apiContent, setApiContent] = useState();
-
     const [imageURL, setImageURL] = useState();
     const [imageFile, setImageFile] = useState();
-
     const [productItems, setProductItems] = useState([]);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [textArea, setTextArea] = useState({
         message: '',
         length: 0,
     });
+
+    const queryClient = useQueryClient();
 
     usePageHandler('text', detailPost ? '아이템 보기' : '게시글 작성');
 
@@ -59,26 +59,26 @@ const NewBoard = () => {
         setApiContent({ message: textArea.message.trim(), productItems });
     }, [textArea.message, productItems]);
 
+    const uploadPostMutation = useMutation({
+        mutationFn: ({ apiContent, imageFile, token }) =>
+            uploadPostApi(apiContent, imageFile, token),
+        onSuccess: data => {
+            if (data.message === '내용 또는 이미지를 입력해주세요.') {
+                alert(data.message);
+            } else {
+                queryClient.invalidateQueries(['getAllPosts', token]);
+                navigate('/home');
+            }
+        },
+    });
+
     const submitPost = event => {
         event.preventDefault();
         if (!textArea.message || !imageURL) {
             alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
             return null;
         } else {
-            uploadPostApi(apiContent, imageFile, token)
-                .then(postData => {
-                    if (
-                        postData.message === '내용 또는 이미지를 입력해주세요.'
-                    ) {
-                        alert(postData.message);
-                    }
-                })
-                .catch(error => {
-                    console.log('error', error);
-                })
-                .finally(() => {
-                    navigate('/home');
-                });
+            uploadPostMutation.mutate({ apiContent, imageFile, token });
         }
     };
 

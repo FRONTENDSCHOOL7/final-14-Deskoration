@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
-import { uploadImgApi } from '../../service/img_service';
-import imageCompression from 'browser-image-compression';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useImgUpload } from '../../hooks/useImgUpload';
 import { Marker } from '../../components/Marker/Marker';
-
-import * as S from './PostUploadForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-
 import AlertModal from '../../components/AlertModal/AlertModal';
 import { openAlertModal } from '../../features/modal/alertModalSlice';
+import * as S from './PostUploadForm.styled';
 
 const PostUploadForm = ({
     productItems,
@@ -49,45 +44,12 @@ const PostUploadForm = ({
         hiddenFileInput.current.click();
     };
 
-    const handleUploadImg = async event => {
-        const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
-
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const options = {
-            maxSizeMB: 5,
-        };
-        const fileTypeOptions = { ...options, fileType: 'image/jpeg' };
-
-        try {
-            const compressedBlob = await imageCompression(
-                file,
-                regex.test(file) ? options : fileTypeOptions,
-            );
-            const compressedFile = new File(
-                [compressedBlob],
-                regex.test(file)
-                    ? compressedBlob.name
-                    : compressedBlob.name.split('.')[0] + '.jpeg',
-                {
-                    type: compressedBlob.type,
-                },
-            );
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                const imgData = new FormData();
-                imgData.append('image', compressedFile);
-                uploadImgApi(imgData, setImageFile);
-                setImageURL(reader.result);
-            };
-            setProductItems([]);
-            setIsImageLoaded(false);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    const handleUploadImg = useImgUpload(
+        setImageFile,
+        setImageURL,
+        setProductItems,
+        setIsImageLoaded,
+    );
 
     const deleteFile = () => {
         setImageURL('');

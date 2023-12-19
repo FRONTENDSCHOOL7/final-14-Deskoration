@@ -9,42 +9,46 @@ import usePageHandler from '../../hooks/usePageHandler';
 import { postFollowApi, deleteFollowApi } from '../../service/follow_service';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 const UserProfile = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [profileData, setProfileData] = useState(null);
-    const [userPost, setUserPost] = useState(null);
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
     const { username } = useParams(); //선택한 게시물 아이디 값
     const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
 
     const navigate = useNavigate();
-    usePageHandler('text', profileData?.username);
 
-    useEffect(() => {
-        setIsLoading(true);
-        // API 호출해서 데이터 받아오기
-        getUserProfileApi(username, token)
-            .then(data => {
-                setProfileData(data.profile);
-                return data.profile.accountname;
-            })
-            .then(name => {
-                getMyPostApi(name, token).then(data => {
-                    const result = data.filter(item =>
-                        item.content.includes('"deskoration"'),
-                    );
-                    setUserPost(result);
-                });
-            })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생: ', error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, [token, username]);
+    const { data: profileData } = useQuery({
+        staleTime: 5000,
+        // refetchInterval: 5000,
+        // refetchIntervalInBackground: true,
+        queryKey: ['getUserProfileApi', username, token],
+        queryFn: () =>
+            getUserProfileApi(username, token).then(data => data.profile),
+    });
+
+    console.log(profileData);
+
+    const { data: userPost } = useQuery({
+        staleTime: 5000,
+        // refetchInterval: 5000,
+        // refetchIntervalInBackground: true,
+        queryKey: ['getMyPostApi', profileData?.accountname, token],
+        queryFn: () => {
+            if (profileData) {
+                return getMyPostApi(profileData.accountname, token).then(data =>
+                    data.filter(item => item.content.includes('"deskoration')),
+                );
+            }
+            return [];
+        },
+        enabled: !!profileData?.accountname,
+    });
+
+    usePageHandler('text', profileData?.username);
 
     if (profileData === null || userPost === null) {
         return <Loader />;
@@ -57,12 +61,12 @@ const UserProfile = () => {
     const userFollowToggle = async accountname => {
         try {
             let updatedFollow;
-            if (profileData.isfollow) {
+            if (profileData?.isfollow) {
                 const response = await deleteFollowApi(token, accountname);
-                updatedFollow = response.profile.isfollow;
+                updatedFollow = response.profile?.isfollow;
             } else {
                 const response = await postFollowApi(token, accountname);
-                updatedFollow = response.profile.isfollow;
+                updatedFollow = response.profile?.isfollow;
             }
 
             const updatedFollowerData = {
@@ -70,7 +74,7 @@ const UserProfile = () => {
                 isfollow: updatedFollow,
             };
 
-            setProfileData(updatedFollowerData);
+            // setProfileData(updatedFollowerData);
         } catch (error) {
             console.error('API 요청 중 오류 발생:', error);
         }
@@ -139,9 +143,9 @@ const UserProfile = () => {
                         <p className="user-name">{profileData?.username}</p>
                         <p className="user-info">
                             {expandedContent
-                                ? profileData.intro
+                                ? profileData?.intro
                                 : profileData?.intro?.slice(0, 53)}
-                            {profileData.intro?.length > 30 && (
+                            {profileData?.intro?.length > 30 && (
                                 <S.ToggleButton
                                     type="button"
                                     onClick={toggleExpandedContent}
@@ -156,7 +160,7 @@ const UserProfile = () => {
                     <GradientButton
                         type={'button'}
                         // gra={'true'}
-                        gra={!profileData.isfollow ? true : false}
+                        gra={!profileData?.isfollow ? true : false}
                         width={'100%'}
                         padding={'10px'}
                         onClick={() =>
@@ -164,7 +168,7 @@ const UserProfile = () => {
                         }
                     >
                         {/* 팔로우 */}
-                        {!profileData.isfollow ? '팔로우' : '팔로잉'}
+                        {!profileData?.isfollow ? '팔로우' : '팔로잉'}
                     </GradientButton>
                     <GradientButton
                         type={'button'}

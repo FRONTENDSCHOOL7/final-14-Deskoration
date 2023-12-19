@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import * as S from './Feed.styled';
 import usePageHandler from '../../hooks/usePageHandler';
 import { getFeedApi, reportPostAPI } from '../../service/post_service';
-import { useLikeUpdate } from '../../hooks/useLikeUpdate';
 import { Link } from 'react-router-dom';
 import SocialButton from '../../components/SocialButton/SocialButton';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
@@ -11,6 +10,7 @@ import { openAlertModal } from '../../features/modal/alertModalSlice';
 import AlertModal from '../../components/AlertModal/AlertModal';
 import Loader from '../../components/Loading/Loader';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import Like from '../../components/Like/Like';
 
 const Feed = () => {
     const dispatch = useDispatch();
@@ -71,9 +71,6 @@ const Feed = () => {
             }),
     });
 
-    const likeMutation = useLikeUpdate(queryKey, true);
-    const cancelLikeMutation = useLikeUpdate(queryKey, false);
-
     if (isLoading) {
         return <Loader />;
     }
@@ -118,19 +115,11 @@ const Feed = () => {
                                 </S.DetailMsg>
                             </Link>
                             <div>
-                                <SocialButton
-                                    type={'like'}
-                                    onClick={() =>
-                                        !post.hearted
-                                            ? likeMutation.mutate(
-                                                  mutationParams,
-                                              )
-                                            : cancelLikeMutation.mutate(
-                                                  mutationParams,
-                                              )
-                                    }
+                                <Like
+                                    queryKey={queryKey}
                                     isLike={post.hearted}
                                     likeCount={post.heartCount}
+                                    mutationParams={mutationParams}
                                 />
                                 <Link to={`/detailpost/${post.id}`}>
                                     <SocialButton

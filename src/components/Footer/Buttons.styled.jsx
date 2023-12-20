@@ -56,8 +56,9 @@ export const IconButton = styled.button`
     justify-content: space-between;
     align-items: center;
     min-width: 48px;
-    margin-bottom: 7px;
-    gap: 5px;
+    > * {
+        padding-bottom: 5px;
+    }
     &::before {
         content: '';
         width: 4px;
@@ -65,6 +66,20 @@ export const IconButton = styled.button`
         border-radius: 50%;
         background-color: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : '#fff'};
+        margin-bottom: 5px;
+        @media screen and (min-width: 1024px) {
+            margin: 0 12px 0 0;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        flex-direction: row;
+        padding: 7px 0;
+
+        > * {
+            padding: 0;
+            margin: 0 12px 0 0;
+        }
     }
 `;
 

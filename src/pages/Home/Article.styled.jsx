@@ -3,24 +3,39 @@ import theme from '../../styles/theme';
 import { ReactComponent as Search } from '../../assets/images/Search.svg';
 
 export const Section = styled.section`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    grid-gap: 5px;
     width: 100%;
-    gap: 10px;
+    max-width: 730px;
     color: ${theme.mainFont};
     overflow-y: auto;
-    padding: 10px 0px;
     height: calc(100vh - 246px);
+    margin: 0 auto;
+
+    @media screen and (min-width: 1024px) {
+        height: calc(100vh - 122px);
+    }
+
+    @media screen and (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    a {
+        padding: 10px 5px 5px 5px;
+    }
 `;
 
 export const Article = styled.article`
-    width: 145px;
-    height: 145px;
+    aspect-ratio: 1 / 1;
+    max-width: 220px;
+    max-height: 220px;
+    margin: 0 auto;
     background-image: url(${props => props.src});
-    /* background-image: url(${props =>
-        props.imageurl || './images/DeskSetup.jpg'}); */
     background-size: cover;
     background-position: center;
     border: 1px solid ${props => props.theme.border};

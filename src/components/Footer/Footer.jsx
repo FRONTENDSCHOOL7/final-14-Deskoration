@@ -31,6 +31,10 @@ const Footer = () => {
 
     return (
         <S.Footer>
+            <S.LogoBox>
+                <S.LogoIcon />
+            </S.LogoBox>
+
             <S.FooterUl>
                 <li>
                     <HomeBtn

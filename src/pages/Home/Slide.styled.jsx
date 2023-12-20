@@ -2,12 +2,23 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
-    padding-bottom: 8px;
+    max-width: 730px;
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
     white-space: nowrap;
     gap: 15px;
+    padding-bottom: 8px;
+    margin: 0 auto;
+
+    @media screen and (min-width: 1024px) {
+        padding-bottom: 16px;
+        margin: 0 auto;
+    }
+
+    @media screen and (min-width: 1440px) {
+        justify-content: space-evenly;
+    }
 `;
 
 export const Category = styled.div`

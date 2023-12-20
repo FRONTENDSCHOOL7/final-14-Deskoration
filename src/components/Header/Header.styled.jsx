@@ -10,6 +10,10 @@ export const Headbar = styled.header`
     align-items: center;
     padding: 0 25px;
     border-bottom: 1px solid ${props => props.theme.border};
+
+    @media screen and (min-width: 1024px) {
+        display: none;
+    }
 `;
 
 export const LogoIcon = styled(Logo)`

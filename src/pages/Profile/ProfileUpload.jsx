@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import * as S from './ProfileUpload.styled';
 import basicImg from '../../assets/images/basicImg.png';
 import { Input } from '../../components/Input/Input';
-import { uploadImgApi } from '../../service/img_service';
 import {
     authLoginApi,
     authSignUpApi,
@@ -16,9 +15,9 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import imageCompression from 'browser-image-compression';
 import usePageHandler from '../../hooks/usePageHandler';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { useImgUpload } from '../../hooks/useImgUpload';
 
 export const ProfileUpload = () => {
     const navigate = useNavigate();
@@ -29,9 +28,9 @@ export const ProfileUpload = () => {
     const baseURL = 'https://api.mandarin.weniv.co.kr/';
     const noImage = 'Ellipse.png';
 
-    const [photoURL, setPhotoURL] = useState(basicImg);
+    const [imageURL, setImageURL] = useState(basicImg);
     const [isImageAdded, setIsImageAdded] = useState(false);
-    const [file, setFile] = useState();
+    const [imageFile, setImageFile] = useState('');
     const { emailValue, passwordValue } = useLocation().state || {};
 
     // 헤더에 문구 넣기
@@ -67,7 +66,7 @@ export const ProfileUpload = () => {
     useEffect(() => {
         if (myProfileData) {
             const userData = myProfileData.user;
-            setPhotoURL(userData.image);
+            setImageURL(userData.image);
             if (baseURL + noImage !== userData.image) {
                 setIsImageAdded(true);
             }
@@ -80,49 +79,16 @@ export const ProfileUpload = () => {
     }, [myProfileData, setValue]);
 
     // 업로드한 이미지 url 저장
-    const handleUploadImg = async event => {
-        const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
-
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const options = {
-            maxSizeMB: 5,
-        };
-        const fileTypeOptions = { ...options, fileType: 'image/jpeg' };
-
-        try {
-            const compressedBlob = await imageCompression(
-                file,
-                regex.test(file) ? options : fileTypeOptions,
-            );
-            const compressedFile = new File(
-                [compressedBlob],
-                regex.test(file)
-                    ? compressedBlob.name
-                    : compressedBlob.name.split('.')[0] + '.jpeg',
-                {
-                    type: compressedBlob.type,
-                },
-            );
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                const imgData = new FormData();
-                imgData.append('image', compressedFile);
-                uploadImgApi(imgData, setFile);
-                setPhotoURL(reader.result);
-            };
-            setIsImageAdded(true);
-        } catch (e) {
-            console.log(e);
-        }
-    };
+    const handleUploadImg = useImgUpload(
+        setImageFile,
+        setImageURL,
+        setIsImageAdded,
+    );
 
     // 이미지 삭제
     const deleteImg = () => {
         setIsImageAdded(false);
-        setPhotoURL(basicImg);
+        setImageURL(basicImg);
     };
 
     //계정 ID 검사
@@ -178,7 +144,6 @@ export const ProfileUpload = () => {
 
     // submit 함수
     const dataSubmit = async submitData => {
-        console.log(isValid);
         //회원 가입 시 초기 프로필 설정일 경우
         if (isValid && !editPage) {
             const userData = {
@@ -188,7 +153,7 @@ export const ProfileUpload = () => {
                     password: passwordValue,
                     accountname: submitData.userID,
                     intro: submitData.intro,
-                    image: !file ? baseURL + noImage : baseURL + file,
+                    image: !imageFile ? baseURL + noImage : baseURL + imageFile,
                 },
             };
             signUpMutation.mutate(userData);
@@ -201,11 +166,11 @@ export const ProfileUpload = () => {
                     accountname: submitData.userID,
                     intro: submitData.intro,
                     image:
-                        !file && photoURL === basicImg
+                        !imageFile && imageURL === basicImg
                             ? baseURL + noImage
-                            : !file && photoURL
+                            : !imageFile && imageURL
                             ? myProfileData.user.image
-                            : baseURL + file,
+                            : baseURL + imageFile,
                 },
             };
             profileUpdateMutation.mutate({ token, userData });
@@ -217,7 +182,7 @@ export const ProfileUpload = () => {
             <S.ProfileContainer>
                 <form onSubmit={handleSubmit(dataSubmit)}>
                     <S.ProfileImgBox>
-                        <img src={photoURL} alt="프로필 이미지" />
+                        <img src={imageURL} alt="프로필 이미지" />
                         {isImageAdded && (
                             <button type="button" onClick={deleteImg}>
                                 <S.DeleteIcon />

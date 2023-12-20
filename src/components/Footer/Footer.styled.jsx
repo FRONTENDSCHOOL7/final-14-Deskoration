@@ -7,8 +7,6 @@ export const Footer = styled.nav`
     padding: 0 25px;
     align-items: center;
     justify-content: space-between;
-    position: absolute;
-    bottom: 0;
     background-color: #fff;
     border-top: 1px solid ${({ theme }) => theme.border};
 `;

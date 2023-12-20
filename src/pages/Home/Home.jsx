@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getAllPostApi } from '../../service/post_service';
 
@@ -18,24 +18,34 @@ const Home = () => {
 
     const {
         data: articles,
-        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
         isLoading,
-    } = useQuery({
+        error,
+    } = useInfiniteQuery({
         queryKey: ['getAllPosts', token],
-        queryFn: () => getAllPostApi(token),
-        select: data =>
-            category === 'All'
-                ? data?.posts?.filter(post =>
+        queryFn: ({ pageParam = 0 }) => getAllPostApi(token, pageParam),
+        select: data => {
+            const allPosts = data.pages.flatMap(page => page.posts);
+            return category === 'All'
+                ? allPosts.filter(post =>
                       post.content?.includes('"deskoration"'),
                   )
-                : data?.posts
-                      ?.filter(post => post.content?.includes('"deskoration"'))
+                : allPosts
+                      .filter(post => post.content?.includes('"deskoration"'))
                       .filter(article => {
                           const content = JSON.parse(article.content);
                           return content.deskoration.productItems.some(
                               item => item.detail.category === category,
                           );
-                      }),
+                      });
+        },
+        getNextPageParam: (lastPage, allPages) => {
+            const morePagesExist = lastPage?.posts?.length === 280;
+            if (!morePagesExist) return false;
+            return allPages.length * 280;
+        },
     });
 
     if (isLoading) {
@@ -55,7 +65,7 @@ const Home = () => {
     return (
         <>
             <Slide category={handleCategory} />
-            <Article articles={articles} />
+            <Article articles={articles} fetchNextPage={fetchNextPage} />
         </>
     );
 };

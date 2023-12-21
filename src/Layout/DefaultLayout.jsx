@@ -15,11 +15,15 @@ const DefaultLayout = () => {
             <Header />
             {isHome ? (
                 <S.HomeMain>
-                    <Outlet />
+                    <S.MainBox>
+                        <Outlet />
+                    </S.MainBox>
                 </S.HomeMain>
             ) : (
                 <S.Main>
-                    <Outlet />
+                    <S.MainBox>
+                        <Outlet />
+                    </S.MainBox>
                 </S.Main>
             )}
             {isDetailPost ? null : isChatRoom ? null : <Footer />}

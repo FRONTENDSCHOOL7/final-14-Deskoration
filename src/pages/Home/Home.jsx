@@ -19,8 +19,6 @@ const Home = () => {
     const {
         data: articles,
         fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
         isLoading,
         error,
     } = useInfiniteQuery({

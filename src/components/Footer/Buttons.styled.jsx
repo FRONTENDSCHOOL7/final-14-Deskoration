@@ -67,6 +67,7 @@ export const IconButton = styled.button`
         background-color: ${({ theme, $hover, $active }) =>
             $active ? theme.main : $hover ? theme.main : '#fff'};
         margin-bottom: 5px;
+
         @media screen and (min-width: 1024px) {
             margin: 0 12px 0 0;
         }
@@ -75,7 +76,8 @@ export const IconButton = styled.button`
     @media screen and (min-width: 1024px) {
         flex-direction: row;
         padding: 7px 0;
-
+        min-width: 100%;
+        justify-content: flex-start;
         > * {
             padding: 0;
             margin: 0 12px 0 0;
@@ -88,4 +90,6 @@ export const IconNameSpan = styled.span`
     font-size: ${({ theme }) => theme.fontSize.sm};
     color: ${({ theme, $hover, $active }) =>
         $active ? theme.main : $hover ? theme.main : theme.mainFont};
+    flex-grow: 1;
+    text-align: left;
 `;

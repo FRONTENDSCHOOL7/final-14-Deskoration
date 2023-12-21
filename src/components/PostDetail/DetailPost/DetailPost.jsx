@@ -1,60 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useDispatch } from 'react-redux';
 import { openAlertModal } from '../../../features/modal/alertModalSlice';
-
 import { deletePostAPI, reportPostAPI } from '../../../service/post_service';
-import { postLikeApi, deleteLikeApi } from '../../../service/like_service';
-
 import { Marker } from '../../Marker/Marker';
 import SocialButton from '../../SocialButton/SocialButton';
 import BottomSheet from '../../BottomSheet/BottomSheet';
+import Like from '../../Like/Like';
 
 import * as S from './DetailPost.styled';
 
 const DetailPost = ({ data, commentData, token, id, setFocus }) => {
     const dispatch = useDispatch();
-    const [likeData, setLikeData] = useState({
-        isLike: data.post.hearted,
-        likeCount: data.post.heartCount,
-    });
-
     const postData = data?.post;
     const postContent = JSON.parse(data?.post?.content);
-
+    const mutationParams = {
+        id: postData.id,
+        token: token,
+    };
     const myId = sessionStorage.getItem('Id');
 
     const navigate = useNavigate();
-
-    // 너도.. useQuery?랑 mutation
-    const handleLike = () => {
-        if (!likeData.isLike) {
-            postLikeApi(id, token)
-                .then(likeResult => {
-                    setLikeData(prev => ({
-                        ...prev,
-                        isLike: true,
-                        likeCount: likeResult.post.heartCount,
-                    }));
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        } else {
-            deleteLikeApi(id, token)
-                .then(unlikeResult => {
-                    setLikeData(prev => ({
-                        ...prev,
-                        isLike: false,
-                        likeCount: unlikeResult.post.heartCount,
-                    }));
-                })
-                .catch(error => {
-                    console.error('error');
-                });
-        }
-    };
 
     // bottomsheet
     const [isPostBottomSheet, setIsPostBottomSheet] = useState(false);
@@ -120,11 +86,11 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
 
                         <S.ContentButtonBox>
                             <div>
-                                <SocialButton
-                                    type={'like'}
-                                    onClick={handleLike}
-                                    isLike={likeData.isLike}
-                                    likeCount={likeData.likeCount}
+                                <Like
+                                    queryKey={['getDetailPost', id, token]}
+                                    isLike={postData.hearted}
+                                    likeCount={postData.heartCount}
+                                    mutationParams={mutationParams}
                                 />
                                 <SocialButton
                                     type={'comment'}

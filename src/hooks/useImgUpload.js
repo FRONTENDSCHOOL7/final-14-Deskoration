@@ -6,6 +6,7 @@ export const useImgUpload = (
     setImageURL,
     setProductItems,
     setIsImageLoaded,
+    setIsImageAdded,
 ) => {
     const handleUploadImg = async event => {
         const regex = new RegExp(/(.png|.jpg|.jpeg|.gif|.tif|.heic|bmp)/);
@@ -42,7 +43,8 @@ export const useImgUpload = (
                 setImageURL(reader.result);
             };
             setProductItems([]);
-            setIsImageLoaded(false);
+            setIsImageLoaded?.(false);
+            setIsImageAdded?.(true);
         } catch (error) {
             console.error(error);
         }

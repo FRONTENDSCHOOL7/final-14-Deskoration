@@ -59,9 +59,9 @@ export const updatePostApi = async (token, postId, postData, image) => {
     }
 };
 
-export const getAllPostApi = async token => {
-    const number = 1000;
-    const reqURL = `${baseUrl}/post?limit=${number}`;
+export const getAllPostApi = async (token, skip = 0) => {
+    const number = 280;
+    const reqURL = `${baseUrl}/post?limit=${number}&skip=${skip}`;
     try {
         const response = await fetch(reqURL, {
             method: 'GET',
@@ -73,7 +73,6 @@ export const getAllPostApi = async token => {
 
         if (response.ok) {
             const data = await response.json();
-
             return data;
         } else {
             console.error('API 요청이 실패했습니다.');

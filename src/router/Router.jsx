@@ -1,10 +1,7 @@
 import { React, lazy, Suspense } from 'react';
-
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PostUpdateForm from '../pages/NewBoard/UpdateBoard';
-
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
-
 const UserLayoutPage = lazy(() => import('../pages/User/User'));
 const LoginPage = lazy(() => import('../pages/User/Login'));
 const SignupPage = lazy(() => import('../pages/User/Signup'));
@@ -21,9 +18,7 @@ const UserFollowingListPage = lazy(() =>
 const UserFollowerListPage = lazy(() =>
     import('../pages/FollowFollowingList/UserFollowerList'),
 );
-
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
-
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
 const HomePage = lazy(() => import('../pages/Home/Home'));
 const FeedPage = lazy(() => import('../pages/Feed/Feed'));
@@ -38,12 +33,9 @@ const ChatListPage = lazy(() =>
 const ChatRoomPage = lazy(() =>
     import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
 );
-// const HomeLayoutPage = lazy(() => import('../Layout/HomeLayout'));
 const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
 const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
-
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
-
 const NotFoundPage = lazy(() => import('../pages/404/NotFoundPage'));
 
 const Router = () => {
@@ -61,7 +53,6 @@ const Router = () => {
                             <Route path="/signup" element={<SignupPage />} />
                         </Route>
                     </Route>
-
                     <Route element={<PrivateRoutePage />}>
                         <Route element={<DefaultLayoutPage />}>
                             <Route path={'/home'} element={<HomePage />} />
@@ -73,6 +64,10 @@ const Router = () => {
                             <Route
                                 path={'/postUpload/:itemCount'}
                                 element={<PostUploadPage />}
+                            />
+                            <Route
+                                path={'/detailPost/:id'}
+                                element={<DetailPostPage />}
                             />
                             <Route
                                 path={'/detailPost/:id/:itemCount'}
@@ -128,18 +123,6 @@ const Router = () => {
                             path={'/profileEdit'}
                             element={<ProfileUploadPage />}
                         />
-                        {/* <Route
-                            path={'/followerList'}
-                            element={<FollowerListPage />}
-                        />
-                        <Route
-                            path={'/followingList'}
-                            element={<FollowingListPage />}
-                        /> */}
-                        <Route
-                            path={'/detailPost/:id'}
-                            element={<DetailPostPage />}
-                        />
                         <Route
                             path={'/profile/:username'}
                             element={<UserProfilePage />}
@@ -151,5 +134,4 @@ const Router = () => {
         </Suspense>
     );
 };
-
 export default Router;

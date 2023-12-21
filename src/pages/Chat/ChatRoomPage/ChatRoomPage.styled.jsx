@@ -90,7 +90,7 @@ export const ChatInputForm = styled.form`
     bottom: 0;
     left: 0;
     width: 100%;
-    /* height: 85px; */
+    height: 85px;
     background-color: #fff;
     border-top: 1px solid ${props => props.theme.border};
     padding: 15px;

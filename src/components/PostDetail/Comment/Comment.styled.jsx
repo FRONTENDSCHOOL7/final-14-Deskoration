@@ -65,6 +65,7 @@ export const CommentInputForm = styled.form`
     bottom: 0;
     left: 0;
     width: 100%;
+    height: 85px;
     background: #fff;
     padding: 15px;
     border-top: 1px solid ${props => props.theme.border};

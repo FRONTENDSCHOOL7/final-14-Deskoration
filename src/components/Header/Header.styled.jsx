@@ -9,7 +9,7 @@ export const Headbar = styled.header`
     display: flex;
     align-items: center;
     padding: 0 25px;
-    border: 1px solid ${props => props.theme.border};
+    border-bottom: 1px solid ${props => props.theme.border};
 `;
 
 export const LogoIcon = styled(Logo)`

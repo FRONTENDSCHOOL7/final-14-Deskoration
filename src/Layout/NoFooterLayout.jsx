@@ -6,9 +6,7 @@ const NoFooterLayout = () => {
         <>
             <Header />
             <S.NoFooterMain>
-                <S.MainBox>
-                    <Outlet />
-                </S.MainBox>
+                <Outlet />
             </S.NoFooterMain>
         </>
     );

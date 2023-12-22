@@ -13,19 +13,9 @@ const DefaultLayout = () => {
     return (
         <>
             <Header />
-            {isHome ? (
-                <S.HomeMain>
-                    <S.MainBox>
-                        <Outlet />
-                    </S.MainBox>
-                </S.HomeMain>
-            ) : (
-                <S.Main>
-                    <S.MainBox>
-                        <Outlet />
-                    </S.MainBox>
-                </S.Main>
-            )}
+            <S.Main isHome={isHome}>
+                <Outlet />
+            </S.Main>
             {isDetailPost ? null : isChatRoom ? null : <Footer />}
         </>
     );

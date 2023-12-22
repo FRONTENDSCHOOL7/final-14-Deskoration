@@ -29,7 +29,7 @@ export const LogoContainer = styled.div`
         bottom: 0;
         background-image: url(${bgLoading});
         background-repeat: no-repeat;
-        background-size: fill;
+        background-size: cover;
         background-position: 80%;
         opacity: 0.28;
     }

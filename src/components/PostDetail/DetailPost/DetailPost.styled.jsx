@@ -8,9 +8,7 @@ export const Dots_verticalIcon = styled(Dots_vertical)`
     height: 24px;
 `;
 
-export const DetailPostCotainer = styled.div`
-    height: 100%;
-`;
+export const DetailPostContainer = styled.div``;
 
 // 댓글창 헤더
 export const DetailPostHeader = styled.header`
@@ -25,7 +23,6 @@ export const DetailPostHeader = styled.header`
 export const DetailPostUser = styled.div`
     display: flex;
     align-items: center;
-    /* gap: 5px; */
 
     div {
         font-weight: bold;
@@ -38,15 +35,20 @@ export const BackIcon = styled(Back)`
 `;
 
 export const DetailPostMain = styled.div`
-    /* overflow-y: ${props => !props.$isBottomSheet && 'scroll'}; */
-
     padding-bottom: 10px;
 `;
 
 export const ContentSection = styled.section`
     margin-bottom: 10px;
+
+    > div:first-child {
+        max-width: 450px;
+        margin: 0 auto;
+        position: relative;
+    }
+
     > div > img {
-        width: 100%;
+        max-width: 100%;
         margin-bottom: 10px;
         border-radius: 20px;
         border: 1px solid ${props => props.theme.border};

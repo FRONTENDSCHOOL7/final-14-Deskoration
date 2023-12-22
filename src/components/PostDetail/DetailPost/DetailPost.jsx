@@ -60,10 +60,10 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
 
     return (
         <>
-            <S.DetailPostCotainer>
+            <S.DetailPostContainer>
                 <S.DetailPostMain $isBottomSheet={isPostBottomSheet}>
                     <S.ContentSection>
-                        <div className="post" style={{ position: 'relative' }}>
+                        <div>
                             <img
                                 src={postData?.image}
                                 alt="데스크 셋업 이미지"
@@ -128,7 +128,7 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
                     children={'신고하기'}
                     deleteFn={e => reportPost(e)}
                 />
-            </S.DetailPostCotainer>
+            </S.DetailPostContainer>
         </>
     );
 };

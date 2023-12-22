@@ -57,13 +57,13 @@ export const UserChatList = styled.ul`
 `;
 
 export const UserChatRoom = styled.div`
-    /* width: 310px; */
     height: 70px;
-    /* margin: 0 25px; */
     display: flex;
     align-items: center;
 
     .user-img {
+        min-width: 50px;
+        min-height: 50px;
         width: 50px;
         height: 50px;
         border-radius: 100%;

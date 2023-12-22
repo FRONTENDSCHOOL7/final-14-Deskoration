@@ -6,14 +6,17 @@ import PostUploadForm from './PostUploadForm';
 import usePageHandler from '../../hooks/usePageHandler';
 import RegisterForm from './RegisterForm';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import baseUrl from '../../service/base_url';
 
 const PostUpdateForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const baseURL = 'https://api.mandarin.weniv.co.kr/';
-    const baseUrlLength = baseURL.length;
+    const baseUrlLength = baseUrl.length;
     const pathName = location.pathname;
     const postData = location.state?.postData;
+    const postId = postData?.id;
+    const postImg = postData?.image;
     const token = sessionStorage.getItem('Token');
     const [updateData, setUpdateData] = useState();
     const [imageURL, setImageURL] = useState('');
@@ -26,8 +29,6 @@ const PostUpdateForm = () => {
 
     usePageHandler('text', '게시물 수정');
 
-    // console.log(postData.id);
-
     const trimTextArea = () => {
         setTextArea(prev => ({
             ...prev,
@@ -36,25 +37,23 @@ const PostUpdateForm = () => {
         }));
     };
 
+    const { data: postContentData } = useQuery({
+        queryKey: ['detialPostApi', token],
+        queryFn: () => detialPostApi(postId, token),
+    });
+
     useEffect(() => {
-        console.log(postData);
-        detialPostApi(postData?.id, token)
-            .then(response => {
-                const resData = JSON.parse(response.post.content);
-                const contentData = resData?.deskoration || {};
-                setImageURL(postData.image || '');
-                setProductItems(contentData.productItems || []);
-                setTextArea({
-                    message: contentData.message || '',
-                    length: contentData.message
-                        ? contentData.message.length
-                        : 0,
-                });
-            })
-            .catch(error => {
-                console.log('error', error);
+        if (postContentData) {
+            const resData = JSON.parse(postContentData.post.content);
+            const contentData = resData?.deskoration || {};
+            setImageURL(postImg || '');
+            setProductItems(contentData.productItems || []);
+            setTextArea({
+                message: contentData.message || '',
+                length: contentData.message ? contentData.message.length : 0,
             });
-    }, [token]);
+        }
+    }, [postContentData, token]);
 
     const deleteProduct = itemID => {
         if (window.confirm('상품을 삭제 하겠습니까?')) {
@@ -79,25 +78,23 @@ const PostUpdateForm = () => {
         });
     }, [textArea.message, productItems]);
 
+    const postUpdateMutation = useMutation({
+        mutationFn: ({ token, postId, updateData, imageFile }) =>
+            updatePostApi(token, postId, updateData, imageFile),
+        onSuccess: data => {
+            console.log('Post updated successfully:', data);
+            navigate(-1);
+        },
+    });
+
     const submitPost = async event => {
         event.preventDefault();
-
         try {
             if (!textArea.message || !imageURL) {
                 alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
                 return;
             }
-
-            const responseData = await updatePostApi(
-                token,
-                postData?.id,
-                updateData,
-                imageFile,
-            );
-
-            console.log('Post updated successfully:', responseData);
-
-            navigate('/home');
+            postUpdateMutation.mutate({ token, postId, updateData, imageFile });
         } catch (error) {
             console.error('Error updating post:', error);
         }
@@ -105,7 +102,7 @@ const PostUpdateForm = () => {
 
     return (
         <S.NewBoardContainer>
-            {pathName === `/postEdit/${postData?.id}` ? (
+            {pathName === `/postEdit/${postId}` ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
                         productItems={productItems}

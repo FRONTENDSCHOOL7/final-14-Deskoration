@@ -13,7 +13,7 @@ const DefaultLayout = () => {
     return (
         <>
             <Header />
-            <S.Main isHome={isHome}>
+            <S.Main $isHome={isHome}>
                 <Outlet />
             </S.Main>
             {isDetailPost ? null : isChatRoom ? null : <Footer />}

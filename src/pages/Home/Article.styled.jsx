@@ -3,21 +3,27 @@ import theme from '../../styles/theme';
 import { ReactComponent as Search } from '../../assets/images/Search.svg';
 
 export const Section = styled.section`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    grid-gap: 10px;
     width: 100%;
-    gap: 10px;
     color: ${theme.mainFont};
     overflow-y: auto;
-    padding: 10px 0px;
     height: calc(100vh - 247px);
+    padding: 10px 5px 10px 0;
+
+    @media screen and (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    a {
+        aspect-ratio: 1/1;
+    }
 `;
 
 export const Article = styled.article`
-    width: 145px;
-    height: 145px;
+    max-width: 280px;
+    max-height: 280px;
+    aspect-ratio: 1/1;
     background-image: url(${props => props.src});
     /* background-image: url(${props =>
         props.imageurl || './images/DeskSetup.jpg'}); */

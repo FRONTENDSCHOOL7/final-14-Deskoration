@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import theme from '../../styles/theme';
 
 export const SlideSection = styled.section`
-    padding-bottom: 8px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     overflow-x: auto;
     white-space: nowrap;
     gap: 15px;
+    padding-bottom: 8px;
 `;
 
 export const Category = styled.div`

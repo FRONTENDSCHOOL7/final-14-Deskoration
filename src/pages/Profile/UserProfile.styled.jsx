@@ -104,22 +104,32 @@ export const UserDataList = styled.div`
 
 export const UserPostings = styled.div`
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    grid-gap: 10px;
+    margin-top: 10px;
     color: ${({ theme }) => theme.mainFont};
 
+    @media screen and (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    a {
+        aspect-ratio: 1/1;
+        max-width: 280px;
+        max-height: 280px;
+    }
+
     img {
-        width: 145px;
-        height: 145px;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
         transition: border 0.1s ease;
         &:hover {
-            border: 3px solid ${({ theme }) => theme.main};
+            border: 3px solid ${theme.main};
         }
-        border: 3px solid #fff;
+        border: 1px solid ${theme.border};
         border-radius: 10px;
     }
 `;

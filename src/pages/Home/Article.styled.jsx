@@ -4,7 +4,7 @@ import { ReactComponent as Search } from '../../assets/images/Search.svg';
 
 export const Section = styled.section`
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    grid-template-columns: 1fr;
     grid-gap: 10px;
     width: 100%;
     color: ${theme.mainFont};
@@ -12,21 +12,24 @@ export const Section = styled.section`
     height: calc(100vh - 247px);
     padding: 10px 5px 10px 0;
 
+    @media screen and (min-width: 280px) {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
     @media screen and (min-width: 768px) {
         grid-template-columns: repeat(4, 1fr);
     }
     a {
         aspect-ratio: 1/1;
+        max-width: 280px;
+        max-height: 280px;
     }
 `;
 
 export const Article = styled.article`
-    max-width: 280px;
-    max-height: 280px;
-    aspect-ratio: 1/1;
+    width: 100%;
+    height: 100%;
     background-image: url(${props => props.src});
-    /* background-image: url(${props =>
-        props.imageurl || './images/DeskSetup.jpg'}); */
     background-size: cover;
     background-position: center;
     border: 1px solid ${props => props.theme.border};

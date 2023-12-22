@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as S from './FollowingList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
@@ -8,61 +8,72 @@ import {
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const UserFollowingList = () => {
     const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
-    const { username } = useParams(); //선택한 게시물 아이디 값
-    const [followingData, setFollowingData] = useState([]);
-    const [follow, setFollow] = useState(false);
+    const { username } = useParams();
+    const queryClient = useQueryClient();
     usePageHandler('text', '팔로잉');
-    // console.log(username);
 
-    // 팔로잉 리스트 불러오기
-    useEffect(() => {
-        const fetchFollowing = async () => {
-            await getFollowingApi(token, username)
-                .then(data => {
-                    setFollowingData(data);
-                })
-                .catch(error => {
-                    console.error('API 요청 중 오류 발생: ', error);
-                });
-        };
-        fetchFollowing();
-    }, []);
+    const {
+        data: userFollowingData,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ['userFollowingData', token, username],
+        queryFn: () => getFollowingApi(token, username),
+    });
 
-    const handleFollowToggle = async accountname => {
-        const following = followingData.find(
-            f => f.accountname === accountname,
+    const userFollowing = useMutation({
+        mutationFn: accountName => postFollowApi(token, accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries([
+                'userFollowingData',
+                token,
+                myAccountName,
+            ]);
+        },
+    });
+
+    const userUnFollowing = useMutation({
+        mutationFn: accountName => deleteFollowApi(token, accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries([
+                'userFollowingData',
+                token,
+                myAccountName,
+            ]);
+        },
+    });
+
+    const handleFollowToggle = accountName => {
+        const followingD = userFollowingData.find(
+            f => f.accountname === accountName,
         );
-        if (following) {
-            try {
-                let updatedFollowing;
-                if (following.isfollow) {
-                    const response = await deleteFollowApi(token, accountname);
-                    updatedFollowing = response.profile.isfollow;
-                } else {
-                    const response = await postFollowApi(token, accountname);
-                    updatedFollowing = response.profile.isfollow;
-                }
-                const updatedFollowingData = followingData.map(f =>
-                    f.accountname === accountname
-                        ? { ...f, isfollow: updatedFollowing }
-                        : f,
-                );
-                setFollowingData(updatedFollowingData);
-                console.log(followingData);
-            } catch (error) {
-                console.error('API 요청 중 오류 발생:', error);
+        if (followingD) {
+            if (followingD.isfollow) {
+                userUnFollowing.mutate(accountName);
+            } else {
+                userFollowing.mutate(accountName);
             }
         }
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error: {error.message}</div>;
+    }
+
     return (
         <>
             <S.FollowingContainer>
-                {followingData?.map(data => (
+                {userFollowingData?.map(data => (
                     <S.FollowingList key={data._id}>
                         <Link to={`/profile/${data.accountname}`}>
                             <S.FollowingInfo>

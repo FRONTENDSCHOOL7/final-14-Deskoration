@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
@@ -8,55 +8,73 @@ import {
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const UserFollowerList = () => {
     const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
-    const { username } = useParams(); //선택한 게시물 아이디 값
-    const [followerData, setFollowerData] = useState([]);
-    const [follow, setFollow] = useState(false);
+    const { username } = useParams();
+    const queryClient = useQueryClient();
     usePageHandler('text', '팔로워');
-    console.log(username);
 
     // 팔로워 리스트 불러오기
-    useEffect(() => {
-        getFollowerApi(token, username)
-            .then(data => {
-                setFollowerData(data);
-            })
-            .catch(error => {
-                console.error('API 요청 중 오류 발생: ', error);
-            });
-    }, []);
+    const {
+        data: userFollowerData,
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ['userFollowerData', token, username],
+        queryFn: () => getFollowerApi(token, username),
+    });
 
-    const handleFollowToggle = async accountname => {
-        const follower = followerData.find(f => f.accountname === accountname);
+    const userFollow = useMutation({
+        mutationFn: accountName => postFollowApi(token, accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries([
+                'userFollowerData',
+                token,
+                myAccountName,
+            ]);
+        },
+    });
+
+    const userUnFollow = useMutation({
+        mutationFn: accountName => deleteFollowApi(token, accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries([
+                'userFollowerData',
+                token,
+                myAccountName,
+            ]);
+        },
+    });
+
+    const handleFollowToggle = accountName => {
+        const follower = userFollowerData.find(
+            f => f.accountname === accountName,
+        );
         if (follower) {
-            try {
-                let updatedFollow;
-                if (follower.isfollow) {
-                    const response = await deleteFollowApi(token, accountname);
-                    updatedFollow = response.profile.isfollow;
-                } else {
-                    const response = await postFollowApi(token, accountname);
-                    updatedFollow = response.profile.isfollow;
-                }
-                const updatedFollowerData = followerData.map(f =>
-                    f.accountname === accountname
-                        ? { ...f, isfollow: updatedFollow }
-                        : f,
-                );
-                setFollowerData(updatedFollowerData);
-            } catch (error) {
-                console.error('API 요청 중 오류 발생:', error);
+            if (follower.isfollow) {
+                userUnFollow.mutate(accountName);
+            } else {
+                userFollow.mutate(accountName);
             }
         }
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error: {error.message}</div>;
+    }
+
     return (
         <>
             <S.FollowerContainer>
-                {followerData.map(data => (
+                {userFollowerData.map(data => (
                     <S.FollowerList key={data._id}>
                         <Link to={`/profile/${data.accountname}`}>
                             <S.FollowerInfo>

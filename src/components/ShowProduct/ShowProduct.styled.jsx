@@ -6,7 +6,8 @@ export const ShareIcon = styled(Share)``;
 
 export const MapContianer = styled.div`
     position: relative;
-
+    max-width: 450px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;

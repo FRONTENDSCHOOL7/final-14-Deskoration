@@ -43,6 +43,7 @@ export const UserInfo = styled.div`
         display: flex;
         flex-direction: column;
         padding-left: 10px;
+        flex-grow: 1;
     }
 
     .user-name {
@@ -53,7 +54,7 @@ export const UserInfo = styled.div`
 
     .user-info {
         color: ${props => props.theme.mainFont};
-        width: 215px;
+        margin-bottom: 10px;
     }
 `;
 

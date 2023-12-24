@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import GradientButton from '../../components/GradientButton/GradientButton';
 import { ReactComponent as Back } from '../../assets/images/Backward.svg';
 
 export const BackIcon = styled(Back)`
@@ -7,10 +6,8 @@ export const BackIcon = styled(Back)`
 `;
 
 export const NewBoardContainer = styled.div`
-    /* position: relative; */
-    /* padding: 0 25px; */
-    /* height: 100%;
-    overflow: auto; */
+    max-width: 450px;
+    margin: 0 auto;
 `;
 
 export const NewBoardHeader = styled.header`

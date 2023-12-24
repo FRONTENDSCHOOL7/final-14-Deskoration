@@ -5,7 +5,8 @@ import { ReactComponent as Comment } from '../../assets/images/Comment.svg';
 
 export const FeedContainer = styled.article`
     display: flex;
-    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
     margin-bottom: 20px;
     flex-direction: column;
     gap: 16px;
@@ -44,8 +45,7 @@ export const FeedDetailBox = styled.div`
     gap: 10px;
 
     img {
-        max-width: 100%;
-
+        width: 100%;
         transition: transform 0.3s ease;
         &:hover {
             transform: scale(1.03);
@@ -76,10 +76,6 @@ export const MoreIcon = styled(More)`
     width: 24px;
     height: 24px;
     transform: rotate(90deg);
-    path {
-        fill: ${props => props.theme.subFont};
-        stroke: ${props => props.theme.subFont};
-    }
 `;
 
 export const LikeIcon = styled(Like)`

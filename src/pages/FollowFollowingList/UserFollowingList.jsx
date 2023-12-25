@@ -2,16 +2,15 @@ import React from 'react';
 import * as S from './FollowingList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
-    postFollowApi,
-    getFollowingApi,
-    deleteFollowApi,
+    postFollowAPI,
+    deleteFollowAPI,
+    getFollowingAPI,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const UserFollowingList = () => {
-    const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
     const { username } = useParams();
     const queryClient = useQueryClient();
@@ -23,29 +22,21 @@ const UserFollowingList = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['userFollowingData', token, username],
-        queryFn: () => getFollowingApi(token, username),
+        queryKey: ['userFollowingData', username],
+        queryFn: () => getFollowingAPI(username),
     });
 
     const userFollowing = useMutation({
-        mutationFn: accountName => postFollowApi(token, accountName),
+        mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'userFollowingData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['userFollowingData', myAccountName]);
         },
     });
 
     const userUnFollowing = useMutation({
-        mutationFn: accountName => deleteFollowApi(token, accountName),
+        mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'userFollowingData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['userFollowingData', myAccountName]);
         },
     });
 

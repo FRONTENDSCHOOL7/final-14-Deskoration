@@ -2,16 +2,15 @@ import React from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
-    postFollowApi,
-    deleteFollowApi,
-    getFollowerApi,
+    postFollowAPI,
+    deleteFollowAPI,
+    getFollowerAPI,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FollowerList = () => {
-    const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
     const queryClient = useQueryClient();
     usePageHandler('text', '팔로워');
@@ -22,29 +21,21 @@ const FollowerList = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['followerData', token, myAccountName],
-        queryFn: () => getFollowerApi(token, myAccountName),
+        queryKey: ['followerData', myAccountName],
+        queryFn: () => getFollowerAPI(myAccountName),
     });
 
     const follow = useMutation({
-        mutationFn: accountName => postFollowApi(token, accountName),
+        mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'followerData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['followerData', myAccountName]);
         },
     });
 
     const unfollow = useMutation({
-        mutationFn: accountName => deleteFollowApi(token, accountName),
+        mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'followerData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['followerData', myAccountName]);
         },
     });
 

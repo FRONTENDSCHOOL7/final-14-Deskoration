@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postLikeApi, deleteLikeApi } from '../service/like_service';
+import { postLikeAPI, deleteLikeAPI } from '../service/like_service';
 
 export const useLikeUpdate = (queryKey, isLike) => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, token }) =>
-            isLike ? postLikeApi(id, token) : deleteLikeApi(id, token),
+        mutationFn: ({ id }) => (isLike ? postLikeAPI(id) : deleteLikeAPI(id)),
         onMutate: async ({ id }) => {
             await queryClient.cancelQueries(queryKey);
             const previousFeedData = queryClient.getQueryData(queryKey);

@@ -10,13 +10,12 @@ import Like from '../../Like/Like';
 
 import * as S from './DetailPost.styled';
 
-const DetailPost = ({ data, commentData, token, id, setFocus }) => {
+const DetailPost = ({ data, commentData, id, setFocus }) => {
     const dispatch = useDispatch();
     const postData = data?.post;
     const postContent = JSON.parse(data?.post?.content);
     const mutationParams = {
         id: postData.id,
-        token: token,
     };
     const myId = sessionStorage.getItem('Id');
 
@@ -43,7 +42,7 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
     const deletePost = e => {
         e.stopPropagation();
         if (window.confirm('이 포스트를 삭제하시겠습니까?')) {
-            deletePostAPI(postData.id, token);
+            deletePostAPI(postData.id);
             navigate(-1);
         }
         handlePostBottomSheet();
@@ -52,8 +51,8 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
     const reportPost = e => {
         e.stopPropagation();
         if (window.confirm('이 포스트를 신고하시겠습니까?')) {
-            reportPostAPI(postData.id, token);
-            dispatch(openAlertModal());
+            reportPostAPI(postData.id);
+            dispatch(openAlertModal('포스트 신고가 완료되었습니다.'));
         }
         handleReportBottomSheet();
     };
@@ -87,7 +86,7 @@ const DetailPost = ({ data, commentData, token, id, setFocus }) => {
                         <S.ContentButtonBox>
                             <div>
                                 <Like
-                                    queryKey={['getDetailPost', id, token]}
+                                    queryKey={['getDetailPost', id]}
                                     isLike={postData.hearted}
                                     likeCount={postData.heartCount}
                                     mutationParams={mutationParams}

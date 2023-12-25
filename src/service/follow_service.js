@@ -1,87 +1,45 @@
-import baseUrl from './base_url';
+import instance from './axiosInstance';
 
-export const postFollowApi = async (token, accountName) => {
-    const reqUrl = `${baseUrl}/profile/${accountName}/follow`;
+export const postFollowAPI = async accountName => {
+    const reqURL = `/profile/${accountName}/follow`;
+
     try {
-        const response = await fetch(reqUrl, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Follow service API request failed');
-        }
+        const response = await instance.post(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw error;
+        throw new Error('팔로우를 할 수 없습니다.');
     }
 };
 
-export const deleteFollowApi = async (token, accountName) => {
-    const reqURL = `${baseUrl}/profile/${accountName}/unfollow`;
+export const deleteFollowAPI = async accountName => {
+    const reqURL = `/profile/${accountName}/unfollow`;
 
     try {
-        const response = await fetch(reqURL, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        const result = await response.json();
-        return result;
+        const response = await instance.delete(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('팔로우를 삭제할 수 없습니다.');
     }
 };
 
-export const getFollowerApi = async (token, myAccountName) => {
-    const reqURL = `${baseUrl}/profile/${myAccountName}/follower`;
+export const getFollowerAPI = async myAccountName => {
+    const reqURL = `/profile/${myAccountName}/follower`;
 
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error('Error:', response.status, response.statusText);
-        }
+        const response = await instance.get(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('팔로워를 가져올 수 없습니다.');
     }
 };
 
-export const getFollowingApi = async (token, myAccountName) => {
-    const reqUrl = `${baseUrl}/profile/${myAccountName}/following`;
+export const getFollowingAPI = async myAccountName => {
+    const reqURL = `/profile/${myAccountName}/following`;
 
     try {
-        const response = await fetch(reqUrl, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error('Error:', response.status, response.statusText);
-        }
+        const response = await instance.get(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('팔로잉을 할 수 없습니다.');
     }
 };

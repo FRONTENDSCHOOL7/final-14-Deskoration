@@ -1,5 +1,5 @@
 import imageCompression from 'browser-image-compression';
-import { uploadImgApi } from '../service/img_service';
+import { uploadImgAPI } from '../service/img_service';
 
 export const useImgUpload = (
     setImageFile,
@@ -39,7 +39,7 @@ export const useImgUpload = (
             reader.onloadend = () => {
                 const imgData = new FormData();
                 imgData.append('image', compressedFile);
-                uploadImgApi(imgData, setImageFile);
+                uploadImgAPI(imgData, setImageFile);
                 setImageURL(reader.result);
             };
             setProductItems([]);

@@ -1,40 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import * as S from './ProfileUpload.styled';
-import basicImg from '../../assets/images/basicImg.png';
-import { Input } from '../../components/Input/Input';
-import {
-    authLoginApi,
-    authSignUpApi,
-    validAccountNameApi,
-} from '../../service/auth_service';
-import {
-    updateProfileApi,
-    getMyProfileApi,
-} from '../../service/profile_service';
-import GradientButton from '../../components/GradientButton/GradientButton';
 import { useLocation } from 'react-router';
 import { useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import {
+    authLoginAPI,
+    authSignUpAPI,
+    validAccountNameAPI,
+} from '../../service/auth_service';
+import { updateProfileAPI } from '../../service/profile_service';
+
+import { openAlertModal } from '../../features/modal/alertModalSlice';
+
 import usePageHandler from '../../hooks/usePageHandler';
-import { useQuery, useMutation } from '@tanstack/react-query';
 import { useImgUpload } from '../../hooks/useImgUpload';
 
+import AlertModal from '../../components/AlertModal/AlertModal';
+import { Input } from '../../components/Input/Input';
+import GradientButton from '../../components/GradientButton/GradientButton';
+
+import * as S from './ProfileUpload.styled';
+import basicImg from '../../assets/images/basicImg.png';
+
 export const ProfileUpload = () => {
+    // 헤더에 문구 넣기
+    usePageHandler('text', '프로필 설정');
+
+    const noImage = '/Ellipse.png';
+
+    const queryClient = useQueryClient();
+    // 프로필 수정하기를 위한 데이터
+    const myProfileData = queryClient.getQueryData(['getMyProfile']);
+
     const navigate = useNavigate();
     const location = useLocation();
-    const token = sessionStorage.getItem('Token');
-    const editPage = location.pathname.includes('/profileEdit');
+    const dispatch = useDispatch();
 
-    const baseURL = 'https://api.mandarin.weniv.co.kr/';
-    const noImage = 'Ellipse.png';
+    // editProfile
+    const editPage = location.pathname.includes('/profileEdit');
 
     const [imageURL, setImageURL] = useState(basicImg);
     const [isImageAdded, setIsImageAdded] = useState(false);
     const [imageFile, setImageFile] = useState('');
     const { emailValue, passwordValue } = useLocation().state || {};
-
-    // 헤더에 문구 넣기
-    usePageHandler('text', '프로필 설정');
 
     const {
         register,
@@ -56,18 +66,11 @@ export const ProfileUpload = () => {
         setFocus('userName');
     }, [setFocus]);
 
-    // 프로필 편집일 경우, API 호출해서 데이터 받아오기
-    const { data: myProfileData } = useQuery({
-        queryKey: ['getMyProfileApi', token],
-        queryFn: () => getMyProfileApi(token),
-        enabled: !!editPage,
-    });
-
     useEffect(() => {
         if (myProfileData) {
             const userData = myProfileData.user;
             setImageURL(userData.image);
-            if (baseURL + noImage !== userData.image) {
+            if (process.env.REACT_APP_BASE_URL + noImage !== userData.image) {
                 setIsImageAdded(true);
             }
 
@@ -78,22 +81,16 @@ export const ProfileUpload = () => {
         }
     }, [myProfileData, setValue]);
 
-    // 업로드한 이미지 url 저장
-    const handleUploadImg = useImgUpload(
-        setImageFile,
-        setImageURL,
-        setIsImageAdded,
-    );
-
-    // 이미지 삭제
-    const deleteImg = () => {
-        setIsImageAdded(false);
-        setImageURL(basicImg);
-    };
+    // 프로필 데이터가 시간초과로 사라진 경우
+    useEffect(() => {
+        if (!myProfileData) {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
+        }
+    }, [dispatch, myProfileData, navigate]);
 
     //계정 ID 검사
     const validateUserID = id => {
-        return validAccountNameApi(id)
+        return validAccountNameAPI(id)
             .then(result => {
                 if (result.message === '사용 가능한 계정ID 입니다.') {
                     return true;
@@ -112,8 +109,9 @@ export const ProfileUpload = () => {
     // 로그인 API
     const logInMutation = useMutation({
         mutationFn: ({ emailValue, passwordValue }) =>
-            authLoginApi(emailValue, passwordValue),
+            authLoginAPI(emailValue, passwordValue),
         onSuccess: data => {
+            // 토큰 외에 저장 금지 아마도?
             sessionStorage.setItem('Token', data.user.token);
             sessionStorage.setItem('AccountName', data.user.accountname);
             sessionStorage.setItem('Id', data.user._id);
@@ -123,37 +121,58 @@ export const ProfileUpload = () => {
 
     // 회원가입 API
     const signUpMutation = useMutation({
-        mutationFn: userData => authSignUpApi(userData),
+        mutationFn: userData => authSignUpAPI(userData),
         onSuccess: data => {
             if (data.message === '회원가입 성공') {
                 logInMutation.mutate({ emailValue, passwordValue });
-            } else {
-                console.error(data.message);
+            } else if (data.message === '잘못된 접근입니다.') {
+                dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
             }
         },
-    });
-
-    // 프로필 편집 API
-    const profileUpdateMutation = useMutation({
-        mutationFn: ({ token, userData }) => updateProfileApi(token, userData),
-        onSuccess: data => {
-            sessionStorage.setItem('AccountName', data.user.accountname);
-            navigate('/profile');
+        onError() {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
         },
     });
 
+    // 프로필 편집 API @정민.. 어제 분명히 됐는데 다시 안돼요 ^__^
+    const profileUpdateMutation = useMutation({
+        mutationFn: ({ userData }) => updateProfileAPI(userData),
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(['getMyPost']);
+            navigate('/profile');
+        },
+        onError(error) {
+            console.log(error);
+        },
+    });
+
+    // 업로드한 이미지 url 저장
+    const handleUploadImg = useImgUpload(
+        setImageFile,
+        setImageURL,
+        setIsImageAdded,
+    );
+
+    // 이미지 삭제
+    const deleteImg = () => {
+        setIsImageAdded(false);
+        setImageURL(basicImg);
+    };
+
     // submit 함수
-    const dataSubmit = async submitData => {
+    const submitProfile = async profileData => {
         //회원 가입 시 초기 프로필 설정일 경우
         if (isValid && !editPage) {
             const userData = {
                 user: {
-                    username: submitData.userName,
+                    username: profileData.userName,
                     email: emailValue,
                     password: passwordValue,
-                    accountname: submitData.userID,
-                    intro: submitData.intro,
-                    image: !imageFile ? baseURL + noImage : baseURL + imageFile,
+                    accountname: profileData.userID,
+                    intro: profileData.intro,
+                    image: !imageFile
+                        ? process.env.REACT_APP_BASE_URL + noImage
+                        : process.env.REACT_APP_BASE_URL + imageFile,
                 },
             };
             signUpMutation.mutate(userData);
@@ -162,25 +181,25 @@ export const ProfileUpload = () => {
         if (isValid && editPage) {
             const userData = {
                 user: {
-                    username: submitData.userName,
-                    accountname: submitData.userID,
-                    intro: submitData.intro,
+                    username: profileData.userName,
+                    accountname: profileData.userID,
+                    intro: profileData.intro,
                     image:
                         !imageFile && imageURL === basicImg
-                            ? baseURL + noImage
+                            ? process.env.REACT_APP_BASE_URL + noImage
                             : !imageFile && imageURL
                             ? myProfileData.user.image
-                            : baseURL + imageFile,
+                            : process.env.REACT_APP_BASE_URL + '/' + imageFile,
                 },
             };
-            profileUpdateMutation.mutate({ token, userData });
+            profileUpdateMutation.mutate({ userData });
         }
     };
 
     return (
         <section>
             <S.ProfileContainer>
-                <form onSubmit={handleSubmit(dataSubmit)}>
+                <form onSubmit={handleSubmit(submitProfile)}>
                     <S.ProfileImgBox>
                         <img src={imageURL} alt="프로필 이미지" />
                         {isImageAdded && (
@@ -262,6 +281,7 @@ export const ProfileUpload = () => {
                     />
                 </form>
             </S.ProfileContainer>
+            <AlertModal gobackButton={() => navigate('/profile')} />
         </section>
     );
 };

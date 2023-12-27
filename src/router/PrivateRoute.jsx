@@ -1,7 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import axiosInstance from '../service/axiosInstance';
 
 const PrivateRoutePage = () => {
-    const authenticated = sessionStorage.getItem('Token');
+    const authenticated =
+        axiosInstance.defaults.headers.Authorization !== 'Bearer null';
 
     return !authenticated ? (
         // 로그아웃 상태라면 PrivateRoutePage 접근 방지

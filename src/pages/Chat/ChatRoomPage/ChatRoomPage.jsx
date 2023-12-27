@@ -13,7 +13,6 @@ import {
     onSnapshot,
     arrayUnion,
     addDoc,
-    getDoc,
     setDoc,
 } from 'firebase/firestore';
 import { db } from '../../../firebase';
@@ -27,31 +26,13 @@ const ChatRoomPage = () => {
         },
     });
     const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
-
-    const newDate = new Date();
-    let hours = newDate.getHours();
-    const minutes = newDate.getMinutes().toString().padStart(2, '0');
-    const amPm = hours >= 12 ? 'PM' : 'AM';
-
-    if (hours > 12) {
-        hours -= 12;
-    } else if (hours === 0) {
-        hours = 12;
-    }
     const { roomId, user } = location.state;
     const [chatMessages, setChatMessages] = useState([]);
-    const [firebaseMessage, setFirebaseMessage] = useState([]);
-    const [participants, setParticipants] = useState([]);
     const myAccountName = sessionStorage.getItem('AccountName');
     const myProfileImage = sessionStorage.getItem('Image');
     const myUserName = sessionStorage.getItem('Username');
     const navigate = useNavigate();
-
-    const formattedTime = `${hours}:${minutes} ${amPm}`;
-
     const [chatId, setChatId] = useState('');
-    // const [formattedTime, setFormattedTime] = useState()
-
     const chatCollectionRef = collection(db, 'messages');
     const chatListCollectionRef = collection(db, 'chatList');
     const chatRoomsCollectionRef = collection(db, 'rooms');
@@ -71,8 +52,6 @@ const ChatRoomPage = () => {
                 }));
                 chatMessageList.map(info => {
                     if (info.roomId === roomId) {
-                        setFirebaseMessage(info.messages);
-                        setParticipants(info.participants);
                         setChatMessages(info.messages);
                         setChatId(info.chatId);
                     }
@@ -89,7 +68,6 @@ const ChatRoomPage = () => {
         const unsubscribe = onSnapshot(chatCollectionRef, snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === 'modified' || change.type === 'added') {
-                    // console.log('Modified message:', change.doc.data());
                     if (change.doc.data().roomId === roomId)
                         setChatMessages(change.doc.data().messages);
                     chatContainerRef.current.scrollTop =
@@ -107,7 +85,6 @@ const ChatRoomPage = () => {
             alert('메세지를 입력하세요.');
             return;
         }
-
         // 새 메시지를 생성
         const newMessage = {
             content: data.chatMsg,
@@ -133,7 +110,14 @@ const ChatRoomPage = () => {
                     // participants: participants,
                     messages: arrayUnion(newMessage), // Add the new message to the existing array
                 });
-                console.log('Message added successfully');
+
+                const lastMsgRef = doc(db, 'chatList', roomId);
+                await setDoc(lastMsgRef, {
+                    createdAt: new Date(),
+                    lastMessage: data.chatMsg,
+                    participants: arrayUnion(participants, participants2),
+                })
+                    
             } else {
                 const newChatList = await addDoc(chatListCollectionRef, {
                     createdAt: new Date(),
@@ -159,6 +143,8 @@ const ChatRoomPage = () => {
                     },
                     newChatList.id,
                 );
+                
+                
                 navigate(`/chat/${newChatList.id}`, {
                     state: { roomId: newChatList.id, user: participants },
                     replace: true,
@@ -181,10 +167,7 @@ const ChatRoomPage = () => {
         }`;
     };
 
-    // console.log(chatId);
-    // console.log(firebaseMessage);
-
-    usePageHandler('user', user?.image, user?.username);
+    usePageHandler('user', user.image, user.username, user.accountname );
 
     return (
         <>

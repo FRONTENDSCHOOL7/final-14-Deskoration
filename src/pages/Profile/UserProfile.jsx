@@ -156,6 +156,26 @@ const UserProfile = () => {
                         </p>
                     </div>
                 </S.UserInfo>
+
+                <S.UserDataList>
+                    <p>
+                        <span>{userPost?.length}</span>
+                        <span>게시물</span>
+                    </p>
+
+                    <Link to={`/followerList`}>
+                        <p>
+                            <span>{profileData?.followerCount}</span>
+                            <span>팔로워</span>
+                        </p>
+                    </Link>
+                    <Link to="/followingList">
+                        <p>
+                            <span>{profileData?.followingCount}</span>
+                            <span>팔로잉</span>
+                        </p>
+                    </Link>
+                </S.UserDataList>
                 <div className="gradient_btn">
                     <GradientButton
                         type={'button'}
@@ -180,24 +200,6 @@ const UserProfile = () => {
                         메시지 보내기
                     </GradientButton>
                 </div>
-                <S.UserDataList>
-                    <button className="user-post">
-                        <p>{userPost?.length}</p>
-                        <p>게시물</p>
-                    </button>
-                    <Link to={`/followerList/${username}`}>
-                        <button className="user-follow">
-                            <p>{profileData?.followerCount}</p>
-                            <p>팔로워</p>
-                        </button>
-                    </Link>
-                    <Link to={`/followingList/${username}`}>
-                        <button className="user-following">
-                            <p>{profileData?.followingCount}</p>
-                            <p>팔로잉</p>
-                        </button>
-                    </Link>
-                </S.UserDataList>
                 <S.UserPostings>
                     {userPost?.map((post, index) => (
                         <Link key={post.id} to={`/detailPost/${post.id}`}>

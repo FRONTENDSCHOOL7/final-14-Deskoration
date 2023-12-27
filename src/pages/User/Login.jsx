@@ -2,8 +2,9 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
 
-import { authLoginApi } from '../../service/auth_service';
+import { authLoginAPI } from '../../service/auth_service';
 
 import { openAlertModal } from '../../features/modal/alertModalSlice';
 
@@ -11,6 +12,7 @@ import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input } from '../../components/Input/Input';
 
 import * as S from './User.styled';
+import axiosInstance from '../../service/axiosInstance';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -28,33 +30,35 @@ const Login = () => {
 
     const checkboxValue = watch('checkbox');
 
-    const submitLogin = async data => {
+    const logInMutation = useMutation({
+        mutationFn: ({ emailValue, passwordValue }) =>
+            authLoginAPI(emailValue, passwordValue),
+        onSuccess: async data => {
+            if (data.message === '이메일 또는 비밀번호가 일치하지 않습니다.') {
+                dispatch(
+                    openAlertModal('이메일 또는 비밀번호가 일치하지 않습니다.'),
+                );
+            } else {
+                sessionStorage.setItem('Token', data.user.token);
+
+                axiosInstance.defaults.headers = {
+                    ...axiosInstance.defaults.headers,
+                    Authorization: `Bearer ${data.user.token}`,
+                };
+                navigate('/home');
+            }
+        },
+        onError() {
+            dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
+        },
+    });
+
+    const submitLogin = data => {
         if (data.email && data.password) {
-            authLoginApi(data.email, data.password)
-                .then(result => {
-                    if (
-                        result.message ===
-                        '이메일 또는 비밀번호가 일치하지 않습니다.'
-                    ) {
-                        dispatch(openAlertModal());
-                    } else {
-                        sessionStorage.setItem('Token', result.user.token);
-                        sessionStorage.setItem(
-                            'Username',
-                            result.user.username,
-                        );
-                        sessionStorage.setItem('Image', result.user.image);
-                        sessionStorage.setItem(
-                            'AccountName',
-                            result.user.accountname,
-                        );
-                        sessionStorage.setItem('Id', result.user._id);
-                        navigate('/home');
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            logInMutation.mutate({
+                emailValue: data.email,
+                passwordValue: data.password,
+            });
         }
     };
 
@@ -117,7 +121,11 @@ const Login = () => {
                     />
                 </S.InputBox>
                 <S.SampleLoginBox>
-                    <input type="checkbox" onChange={handleSampleLoginChange} />
+                    <input
+                        type="checkbox"
+                        id="sampleLoginCheckbox"
+                        onChange={handleSampleLoginChange}
+                    />
                     <label htmlFor="sampleLoginCheckbox">체험하기</label>
                 </S.SampleLoginBox>
                 <GradientButton

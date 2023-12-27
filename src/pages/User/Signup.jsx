@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import { validEmailApi } from '../../service/auth_service';
+import { validEmailAPI } from '../../service/auth_service';
 
 import GradientButton from '../../components/GradientButton/GradientButton';
 import { Input } from '../../components/Input/Input';
@@ -21,9 +21,10 @@ const Signup = () => {
 
     const submitSignup = async data => {
         if (data.email && data.password) {
-            validEmailApi(data.email)
+            validEmailAPI(data.email)
                 .then(result => {
                     if (result.message === '사용 가능한 이메일 입니다.') {
+                        // profileUpload 말고 다른거 생각하기. uploadProfile?
                         navigate('/profileUpload', {
                             state: {
                                 emailValue: data.email,

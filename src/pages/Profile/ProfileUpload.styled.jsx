@@ -10,6 +10,8 @@ export const ProfileTitle = styled.h4`
 
 export const ProfileContainer = styled.div`
     margin-top: 10px;
+    max-width: 450px;
+    margin: 0 auto;
 `;
 export const ProfileImgBox = styled.div`
     width: fit-content;

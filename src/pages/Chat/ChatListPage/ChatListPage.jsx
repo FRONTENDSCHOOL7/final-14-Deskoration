@@ -124,7 +124,7 @@ const ChatListPage = () => {
                         </S.Searchmark>
                         <S.SearchUsernameInput
                             type="text"
-                            placeholder="Search user"
+                            placeholder="유저를 검색하세요."
                             value={searchQuery}
                             onChange={event =>
                                 setSearchQuery(event.target.value)

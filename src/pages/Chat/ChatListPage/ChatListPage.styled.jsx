@@ -33,17 +33,16 @@ export const SearchBar = styled.div`
     border: none;
     border-radius: 10px;
     display: flex;
-    justify-content: space-around;
+    align-items: center;
     margin-bottom: 10px;
 `;
 
 export const Searchmark = styled.div`
-    margin: auto;
+    padding-right: 10px;
 `;
 
 export const SearchUsernameInput = styled.input`
-    margin: auto;
-    width: 244px;
+    width: 100%;
     height: 24px;
     border: none;
     outline: none;

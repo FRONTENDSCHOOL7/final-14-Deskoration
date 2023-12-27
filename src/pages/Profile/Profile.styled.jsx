@@ -7,7 +7,6 @@ export const ProfileContainer = styled.div`
 `;
 
 export const UserInfo = styled.div`
-    width: 100%;
     height: max-content;
     margin-bottom: 10px;
     display: flex;
@@ -25,6 +24,7 @@ export const UserInfo = styled.div`
         display: flex;
         flex-direction: column;
         padding-left: 10px;
+        flex-grow: 1;
     }
 
     .user-name {
@@ -34,10 +34,7 @@ export const UserInfo = styled.div`
     }
 
     .user-info {
-        margin-bottom: 20px;
-
         color: ${props => props.theme.mainFont};
-        width: 215px;
         margin-bottom: 10px;
     }
 `;

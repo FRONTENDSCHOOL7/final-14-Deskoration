@@ -24,13 +24,17 @@ export const CommentItem = styled.div`
         font-size: 10px;
         padding: 10px 0 10px 10px;
         display: flex;
+        align-items: center;
+        min-width: 28px;
     }
 `;
 
 export const CommentBox = styled.div`
     display: flex;
+    width: 100%;
 `;
 export const CommentInfo = styled.div`
+    width: 100%;
     & > button {
         width: 100%;
         color: ${theme.subFont};
@@ -45,10 +49,10 @@ export const CommentInfo = styled.div`
     }
 
     p {
-        width: 200px;
+        /* width: 100%; */
         font-size: 12px;
         word-wrap: break-word;
-        overflow-wrap: break-word;
+        overflow-wrap: anywhere;
         overflow: hidden;
 
         height: ${props => (props.$initHeight ? '30px' : 'auto')};

@@ -11,7 +11,7 @@ export const UserInfo = styled.div`
     flex-direction: column;
     align-items: center;
 
-    .user-img {
+    img {
         width: 100px;
         height: 100px;
         border-radius: 100%;
@@ -19,7 +19,8 @@ export const UserInfo = styled.div`
         object-fit: cover;
         border: 1px solid ${props => props.theme.border};
     }
-    .user-introduce {
+
+    div {
         display: flex;
         flex-direction: column;
         padding-left: 10px;
@@ -28,14 +29,7 @@ export const UserInfo = styled.div`
         text-align: center;
     }
 
-    .user-name {
-        font-size: ${theme.fontSize.md};
-        font-family: 'PreBold', sans-serif;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .user-info {
+    p {
         color: ${props => props.theme.mainFont};
     }
 `;
@@ -54,7 +48,7 @@ export const UserDataList = styled.div`
         padding: 4px;
     }
 
-    a > p {
+    a p {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -66,13 +60,13 @@ export const UserDataList = styled.div`
         border-right: 1px solid ${theme.border};
     }
 
-    p > span:first-child {
+    p span:first-child {
         font-family: 'PreBold', sans-serif;
         font-size: ${theme.fontSize.md};
         margin-bottom: 8px;
     }
 
-    p > span:nth-child(2) {
+    p span:nth-child(2) {
         color: ${theme.subFont};
     }
 `;

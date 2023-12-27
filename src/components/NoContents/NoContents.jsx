@@ -3,16 +3,16 @@ import { Link } from 'react-router-dom';
 import * as S from './NoContents.styled';
 
 const NoContents = props => {
-    const { title, subTitle, link, btnTxt } = props;
+    const { mainTxt, subTxt, link, btnLabel } = props;
     return (
         <S.NoContentsContainer>
             <p>
-                <span>{title}</span>
-                <span>{subTitle}</span>
+                <span>{mainTxt}</span>
+                <span>{subTxt}</span>
             </p>
             {!link ? null : (
                 <S.LinkBox>
-                    <Link to={link}>{btnTxt}</Link>
+                    <Link to={link}>{btnLabel}</Link>
                 </S.LinkBox>
             )}
         </S.NoContentsContainer>

@@ -113,8 +113,6 @@ export const ProfileUpload = () => {
         onSuccess: data => {
             // 토큰 외에 저장 금지 아마도?
             sessionStorage.setItem('Token', data.user.token);
-            sessionStorage.setItem('AccountName', data.user.accountname);
-            sessionStorage.setItem('Id', data.user._id);
             navigate('/home');
         },
     });
@@ -134,11 +132,18 @@ export const ProfileUpload = () => {
         },
     });
 
-    // 프로필 편집 API @정민.. 어제 분명히 됐는데 다시 안돼요 ^__^
+    // 프로필 편집 API
     const profileUpdateMutation = useMutation({
-        mutationFn: ({ userData }) => updateProfileAPI(userData),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries(['getMyPost']);
+        mutationFn: async ({ userData }) => {
+            const updatedData = await updateProfileAPI(userData);
+            queryClient.setQueryData(['getMyProfile'], currentProfileData => {
+                return { ...currentProfileData, ...updatedData };
+            });
+
+            return updatedData;
+        },
+
+        onSuccess: () => {
             navigate('/profile');
         },
         onError(error) {

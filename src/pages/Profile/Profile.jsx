@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getMyProfileAPI } from '../../service/profile_service';
 import { getMyPostAPI } from '../../service/post_service';
+import axiosInstance from '../../service/axiosInstance';
 
 import usePageHandler from '../../hooks/usePageHandler';
 
@@ -16,6 +17,8 @@ import * as S from './Profile.styled';
 
 const Profile = () => {
     usePageHandler('text', '나의 프로필');
+
+    const queryClient = useQueryClient();
 
     const navigate = useNavigate();
 
@@ -57,6 +60,9 @@ const Profile = () => {
 
     const logOut = () => {
         sessionStorage.clear();
+        queryClient.clear();
+        axiosInstance.defaults.headers.Authorization = 'Bearer null';
+
         navigate('/');
     };
 

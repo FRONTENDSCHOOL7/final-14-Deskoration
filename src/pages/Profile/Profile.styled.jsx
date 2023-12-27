@@ -7,16 +7,15 @@ export const ProfileContainer = styled.div`
 `;
 
 export const UserInfo = styled.div`
-    height: max-content;
-    margin-bottom: 10px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
 
     .user-img {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         border-radius: 100%;
-        margin-right: 8px;
+        margin-bottom: 10px;
         object-fit: cover;
         border: 1px solid ${props => props.theme.border};
     }
@@ -25,62 +24,56 @@ export const UserInfo = styled.div`
         flex-direction: column;
         padding-left: 10px;
         flex-grow: 1;
+        max-width: 630px;
+        text-align: center;
     }
 
     .user-name {
-        font-size: 16px;
-        font-weight: bold;
+        font-size: ${theme.fontSize.md};
+        font-family: 'PreBold', sans-serif;
         margin-bottom: 10px;
+        text-align: center;
     }
 
     .user-info {
         color: ${props => props.theme.mainFont};
-        margin-bottom: 10px;
     }
 `;
 
 export const UserDataList = styled.div`
-    width: 100%;
-    height: 80px;
-    margin: 20px 0;
+    margin: 15px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 
-    .user-post {
-        width: 80px;
-        height: 80px;
-        border-radius: 15px;
-        gap: 5px;
-        background-color: ${({ theme }) => theme.border};
-        color: ${({ theme }) => theme.mainFont};
+    > * {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        padding: 4px;
+    }
+
+    a > p {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
-    .user-follow {
-        width: 80px;
-        height: 80px;
-        border-radius: 15px;
-        gap: 5px;
-        background-color: ${({ theme }) => theme.border};
-        color: ${({ theme }) => theme.mainFont};
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+
+    a:nth-child(2) {
+        border-left: 1px solid ${theme.border};
+        border-right: 1px solid ${theme.border};
     }
-    .user-following {
-        width: 80px;
-        height: 80px;
-        border-radius: 15px;
-        gap: 5px;
-        background-color: ${({ theme }) => theme.border};
-        color: ${({ theme }) => theme.mainFont};
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+
+    p > span:first-child {
+        font-family: 'PreBold', sans-serif;
+        font-size: ${theme.fontSize.md};
+        margin-bottom: 8px;
+    }
+
+    p > span:nth-child(2) {
+        color: ${theme.subFont};
     }
 `;
 
@@ -89,7 +82,7 @@ export const UserPostings = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
     grid-gap: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
     color: ${({ theme }) => theme.mainFont};
 
     @media screen and (min-width: 768px) {

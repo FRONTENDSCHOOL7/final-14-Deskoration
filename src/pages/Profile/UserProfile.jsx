@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
@@ -17,12 +17,8 @@ import * as S from './UserProfile.styled';
 import NotFoundPage from '../404/NotFoundPage';
 
 const UserProfile = () => {
-    // const [isLoading, setIsLoading] = useState(false);
-    // const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
     const { username } = useParams(); //선택한 게시물 아이디 값
-
-    const myAccountName = sessionStorage.getItem('AccountName');
 
     const navigate = useNavigate();
 
@@ -55,36 +51,38 @@ const UserProfile = () => {
     };
 
     // To.Herrypi  mutation 사용하기!
-    const userFollowToggle = async accountname => {
-        try {
-            let updatedFollow;
-            if (profileData?.isfollow) {
-                const response = await deleteFollowAPI(accountname);
-                updatedFollow = response.profile?.isfollow;
-            } else {
-                const response = await postFollowAPI(accountname);
-                updatedFollow = response.profile?.isfollow;
-            }
+    const queryClient = useQueryClient();
 
-            const updatedFollowerData = {
-                ...profileData,
-                isfollow: updatedFollow,
-            };
+    const follow = useMutation({
+        mutationFn: accountName => postFollowAPI(accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getUserProfile', username]);
+        },
+    });
 
-            // setProfileData(updatedFollowerData);
-        } catch (error) {
-            console.error('API 요청 중 오류 발생:', error);
+    const unfollow = useMutation({
+        mutationFn: accountName => deleteFollowAPI(accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getUserProfile', username]);
+        },
+    });
+
+    const userFollowToggle = accountName => {
+        if (profileData?.isfollow) {
+            unfollow.mutate(accountName);
+        } else {
+            follow.mutate(accountName);
         }
     };
 
-    const fetchRoomId = async () => {
+    const fetchRoomId = async accountname => {
         try {
             let chatRoomId = '';
             const roomRef = collection(db, 'rooms');
             const roomSnapshot = await getDocs(
                 query(
                     roomRef,
-                    where('participants', 'array-contains', myAccountName),
+                    where('participants', 'array-contains', accountname),
                 ),
             );
 
@@ -134,18 +132,14 @@ const UserProfile = () => {
         <>
             <S.ProfileContainer>
                 <S.UserInfo>
-                    <img
-                        src={profileData?.image}
-                        alt="userImage"
-                        className="user-img"
-                    />
+                    <img src={profileData?.image} alt="" />
 
-                    <div className="user-introduce">
-                        <p className="user-name">{profileData?.username}</p>
-                        <p className="user-info">
+                    <div>
+                        <p>{profileData?.username}</p>
+                        <p>
                             {expandedContent
                                 ? profileData?.intro
-                                : profileData?.intro?.slice(0, 53)}
+                                : profileData?.intro.slice(0, 53)}
                             {profileData?.intro?.length > 30 && (
                                 <S.ToggleButton
                                     type="button"
@@ -157,13 +151,11 @@ const UserProfile = () => {
                         </p>
                     </div>
                 </S.UserInfo>
-
                 <S.UserDataList>
                     <p>
                         <span>{postData?.length}</span>
                         <span>게시물</span>
                     </p>
-
                     <Link to={`/followerList`}>
                         <p>
                             <span>{profileData?.followerCount}</span>
@@ -177,10 +169,10 @@ const UserProfile = () => {
                         </p>
                     </Link>
                 </S.UserDataList>
-                <div className="gradient_btn">
+
+                <S.SocialButtonBox>
                     <GradientButton
                         type={'button'}
-                        // gra={'true'}
                         gra={!profileData?.isfollow ? true : false}
                         width={'100%'}
                         padding={'10px'}
@@ -188,37 +180,17 @@ const UserProfile = () => {
                             userFollowToggle(profileData?.accountname)
                         }
                     >
-                        {/* 팔로우 */}
                         {!profileData?.isfollow ? '팔로우' : '팔로잉'}
                     </GradientButton>
                     <GradientButton
                         type={'button'}
-                        gra={''}
                         width={'100%'}
                         padding={'10px'}
                         onClick={fetchRoomId}
                     >
                         메시지 보내기
                     </GradientButton>
-                </div>
-                <S.UserDataList>
-                    <button className="user-post">
-                        <p>{postData?.length}</p>
-                        <p>게시물</p>
-                    </button>
-                    <Link to={`/followerList/${username}`}>
-                        <button className="user-follow">
-                            <p>{profileData?.followerCount}</p>
-                            <p>팔로워</p>
-                        </button>
-                    </Link>
-                    <Link to={`/followingList/${username}`}>
-                        <button className="user-following">
-                            <p>{profileData?.followingCount}</p>
-                            <p>팔로잉</p>
-                        </button>
-                    </Link>
-                </S.UserDataList>
+                </S.SocialButtonBox>
                 <S.UserPostings>
                     {postData?.map((post, index) => (
                         <Link key={post.id} to={`/detailPost/${post.id}`}>

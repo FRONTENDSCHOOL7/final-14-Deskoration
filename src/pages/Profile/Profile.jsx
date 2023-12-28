@@ -312,7 +312,12 @@ const Profile = () => {
                         )}
 
                         {postData?.length === 0 ? (
-                            <NoContents />
+                            <NoContents
+                                mainTxt={'아직 등록한 게시글이 없습니다!'}
+                                subTxt={'첫 번째 사진을 공유해보세요'}
+                                link={'/postUpload'}
+                                btnLabel={'게시글 작성하기'}
+                            />
                         ) : (
                             <Article articles={postData} />
                         )}

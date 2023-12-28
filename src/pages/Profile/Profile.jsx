@@ -14,14 +14,13 @@ import BottomSheet from '../../components/BottomSheet/BottomSheet';
 import NotFoundPage from '../404/NotFoundPage';
 
 import * as S from './Profile.styled';
+import Article from '../Home/Article';
+import NoContents from '../../components/NoContents/NoContents';
 
 const Profile = () => {
     usePageHandler('text', '나의 프로필');
-
     const queryClient = useQueryClient();
-
     const navigate = useNavigate();
-
     const [expandedContent, setExpandedContent] = useState(false);
     const [isBottomSheet, setIsBottomSheet] = useState(false);
 
@@ -35,6 +34,7 @@ const Profile = () => {
         select: data => data.user,
     });
 
+    console.log(profileData);
     const {
         data: postData,
         isLoading: postLoading,
@@ -65,7 +65,7 @@ const Profile = () => {
 
         navigate('/');
     };
-
+    // console.log(postData);
     return (
         <>
             {profileLoading || postLoading ? (
@@ -123,16 +123,11 @@ const Profile = () => {
                         >
                             프로필 편집
                         </GradientButton>
-                        <S.UserPostings>
-                            {postData.map(post => (
-                                <Link
-                                    key={post.id}
-                                    to={`/detailPost/${post.id}`}
-                                >
-                                    <img src={post.image} alt="게시물 목록" />
-                                </Link>
-                            ))}
-                        </S.UserPostings>
+                        {postData?.length === 0 ? (
+                            <NoContents />
+                        ) : (
+                            <Article articles={postData} />
+                        )}
                     </S.ProfileContainer>
                     <S.MoreButton onClick={hadleBottomSheet}>
                         <S.MoreIcon />

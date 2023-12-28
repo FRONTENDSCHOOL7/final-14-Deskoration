@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
-import { detialPostApi } from '../../../service/post_service';
-import { getCommentApi } from '../../../service/comment_service';
+import { getDetailPostAPI } from '../../../service/post_service';
+import { getCommentAPI } from '../../../service/comment_service';
 
 import usePageHandler from '../../../hooks/usePageHandler';
 import AlertModal from '../../../components/AlertModal/AlertModal';
@@ -14,15 +14,14 @@ import Loader from '../../../components/Loading/Loader';
 import NotFoundPage from '../../404/NotFoundPage';
 
 const DetailPostPage = () => {
-    const token = sessionStorage.getItem('Token');
     const { id } = useParams();
     const {
         data: postData,
         isLoading: postLoading,
         error: postError,
     } = useQuery({
-        queryKey: ['getDetailPost', id, token],
-        queryFn: () => detialPostApi(id, token),
+        queryKey: ['getDetailPost', id],
+        queryFn: () => getDetailPostAPI(id),
     });
 
     const {
@@ -30,8 +29,8 @@ const DetailPostPage = () => {
         isLoading: commentLoading,
         error: commentError,
     } = useQuery({
-        queryKey: ['getAllComment', id, token],
-        queryFn: () => getCommentApi(id, token),
+        queryKey: ['getAllComment', id],
+        queryFn: () => getCommentAPI(id),
         select: data => data.comments.reverse(),
     });
 
@@ -59,14 +58,12 @@ const DetailPostPage = () => {
                     <DetailPost
                         commentData={commentData}
                         data={postData}
-                        token={token}
                         id={id}
                         setFocus={setFocus}
                     />
                     <Comment
                         commentData={commentData}
                         postDataID={postData.post.id}
-                        token={token}
                         id={id}
                         register={register}
                         handleSubmit={handleSubmit}

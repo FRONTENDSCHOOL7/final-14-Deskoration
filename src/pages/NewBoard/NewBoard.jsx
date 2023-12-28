@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { uploadPostApi } from '../../service/post_service';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import usePageHandler from '../../hooks/usePageHandler';
 
+import { uploadPostAPI } from '../../service/post_service';
+
+import usePageHandler from '../../hooks/usePageHandler';
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
+import GradientButton from '../../components/GradientButton/GradientButton';
 
 import * as S from './NewBoard.styled';
 
+// AddPost
 const NewBoard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const pathName = location.pathname;
     const detailPost = pathName.includes('/detailPost');
-    const token = sessionStorage.getItem('Token');
 
     const [apiContent, setApiContent] = useState();
     const [imageURL, setImageURL] = useState();
@@ -60,13 +61,13 @@ const NewBoard = () => {
     }, [textArea.message, productItems]);
 
     const uploadPostMutation = useMutation({
-        mutationFn: ({ apiContent, imageFile, token }) =>
-            uploadPostApi(apiContent, imageFile, token),
+        mutationFn: ({ apiContent, imageFile }) =>
+            uploadPostAPI(apiContent, imageFile),
         onSuccess: data => {
             if (data.message === '내용 또는 이미지를 입력해주세요.') {
                 alert(data.message);
             } else {
-                queryClient.invalidateQueries(['getAllPosts', token]);
+                queryClient.invalidateQueries(['getAllPosts']);
                 navigate('/home');
             }
         },
@@ -78,7 +79,7 @@ const NewBoard = () => {
             alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
             return null;
         } else {
-            uploadPostMutation.mutate({ apiContent, imageFile, token });
+            uploadPostMutation.mutate({ apiContent, imageFile });
         }
     };
 

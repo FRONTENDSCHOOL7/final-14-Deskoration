@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './UpdateBoard.styled';
-import { updatePostApi, detialPostApi } from '../../service/post_service';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { updatePostAPI, getDetailPostAPI } from '../../service/post_service';
+
+import usePageHandler from '../../hooks/usePageHandler';
+
 import GradientButton from '../../components/GradientButton/GradientButton';
 import PostUploadForm from './PostUploadForm';
-import usePageHandler from '../../hooks/usePageHandler';
 import RegisterForm from './RegisterForm';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+
+// baseURL 없앨껀데.. 이거 무엇을 위하여??
 import baseUrl from '../../service/base_url';
 
+import * as S from './UpdateBoard.styled';
+
+// editPost?? 이거 꼭 필요한 component??
 const PostUpdateForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -17,9 +24,9 @@ const PostUpdateForm = () => {
     const postData = location.state?.postData;
     const postId = postData?.id;
     const postImg = postData?.image;
-    const token = sessionStorage.getItem('Token');
     const [updateData, setUpdateData] = useState();
     const [imageURL, setImageURL] = useState('');
+    // 기존 이미지 변경이 없을때, 데이터를 보내줄때 앞에 기본 url이 추가가 되서 이렇게 사용했다.
     const [imageFile, setImageFile] = useState(
         postData?.image.substring(baseUrlLength),
     );
@@ -37,9 +44,10 @@ const PostUpdateForm = () => {
         }));
     };
 
+    // To.Herrypi state로 변경
     const { data: postContentData } = useQuery({
-        queryKey: ['detialPostApi', token],
-        queryFn: () => detialPostApi(postId, token),
+        queryKey: ['detialPost'],
+        queryFn: () => getDetailPostAPI(postId),
     });
 
     useEffect(() => {
@@ -53,7 +61,7 @@ const PostUpdateForm = () => {
                 length: contentData.message ? contentData.message.length : 0,
             });
         }
-    }, [postContentData, token]);
+    }, [postContentData, postImg]);
 
     const deleteProduct = itemID => {
         if (window.confirm('상품을 삭제 하겠습니까?')) {
@@ -79,10 +87,9 @@ const PostUpdateForm = () => {
     }, [textArea.message, productItems]);
 
     const postUpdateMutation = useMutation({
-        mutationFn: ({ token, postId, updateData, imageFile }) =>
-            updatePostApi(token, postId, updateData, imageFile),
-        onSuccess: data => {
-            console.log('Post updated successfully:', data);
+        mutationFn: ({ postId, updateData, imageFile }) =>
+            updatePostAPI(postId, updateData, imageFile),
+        onSuccess: () => {
             navigate(-1);
         },
     });
@@ -94,7 +101,7 @@ const PostUpdateForm = () => {
                 alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
                 return;
             }
-            postUpdateMutation.mutate({ token, postId, updateData, imageFile });
+            postUpdateMutation.mutate({ postId, updateData, imageFile });
         } catch (error) {
             console.error('Error updating post:', error);
         }

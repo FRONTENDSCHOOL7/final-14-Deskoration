@@ -1,71 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './UserProfile.styled';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import { getUserProfileApi } from '../../service/profile_service';
-import { getMyPostApi } from '../../service/post_service';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import Loader from '../../components/Loading/Loader';
-import usePageHandler from '../../hooks/usePageHandler';
-import { postFollowApi, deleteFollowApi } from '../../service/follow_service';
+import { useQuery, useMutation } from '@tanstack/react-query';
+
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
-import { useQuery, useMutation } from '@tanstack/react-query';
+
+import { getUserProfileAPI } from '../../service/profile_service';
+import { postFollowAPI, deleteFollowAPI } from '../../service/follow_service';
+import { getMyPostAPI } from '../../service/post_service';
+
+import GradientButton from '../../components/GradientButton/GradientButton';
+import Loader from '../../components/Loading/Loader';
+import usePageHandler from '../../hooks/usePageHandler';
+
+import * as S from './UserProfile.styled';
+import NotFoundPage from '../404/NotFoundPage';
 
 const UserProfile = () => {
     // const [isLoading, setIsLoading] = useState(false);
     // const [userPost, setUserPost] = useState(null);
     const [expandedContent, setExpandedContent] = useState(false);
     const { username } = useParams(); //선택한 게시물 아이디 값
-    const token = sessionStorage.getItem('Token');
+
     const myAccountName = sessionStorage.getItem('AccountName');
 
     const navigate = useNavigate();
 
-    const { data: profileData } = useQuery({
-        staleTime: 5000,
-        // refetchInterval: 5000,
-        // refetchIntervalInBackground: true,
-        queryKey: ['getUserProfileApi', username, token],
-        queryFn: () =>
-            getUserProfileApi(username, token).then(data => data.profile),
+    const {
+        data: profileData,
+        isLoading: profileLoading,
+        error: profileError,
+    } = useQuery({
+        queryKey: ['getUserProfile', username],
+        queryFn: () => getUserProfileAPI(username),
+        select: data => data.profile,
     });
 
-    console.log(profileData);
-
-    const { data: userPost } = useQuery({
-        staleTime: 5000,
-        // refetchInterval: 5000,
-        // refetchIntervalInBackground: true,
-        queryKey: ['getMyPostApi', profileData?.accountname, token],
-        queryFn: () => {
-            if (profileData) {
-                return getMyPostApi(profileData.accountname, token).then(data =>
-                    data.filter(item => item.content.includes('"deskoration')),
-                );
-            }
-            return [];
-        },
-        enabled: !!profileData?.accountname,
+    const {
+        data: postData,
+        isLoading: postLoading,
+        error: postError,
+    } = useQuery({
+        queryKey: ['getMyPost'],
+        queryFn: () => getMyPostAPI(profileData.accountname),
+        select: data =>
+            data.filter(item => item.content.includes('"deskoration"')),
+        enabled: !!profileData,
     });
 
     usePageHandler('text', profileData?.username);
-
-    if (profileData === null || userPost === null) {
-        return <Loader />;
-    }
 
     const toggleExpandedContent = () => {
         setExpandedContent(!expandedContent);
     };
 
+    // To.Herrypi  mutation 사용하기!
     const userFollowToggle = async accountname => {
         try {
             let updatedFollow;
             if (profileData?.isfollow) {
-                const response = await deleteFollowApi(token, accountname);
+                const response = await deleteFollowAPI(accountname);
                 updatedFollow = response.profile?.isfollow;
             } else {
-                const response = await postFollowApi(token, accountname);
+                const response = await postFollowAPI(accountname);
                 updatedFollow = response.profile?.isfollow;
             }
 
@@ -129,6 +126,10 @@ const UserProfile = () => {
         }
     };
 
+    if (profileLoading || postLoading) {
+        return <Loader />;
+    }
+
     return (
         <>
             <S.ProfileContainer>
@@ -159,7 +160,7 @@ const UserProfile = () => {
 
                 <S.UserDataList>
                     <p>
-                        <span>{userPost?.length}</span>
+                        <span>{postData?.length}</span>
                         <span>게시물</span>
                     </p>
 
@@ -200,8 +201,26 @@ const UserProfile = () => {
                         메시지 보내기
                     </GradientButton>
                 </div>
+                <S.UserDataList>
+                    <button className="user-post">
+                        <p>{postData?.length}</p>
+                        <p>게시물</p>
+                    </button>
+                    <Link to={`/followerList/${username}`}>
+                        <button className="user-follow">
+                            <p>{profileData?.followerCount}</p>
+                            <p>팔로워</p>
+                        </button>
+                    </Link>
+                    <Link to={`/followingList/${username}`}>
+                        <button className="user-following">
+                            <p>{profileData?.followingCount}</p>
+                            <p>팔로잉</p>
+                        </button>
+                    </Link>
+                </S.UserDataList>
                 <S.UserPostings>
-                    {userPost?.map((post, index) => (
+                    {postData?.map((post, index) => (
                         <Link key={post.id} to={`/detailPost/${post.id}`}>
                             <img src={post.image} alt="게시물 목록" />
                         </Link>
@@ -211,6 +230,7 @@ const UserProfile = () => {
             <S.MoreButton>
                 <S.MoreIcon />
             </S.MoreButton>
+            {(profileError || postError) && <NotFoundPage />}
         </>
     );
 };

@@ -2,16 +2,16 @@ import React from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import {
-    postFollowApi,
-    deleteFollowApi,
-    getFollowerApi,
+    postFollowAPI,
+    deleteFollowAPI,
+    getFollowerAPI,
 } from '../../service/follow_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
+// 다른 사람
 const UserFollowerList = () => {
-    const token = sessionStorage.getItem('Token');
     const myAccountName = sessionStorage.getItem('AccountName');
     const { username } = useParams();
     const queryClient = useQueryClient();
@@ -24,29 +24,21 @@ const UserFollowerList = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['userFollowerData', token, username],
-        queryFn: () => getFollowerApi(token, username),
+        queryKey: ['userFollowerData', username],
+        queryFn: () => getFollowerAPI(username),
     });
 
-    const userFollow = useMutation({
-        mutationFn: accountName => postFollowApi(token, accountName),
+    const userFollowMutation = useMutation({
+        mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'userFollowerData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['userFollowerData', myAccountName]);
         },
     });
 
     const userUnFollow = useMutation({
-        mutationFn: accountName => deleteFollowApi(token, accountName),
+        mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries([
-                'userFollowerData',
-                token,
-                myAccountName,
-            ]);
+            queryClient.invalidateQueries(['userFollowerData', myAccountName]);
         },
     });
 
@@ -58,7 +50,7 @@ const UserFollowerList = () => {
             if (follower.isfollow) {
                 userUnFollow.mutate(accountName);
             } else {
-                userFollow.mutate(accountName);
+                userFollowMutation.mutate(accountName);
             }
         }
     };

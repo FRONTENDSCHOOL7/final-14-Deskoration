@@ -1,15 +1,17 @@
-import baseUrl from './base_url';
+import axiosInstance from './axiosInstance';
 
-export const uploadImgApi = async (formData, setImageFile) => {
-    const reqURL = `${baseUrl}/image/uploadfiles`;
+export const uploadImgAPI = async (formData, setImageFile) => {
+    const reqURL = '/image/uploadfiles';
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            body: formData,
+        const response = await axiosInstance.post(reqURL, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         });
 
-        if (response.ok) {
-            const data = await response.json();
+        if (response.status === 200) {
+            const data = response.data;
             setImageFile(data[0].filename);
             return data;
         } else {
@@ -17,8 +19,6 @@ export const uploadImgApi = async (formData, setImageFile) => {
             throw new Error('Image upload failed');
         }
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 };
-
-// 프로필관련 api

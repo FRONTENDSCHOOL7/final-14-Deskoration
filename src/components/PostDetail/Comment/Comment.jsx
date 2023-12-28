@@ -6,34 +6,26 @@ import { useDispatch } from 'react-redux';
 import { openAlertModal } from '../../../features/modal/alertModalSlice';
 
 import {
-    postCommentApi,
-    deleteCommentApi,
-    reportCommentApi,
+    postCommentAPI,
+    reportCommentAPI,
+    deleteCommentAPI,
 } from '../../../service/comment_service';
 
 import * as S from './Comment.styled';
 
 const Comment = props => {
-    const {
-        commentData,
-        postDataID,
-        token,
-        id,
-        register,
-        handleSubmit,
-        resetField,
-    } = props;
+    const { commentData, postDataID, id, register, handleSubmit, resetField } =
+        props;
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
 
     const myId = sessionStorage.getItem('Id');
 
     const submitMutation = useMutation({
-        mutationFn: commentData =>
-            postCommentApi(id, commentData.comment, token),
+        mutationFn: commentData => postCommentAPI(id, commentData.comment),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: ['getAllComment', id, token],
+                queryKey: ['getAllComment', id],
             });
         },
         onError() {
@@ -42,10 +34,10 @@ const Comment = props => {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: commentID => deleteCommentApi(postDataID, commentID, token),
+        mutationFn: commentID => deleteCommentAPI(postDataID, commentID),
         onSuccess() {
             queryClient.invalidateQueries({
-                queryKey: ['getAllComment', postDataID, token],
+                queryKey: ['getAllComment', postDataID],
             });
         },
         onError() {
@@ -54,7 +46,7 @@ const Comment = props => {
     });
 
     const reporteMutation = useMutation({
-        mutationFn: commentID => reportCommentApi(postDataID, commentID, token),
+        mutationFn: commentID => reportCommentAPI(postDataID, commentID),
         onSuccess() {
             dispatch(openAlertModal('댓글이 신고되었습니다.'));
         },

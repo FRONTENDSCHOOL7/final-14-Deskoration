@@ -1,76 +1,33 @@
-import baseUrl from './base_url';
+import instance from './axiosInstance';
 
-export const getUserProfileApi = async (username, token) => {
-    const reqURL = `${baseUrl}/profile/${username}`;
+export const getUserProfileAPI = async username => {
+    const reqURL = `/profile/${username}`;
 
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Failed to fetch user profile');
-        }
+        const response = await instance.get(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('다른 사람의 프로필을 가져올 수 없습니다.');
     }
 };
 
-export const getMyProfileApi = async token => {
-    const reqUrl = `${baseUrl}/user/myinfo`;
+export const getMyProfileAPI = async () => {
+    const reqURL = `/user/myinfo`;
 
     try {
-        const response = await fetch(reqUrl, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Failed to fetch user profile');
-        }
+        const response = await instance.get(reqURL);
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('An error occurred while fetching user profile');
+        throw new Error('나의 프로필을 가져올 수 없습니다.');
     }
 };
 
-export const updateProfileApi = async (token, userData) => {
-    const reqUrl = `${baseUrl}/user`;
-
+export const updateProfileAPI = async userData => {
+    const reqURL = `/user`;
     try {
-        const response = await fetch(reqUrl, {
-            method: 'PUT',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Failed to fetch user profile');
-        }
+        const response = await instance.put(reqURL, userData);
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('An error occurred while fetching user profile');
+        throw new Error('나의 프로필을 업데이트할 수 없습니다.');
     }
 };

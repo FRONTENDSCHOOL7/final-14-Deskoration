@@ -1,47 +1,25 @@
-import baseUrl from './base_url';
+import axiosInstance from './axiosInstance';
 
-export const postLikeApi = async (postID, token) => {
-    const reqURL = `${baseUrl}/post/${postID}/heart`;
+export const postLikeAPI = async postID => {
+    const reqURL = `/post/${postID}/heart`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+        const response = await axiosInstance.post(reqURL);
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Image upload failed');
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('좋아요를 할 수 없습니다.');
     }
 };
 
-export const deleteLikeApi = async (postID, token) => {
-    const reqURL = `${baseUrl}/post/${postID}/unheart`;
-    try {
-        const response = await fetch(reqURL, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+export const deleteLikeAPI = async postID => {
+    const reqURL = `/post/${postID}/unheart`;
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Image upload failed');
-        }
+    try {
+        const response = await axiosInstance.delete(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('좋아요를 삭제할 수 없습니다.');
     }
 };

@@ -184,7 +184,7 @@ const ChatRoomPage = () => {
     // console.log(chatId);
     // console.log(firebaseMessage);
 
-    usePageHandler('user', user?.image, user?.username);
+    usePageHandler('user', user?.image, user?.username, user?.accountname);
 
     return (
         <>

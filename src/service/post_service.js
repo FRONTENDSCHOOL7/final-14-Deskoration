@@ -1,190 +1,108 @@
-import baseUrl from './base_url';
+import instance from './axiosInstance';
 
-export const uploadPostApi = async (content, image, token) => {
-    const reqURL = `${baseUrl}/post`;
+const BASEURL = process.env.REACT_APP_BASE_URL;
+
+export const uploadPostAPI = async (content, image) => {
+    const reqURL = `/post`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
+        const response = await instance.post(reqURL, {
+            post: {
+                content: JSON.stringify({ deskoration: content }),
+                image: `${BASEURL}/${image}`,
             },
-            body: JSON.stringify({
-                post: {
-                    content: JSON.stringify({ deskoration: content }),
-                    image: `${baseUrl}/${image}`,
-                },
-            }),
         });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        return response.data;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('게시글을 올릴 수 없습니다.');
     }
 };
 
-export const updatePostApi = async (token, postId, postData, image) => {
-    const reqUrl = `${baseUrl}/post/${postId}`;
+export const updatePostAPI = async (postId, postData, image) => {
+    const reqURL = `/post/${postId}`;
 
     try {
-        const response = await fetch(reqUrl, {
-            method: 'PUT',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
+        const response = await instance.put(reqURL, {
+            post: {
+                content: JSON.stringify({ deskoration: postData }),
+                image: `${BASEURL}/${image}`,
             },
-            body: JSON.stringify({
-                post: {
-                    content: JSON.stringify({ deskoration: postData }),
-                    image: `${baseUrl}/${image}`,
-                },
-            }),
         });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Failed to update post');
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('An error occurred while updating post');
+        throw new Error('게시글을 수정할 수 없습니다.');
     }
 };
 
-export const getAllPostApi = async (token, skip = 0) => {
+export const getAllPostAPI = async (skip = 0) => {
     const number = 280;
-    const reqURL = `${baseUrl}/post?limit=${number}&skip=${skip}`;
-    try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+    const reqURL = `/post?limit=${number}&skip=${skip}`;
 
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+    try {
+        const response = await instance.get(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('전체 게시글을 가져올 수 없습니다.');
     }
 };
 
-export const getMyPostApi = async (accountname, token) => {
-    const reqURL = `${baseUrl}/post/${accountname}/userpost`;
+export const getMyPostAPI = async accountname => {
+    const reqURL = `/post/${accountname}/userpost`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+        const response = await instance.get(reqURL);
 
-        if (response.ok) {
-            const data = await response.json();
-
-            return data.post;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        return response.data.post;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('나의 게시글을 가져올 수 없습니다.');
     }
 };
 
-export const detialPostApi = async (id, token) => {
-    const reqURL = `${baseUrl}/post/${id}`;
+export const getDetailPostAPI = async id => {
+    const reqURL = `/post/${id}`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        const response = await instance.get(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('디테일 포스트를 가져올 수 없습니다.');
     }
 };
 
-export const deletePostAPI = async (postId, token) => {
-    const reqURL = `${baseUrl}/post/${postId}`;
+export const deletePostAPI = async postId => {
+    const reqURL = `/post/${postId}`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        const response = await instance.delete(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('게시글을 삭제할 수 없습니다.');
     }
 };
 
-export const reportPostAPI = async (postId, token) => {
-    const reqURL = `${baseUrl}/post/${postId}/report`;
+export const reportPostAPI = async postId => {
+    const reqURL = `/post/${postId}/report`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        const response = await instance.post(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('게시글을 신고할 수 없습니다.');
     }
 };
 
-export const getFeedApi = async token => {
-    const reqURL = `${baseUrl}/post/feed`;
+export const getFeedAPI = async () => {
+    const reqURL = `/post/feed`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            const data = await response.json();
-            return data;
-        } else {
-            console.error('API 요청이 실패했습니다.');
-        }
+        const response = await instance.get(reqURL);
+
+        return response.data;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('피드 게시글을 가져올 수 없습니다.');
     }
 };

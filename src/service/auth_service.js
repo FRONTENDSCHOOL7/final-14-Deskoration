@@ -1,90 +1,54 @@
-import baseUrl from './base_url';
+import instance from './axiosInstance';
 
-export const validEmailApi = async email => {
-    const reqURL = `${baseUrl}/user/emailvalid`;
+export const validEmailAPI = async email => {
+    const reqURL = `/user/emailvalid`;
 
-    const response = await fetch(reqURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: { email: email } }),
-    });
-
-    if (response.ok) {
-        const result = await response.json();
-        return result;
-    } else {
-        console.error(`Request failed with status: ${response.status}`);
-        throw new Error('Email validation failed');
+    try {
+        const response = await instance.post(reqURL, {
+            user: { email: email },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('정확하지 않은 이메일입니다.');
     }
 };
 
-export const validAccountNameApi = async accountName => {
-    const reqURL = `${baseUrl}/user/accountnamevalid`;
+export const validAccountNameAPI = async accountName => {
+    const reqURL = `/user/accountnamevalid`;
 
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user: { accountname: accountName } }),
+        const response = await instance.post(reqURL, {
+            user: { accountname: accountName },
         });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Account name validation failed');
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw error;
+        throw new Error('사용중인 계정 아이디입니다.');
     }
 };
 
-export const authLoginApi = async (emailValue, passwordValue) => {
-    const reqUrl = `${baseUrl}/user/login`;
+export const authLoginAPI = async (emailValue, passwordValue) => {
+    const reqURL = '/user/login';
 
     try {
-        const response = await fetch(reqUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user: {
-                    email: emailValue,
-                    password: passwordValue,
-                },
-            }),
+        const response = await instance.post(reqURL, {
+            user: {
+                email: emailValue,
+                password: passwordValue,
+            },
         });
-
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Login request failed');
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
-        throw new Error('Login request failed');
+        throw new Error('지금은 로그인할 수 없습니다.');
     }
 };
 
-export const authSignUpApi = async userData => {
-    const reqURL = `${baseUrl}/user`;
+export const authSignUpAPI = async userData => {
+    const reqURL = `/user`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'POST',
-            headers: { 'Content-type': 'application/json' },
-            body: JSON.stringify(userData),
-        });
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error(`Request failed with status: ${response.status}`);
-            throw new Error('Login request failed');
-        }
+        const response = await instance.post(reqURL, userData);
+        return response.data;
     } catch (error) {
-        throw error;
+        throw new Error('지금은 가입할 수 없습니다.');
     }
 };

@@ -1,29 +1,19 @@
-import baseUrl from './base_url';
+import instance from './axiosInstance';
 
-export const getCommentApi = async (id, token) => {
-    const reqURL = `${baseUrl}/post/${id}/comments`;
+export const getCommentAPI = async id => {
+    const reqURL = `/post/${id}/comments`;
+
     try {
-        const response = await fetch(reqURL, {
-            method: 'GET',
-            headers: {
-                authorization: `Bearer ${token}`,
-                'content-type': 'application/json',
-            },
-        });
+        const response = await instance.get(reqURL);
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error('API 요청 중 오류 발생: ', response.statusText);
-        }
+        return response.data;
     } catch (error) {
-        console.error('API 요청 중 오류 발생: ', error);
+        throw new Error('댓글을 가져올 수 없습니다.');
     }
 };
 
-export const postCommentApi = async (id, content, token) => {
-    const apiUrl = `${baseUrl}/post/${id}/comments`;
+export const postCommentAPI = async (id, content) => {
+    const reqURL = `/post/${id}/comments`;
 
     const commentData = {
         comment: {
@@ -32,72 +22,34 @@ export const postCommentApi = async (id, content, token) => {
     };
 
     try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(commentData),
-        });
+        const response = await instance.post(reqURL, commentData);
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            alert('댓글을 입력해 주세요.');
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
+        throw new Error('댓글을 게시할 수 없습니다.');
     }
 };
 
-export const reportCommentApi = async (postID, commentID, token) => {
-    const apiUrl = `${baseUrl}/post/${postID}/comments/${commentID}/report`;
+export const reportCommentAPI = async (postID, commentID) => {
+    const reqURL = `/post/${postID}/comments/${commentID}/report`;
 
     try {
-        const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+        const response = await instance.post(reqURL);
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error('API request failed');
-            return null;
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
-        return null;
+        throw new Error('댓글을 신고할 수 없습니다.');
     }
 };
 
-export const deleteCommentApi = async (postID, commentID, token) => {
-    const apiUrl = `${baseUrl}/post/${postID}/comments/${commentID}`;
+export const deleteCommentAPI = async (postID, commentID) => {
+    const reqURL = `/post/${postID}/comments/${commentID}`;
 
     try {
-        const response = await fetch(apiUrl, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-type': 'application/json',
-            },
-        });
+        const response = await instance.delete(reqURL);
 
-        if (response.ok) {
-            const result = await response.json();
-            return result;
-        } else {
-            console.error('API request failed');
-            return null;
-        }
+        return response.data;
     } catch (error) {
-        console.error(error);
-        return null;
+        throw new Error('댓글을 삭제할 수 없습니다.');
     }
 };

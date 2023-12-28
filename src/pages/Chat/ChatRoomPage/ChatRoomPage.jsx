@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as S from './ChatRoomPage.styled';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getMyProfileAPI } from '../../../service/profile_service';
 import usePageHandler from '../../../hooks/usePageHandler';
 import {
     collection,
@@ -28,17 +30,29 @@ const ChatRoomPage = () => {
     const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
     const { roomId, user } = location.state;
     const [chatMessages, setChatMessages] = useState([]);
-    const myAccountName = sessionStorage.getItem('AccountName');
-    const myProfileImage = sessionStorage.getItem('Image');
-    const myUserName = sessionStorage.getItem('Username');
+
+    const queryClient = useQueryClient();
+    const myProfileData = queryClient.getQueryData(['getMyProfile']);
+    const myProfileAccountName = myProfileData?.user?.accountname;
+    const profileImageData = myProfileData?.user?.image;
+    const myProfileUserName = myProfileData?.user?.username;
+
+    // myProfileData를 불러올 수 없을경우 useQuery로 데이터 불러옴
+    const { data: profileData } = useQuery({
+        queryKey: ['getMyProfile'],
+        queryFn: () => getMyProfileAPI(),
+        select: data => data.user,
+        enabled: !myProfileData,
+    });
+    const myAccountName = myProfileAccountName || profileData.accountname;
+    const myProfileImage = profileImageData || profileData.image;
+    const myUserName = myProfileUserName || profileData.username;
     const navigate = useNavigate();
     const [chatId, setChatId] = useState('');
     const chatCollectionRef = collection(db, 'messages');
     const chatListCollectionRef = collection(db, 'chatList');
     const chatRoomsCollectionRef = collection(db, 'rooms');
-
     // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -107,7 +121,6 @@ const ChatRoomPage = () => {
             if (roomId !== undefined) {
                 const docRef = doc(db, 'messages', chatId);
                 await updateDoc(docRef, {
-                    // participants: participants,
                     messages: arrayUnion(newMessage), // Add the new message to the existing array
                 });
 

@@ -34,10 +34,9 @@ export const updatePostAPI = async (postId, postData, image) => {
     }
 };
 
-export const getAllPostAPI = async (skip = 0) => {
-    const number = 280;
-    const reqURL = `/post?limit=${number}&skip=${skip}`;
-
+export const getAllPostAPI = async (token, skip = 0) => {
+    const number = 200;
+    const reqURL = `${BASEURL}/post?limit=${number}&skip=${skip}`;
     try {
         const response = await instance.get(reqURL);
 

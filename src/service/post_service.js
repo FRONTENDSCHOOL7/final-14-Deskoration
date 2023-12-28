@@ -60,7 +60,7 @@ export const updatePostApi = async (token, postId, postData, image) => {
 };
 
 export const getAllPostApi = async (token, skip = 0) => {
-    const number = 280;
+    const number = 200;
     const reqURL = `${baseUrl}/post?limit=${number}&skip=${skip}`;
     try {
         const response = await fetch(reqURL, {

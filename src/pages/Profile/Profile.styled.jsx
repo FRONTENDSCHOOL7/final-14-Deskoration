@@ -79,8 +79,8 @@ export const UserPostings = styled.div`
     margin-top: 20px;
     color: ${({ theme }) => theme.mainFont};
 
-    @media screen and (min-width: 768px) {
-        grid-template-columns: repeat(4, 1fr);
+    @media screen and (min-width: 600px) {
+        grid-template-columns: repeat(3, 1fr);
     }
 
     a {

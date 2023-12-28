@@ -74,21 +74,15 @@ const Profile = () => {
                 <>
                     <S.ProfileContainer>
                         <S.UserInfo>
-                            <img
-                                src={profileData.image}
-                                alt=""
-                                className="user-img"
-                            />
+                            <img src={profileData?.image} alt="" />
 
-                            <div className="user-introduce">
-                                <p className="user-name">
-                                    {profileData.accountname}
-                                </p>
-                                <p className="user-info">
+                            <div>
+                                <p>{profileData?.username}</p>
+                                <p>
                                     {expandedContent
-                                        ? profileData.intro
-                                        : profileData.intro.slice(0, 53)}
-                                    {profileData.intro.length > 30 && (
+                                        ? profileData?.intro
+                                        : profileData?.intro.slice(0, 53)}
+                                    {profileData?.intro?.length > 30 && (
                                         <S.ToggleButton
                                             type="button"
                                             onClick={toggleExpandedContent}
@@ -101,6 +95,25 @@ const Profile = () => {
                                 </p>
                             </div>
                         </S.UserInfo>
+                        <S.UserDataList>
+                            <p>
+                                <span>{postData?.length}</span>
+                                <span>게시물</span>
+                            </p>
+
+                            <Link to={`/followerList`}>
+                                <p>
+                                    <span>{profileData?.followerCount}</span>
+                                    <span>팔로워</span>
+                                </p>
+                            </Link>
+                            <Link to="/followingList">
+                                <p>
+                                    <span>{profileData?.followingCount}</span>
+                                    <span>팔로잉</span>
+                                </p>
+                            </Link>
+                        </S.UserDataList>
                         <GradientButton
                             type={'button'}
                             gra={'true'}
@@ -110,24 +123,6 @@ const Profile = () => {
                         >
                             프로필 편집
                         </GradientButton>
-                        <S.UserDataList>
-                            <button className="user-post">
-                                <p>{postData.length}</p>
-                                <p>게시물</p>
-                            </button>
-                            <Link to={`/followerList`}>
-                                <button className="user-follow">
-                                    <p>{profileData.followerCount}</p>
-                                    <p>팔로워</p>
-                                </button>
-                            </Link>
-                            <Link to="/followingList">
-                                <button className="user-following">
-                                    <p>{profileData.followingCount}</p>
-                                    <p>팔로잉</p>
-                                </button>
-                            </Link>
-                        </S.UserDataList>
                         <S.UserPostings>
                             {postData.map(post => (
                                 <Link

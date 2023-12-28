@@ -15,7 +15,6 @@ export const UserInfo = styled.div`
         width: 100px;
         height: 100px;
         border-radius: 100%;
-        margin-bottom: 10px;
         object-fit: cover;
         border: 1px solid ${props => props.theme.border};
     }
@@ -25,17 +24,18 @@ export const UserInfo = styled.div`
         flex-direction: column;
         padding-left: 10px;
         flex-grow: 1;
-        max-width: 630px;
         text-align: center;
     }
 
-    p {
-        color: ${props => props.theme.mainFont};
+    div > p:first-child {
+        font-size: ${theme.fontSize.md};
+        font-family: 'PreBold', sans-serif;
+        margin: 10px 0;
     }
 `;
 
 export const UserDataList = styled.div`
-    margin: 15px 0;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
 

@@ -40,9 +40,9 @@ const Home = () => {
                       });
         },
         getNextPageParam: (lastPage, allPages) => {
-            const morePagesExist = lastPage?.posts?.length === 280;
+            const morePagesExist = lastPage?.posts?.length === 200;
             if (!morePagesExist) return false;
-            return allPages.length * 280;
+            return allPages.length * 200;
         },
     });
 

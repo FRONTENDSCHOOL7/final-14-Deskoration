@@ -5,24 +5,14 @@ import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 
 export const Backwardicon = styled(Backward)``;
 
-export const ProfileHeader = styled.div`
-    display: flex;
-    width: 100%;
-    height: 70px;
-    padding-top: 20px;
-    margin: 0 25px;
-
-    font-size: 24px;
-    align-items: center;
-`;
 export const ProfileContainer = styled.div`
     width: 100%;
+`;
 
-    .gradient_btn {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-    }
+export const SocialButtonBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 `;
 
 export const UserInfo = styled.div`
@@ -30,32 +20,26 @@ export const UserInfo = styled.div`
     flex-direction: column;
     align-items: center;
 
-    .user-img {
+    img {
         width: 100px;
         height: 100px;
         border-radius: 100%;
-        margin-bottom: 10px;
         object-fit: cover;
         border: 1px solid ${props => props.theme.border};
     }
-    .user-introduce {
+
+    div {
         display: flex;
         flex-direction: column;
         padding-left: 10px;
         flex-grow: 1;
-        max-width: 630px;
         text-align: center;
     }
 
-    .user-name {
+    div > p:first-child {
         font-size: ${theme.fontSize.md};
         font-family: 'PreBold', sans-serif;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .user-info {
-        color: ${props => props.theme.mainFont};
+        margin: 10px 0;
     }
 `;
 

@@ -5,6 +5,11 @@ import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 export const ProfileContainer = styled.div`
     width: 100%;
 `;
+export const SocialButtonBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+`;
 
 export const UserInfo = styled.div`
     display: flex;

@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { getMyProfileAPI } from '../../service/profile_service';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase';
+
+import {
+    getMyProfileAPI,
+    getUserProfileAPI,
+} from '../../service/profile_service';
+import { postFollowAPI, deleteFollowAPI } from '../../service/follow_service';
 import { getMyPostAPI } from '../../service/post_service';
 import axiosInstance from '../../service/axiosInstance';
 
@@ -18,12 +25,15 @@ import Article from '../Home/Article';
 import NoContents from '../../components/NoContents/NoContents';
 
 const Profile = () => {
-    usePageHandler('text', '나의 프로필');
     const queryClient = useQueryClient();
-    const navigate = useNavigate();
     const [expandedContent, setExpandedContent] = useState(false);
     const [isBottomSheet, setIsBottomSheet] = useState(false);
 
+    const { username } = useParams(); //선택한 게시물 아이디 값
+
+    const navigate = useNavigate();
+
+    //나의 프로필 부분 -> username === undefined
     const {
         data: profileData,
         isLoading: profileLoading,
@@ -32,20 +42,42 @@ const Profile = () => {
         queryKey: ['getMyProfile'],
         queryFn: () => getMyProfileAPI(),
         select: data => data.user,
+        enabled: username === undefined,
+    });
+    //유저 프로필 부분 => username === username
+    const {
+        data: userProfileData,
+        isLoading: userProfileLoading,
+        error: userProfileError,
+    } = useQuery({
+        queryKey: ['getUserProfile', username],
+        queryFn: () => getUserProfileAPI(username),
+        select: data => data.profile,
+        enabled: username !== undefined,
     });
 
-    console.log(profileData);
+    //게시물 데이터 가져오기 내프로필 유저프로필 경우에 따라
     const {
         data: postData,
         isLoading: postLoading,
         error: postError,
     } = useQuery({
         queryKey: ['getMyPost'],
-        queryFn: () => getMyPostAPI(profileData.accountname),
+        queryFn: () =>
+            getMyPostAPI(
+                username === undefined
+                    ? profileData.accountname
+                    : userProfileData.accountname,
+            ),
         select: data =>
             data.filter(item => item.content.includes('"deskoration"')),
-        enabled: !!profileData,
+        enabled: username === undefined ? !!profileData : !!userProfileData,
     });
+
+    usePageHandler(
+        'text',
+        username === undefined ? '나의 프로필' : userProfileData?.username,
+    );
 
     const hadleBottomSheet = () => setIsBottomSheet(!isBottomSheet);
 
@@ -58,6 +90,79 @@ const Profile = () => {
         navigate('/profileEdit');
     };
 
+    // To.Herrypi  mutation 사용하기!
+    // 팔로우 팔로잉
+    const follow = useMutation({
+        mutationFn: accountName => postFollowAPI(accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getUserProfile', username]);
+        },
+    });
+
+    const unfollow = useMutation({
+        mutationFn: accountName => deleteFollowAPI(accountName),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getUserProfile', username]);
+        },
+    });
+
+    const userFollowToggle = accountName => {
+        if (profileData?.isfollow) {
+            unfollow.mutate(accountName);
+        } else {
+            follow.mutate(accountName);
+        }
+    };
+    // 채팅 방 생성 관련 코드
+    const fetchRoomId = async accountname => {
+        try {
+            let chatRoomId = '';
+            const roomRef = collection(db, 'rooms');
+            const roomSnapshot = await getDocs(
+                query(
+                    roomRef,
+                    where('participants', 'array-contains', accountname),
+                ),
+            );
+
+            for (let room of roomSnapshot.docs) {
+                const data = room.data();
+                let result = data.participants.includes(
+                    userProfileData.accountname,
+                );
+                if (result) {
+                    chatRoomId = data.roomId;
+                    break;
+                }
+            }
+
+            if (chatRoomId) {
+                navigate(`/chat/${chatRoomId}`, {
+                    state: {
+                        roomId: chatRoomId,
+                        user: {
+                            accountname: userProfileData.accountname,
+                            username: userProfileData.username,
+                            image: userProfileData.image,
+                        },
+                    },
+                });
+            } else {
+                navigate(`/chat/${userProfileData.accountname}`, {
+                    state: {
+                        user: {
+                            accountname: userProfileData.accountname,
+                            username: userProfileData.username,
+                            image: userProfileData.image,
+                        },
+                    },
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const logOut = () => {
         sessionStorage.clear();
         queryClient.clear();
@@ -65,36 +170,64 @@ const Profile = () => {
 
         navigate('/');
     };
-    // console.log(postData);
+
     return (
         <>
-            {profileLoading || postLoading ? (
+            {(profileLoading && userProfileLoading) || postLoading ? (
                 <Loader />
             ) : (
                 <>
                     <S.ProfileContainer>
-                        <S.UserInfo>
-                            <img src={profileData?.image} alt="" />
-
-                            <div>
-                                <p>{profileData?.username}</p>
-                                <p>
-                                    {expandedContent
-                                        ? profileData?.intro
-                                        : profileData?.intro.slice(0, 53)}
-                                    {profileData?.intro?.length > 30 && (
-                                        <S.ToggleButton
-                                            type="button"
-                                            onClick={toggleExpandedContent}
-                                        >
-                                            {expandedContent
-                                                ? '접기'
-                                                : '...더보기'}
-                                        </S.ToggleButton>
-                                    )}
-                                </p>
-                            </div>
-                        </S.UserInfo>
+                        {username === undefined ? (
+                            <S.UserInfo>
+                                <img src={profileData?.image} alt="" />
+                                <div>
+                                    <p>{profileData?.username}</p>
+                                    <p>
+                                        {expandedContent
+                                            ? profileData?.intro
+                                            : profileData?.intro.slice(0, 53)}
+                                        {profileData?.intro?.length > 30 && (
+                                            <S.ToggleButton
+                                                type="button"
+                                                onClick={toggleExpandedContent}
+                                            >
+                                                {expandedContent
+                                                    ? '접기'
+                                                    : '...더보기'}
+                                            </S.ToggleButton>
+                                        )}
+                                    </p>
+                                </div>
+                            </S.UserInfo>
+                        ) : (
+                            // 상대 유저프로필 일경우
+                            <S.UserInfo>
+                                <img src={userProfileData?.image} alt="" />
+                                <div>
+                                    <p>{userProfileData?.username}</p>
+                                    <p>
+                                        {expandedContent
+                                            ? userProfileData?.intro
+                                            : userProfileData?.intro.slice(
+                                                  0,
+                                                  53,
+                                              )}
+                                        {userProfileData?.intro?.length >
+                                            30 && (
+                                            <S.ToggleButton
+                                                type="button"
+                                                onClick={toggleExpandedContent}
+                                            >
+                                                {expandedContent
+                                                    ? '접기'
+                                                    : '...더보기'}
+                                            </S.ToggleButton>
+                                        )}
+                                    </p>
+                                </div>
+                            </S.UserInfo>
+                        )}
                         <S.UserDataList>
                             <p>
                                 <span>{postData?.length}</span>
@@ -102,27 +235,82 @@ const Profile = () => {
                             </p>
 
                             <Link to={`/followerList`}>
-                                <p>
-                                    <span>{profileData?.followerCount}</span>
-                                    <span>팔로워</span>
-                                </p>
+                                {username === undefined ? (
+                                    <p>
+                                        <span>
+                                            {profileData?.followerCount}
+                                        </span>
+                                        <span>팔로워</span>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        <span>
+                                            {userProfileData?.followerCount}
+                                        </span>
+                                        <span>팔로워</span>
+                                    </p>
+                                )}
                             </Link>
                             <Link to="/followingList">
-                                <p>
-                                    <span>{profileData?.followingCount}</span>
-                                    <span>팔로잉</span>
-                                </p>
+                                {username === undefined ? (
+                                    <p>
+                                        <span>
+                                            {profileData?.followingCount}
+                                        </span>
+                                        <span>팔로잉</span>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        <span>
+                                            {userProfileData?.followingCount}
+                                        </span>
+                                        <span>팔로잉</span>
+                                    </p>
+                                )}
                             </Link>
                         </S.UserDataList>
-                        <GradientButton
-                            type={'button'}
-                            gra={'true'}
-                            width={'100%'}
-                            padding={'10px'}
-                            onClick={moveToEditProfile}
-                        >
-                            프로필 편집
-                        </GradientButton>
+                        {username === undefined ? (
+                            <GradientButton
+                                type={'button'}
+                                gra={'true'}
+                                width={'100%'}
+                                padding={'10px'}
+                                onClick={moveToEditProfile}
+                            >
+                                프로필 편집
+                            </GradientButton>
+                        ) : (
+                            <S.SocialButtonBox>
+                                <GradientButton
+                                    type={'button'}
+                                    gra={
+                                        !userProfileData?.isfollow
+                                            ? true
+                                            : false
+                                    }
+                                    width={'100%'}
+                                    padding={'10px'}
+                                    onClick={() =>
+                                        userFollowToggle(
+                                            userProfileData?.accountname,
+                                        )
+                                    }
+                                >
+                                    {!userProfileData?.isfollow
+                                        ? '팔로우'
+                                        : '팔로잉'}
+                                </GradientButton>
+                                <GradientButton
+                                    type={'button'}
+                                    width={'100%'}
+                                    padding={'10px'}
+                                    onClick={fetchRoomId}
+                                >
+                                    메시지 보내기
+                                </GradientButton>
+                            </S.SocialButtonBox>
+                        )}
+
                         {postData?.length === 0 ? (
                             <NoContents />
                         ) : (
@@ -132,14 +320,19 @@ const Profile = () => {
                     <S.MoreButton onClick={hadleBottomSheet}>
                         <S.MoreIcon />
                     </S.MoreButton>
-                    <BottomSheet
-                        isBottomSheet={isBottomSheet}
-                        hadleBottomSheet={hadleBottomSheet}
-                        deleteFn={logOut}
-                        oneButton
-                        children={'로그아웃'}
-                    />
-                    {(profileError || postError) && <NotFoundPage />}
+                    {username === undefined && (
+                        <BottomSheet
+                            isBottomSheet={isBottomSheet}
+                            hadleBottomSheet={hadleBottomSheet}
+                            deleteFn={logOut}
+                            oneButton
+                            children={'로그아웃'}
+                        />
+                    )}
+
+                    {(username === undefined
+                        ? profileError
+                        : userProfileError || postError) && <NotFoundPage />}
                 </>
             )}
         </>

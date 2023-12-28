@@ -125,7 +125,7 @@ const Router = () => {
                         />
                         <Route
                             path={'/profile/:username'}
-                            element={<UserProfilePage />}
+                            element={<ProfilePage />}
                         />
                     </Route>
                     <Route path="*" element={<NotFoundPage />} />

@@ -142,7 +142,6 @@ const ChatRoomPage = () => {
                     },
                     newChatList.id,
                 );
-
                 navigate(`/chat/${newChatList.id}`, {
                     state: { roomId: newChatList.id, user: participants },
                     replace: true,

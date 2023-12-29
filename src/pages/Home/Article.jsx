@@ -9,12 +9,26 @@ const Article = ({ articles, fetchNextPage }) => {
     return (
         <>
             <S.Section>
-                {articles.map(article => (
-                    <Link key={article._id} to={`/detailPost/${article._id}`}>
+                {articles?.map(article => (
+                    <Link
+                        key={
+                            article._id !== undefined ? article._id : article.id
+                        }
+                        to={
+                            article._id !== undefined
+                                ? `/detailPost/${article._id}`
+                                : `/detailPost/${article.id}`
+                        }
+                    >
                         <S.Article src={article.image}></S.Article>
                     </Link>
                 ))}
-                <div ref={loaderRef} style={{ height: '1px', width: '100%' }} />
+                {fetchNextPage && (
+                    <div
+                        ref={loaderRef}
+                        style={{ height: '1px', width: '100%' }}
+                    />
+                )}
             </S.Section>
         </>
     );

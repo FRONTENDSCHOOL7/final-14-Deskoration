@@ -5,43 +5,42 @@ import { ReactComponent as More } from '../../assets/images/Dots_vertical.svg';
 export const ProfileContainer = styled.div`
     width: 100%;
 `;
+export const SocialButtonBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+`;
 
 export const UserInfo = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .user-img {
+    img {
         width: 100px;
         height: 100px;
         border-radius: 100%;
-        margin-bottom: 10px;
         object-fit: cover;
         border: 1px solid ${props => props.theme.border};
     }
-    .user-introduce {
+
+    div {
         display: flex;
         flex-direction: column;
         padding-left: 10px;
         flex-grow: 1;
-        max-width: 630px;
         text-align: center;
     }
 
-    .user-name {
+    div > p:first-child {
         font-size: ${theme.fontSize.md};
         font-family: 'PreBold', sans-serif;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .user-info {
-        color: ${props => props.theme.mainFont};
+        margin: 10px 0;
     }
 `;
 
 export const UserDataList = styled.div`
-    margin: 15px 0;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
 
@@ -54,7 +53,7 @@ export const UserDataList = styled.div`
         padding: 4px;
     }
 
-    a > p {
+    a p {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -66,13 +65,13 @@ export const UserDataList = styled.div`
         border-right: 1px solid ${theme.border};
     }
 
-    p > span:first-child {
+    p span:first-child {
         font-family: 'PreBold', sans-serif;
         font-size: ${theme.fontSize.md};
         margin-bottom: 8px;
     }
 
-    p > span:nth-child(2) {
+    p span:nth-child(2) {
         color: ${theme.subFont};
     }
 `;
@@ -85,8 +84,8 @@ export const UserPostings = styled.div`
     margin-top: 20px;
     color: ${({ theme }) => theme.mainFont};
 
-    @media screen and (min-width: 768px) {
-        grid-template-columns: repeat(4, 1fr);
+    @media screen and (min-width: 600px) {
+        grid-template-columns: repeat(3, 1fr);
     }
 
     a {

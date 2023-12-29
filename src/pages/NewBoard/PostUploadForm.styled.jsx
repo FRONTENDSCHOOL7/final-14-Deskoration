@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import { ReactComponent as ChangeFile } from '../../assets/images/ChangeFile.svg';
 import { ReactComponent as Delete } from '../../assets/images/Delete.svg';
@@ -83,9 +83,23 @@ export const NewBoardFileContainer = styled.div`
         }
     }
 `;
+const Zoom = keyframes`
+    0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+`;
 
 export const FileInputButton = styled.button`
-    border: 1px solid ${props => props.theme.border};
+    ${props =>
+        !props.$add &&
+        css`
+            border: 1px solid ${props => props.theme.border};
+        `}
 
     border-radius: 14px;
     padding: 10px;
@@ -95,13 +109,20 @@ export const FileInputButton = styled.button`
         ${props =>
             props.$add
                 ? css`
-                      border: 5px solid ${props => props.theme.main};
+                      border: none;
                   `
                 : css`
                       border: 1px solid ${props => props.theme.main};
                   `}
-
         svg {
+            animation: ${Zoom} 0.4s forwards;
+            rect {
+                fill: ${props => props.theme.main};
+                stroke: ${props => props.theme.main};
+            }
+            line {
+                stroke: #fff;
+            }
             path {
                 fill: ${props => props.theme.main};
             }

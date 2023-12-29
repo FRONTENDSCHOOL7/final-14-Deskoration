@@ -17,6 +17,24 @@ const pulse = keyframes`
   }
 `;
 
+const appear = keyframes`
+  0%{
+    opacity: 0.5;
+  }
+  100%{
+    opacity: 1;
+  }
+`;
+
+const disappear = keyframes`
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0.5;
+  }
+`;
+
 export const MarkerPointer = styled.img`
     position: absolute;
     z-index: 100;
@@ -35,6 +53,7 @@ export const MarkerContainer = styled.div`
     &:hover {
         ${BallonContainer} {
             display: block;
+            animation: ${appear} 0.3s;
         }
     }
 `;

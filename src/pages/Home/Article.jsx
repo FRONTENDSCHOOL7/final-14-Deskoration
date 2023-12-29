@@ -2,13 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useScroll from '../../hooks/useScroll';
 import * as S from './Article.styled';
+import { useLocation } from 'react-router-dom';
 
 const Article = ({ articles, fetchNextPage }) => {
     const loaderRef = useScroll(fetchNextPage);
 
+    const location = useLocation();
+    const isProfile = location.pathname.includes('/profile');
+
     return (
         <>
-            <S.Section>
+            <S.Section $isProfile={isProfile}>
                 {articles?.map(article => (
                     <Link
                         key={

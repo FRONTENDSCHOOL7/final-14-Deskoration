@@ -9,7 +9,7 @@ const Article = ({ articles, fetchNextPage }) => {
     return (
         <>
             <S.Section>
-                {articles.map(article => (
+                {articles?.map(article => (
                     <Link
                         key={
                             article._id !== undefined ? article._id : article.id

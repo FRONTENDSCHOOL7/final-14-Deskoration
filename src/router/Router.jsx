@@ -34,7 +34,6 @@ const ChatRoomPage = lazy(() =>
     import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
 );
 const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
-const UserProfilePage = lazy(() => import('../pages/Profile/UserProfile'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
 const NotFoundPage = lazy(() => import('../pages/404/NotFoundPage'));
 

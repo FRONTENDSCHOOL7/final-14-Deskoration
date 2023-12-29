@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
-
 import {
     getMyProfileAPI,
     getUserProfileAPI,
@@ -12,14 +10,11 @@ import {
 import { postFollowAPI, deleteFollowAPI } from '../../service/follow_service';
 import { getMyPostAPI } from '../../service/post_service';
 import axiosInstance from '../../service/axiosInstance';
-
 import usePageHandler from '../../hooks/usePageHandler';
-
 import GradientButton from '../../components/GradientButton/GradientButton';
 import Loader from '../../components/Loading/Loader';
 import BottomSheet from '../../components/BottomSheet/BottomSheet';
 import NotFoundPage from '../404/NotFoundPage';
-
 import * as S from './Profile.styled';
 import Article from '../Home/Article';
 import NoContents from '../../components/NoContents/NoContents';
@@ -28,55 +23,55 @@ const Profile = () => {
     const queryClient = useQueryClient();
     const [expandedContent, setExpandedContent] = useState(false);
     const [isBottomSheet, setIsBottomSheet] = useState(false);
-
     const { username } = useParams(); //선택한 게시물 아이디 값
+    const isMyProfile = !username;
 
     const navigate = useNavigate();
 
-    //나의 프로필 부분 -> username === undefined
+    //나의 프로필 부분 -> isMyProfile
     const {
         data: profileData,
-        isLoading: profileLoading,
+        isFetching: profileFetching,
         error: profileError,
     } = useQuery({
         queryKey: ['getMyProfile'],
         queryFn: () => getMyProfileAPI(),
         select: data => data.user,
-        enabled: username === undefined,
+        enabled: isMyProfile,
     });
     //유저 프로필 부분 => username === username
     const {
         data: userProfileData,
-        isLoading: userProfileLoading,
+        isFetching: userProfileFetching,
         error: userProfileError,
     } = useQuery({
         queryKey: ['getUserProfile', username],
         queryFn: () => getUserProfileAPI(username),
         select: data => data.profile,
-        enabled: username !== undefined,
+        enabled: !isMyProfile,
     });
 
     //게시물 데이터 가져오기 내프로필 유저프로필 경우에 따라
     const {
         data: postData,
-        isLoading: postLoading,
+        isFetching: postFetching,
         error: postError,
     } = useQuery({
         queryKey: ['getMyPost'],
         queryFn: () =>
             getMyPostAPI(
-                username === undefined
+                isMyProfile
                     ? profileData.accountname
                     : userProfileData.accountname,
             ),
         select: data =>
             data.filter(item => item.content.includes('"deskoration"')),
-        enabled: username === undefined ? !!profileData : !!userProfileData,
+        enabled: isMyProfile ? !!profileData : !!userProfileData,
     });
 
     usePageHandler(
         'text',
-        username === undefined ? '나의 프로필' : userProfileData?.username,
+        isMyProfile ? '나의 프로필' : userProfileData?.username,
     );
 
     const hadleBottomSheet = () => setIsBottomSheet(!isBottomSheet);
@@ -90,7 +85,6 @@ const Profile = () => {
         navigate('/profileEdit');
     };
 
-    // To.Herrypi  mutation 사용하기!
     // 팔로우 팔로잉
     const follow = useMutation({
         mutationFn: accountName => postFollowAPI(accountName),
@@ -113,7 +107,6 @@ const Profile = () => {
             follow.mutate(accountName);
         }
     };
-    // 채팅 방 생성 관련 코드
     const fetchRoomId = async accountname => {
         try {
             let chatRoomId = '';
@@ -173,12 +166,12 @@ const Profile = () => {
 
     return (
         <>
-            {(profileLoading && userProfileLoading) || postLoading ? (
+            {(profileFetching && userProfileFetching) || postFetching ? (
                 <Loader />
             ) : (
                 <>
                     <S.ProfileContainer>
-                        {username === undefined ? (
+                        {isMyProfile ? (
                             <S.UserInfo>
                                 <img src={profileData?.image} alt="" />
                                 <div>
@@ -235,7 +228,7 @@ const Profile = () => {
                             </p>
 
                             <Link to={`/followerList`}>
-                                {username === undefined ? (
+                                {isMyProfile ? (
                                     <p>
                                         <span>
                                             {profileData?.followerCount}
@@ -252,7 +245,7 @@ const Profile = () => {
                                 )}
                             </Link>
                             <Link to="/followingList">
-                                {username === undefined ? (
+                                {isMyProfile ? (
                                     <p>
                                         <span>
                                             {profileData?.followingCount}
@@ -269,7 +262,7 @@ const Profile = () => {
                                 )}
                             </Link>
                         </S.UserDataList>
-                        {username === undefined ? (
+                        {isMyProfile ? (
                             <GradientButton
                                 type={'button'}
                                 gra={'true'}
@@ -325,7 +318,7 @@ const Profile = () => {
                     <S.MoreButton onClick={hadleBottomSheet}>
                         <S.MoreIcon />
                     </S.MoreButton>
-                    {username === undefined && (
+                    {isMyProfile && (
                         <BottomSheet
                             isBottomSheet={isBottomSheet}
                             hadleBottomSheet={hadleBottomSheet}
@@ -335,7 +328,7 @@ const Profile = () => {
                         />
                     )}
 
-                    {(username === undefined
+                    {(isMyProfile
                         ? profileError
                         : userProfileError || postError) && <NotFoundPage />}
                 </>

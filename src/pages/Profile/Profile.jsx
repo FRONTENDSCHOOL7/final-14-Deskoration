@@ -227,40 +227,44 @@ const Profile = () => {
                                 <span>게시물</span>
                             </p>
 
-                            <Link to={`/followerList`}>
-                                {isMyProfile ? (
+                            {isMyProfile ? (
+                                <Link to={`/followerList`}>
                                     <p>
                                         <span>
                                             {profileData?.followerCount}
                                         </span>
                                         <span>팔로워</span>
                                     </p>
-                                ) : (
+                                </Link>
+                            ) : (
+                                <Link to={`/followerList/${username}`}>
                                     <p>
                                         <span>
                                             {userProfileData?.followerCount}
                                         </span>
                                         <span>팔로워</span>
                                     </p>
-                                )}
-                            </Link>
-                            <Link to="/followingList">
-                                {isMyProfile ? (
+                                </Link>
+                            )}
+                            {isMyProfile ? (
+                                <Link to="/followingList">
                                     <p>
                                         <span>
                                             {profileData?.followingCount}
                                         </span>
                                         <span>팔로잉</span>
                                     </p>
-                                ) : (
+                                </Link>
+                            ) : (
+                                <Link to={`/followingList/${username}`}>
                                     <p>
                                         <span>
                                             {userProfileData?.followingCount}
                                         </span>
                                         <span>팔로잉</span>
                                     </p>
-                                )}
-                            </Link>
+                                </Link>
+                            )}
                         </S.UserDataList>
                         {isMyProfile ? (
                             <GradientButton

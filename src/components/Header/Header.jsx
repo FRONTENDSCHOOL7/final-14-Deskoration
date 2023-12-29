@@ -8,7 +8,6 @@ import { getMyProfileAPI } from '../../service/profile_service';
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    // const myAccountName = sessionStorage.getItem('AccountName');
     const handleGoBack = () => {
         navigate(-1);
     };

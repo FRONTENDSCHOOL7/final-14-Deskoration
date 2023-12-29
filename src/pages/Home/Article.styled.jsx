@@ -8,7 +8,7 @@ export const Section = styled.section`
     grid-gap: 10px;
     width: 100%;
     color: ${theme.mainFont};
-    overflow-y: auto;
+    overflow-y: ${props => (props.$isProfile ? null : 'auto')};
     height: calc(100vh - 247px);
     padding: 10px 5px 10px 0;
 

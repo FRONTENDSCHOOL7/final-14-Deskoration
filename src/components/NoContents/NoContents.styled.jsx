@@ -27,13 +27,19 @@ export const NoContentsContainer = styled.div`
 `;
 
 export const LinkBox = styled.div`
-    padding: 10px;
+    padding: 10px 0;
     border-radius: 12px;
     color: #fff;
     background: linear-gradient(90deg, #685c53 16.45%, #8d7358 97.1%);
 
     &:hover {
         outline: 2px solid ${props => props.theme.main};
+    }
+
+    a {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
     }
 `;
 

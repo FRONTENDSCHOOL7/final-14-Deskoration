@@ -12,12 +12,6 @@ const FollowerListPage = lazy(() =>
 const FollowingListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowingList'),
 );
-const UserFollowingListPage = lazy(() =>
-    import('../pages/FollowFollowingList/UserFollowingList'),
-);
-const UserFollowerListPage = lazy(() =>
-    import('../pages/FollowFollowingList/UserFollowerList'),
-);
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
 const HomePage = lazy(() => import('../pages/Home/Home'));
@@ -105,11 +99,11 @@ const Router = () => {
                             />
                             <Route
                                 path={'/followerList/:username'}
-                                element={<UserFollowerListPage />}
+                                element={<FollowerListPage />}
                             />
                             <Route
                                 path={'/followingList/:username'}
-                                element={<UserFollowingListPage />}
+                                element={<FollowingListPage />}
                             />
                         </Route>
                     </Route>

@@ -21,77 +21,100 @@ import { db } from '../../../firebase';
 
 const ChatRoomPage = () => {
     const location = useLocation();
-    const { register, handleSubmit, resetField } = useForm({
-        mode: 'onSubmit',
-        defaultValues: {
-            chatMsg: '',
-        },
-    });
-    const chatContainerRef = useRef(null); // Ref를 생성하여 채팅 컨테이너에 접근
     const { roomId, user } = location.state;
-    const [chatMessages, setChatMessages] = useState([]);
 
-    const queryClient = useQueryClient();
-    const myProfileData = queryClient.getQueryData(['getMyProfile']);
-    const myProfileAccountName = myProfileData?.user?.accountname;
-    const profileImageData = myProfileData?.user?.image;
-    const myProfileUserName = myProfileData?.user?.username;
+    const [chatMessages, setChatMessages] = useState([]);
+    const [chatId, setChatId] = useState('');
+
+    const navigate = useNavigate();
 
     // myProfileData를 불러올 수 없을경우 useQuery로 데이터 불러옴
+    const queryClient = useQueryClient();
+    const myProfileData = queryClient.getQueryData(['getMyProfile']);
     const { data: profileData } = useQuery({
         queryKey: ['getMyProfile'],
         queryFn: () => getMyProfileAPI(),
         select: data => data.user,
         enabled: !myProfileData,
     });
-    const myAccountName = myProfileAccountName || profileData.accountname;
-    const myProfileImage = profileImageData || profileData.image;
-    const myUserName = myProfileUserName || profileData.username;
-    const navigate = useNavigate();
-    const [chatId, setChatId] = useState('');
+    const myAccountName =
+        myProfileData?.user?.accountname || profileData?.accountname;
+    const myProfileImage = myProfileData?.user?.image || profileData?.image;
+    const myUserName = myProfileData?.user?.username || profileData?.username;
+
     const chatCollectionRef = collection(db, 'messages');
     const chatListCollectionRef = collection(db, 'chatList');
     const chatRoomsCollectionRef = collection(db, 'rooms');
-    // useEffect를 사용하여 스크롤을 항상 맨 아래로 이동
+
+    const formatDate = data => {
+        const convertedDate = data.toDate();
+        const hour = convertedDate.getHours();
+        const min = convertedDate.getMinutes();
+
+        return `${hour}:${
+            min === 0 ? '00' : min > 0 && min < 10 ? '0' + min : min
+        }`;
+    };
+
+    const { register, handleSubmit, resetField } = useForm({
+        mode: 'onSubmit',
+        defaultValues: {
+            chatMsg: '',
+        },
+    });
+
+    //chat message 가져오기
+    const fetchData = async () => {
+        try {
+            const chatSnapshot = await getDocs(
+                query(chatCollectionRef, orderBy('messages')),
+            );
+
+            const chatMessageList = chatSnapshot.docs.map(doc => ({
+                chatId: doc.id,
+                ...doc.data(),
+            }));
+            chatMessageList.map(info => {
+                if (info.roomId === roomId) {
+                    setChatMessages(info.messages);
+                    setChatId(info.chatId);
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const chatSnapshot = await getDocs(
-                    query(chatCollectionRef, orderBy('messages')),
-                );
-
-                const chatMessageList = chatSnapshot.docs.map(doc => ({
-                    chatId: doc.id,
-                    ...doc.data(),
-                }));
-                chatMessageList.map(info => {
-                    if (info.roomId === roomId) {
-                        setChatMessages(info.messages);
-                        setChatId(info.chatId);
-                    }
-                });
-                const chatContainer = chatContainerRef.current;
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchData();
-
         const unsubscribe = onSnapshot(chatCollectionRef, snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type === 'modified' || change.type === 'added') {
                     if (change.doc.data().roomId === roomId)
                         setChatMessages(change.doc.data().messages);
-                    chatContainerRef.current.scrollTop =
-                        chatContainerRef.current.scrollHeight;
                 }
             });
         });
-
         return () => unsubscribe();
-    }, [roomId, chatContainerRef]);
+    }, [chatCollectionRef, roomId]);
+
+    //chat 관련 메소드
+    const chatManager = {
+        createNewMessage: function (messageContent, accountName) {
+            return {
+                content: messageContent,
+                createdAt: new Date(),
+                accountname: accountName,
+            };
+        },
+        createParticipant: function (image, accountName, userName) {
+            return {
+                image,
+                accountname: accountName,
+                username: userName,
+            };
+        },
+    };
 
     const handleSendMessage = async data => {
         // 빈 메세지 전송 시 경고
@@ -100,22 +123,20 @@ const ChatRoomPage = () => {
             return;
         }
         // 새 메시지를 생성
-        const newMessage = {
-            content: data.chatMsg,
-            createdAt: new Date(),
-            accountname: myAccountName,
-        };
-
-        const participants = {
-            image: user.image,
-            accountname: user.accountname,
-            username: user.username,
-        };
-        const participants2 = {
-            image: myProfileImage,
-            accountname: myAccountName,
-            username: myUserName,
-        };
+        const newMessage = chatManager.createNewMessage(
+            data.chatMsg,
+            myAccountName,
+        );
+        const participant1 = chatManager.createParticipant(
+            user.image,
+            user.accountname,
+            user.username,
+        );
+        const participant2 = chatManager.createParticipant(
+            myProfileImage,
+            myAccountName,
+            myUserName,
+        );
 
         try {
             if (roomId !== undefined) {
@@ -128,13 +149,13 @@ const ChatRoomPage = () => {
                 await setDoc(lastMsgRef, {
                     createdAt: new Date(),
                     lastMessage: data.chatMsg,
-                    participants: arrayUnion(participants, participants2),
+                    participants: arrayUnion(participant1, participant2),
                 });
             } else {
                 const newChatList = await addDoc(chatListCollectionRef, {
                     createdAt: new Date(),
                     lastMessage: newMessage.content,
-                    participants: arrayUnion(participants, participants2),
+                    participants: arrayUnion(participant1, participant2),
                 });
                 await addDoc(
                     chatCollectionRef,
@@ -156,7 +177,7 @@ const ChatRoomPage = () => {
                     newChatList.id,
                 );
                 navigate(`/chat/${newChatList.id}`, {
-                    state: { roomId: newChatList.id, user: participants },
+                    state: { roomId: newChatList.id, user: participant1 },
                     replace: true,
                 });
             }
@@ -167,22 +188,12 @@ const ChatRoomPage = () => {
         resetField('chatMsg');
     };
 
-    const formatDate = data => {
-        const convertedDate = data.toDate();
-        const hour = convertedDate.getHours();
-        const min = convertedDate.getMinutes();
-
-        return `${hour}:${
-            min === 0 ? '00' : min > 0 && min < 10 ? '0' + min : min
-        }`;
-    };
-
     usePageHandler('user', user.image, user.username, user.accountname);
 
     return (
         <>
             <S.ChatRoomPageContainer>
-                <S.ChatRoomMain ref={chatContainerRef}>
+                <S.ChatRoomMain>
                     {/* 상대 채팅 */}
                     {roomId === undefined && (
                         <S.ChatContent

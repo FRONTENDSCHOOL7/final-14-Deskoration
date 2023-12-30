@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { uploadPostAPI } from '../../service/post_service';
+import { uploadPostAPI, updatePostAPI } from '../../service/post_service';
 import usePageHandler from '../../hooks/usePageHandler';
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
@@ -10,23 +10,60 @@ import * as S from './NewBoard.styled';
 
 // AddPost
 const NewBoard = () => {
+    const baseUrlLength = process.env.REACT_APP_BASE_URL.length;
+
     const navigate = useNavigate();
     const location = useLocation();
-    const pathName = location.pathname;
-    const detailPost = pathName.includes('/detailPost');
-    const [apiContent, setApiContent] = useState();
-    const [imageURL, setImageURL] = useState();
-    const [imageFile, setImageFile] = useState();
-    const [productItems, setProductItems] = useState([]);
-    const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const [textArea, setTextArea] = useState({
-        message: '',
-        length: 0,
-    });
 
+    const pathName = location.pathname;
+    const postData = location.state?.postData;
+    const contentData = postData?.content
+        ? JSON.parse(postData.content)?.deskoration
+        : {};
+    const postId = postData?.id;
+
+    const postType = (data1, data2) => {
+        if (pathName === `/postEdit/${postId}`) {
+            return data1;
+        } else {
+            return data2;
+        }
+    };
+    const [apiContent, setApiContent] = useState();
+    const [updateData, setUpdateData] = useState();
+
+    const [imageURL, setImageURL] = useState(
+        postType(postData?.image || '', ''),
+    );
+    const [imageFile, setImageFile] = useState(
+        postType(postData?.image?.substring(baseUrlLength) || '', ''),
+    );
+    const [productItems, setProductItems] = useState(
+        postType(contentData?.productItems || [], []),
+    );
+    const [textArea, setTextArea] = useState(
+        postType(
+            {
+                message: contentData?.message || '',
+                length: contentData?.message ? contentData?.message.length : 0,
+            },
+            {
+                message: '',
+                length: 0,
+            },
+        ),
+    );
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
     const queryClient = useQueryClient();
 
-    usePageHandler('text', detailPost ? '아이템 보기' : '게시글 작성');
+    usePageHandler(
+        'text',
+        pathName.includes(`/postUpload`)
+            ? '게시글 작성'
+            : pathName.includes('/postEdit')
+            ? '게시글 수정'
+            : '아이템 보기',
+    );
 
     const trimTextArea = () => {
         setTextArea(prev => ({
@@ -35,6 +72,7 @@ const NewBoard = () => {
             length: prev.message.trim().length,
         }));
     };
+
     const handleMessageChange = e => {
         setTextArea({
             message: e.target.value,
@@ -52,10 +90,20 @@ const NewBoard = () => {
         return;
     };
 
+    //게시글 작성 업데이트 data
     useEffect(() => {
         setApiContent({ message: textArea.message.trim(), productItems });
     }, [textArea.message, productItems]);
 
+    //게시글 수정 업데이트 data
+    useEffect(() => {
+        setUpdateData({
+            message: textArea.message?.trim(),
+            productItems,
+        });
+    }, [textArea.message, productItems]);
+
+    //게시물 작성 muatat
     const uploadPostMutation = useMutation({
         mutationFn: ({ apiContent, imageFile }) =>
             uploadPostAPI(apiContent, imageFile),
@@ -69,19 +117,37 @@ const NewBoard = () => {
         },
     });
 
+    //게시물 수정 muatat
+    const updatePostMutation = useMutation({
+        mutationFn: ({ postId, updateData, imageFile }) =>
+            updatePostAPI(postId, updateData, imageFile),
+        onSuccess: () => {
+            navigate(-1);
+        },
+    });
+
     const submitPost = event => {
         event.preventDefault();
         if (!textArea.message || !imageURL) {
             alert('나의 데스크 셋업 이미지와 설명 칸을 비울 수 없습니다.');
             return null;
         } else {
-            uploadPostMutation.mutate({ apiContent, imageFile });
+            if (pathName === '/postUpload') {
+                uploadPostMutation.mutate({ apiContent, imageFile });
+            } else if (pathName === `/postEdit/${postId}`) {
+                updatePostMutation.mutate({
+                    postId,
+                    updateData,
+                    imageFile,
+                });
+            }
         }
     };
 
     return (
         <S.NewBoardContainer>
-            {pathName === '/postUpload' ? (
+            {pathName === '/postUpload' ||
+            pathName === `/postEdit/${postId}` ? (
                 <form onSubmit={submitPost}>
                     <PostUploadForm
                         productItems={productItems}

@@ -74,11 +74,11 @@ const Router = () => {
                             />
                             <Route
                                 path={'/postEdit/:id'}
-                                element={<PostUpdateForm />}
+                                element={<PostUploadPage />}
                             />
                             <Route
                                 path={'/postEdit/:id/:itemCount'}
-                                element={<PostUpdateForm />}
+                                element={<PostUploadPage />}
                             />
                             <Route path={'/chat'} element={<ChatListPage />} />
                             <Route

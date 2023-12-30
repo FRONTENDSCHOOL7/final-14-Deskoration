@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import { uploadPostAPI } from '../../service/post_service';
-
 import usePageHandler from '../../hooks/usePageHandler';
 import RegisterForm from './RegisterForm';
 import PostUploadForm from './PostUploadForm';
 import GradientButton from '../../components/GradientButton/GradientButton';
-
 import * as S from './NewBoard.styled';
 
 // AddPost
@@ -17,7 +14,6 @@ const NewBoard = () => {
     const location = useLocation();
     const pathName = location.pathname;
     const detailPost = pathName.includes('/detailPost');
-
     const [apiContent, setApiContent] = useState();
     const [imageURL, setImageURL] = useState();
     const [imageFile, setImageFile] = useState();

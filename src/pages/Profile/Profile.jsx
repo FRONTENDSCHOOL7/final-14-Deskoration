@@ -101,7 +101,7 @@ const Profile = () => {
     });
 
     const userFollowToggle = accountName => {
-        if (profileData?.isfollow) {
+        if (userProfileData?.isfollow) {
             unfollow.mutate(accountName);
         } else {
             follow.mutate(accountName);

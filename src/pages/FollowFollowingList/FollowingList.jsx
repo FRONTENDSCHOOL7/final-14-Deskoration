@@ -83,7 +83,7 @@ const FollowingList = () => {
     }
 
     if (isError) {
-        return <Loader />;
+        return <div>Error......</div>;
     }
 
     return (

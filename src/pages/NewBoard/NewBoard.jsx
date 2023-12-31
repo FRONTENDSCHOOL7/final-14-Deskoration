@@ -21,48 +21,40 @@ const NewBoard = () => {
         ? JSON.parse(postData.content)?.deskoration
         : {};
     const postId = postData?.id;
+    const isPostEdit = pathName === `/postEdit/${postId}`;
+    const initialStates = isPostEdit
+        ? {
+              imageURL: postData?.image || '',
+              imageFile: postData?.image?.substring(baseUrlLength) || '',
+              productItems: contentData?.productItems || [],
+              textArea: {
+                  message: contentData?.message || '',
+                  length: contentData?.message
+                      ? contentData?.message.length
+                      : 0,
+              },
+          }
+        : {
+              imageURL: '',
+              imageFile: '',
+              productItems: [],
+              textArea: { message: '', length: 0 },
+          };
 
-    const postType = (data1, data2) => {
-        if (pathName === `/postEdit/${postId}`) {
-            return data1;
-        } else {
-            return data2;
-        }
-    };
     const [apiContent, setApiContent] = useState();
     const [updateData, setUpdateData] = useState();
-
-    const [imageURL, setImageURL] = useState(
-        postType(postData?.image || '', ''),
-    );
-    const [imageFile, setImageFile] = useState(
-        postType(postData?.image?.substring(baseUrlLength) || '', ''),
-    );
+    const [imageURL, setImageURL] = useState(initialStates.imageURL);
+    const [imageFile, setImageFile] = useState(initialStates.imageFile);
     const [productItems, setProductItems] = useState(
-        postType(contentData?.productItems || [], []),
+        initialStates.productItems,
     );
-    const [textArea, setTextArea] = useState(
-        postType(
-            {
-                message: contentData?.message || '',
-                length: contentData?.message ? contentData?.message.length : 0,
-            },
-            {
-                message: '',
-                length: 0,
-            },
-        ),
-    );
+    const [textArea, setTextArea] = useState(initialStates.textArea);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const queryClient = useQueryClient();
 
     usePageHandler(
         'text',
-        pathName.includes(`/postUpload`)
-            ? '게시글 작성'
-            : pathName.includes('/postEdit')
-            ? '게시글 수정'
-            : '아이템 보기',
+        pathName.includes(`/postUpload`) ? '게시글 작성' : '게시글 수정',
     );
 
     const trimTextArea = () => {

@@ -1,6 +1,5 @@
 import { React, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import PostUpdateForm from '../pages/NewBoard/UpdateBoard';
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
 const UserLayoutPage = lazy(() => import('../pages/User/User'));
 const LoginPage = lazy(() => import('../pages/User/Login'));

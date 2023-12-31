@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { StaticMap } from 'react-kakao-maps-sdk';
 
 import * as S from './ShowProduct.styled';
+import usePageHandler from '../../hooks/usePageHandler';
 
 const ShowProduct = () => {
     const [isClipboard, setIsClipboard] = useState({
@@ -14,7 +15,7 @@ const ShowProduct = () => {
     const location = useLocation();
     const product = location.state?.showProduct;
     const productDetail = product?.detail;
-
+    usePageHandler('text', '아이템 보기');
     const copyClipboard = async () => {
         try {
             await navigator.clipboard.writeText(window.location.href);

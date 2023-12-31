@@ -2,6 +2,7 @@ import React from 'react';
 import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import NoContents from '../../components/NoContents/NoContents';
+import Loader from '../../components/Loading/Loader';
 import {
     postFollowAPI,
     deleteFollowAPI,
@@ -76,11 +77,11 @@ const FollowerList = () => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     if (isError) {
-        return <div>Error: {error.message}</div>;
+        return <Loader />;
     }
 
     return (
@@ -116,8 +117,8 @@ const FollowerList = () => {
                 </S.FollowerContainer>
             ) : (
                 <NoContents
-                    mainTxt={'표시할 팔로워가 없습니다!'}
-                    subTxt={'다른 유저를 먼저 팔로우 해보세요! '}
+                    mainTxt={'아직 팔로우 중인 유저가 없습니다!'}
+                    subTxt={'다른 유저를 먼저 팔로우 해보세요. '}
                     link={'/home'}
                     btnLabel={'홈으로 돌아가기'}
                 />

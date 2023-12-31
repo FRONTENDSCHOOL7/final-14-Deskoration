@@ -1,19 +1,37 @@
 import React from 'react';
-import * as S from './FollowingList.styled';
+import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
+import NoContents from '../../components/NoContents/NoContents';
+import Loader from '../../components/Loading/Loader';
+import NotFoundPage from '../404/NotFoundPage';
 import {
     postFollowAPI,
     deleteFollowAPI,
     getFollowingAPI,
 } from '../../service/follow_service';
+import { getMyProfileAPI } from '../../service/profile_service';
 import usePageHandler from '../../hooks/usePageHandler';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const FollowingList = () => {
-    const myAccountName = sessionStorage.getItem('AccountName');
+    const { username } = useParams();
+    const isOtherUser = username !== undefined;
     const queryClient = useQueryClient();
     usePageHandler('text', '팔로잉');
+
+    const myProfileData = queryClient.getQueryData(['getMyProfile']);
+    const myProfileAccountName = myProfileData?.user?.accountname;
+
+    const { data: profileDataAccountName } = useQuery({
+        queryKey: ['getMyProfile'],
+        queryFn: () => getMyProfileAPI(),
+        select: data => data.user.accountname,
+        enabled: !myProfileData,
+    });
+
+    const myAccountName = myProfileAccountName || profileDataAccountName;
+    const accountNameToUse = isOtherUser ? username : myAccountName;
 
     const {
         data: followingData,
@@ -21,72 +39,93 @@ const FollowingList = () => {
         isError,
         error,
     } = useQuery({
-        queryKey: ['followingData', myAccountName],
-        queryFn: () => getFollowingAPI(myAccountName),
+        queryKey: [
+            isOtherUser ? 'userFollowingData' : 'followingData',
+            accountNameToUse,
+        ],
+        queryFn: () => getFollowingAPI(accountNameToUse),
     });
 
-    const following = useMutation({
+    const follow = useMutation({
         mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['followingData', myAccountName]);
+            queryClient.invalidateQueries([
+                isOtherUser ? 'userFollowingData' : 'followingData',
+                accountNameToUse,
+            ]);
         },
     });
 
-    const unFollowing = useMutation({
+    const unfollow = useMutation({
         mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['followingData', myAccountName]);
+            queryClient.invalidateQueries([
+                isOtherUser ? 'userFollowingData' : 'followingData',
+                accountNameToUse,
+            ]);
         },
     });
 
     const handleFollowToggle = accountName => {
-        const followingD = followingData.find(
+        const following = followingData.find(
             f => f.accountname === accountName,
         );
-        if (followingD) {
-            if (followingD.isfollow) {
-                unFollowing.mutate(accountName);
+        if (following) {
+            if (following.isfollow) {
+                unfollow.mutate(accountName);
             } else {
-                following.mutate(accountName);
+                follow.mutate(accountName);
             }
         }
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     if (isError) {
-        return <div>Error: {error.message}</div>;
+        return <NotFoundPage />;
     }
 
     return (
         <>
-            <S.FollowingContainer>
-                {followingData?.map(data => (
-                    <S.FollowingList key={data._id}>
-                        <Link to={`/profile/${data.accountname}`}>
-                            <S.FollowingInfo>
-                                <img
-                                    src={data?.image}
-                                    className="follower-img"
-                                    alt="유저 프로필 이미지"
-                                />
-                                <div>{data?.accountname}</div>
-                            </S.FollowingInfo>
-                        </Link>
-                        <GradientButton
-                            width={'80px'}
-                            onClick={() =>
-                                handleFollowToggle(data?.accountname)
-                            }
-                            gra={!data.isfollow ? true : false}
-                        >
-                            {!data.isfollow ? '팔로우' : '팔로잉'}
-                        </GradientButton>
-                    </S.FollowingList>
-                ))}
-            </S.FollowingContainer>
+            {followingData.length > 0 ? (
+                <S.FollowerContainer>
+                    {followingData.map(data => (
+                        <S.FollowerList key={data._id}>
+                            <Link to={`/profile/${data.accountname}`}>
+                                <S.FollowerInfo>
+                                    <img
+                                        src={data?.image}
+                                        className="follower-img"
+                                        alt="유저 프로필 이미지"
+                                    />
+                                    <div>{data?.accountname}</div>
+                                </S.FollowerInfo>
+                            </Link>
+                            {(!isOtherUser ||
+                                data.accountname !== myAccountName) && (
+                                <GradientButton
+                                    width={'80px'}
+                                    onClick={() =>
+                                        handleFollowToggle(data?.accountname)
+                                    }
+                                    gra={!data.isfollow ? true : false}
+                                >
+                                    {!data.isfollow ? '팔로우' : '팔로잉'}
+                                </GradientButton>
+                            )}
+                        </S.FollowerList>
+                    ))}
+                </S.FollowerContainer>
+            ) : (
+                <NoContents
+                    mainTxt={'아직 나를 팔로우하는 유저가 없습니다!'}
+                    subTxt={'다른 유저를 먼저 팔로우 해보세요. '}
+                    link={'/home'}
+                    btnLabel={'홈으로 돌아가기'}
+                />
+            )}
         </>
     );
 };

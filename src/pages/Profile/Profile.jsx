@@ -89,19 +89,37 @@ const Profile = () => {
     const follow = useMutation({
         mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['getUserProfile', username]);
+            // queryClient.invalidateQueries(['getUserProfile', username]);
+            queryClient.setQueryData(['getUserProfile', username], data => {
+                return {
+                    ...data,
+                    profile: {
+                        ...data.profile,
+                        isfollow: true,
+                    },
+                };
+            });
         },
     });
 
     const unfollow = useMutation({
         mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['getUserProfile', username]);
+            // queryClient.invalidateQueries(['getUserProfile', username]);
+            queryClient.setQueryData(['getUserProfile', username], data => {
+                return {
+                    ...data,
+                    profile: {
+                        ...data.profile,
+                        isfollow: false,
+                    },
+                };
+            });
         },
     });
 
     const userFollowToggle = accountName => {
-        if (profileData?.isfollow) {
+        if (userProfileData?.isfollow) {
             unfollow.mutate(accountName);
         } else {
             follow.mutate(accountName);

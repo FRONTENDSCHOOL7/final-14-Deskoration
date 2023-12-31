@@ -3,6 +3,7 @@ import * as S from './FollowerList.styled';
 import GradientButton from '../../components/GradientButton/GradientButton';
 import NoContents from '../../components/NoContents/NoContents';
 import Loader from '../../components/Loading/Loader';
+import NotFoundPage from '../404/NotFoundPage';
 import {
     postFollowAPI,
     deleteFollowAPI,
@@ -83,7 +84,7 @@ const FollowingList = () => {
     }
 
     if (isError) {
-        return <div>Error: {error.message}</div>;
+        return <NotFoundPage />;
     }
 
     return (

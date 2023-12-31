@@ -81,7 +81,7 @@ const FollowerList = () => {
     }
 
     if (isError) {
-        return <div>Error......</div>;
+        return <div>Error: {error.message}</div>;
     }
 
     return (

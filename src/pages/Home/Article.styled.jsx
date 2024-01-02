@@ -16,8 +16,8 @@ export const Section = styled.section`
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
 
-    @media screen and (min-width: 768px) {
-        grid-template-columns: repeat(4, 1fr);
+    @media screen and (min-width: 600px) {
+        grid-template-columns: repeat(3, 1fr);
     }
     a {
         aspect-ratio: 1/1;

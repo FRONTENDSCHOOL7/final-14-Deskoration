@@ -89,89 +89,70 @@ const Profile = () => {
     const follow = useMutation({
         mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            // queryClient.invalidateQueries(['getUserProfile', username]);
-            queryClient.setQueryData(['getUserProfile', username], data => {
-                return {
-                    ...data,
-                    profile: {
-                        ...data.profile,
-                        isfollow: true,
-                    },
-                };
-            });
+            queryClient.invalidateQueries(['getUserProfile', username]);
         },
     });
 
     const unfollow = useMutation({
         mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            // queryClient.invalidateQueries(['getUserProfile', username]);
-            queryClient.setQueryData(['getUserProfile', username], data => {
-                return {
-                    ...data,
-                    profile: {
-                        ...data.profile,
-                        isfollow: false,
-                    },
-                };
-            });
+            queryClient.invalidateQueries(['getUserProfile', username]);
         },
     });
 
     const userFollowToggle = accountName => {
-        if (userProfileData?.isfollow) {
+        if (profileData?.isfollow) {
             unfollow.mutate(accountName);
         } else {
             follow.mutate(accountName);
         }
     };
+    //자신의 계정이 속해 있는 채팅 방 정보 가져오기
     const fetchRoomId = async accountname => {
         try {
-            let chatRoomId = '';
-            const roomRef = collection(db, 'rooms');
-            const roomSnapshot = await getDocs(
-                query(
-                    roomRef,
-                    where('participants', 'array-contains', accountname),
-                ),
-            );
-
-            for (let room of roomSnapshot.docs) {
-                const data = room.data();
-                let result = data.participants.includes(
-                    userProfileData.accountname,
-                );
-                if (result) {
-                    chatRoomId = data.roomId;
-                    break;
-                }
-            }
-
-            if (chatRoomId) {
-                navigate(`/chat/${chatRoomId}`, {
-                    state: {
-                        roomId: chatRoomId,
-                        user: {
-                            accountname: userProfileData.accountname,
-                            username: userProfileData.username,
-                            image: userProfileData.image,
-                        },
-                    },
-                });
-            } else {
-                navigate(`/chat/${userProfileData.accountname}`, {
-                    state: {
-                        user: {
-                            accountname: userProfileData.accountname,
-                            username: userProfileData.username,
-                            image: userProfileData.image,
-                        },
-                    },
-                });
-            }
+            const chatRoomId = await findChatRoomId(accountname);
+            navigateToChatRoom(chatRoomId, userProfileData);
         } catch (error) {
             console.error(error);
         }
+    };
+    //자신의 계정이 속해 있는 방정보 찾기
+    const findChatRoomId = async accountname => {
+        const roomRef = collection(db, 'rooms');
+        const roomSnapshot = await getDocs(
+            query(
+                roomRef,
+                where('participants', 'array-contains', accountname),
+            ),
+        );
+
+        for (let room of roomSnapshot.docs) {
+            const data = room.data();
+            if (data.participants.includes(userProfileData.accountname)) {
+                return data.roomId;
+            }
+        }
+        return null;
+    };
+    // 해당하는 계정과에 채팅방으로 이동
+    const navigateToChatRoom = (chatRoomId, userProfile) => {
+        const path = chatRoomId
+            ? `/chat/${chatRoomId}`
+            : `/chat/${userProfile.accountname}`;
+        const state = {
+            roomId: chatRoomId,
+            user: {
+                accountname: userProfile.accountname,
+                username: userProfile.username,
+                image: userProfile.image,
+            },
+        };
+
+        if (!chatRoomId) {
+            delete state.roomId;
+        }
+
+        navigate(path, { state });
     };
 
     const logOut = () => {
@@ -319,7 +300,9 @@ const Profile = () => {
                                     type={'button'}
                                     width={'100%'}
                                     padding={'10px'}
-                                    onClick={fetchRoomId}
+                                    onClick={() =>
+                                        fetchRoomId(profileData.accountname)
+                                    }
                                 >
                                     메시지 보내기
                                 </GradientButton>
@@ -337,9 +320,11 @@ const Profile = () => {
                             <Article articles={postData} />
                         )}
                     </S.ProfileContainer>
-                    <S.MoreButton onClick={hadleBottomSheet}>
-                        <S.MoreIcon />
-                    </S.MoreButton>
+                    {isMyProfile && (
+                        <S.MoreButton onClick={hadleBottomSheet}>
+                            <S.MoreIcon />
+                        </S.MoreButton>
+                    )}
                     {isMyProfile && (
                         <BottomSheet
                             isBottomSheet={isBottomSheet}

@@ -3,12 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { openAlertModal } from '../../../features/modal/alertModalSlice';
 import { deletePostAPI, reportPostAPI } from '../../../service/post_service';
-import { getMyProfileAPI } from '../../../service/profile_service';
 import { Marker } from '../../Marker/Marker';
 import SocialButton from '../../SocialButton/SocialButton';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import BottomSheet from '../../BottomSheet/BottomSheet';
 import Like from '../../Like/Like';
+
 import * as S from './DetailPost.styled';
 
 const DetailPost = ({ data, commentData, id, setFocus }) => {
@@ -18,18 +17,7 @@ const DetailPost = ({ data, commentData, id, setFocus }) => {
     const mutationParams = {
         id: postData.id,
     };
-    const queryClient = useQueryClient();
-    const myProfileData = queryClient.getQueryData(['getMyProfile']);
-    const myProfileId = myProfileData?.user?._id;
-
-    const { data: profileDataId } = useQuery({
-        queryKey: ['getMyProfile'],
-        queryFn: () => getMyProfileAPI(),
-        select: data => data.user._id,
-        enabled: !myProfileData,
-    });
-
-    const myId = myProfileId || profileDataId;
+    const myId = sessionStorage.getItem('Id');
 
     const navigate = useNavigate();
 
@@ -68,6 +56,7 @@ const DetailPost = ({ data, commentData, id, setFocus }) => {
         }
         handleReportBottomSheet();
     };
+
     return (
         <>
             <S.DetailPostContainer>

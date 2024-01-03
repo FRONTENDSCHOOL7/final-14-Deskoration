@@ -5,7 +5,7 @@
 저희 프로젝트는 데스크테리어 SNS로 사용자들은 나만의 데스크셋업을 업로드하고, 소통할 수 있습니다. 사용자들은 본인만의 데스크테리어와 실제 사용감을 공유함으로써 단순한 공간 변화를 넘어, 나만의 소중한 공간을 꾸며나갈 수 있습니다.
 
 ## 배포 링크 및 테스트 계정
-👉 [Deskoration 시작하기](https://develop--dreamy-dasik-d8783e.netlify.app/)
+👉 [Deskoration 시작하기](https://deskoration.netlify.app/)
 ```
 ID : test@deskoration.com
 PW : test123

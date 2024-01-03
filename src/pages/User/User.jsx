@@ -6,9 +6,6 @@ import AlertModal from '../../components/AlertModal/AlertModal';
 
 import * as S from './User.styled';
 import Logo from '../../assets/images/Logo.svg';
-import googleLogo from '../../assets/images/login/Google.png';
-import kakaoLogo from '../../assets/images/login/Kakao.png';
-import facebookLogo from '../../assets/images/login/Facebook.png';
 
 const User = () => {
     const [isReady, setIsReady] = useState(false);
@@ -44,28 +41,6 @@ const User = () => {
                     <S.Content>
                         <Outlet />
                     </S.Content>
-                    <S.SocialLoginContainer>
-                        <ul>
-                            <li>
-                                <button type="button">
-                                    <img src={googleLogo} alt="구글 로그인" />
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button">
-                                    <img src={kakaoLogo} alt="카카오 로그인" />
-                                </button>
-                            </li>
-                            <li>
-                                <button type="button">
-                                    <img
-                                        src={facebookLogo}
-                                        alt="페이스북 로그인"
-                                    />
-                                </button>
-                            </li>
-                        </ul>
-                    </S.SocialLoginContainer>
                     <AlertModal />
                 </S.UserContainer>
             )}

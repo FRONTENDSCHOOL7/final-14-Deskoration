@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
 
 export const UserContainer = styled.article`
-    position: relative;
     padding: 50px 25px 0;
     height: 100%;
     max-width: 450px;

@@ -11,7 +11,7 @@ const Header = () => {
     const handleGoBack = () => {
         navigate(-1);
     };
-
+    const editPage = location.pathname.includes('/profileEdit');
     const queryClient = useQueryClient();
     const myProfileData = queryClient.getQueryData(['getMyProfile']);
     const myProfileAccountName = myProfileData?.user?.accountname;
@@ -21,7 +21,7 @@ const Header = () => {
         queryKey: ['getMyProfile'],
         queryFn: () => getMyProfileAPI(),
         select: data => data.user.accountname,
-        enabled: !myProfileData,
+        enabled: editPage && !myProfileData,
     });
 
     const myAccountName = myProfileAccountName || profileDataAccountName;

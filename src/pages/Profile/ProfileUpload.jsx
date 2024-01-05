@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
+import axiosInstance from '../../service/axiosInstance';
 import {
     authLoginAPI,
     authSignUpAPI,
@@ -27,19 +27,17 @@ import basicImg from '../../assets/images/basicImg.png';
 export const ProfileUpload = () => {
     // 헤더에 문구 넣기
     usePageHandler('text', '프로필 설정');
-
     const noImage = '/Ellipse.png';
-
     const queryClient = useQueryClient();
-    // 프로필 수정하기를 위한 데이터
-    const myProfileData = queryClient.getQueryData(['getMyProfile']);
-
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
 
     // editProfile
     const editPage = location.pathname.includes('/profileEdit');
+    // 프로필 수정하기를 위한 데이터
+    const myProfileData =
+        editPage && queryClient.getQueryData(['getMyProfile']);
 
     const [imageURL, setImageURL] = useState(basicImg);
     const [isImageAdded, setIsImageAdded] = useState(false);
@@ -66,8 +64,9 @@ export const ProfileUpload = () => {
         setFocus('userName');
     }, [setFocus]);
 
+    // 프로필 편집 시에 불러온 데이터를 화면에 렌더링
     useEffect(() => {
-        if (myProfileData) {
+        if (editPage && myProfileData) {
             const userData = myProfileData.user;
             setImageURL(userData.image);
             if (process.env.REACT_APP_BASE_URL + noImage !== userData.image) {
@@ -79,14 +78,14 @@ export const ProfileUpload = () => {
             setValue('userID', userData.accountname);
             setValue('intro', userData.intro);
         }
-    }, [myProfileData, setValue]);
+    }, [editPage, myProfileData, setValue]);
 
-    // 프로필 데이터가 시간초과로 사라진 경우
+    // 프로필 편집 & 프로필 데이터가 시간초과로 사라진 경우
     useEffect(() => {
-        if (!myProfileData) {
+        if (editPage && !myProfileData) {
             dispatch(openAlertModal('잠시 후 다시 시도해주세요.'));
         }
-    }, [dispatch, myProfileData, navigate]);
+    }, [dispatch, editPage, myProfileData, navigate]);
 
     //계정 ID 검사
     const validateUserID = id => {
@@ -111,8 +110,11 @@ export const ProfileUpload = () => {
         mutationFn: ({ emailValue, passwordValue }) =>
             authLoginAPI(emailValue, passwordValue),
         onSuccess: data => {
-            // 토큰 외에 저장 금지 아마도?
             sessionStorage.setItem('Token', data.user.token);
+            axiosInstance.defaults.headers = {
+                ...axiosInstance.defaults.headers,
+                Authorization: `Bearer ${data.user.token}`,
+            };
             navigate('/home');
         },
     });

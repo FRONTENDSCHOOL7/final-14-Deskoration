@@ -36,19 +36,13 @@ export const ProfileUpload = () => {
     // editProfile
     const editPage = location.pathname.includes('/profileEdit');
     // 프로필 수정하기를 위한 데이터
-    const [myProfileData, setMyProfileData] = useState([]);
+    const myProfileData =
+        editPage && queryClient.getQueryData(['getMyProfile']);
 
     const [imageURL, setImageURL] = useState(basicImg);
     const [isImageAdded, setIsImageAdded] = useState(false);
     const [imageFile, setImageFile] = useState('');
     const { emailValue, passwordValue } = useLocation().state || {};
-
-    // 프로필 편집일 경우, 프로필 데이터 가져오기
-    useEffect(() => {
-        if (editPage) {
-            setMyProfileData(queryClient.getQueryData(['getMyProfile']));
-        }
-    }, [editPage, queryClient]);
 
     const {
         register,

@@ -178,8 +178,8 @@ export const ProfileUpload = () => {
                     accountname: profileData.userID,
                     intro: profileData.intro,
                     image: !imageFile
-                        ? process.env.REACT_APP_BASE_URL + noImage
-                        : process.env.REACT_APP_BASE_URL + imageFile,
+                        ? process.env.REACT_APP_BASE_URL + '/' + noImage
+                        : process.env.REACT_APP_BASE_URL + '/' + imageFile,
                 },
             };
             signUpMutation.mutate(userData);
@@ -193,7 +193,7 @@ export const ProfileUpload = () => {
                     intro: profileData.intro,
                     image:
                         !imageFile && imageURL === basicImg
-                            ? process.env.REACT_APP_BASE_URL + noImage
+                            ? process.env.REACT_APP_BASE_URL + '/' + noImage
                             : !imageFile && imageURL
                             ? myProfileData.user.image
                             : process.env.REACT_APP_BASE_URL + '/' + imageFile,

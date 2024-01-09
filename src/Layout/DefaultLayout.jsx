@@ -6,7 +6,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 const DefaultLayout = () => {
     const location = useLocation();
 
-    const isDetailPost = location.pathname.includes('/detailpost/');
+    const isDetailPost = location.pathname.includes('/detailPost/');
     const isChatRoom = location.pathname.includes('/chat/');
     const isHome = location.pathname.includes('/home');
 

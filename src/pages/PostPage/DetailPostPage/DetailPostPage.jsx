@@ -1,40 +1,35 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
-import { getDetailPostAPI } from '../../../service/post_service';
-import { getCommentAPI } from '../../../service/comment_service';
+import usePageHandler from 'hooks/usePageHandler';
+import {
+    useCommentQueryData,
+    useDetailPostQueryData,
+} from 'hooks/useQueryData';
 
-import usePageHandler from '../../../hooks/usePageHandler';
-import AlertModal from '../../../components/AlertModal/AlertModal';
-import DetailPost from '../../../components/PostDetail/DetailPost/DetailPost';
-import Comment from '../../../components/PostDetail/Comment/Comment';
-import Loader from '../../../components/Loading/Loader';
-import NotFoundPage from '../../404/NotFoundPage';
+import AlertModal from 'components/common/AlertModal/AlertModal';
+import DetailPost from 'components/Post/PostDetail/DetailPost/DetailPost';
+import Comment from 'components/Post/PostDetail/Comment/Comment';
+import Loader from 'components/common/Loading/Loader';
+import NotFoundPage from 'pages/404/NotFoundPage';
 
 const DetailPostPage = () => {
-    const { id } = useParams();
+    const { id: postId } = useParams();
     const {
         data: postData,
         isLoading: postLoading,
         error: postError,
-    } = useQuery({
-        queryKey: ['getDetailPost', id],
-        queryFn: () => getDetailPostAPI(id),
-    });
+    } = useDetailPostQueryData(postId);
 
     const {
         data: commentData,
         isLoading: commentLoading,
         error: commentError,
-    } = useQuery({
-        queryKey: ['getAllComment', id],
-        queryFn: () => getCommentAPI(id),
-        select: data => data.comments.reverse(),
-    });
+    } = useCommentQueryData(postId);
 
-    const HandlerName = postData?.post;
+    const HandlerName = postData;
+
     usePageHandler(
         'user',
         HandlerName?.author?.image,
@@ -56,15 +51,14 @@ const DetailPostPage = () => {
             ) : (
                 <>
                     <DetailPost
-                        commentData={commentData}
-                        data={postData}
-                        id={id}
+                        commentLength={commentData.length}
+                        postData={postData}
+                        postId={postId}
                         setFocus={setFocus}
                     />
                     <Comment
                         commentData={commentData}
-                        postDataID={postData.post.id}
-                        id={id}
+                        postId={postId}
                         register={register}
                         handleSubmit={handleSubmit}
                         resetField={resetField}

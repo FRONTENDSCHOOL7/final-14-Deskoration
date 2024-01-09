@@ -1,5 +1,5 @@
 import React from 'react';
-import SocialButton from '../SocialButton/SocialButton';
+import SocialButton from './SocialButton/SocialButton';
 import { useLikeUpdate } from '../../hooks/useLikeUpdate';
 
 const Like = ({ queryKey, isLike, likeCount, mutationParams }) => {
@@ -7,18 +7,16 @@ const Like = ({ queryKey, isLike, likeCount, mutationParams }) => {
     const cancelLikeMutation = useLikeUpdate(queryKey, false);
 
     return (
-        <>
-            <SocialButton
-                type={'like'}
-                onClick={() =>
-                    !isLike
-                        ? likeMutation.mutate(mutationParams)
-                        : cancelLikeMutation.mutate(mutationParams)
-                }
-                isLike={isLike}
-                likeCount={likeCount}
-            />
-        </>
+        <SocialButton
+            type={'like'}
+            onClick={() =>
+                !isLike
+                    ? likeMutation.mutate(mutationParams)
+                    : cancelLikeMutation.mutate(mutationParams)
+            }
+            isLike={isLike}
+            likeCount={likeCount}
+        />
     );
 };
 

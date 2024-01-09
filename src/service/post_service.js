@@ -46,7 +46,7 @@ export const getAllPostAPI = async (skip = 0) => {
     }
 };
 
-export const getMyPostAPI = async accountname => {
+export const getUserPostAPI = async accountname => {
     const reqURL = `/post/${accountname}/userpost`;
 
     try {

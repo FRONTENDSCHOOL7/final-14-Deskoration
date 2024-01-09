@@ -1,8 +1,8 @@
 import React from 'react';
 import * as S from './FollowerList.styled';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import NoContents from '../../components/NoContents/NoContents';
-import Loader from '../../components/Loading/Loader';
+import GradientButton from '../../components/common/GradientButton/GradientButton';
+import NoContents from '../../components/common/NoContents/NoContents';
+import Loader from '../../components/common/Loading/Loader';
 import NotFoundPage from '../404/NotFoundPage';
 import {
     postFollowAPI,
@@ -37,7 +37,6 @@ const FollowingList = () => {
         data: followingData,
         isLoading,
         isError,
-        error,
     } = useQuery({
         queryKey: [
             isOtherUser ? 'userFollowingData' : 'followingData',

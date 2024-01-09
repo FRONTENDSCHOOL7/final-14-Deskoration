@@ -1,9 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import axiosInstance from '../service/axiosInstance';
 
 const PrivateRoutePage = () => {
-    // const authenticated =
-    //     axiosInstance.defaults.headers.Authorization !== 'Bearer null';
     const authenticated = window.sessionStorage.getItem('Token');
 
     return !authenticated ? (

@@ -1,20 +1,21 @@
 import styled from 'styled-components';
+import theme from 'styles/theme';
 
-import { ReactComponent as Logo } from '../../assets/images/Logo.svg';
-import { ReactComponent as Backward } from '../../assets/images/Backward.svg';
+import { ReactComponent as Logo } from 'assets/images/Logo.svg';
+import { ReactComponent as Backward } from 'assets/images/Backward.svg';
 
 export const Headbar = styled.header`
     height: 60px;
-    color: ${props => props.theme.main};
+    color: ${theme.main};
     display: flex;
     align-items: center;
     padding: 0 25px;
-    border-bottom: 1px solid ${props => props.theme.border};
+    border-bottom: 1px solid ${theme.border};
 `;
 
 export const LogoIcon = styled(Logo)`
     height: 30px;
-    color: ${props => props.theme.main};
+    color: ${theme.main};
 `;
 
 export const BackwardIcon = styled(Backward)`
@@ -22,24 +23,27 @@ export const BackwardIcon = styled(Backward)`
 `;
 
 export const titleSpan = styled.span`
-    font-size: ${props => props.theme.fontSize.lg};
-    color: ${props => props.theme.main};
+    font-size: ${theme.fontSize.lg};
+    color: ${theme.main};
     font-weight: 700;
 `;
 
 export const UserInfo = styled.div`
-    display: flex;
     width: 100%;
-    font-size: ${props => props.theme.fontSize.lg};
+    font-size: ${theme.fontSize.lg};
     font-weight: 700;
-    align-items: center;
 
-    .user-img {
+    a {
+        display: flex;
+        align-items: center;
+    }
+
+    img {
         width: 40px;
         height: 40px;
         border-radius: 100%;
         margin-right: 8px;
-        border: 1px solid ${props => props.theme.border};
+        border: 1px solid ${theme.border};
         object-fit: cover;
     }
 `;

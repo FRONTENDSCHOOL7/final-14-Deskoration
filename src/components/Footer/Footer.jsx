@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import * as S from './Footer.styled';
+import { useLocation } from 'react-router-dom';
 
 import { HomeBtn, FeedBtn, AddBtn, ChatBtn, UserBtn } from './Buttons';
-import { useLocation } from 'react-router-dom';
+
+import * as S from './Footer.styled';
 
 const Footer = () => {
     const location = useLocation();

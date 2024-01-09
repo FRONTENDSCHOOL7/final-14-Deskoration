@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { ReactComponent as HomeFile } from '../../assets/images/Home.svg';
-import { ReactComponent as FeedFile } from '../../assets/images/Feed.svg';
+import { ReactComponent as HomeFile } from 'assets/images/footer/Home.svg';
+import { ReactComponent as FeedFile } from 'assets/images/footer/Feed.svg';
 import { ReactComponent as AddFile } from '../../assets/images/Add.svg';
-import { ReactComponent as ChatFile } from '../../assets/images/Chat.svg';
-import { ReactComponent as UserFile } from '../../assets/images/User.svg';
+import { ReactComponent as ChatFile } from 'assets/images/footer/Chat.svg';
+import { ReactComponent as UserFile } from 'assets/images/footer/User.svg';
 
 export const HomeIcon = styled(HomeFile)`
     path {

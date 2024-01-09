@@ -1,10 +1,12 @@
 import { React, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 const PublicRoutePage = lazy(() => import('./PublicRoute'));
-const UserLayoutPage = lazy(() => import('../pages/User/User'));
-const LoginPage = lazy(() => import('../pages/User/Login'));
-const SignupPage = lazy(() => import('../pages/User/Signup'));
-const ProfileUploadPage = lazy(() => import('../pages/Profile/ProfileUpload'));
+const UserLayoutPage = lazy(() => import('../pages/AuthPage/AuthPage'));
+const LoginPage = lazy(() => import('../components/Auth/Login'));
+const SignupPage = lazy(() => import('../components/Auth/Signup'));
+const ProfileUploadPage = lazy(() =>
+    import('../pages/ProfileUploadPage/ProfileUpload'),
+);
 const FollowerListPage = lazy(() =>
     import('../pages/FollowFollowingList/FollowerList'),
 );
@@ -13,20 +15,22 @@ const FollowingListPage = lazy(() =>
 );
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
-const HomePage = lazy(() => import('../pages/Home/Home'));
-const FeedPage = lazy(() => import('../pages/Feed/Feed'));
-const PostUploadPage = lazy(() => import('../pages/NewBoard/NewBoard'));
+const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
+const FeedPage = lazy(() => import('../pages/FeedPage/Feed'));
+const PostUploadPage = lazy(() =>
+    import('../pages/PostPage/AddPostPage/AddPostPage'),
+);
 const DetailPostPage = lazy(() =>
     import('../pages/PostPage/DetailPostPage/DetailPostPage'),
 );
-const ProductPage = lazy(() => import('../components/ShowProduct/ShowProduct'));
+const ProductPage = lazy(() => import('../pages/ProductPage/Product'));
 const ChatListPage = lazy(() =>
     import('../pages/Chat/ChatListPage/ChatListPage'),
 );
 const ChatRoomPage = lazy(() =>
     import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
 );
-const ProfilePage = lazy(() => import('../pages/Profile/Profile'));
+const ProfilePage = lazy(() => import('../pages/ProfilePage/Profile'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));
 const NotFoundPage = lazy(() => import('../pages/404/NotFoundPage'));
 

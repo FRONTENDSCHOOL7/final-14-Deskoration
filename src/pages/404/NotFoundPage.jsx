@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { ReactComponent as IMG } from '../../assets/images/Loading.svg';
-import GradientButton from '../../components/GradientButton/GradientButton';
-import theme from '../../styles/theme';
 
-const IMGIcon = styled(IMG)`
+import GradientButton from 'components/common/GradientButton/GradientButton';
+
+import styled from 'styled-components';
+import theme from 'styles/theme';
+import { ReactComponent as Loading } from 'assets/images/Loading.svg';
+
+const LoadingIcon = styled(Loading)`
     width: 200px;
     height: 300px;
 
@@ -50,7 +52,7 @@ const NotFoundPage = () => {
     return (
         <NoneDataWrapper>
             <h1>DESKORATION</h1>
-            <IMGIcon style={{ '--light-color': lightColor }} />
+            <LoadingIcon style={{ '--light-color': lightColor }} />
             <p>페이지를 찾을 수 없습니다</p>
             <GradientButton
                 gra={'true'}

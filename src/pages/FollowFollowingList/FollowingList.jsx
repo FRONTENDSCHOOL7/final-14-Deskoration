@@ -34,7 +34,7 @@ const FollowingList = () => {
     const accountNameToUse = isOtherUser ? username : myAccountName;
 
     const {
-        data: followingData,
+        data: followingData = [],
         isLoading,
         isError,
     } = useQuery({
@@ -43,6 +43,7 @@ const FollowingList = () => {
             accountNameToUse,
         ],
         queryFn: () => getFollowingAPI(accountNameToUse),
+        enabled: accountNameToUse !== undefined,
     });
 
     const follow = useMutation({
@@ -117,13 +118,15 @@ const FollowingList = () => {
                         </S.FollowerList>
                     ))}
                 </S.FollowerContainer>
-            ) : (
+            ) : accountNameToUse !== undefined ? (
                 <NoContents
                     mainTxt={'아직 나를 팔로우하는 유저가 없습니다!'}
                     subTxt={'다른 유저를 먼저 팔로우 해보세요. '}
                     link={'/home'}
                     btnLabel={'홈으로 돌아가기'}
                 />
+            ) : (
+                <Loader />
             )}
         </>
     );

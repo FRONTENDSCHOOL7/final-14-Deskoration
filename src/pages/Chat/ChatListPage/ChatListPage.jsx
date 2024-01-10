@@ -4,27 +4,14 @@ import { Link } from 'react-router-dom';
 import usePageHandler from '../../../hooks/usePageHandler';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../../../firebase';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMyProfileAPI } from '../../../service/profile_service';
+import { useProfileQueryData } from 'hooks/useQueryData';
 
 const ChatListPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [chatData, setChatData] = useState(null);
     const [searchData, setSearchData] = useState(null);
-
-    const queryClient = useQueryClient();
-    const myProfileData = queryClient.getQueryData(['getMyProfile']);
-    const myProfileAccountName = myProfileData?.user?.accountname;
-
-    // myProfileData를 불러올 수 없을경우 useQuery로 데이터 불러옴
-    const { data: profileDataAccountName } = useQuery({
-        queryKey: ['getMyProfile'],
-        queryFn: () => getMyProfileAPI(),
-        select: data => data.user.accountname,
-        enabled: !myProfileData,
-    });
-
-    const myAccountName = myProfileAccountName || profileDataAccountName;
+    const { data: profileData } = useProfileQueryData(true);
+    const myAccountName = profileData?.accountname;
 
     usePageHandler('text', '채팅');
 
@@ -84,11 +71,9 @@ const ChatListPage = () => {
     // 채팅목록 렌더링
     const renderChatList = chatList => {
         return chatList?.map(chat => {
-            // console.log(chatData);
             const filteredUser = chat.participants.filter(
                 user => user.accountname !== myAccountName,
             )[0];
-            // console.log(filteredUser);
             const formattedDate = formatDate(chat.createdAt);
 
             return (

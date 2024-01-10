@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './ChatRoomPage.styled';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMyProfileAPI } from '../../../service/profile_service';
 import usePageHandler from '../../../hooks/usePageHandler';
 import {
     collection,
@@ -18,29 +16,20 @@ import {
     setDoc,
 } from 'firebase/firestore';
 import { db } from '../../../firebase';
+import { useProfileQueryData } from 'hooks/useQueryData';
 
 const ChatRoomPage = () => {
     const location = useLocation();
     const { roomId, user } = location.state;
-
     const [chatMessages, setChatMessages] = useState([]);
     const [chatId, setChatId] = useState('');
-
     const navigate = useNavigate();
 
-    // myProfileData를 불러올 수 없을경우 useQuery로 데이터 불러옴
-    const queryClient = useQueryClient();
-    const myProfileData = queryClient.getQueryData(['getMyProfile']);
-    const { data: profileData } = useQuery({
-        queryKey: ['getMyProfile'],
-        queryFn: () => getMyProfileAPI(),
-        select: data => data.user,
-        enabled: !myProfileData,
-    });
-    const myAccountName =
-        myProfileData?.user?.accountname || profileData?.accountname;
-    const myProfileImage = myProfileData?.user?.image || profileData?.image;
-    const myUserName = myProfileData?.user?.username || profileData?.username;
+    const { data: profileData } = useProfileQueryData(true);
+
+    const myAccountName = profileData?.accountname;
+    const myProfileImage = profileData?.image;
+    const myUserName = profileData?.username;
 
     const chatCollectionRef = collection(db, 'messages');
     const chatListCollectionRef = collection(db, 'chatList');

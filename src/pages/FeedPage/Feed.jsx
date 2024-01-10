@@ -82,7 +82,7 @@ const Feed = () => {
                             </S.FeedItemHeader>
 
                             <S.FeedDetailBox>
-                                <Link to={`/detailpost/${post.id}`}>
+                                <Link to={`/detailPost/${post.id}`}>
                                     <S.DetailImgBox>
                                         <img
                                             src={post.image}
@@ -100,7 +100,7 @@ const Feed = () => {
                                         likeCount={post.heartCount}
                                         mutationParams={mutationParams}
                                     />
-                                    <Link to={`/detailpost/${post.id}`}>
+                                    <Link to={`/detailPost/${post.id}`}>
                                         <SocialButton
                                             type={'comment'}
                                             commentCount={post.commentCount}

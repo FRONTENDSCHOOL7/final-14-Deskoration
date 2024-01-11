@@ -7,11 +7,9 @@ const SignupPage = lazy(() => import('../components/Auth/Signup'));
 const ProfileUploadPage = lazy(() =>
     import('../pages/ProfileUploadPage/ProfileUpload'),
 );
-const FollowerListPage = lazy(() =>
-    import('../pages/FollowFollowingList/FollowerList'),
-);
+const FollowerListPage = lazy(() => import('../pages/FollowPage/FollowerList'));
 const FollowingListPage = lazy(() =>
-    import('../pages/FollowFollowingList/FollowingList'),
+    import('../pages/FollowPage/FollowingList'),
 );
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));

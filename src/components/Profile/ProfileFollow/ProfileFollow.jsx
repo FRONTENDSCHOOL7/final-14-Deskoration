@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from 'firebase.js';
 
-import { useFollowMutationData } from 'hooks/useQueryData';
+import { useFollowMutationData, useProfileQueryData } from 'hooks/useQueryData';
 import GradientButton from '../../common/GradientButton/GradientButton';
 
 import * as S from './ProfileFollow.styled';
@@ -13,6 +13,8 @@ const ProfileFollow = ({ profileData, postLength }) => {
     const navigate = useNavigate();
     const { username } = useParams(); //선택한 게시물 아이디 값
     const isMyProfile = !username;
+
+    const { data: myProfileData } = useProfileQueryData(true);
 
     const moveToEditProfile = () => {
         navigate('/profileEdit');
@@ -29,10 +31,9 @@ const ProfileFollow = ({ profileData, postLength }) => {
         }
     };
 
-    const fetchRoomId = async accountname => {
+    const fetchRoomId = async () => {
         try {
-            const chatRoomId = await findChatRoomId(accountname);
-            // navigateToChatRoom(chatRoomId, userProfileData);
+            const chatRoomId = await findChatRoomId(myProfileData.accountname);
             navigateToChatRoom(chatRoomId, profileData);
         } catch (error) {
             console.error(error);

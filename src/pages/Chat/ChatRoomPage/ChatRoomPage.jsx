@@ -85,7 +85,7 @@ const ChatRoomPage = () => {
             });
         });
         return () => unsubscribe();
-    }, [chatCollectionRef, roomId]);
+    }, [roomId]);
 
     //chat 관련 메소드
     const chatManager = {

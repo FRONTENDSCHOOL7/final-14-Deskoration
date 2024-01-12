@@ -169,19 +169,18 @@ const PostRegister = ({
 
     // 요소가 움직일 수 있는 최대 한계를 계산한다.
     // 마커가 컨테이너의 오른쪽 혹은 아래쪽의 경계를 넘지 않도록 한다.
-    const calcEndPoint = (containerDimension, markerDimension) => {
+    const calcEndPoint = (containerSize, markerSize) => {
         return parseFloat(
-            ((containerDimension - markerDimension + markerPadding) /
-                containerDimension) *
+            ((containerSize - markerSize + markerPadding) / containerSize) *
                 100,
         );
     };
 
     // 컨테이너 내에서 마커의 새 위치를 계산한다.
     // 마커가 컨테이너의 왼쪽 혹은 위쪽의 경계를 넘지 않도록 한다.
-    const calcMarkerPosition = (position, containerDimension) => {
+    const calcMarkerPosition = (position, containerSize) => {
         return parseFloat(
-            (Math.max(-markerPadding, position) / containerDimension) * 100,
+            (Math.max(-markerPadding, position) / containerSize) * 100,
         );
     };
 

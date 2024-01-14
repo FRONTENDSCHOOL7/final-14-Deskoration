@@ -23,10 +23,10 @@ const DetailPostPage = lazy(() =>
 );
 const ProductPage = lazy(() => import('../pages/ProductPage/Product'));
 const ChatListPage = lazy(() =>
-    import('../pages/Chat/ChatListPage/ChatListPage'),
+    import('../pages/ChatPage/ChatListPage/ChatListPage'),
 );
 const ChatRoomPage = lazy(() =>
-    import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
+    import('../pages/ChatPage/ChatRoomPage/ChatRoomPage'),
 );
 const ProfilePage = lazy(() => import('../pages/ProfilePage/Profile'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));

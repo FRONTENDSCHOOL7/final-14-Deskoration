@@ -224,7 +224,7 @@ export const usePostMutationData = () => {
         },
     });
 
-    const reporPosttMutation = useMutation({
+    const reportPostMutation = useMutation({
         mutationFn: ({ postId }) => reportPostAPI(postId),
         onSuccess: data => {
             if (data.message === '존재하지 않는 게시글입니다.') {
@@ -234,7 +234,7 @@ export const usePostMutationData = () => {
             }
         },
     });
-    return { addPostMutation, updatePostMutation, reporPosttMutation };
+    return { addPostMutation, updatePostMutation, reportPostMutation };
 };
 
 // FOLLOW

@@ -315,6 +315,8 @@ export const useProfileQueryData = (isMyProfile, username) => {
                 return data.profile;
             }
         },
+        staleTime: 1000 * 60 * 5,
+        cachedTime: 1000 * 60 * 6,
         enabled: isMyProfile || !!username,
     });
 };

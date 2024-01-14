@@ -32,6 +32,7 @@ import {
 import {
     deleteFollowAPI,
     getFollowerAPI,
+    getFollowingAPI,
     postFollowAPI,
 } from 'service/follow_service';
 import {
@@ -244,26 +245,47 @@ export const useFollowQueryData = (isOtherUser, accountNameToUse) => {
             accountNameToUse,
         ],
         queryFn: () => getFollowerAPI(accountNameToUse),
+        enabled: accountNameToUse !== undefined,
+    });
+
+    return { data, isLoading, isError };
+};
+
+// FOLLOWING
+export const useFollowingQueryData = (isOtherUser, accountNameToUse) => {
+    const { data, isLoading, isError } = useQuery({
+        queryKey: [
+            isOtherUser ? 'userFollowingData' : 'followingData',
+            accountNameToUse,
+        ],
+        queryFn: () => getFollowingAPI(accountNameToUse),
+        enabled: accountNameToUse !== undefined,
     });
 
     return { data, isLoading, isError };
 };
 
 // 팔로우 언팔로우
-export const useFollowMutationData = username => {
+export const useFollowMutationData = (isOtherUser, accountNameToUse) => {
     const queryClient = useQueryClient();
 
     const followMutation = useMutation({
         mutationFn: accountName => postFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['getUserProfile', username]);
+            queryClient.invalidateQueries([
+                isOtherUser ? 'userFollowerData' : 'followerData',
+                accountNameToUse,
+            ]);
         },
     });
 
     const unfollowMutation = useMutation({
         mutationFn: accountName => deleteFollowAPI(accountName),
         onSuccess: () => {
-            queryClient.invalidateQueries(['getUserProfile', username]);
+            queryClient.invalidateQueries([
+                isOtherUser ? 'userFollowerData' : 'followerData',
+                accountNameToUse,
+            ]);
         },
     });
 

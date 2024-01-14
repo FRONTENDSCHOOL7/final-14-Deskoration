@@ -7,11 +7,9 @@ const SignupPage = lazy(() => import('../components/Auth/Signup'));
 const ProfileUploadPage = lazy(() =>
     import('../pages/ProfileUploadPage/ProfileUpload'),
 );
-const FollowerListPage = lazy(() =>
-    import('../pages/FollowFollowingList/FollowerList'),
-);
+const FollowerListPage = lazy(() => import('../pages/FollowPage/FollowerList'));
 const FollowingListPage = lazy(() =>
-    import('../pages/FollowFollowingList/FollowingList'),
+    import('../pages/FollowPage/FollowingList'),
 );
 const PrivateRoutePage = lazy(() => import('./PrivateRoute'));
 const DefaultLayoutPage = lazy(() => import('../Layout/DefaultLayout'));
@@ -25,10 +23,10 @@ const DetailPostPage = lazy(() =>
 );
 const ProductPage = lazy(() => import('../pages/ProductPage/Product'));
 const ChatListPage = lazy(() =>
-    import('../pages/Chat/ChatListPage/ChatListPage'),
+    import('../pages/ChatPage/ChatListPage/ChatListPage'),
 );
 const ChatRoomPage = lazy(() =>
-    import('../pages/Chat/ChatRoomPage/ChatRoomPage'),
+    import('../pages/ChatPage/ChatRoomPage/ChatRoomPage'),
 );
 const ProfilePage = lazy(() => import('../pages/ProfilePage/Profile'));
 const NoFooterLayoutPage = lazy(() => import('../Layout/NoFooterLayout'));

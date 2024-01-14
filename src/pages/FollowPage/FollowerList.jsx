@@ -1,18 +1,17 @@
 import React from 'react';
-import * as S from './FollowerList.styled';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import usePageHandler from '../../hooks/usePageHandler';
+import { useFollowQueryData, useFollowMutationData } from 'hooks/useQueryData';
+import { getMyProfileAPI } from '../../service/profile_service';
+
 import GradientButton from '../../components/common/GradientButton/GradientButton';
 import NoContents from '../../components/common/NoContents/NoContents';
 import Loader from '../../components/common/Loading/Loader';
 import NotFoundPage from '../404/NotFoundPage';
-import {
-    postFollowAPI,
-    deleteFollowAPI,
-    getFollowerAPI,
-} from '../../service/follow_service';
-import { getMyProfileAPI } from '../../service/profile_service';
-import usePageHandler from '../../hooks/usePageHandler';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+import * as S from './FollowerList.styled';
 
 const FollowerList = () => {
     const { username } = useParams();
@@ -34,44 +33,21 @@ const FollowerList = () => {
     const accountNameToUse = isOtherUser ? username : myAccountName;
 
     const {
-        data: followerData,
+        data: followerData = [],
         isLoading,
         isError,
-    } = useQuery({
-        queryKey: [
-            isOtherUser ? 'userFollowerData' : 'followerData',
-            accountNameToUse,
-        ],
-        queryFn: () => getFollowerAPI(accountNameToUse),
-    });
+    } = useFollowQueryData(isOtherUser, accountNameToUse);
 
-    const follow = useMutation({
-        mutationFn: accountName => postFollowAPI(accountName),
-        onSuccess: () => {
-            queryClient.invalidateQueries([
-                isOtherUser ? 'userFollowerData' : 'followerData',
-                accountNameToUse,
-            ]);
-        },
-    });
-
-    const unfollow = useMutation({
-        mutationFn: accountName => deleteFollowAPI(accountName),
-        onSuccess: () => {
-            queryClient.invalidateQueries([
-                isOtherUser ? 'userFollowerData' : 'followerData',
-                accountNameToUse,
-            ]);
-        },
-    });
+    const { followMutation, unfollowMutation } =
+        useFollowMutationData(accountNameToUse);
 
     const handleFollowToggle = accountName => {
         const follower = followerData.find(f => f.accountname === accountName);
         if (follower) {
             if (follower.isfollow) {
-                unfollow.mutate(accountName);
+                unfollowMutation.mutate(accountName);
             } else {
-                follow.mutate(accountName);
+                followMutation.mutate(accountName);
             }
         }
     };
@@ -115,13 +91,15 @@ const FollowerList = () => {
                         </S.FollowerList>
                     ))}
                 </S.FollowerContainer>
-            ) : (
+            ) : accountNameToUse !== undefined ? (
                 <NoContents
                     mainTxt={'아직 팔로우 중인 유저가 없습니다!'}
                     subTxt={'다른 유저를 먼저 팔로우 해보세요. '}
                     link={'/home'}
                     btnLabel={'홈으로 돌아가기'}
                 />
+            ) : (
+                <Loader />
             )}
         </>
     );

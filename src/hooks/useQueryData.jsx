@@ -245,6 +245,7 @@ export const useFollowQueryData = (isOtherUser, accountNameToUse) => {
             accountNameToUse,
         ],
         queryFn: () => getFollowerAPI(accountNameToUse),
+        enabled: accountNameToUse !== undefined,
     });
 
     return { data, isLoading, isError };
@@ -258,6 +259,7 @@ export const useFollowingQueryData = (isOtherUser, accountNameToUse) => {
             accountNameToUse,
         ],
         queryFn: () => getFollowingAPI(accountNameToUse),
+        enabled: accountNameToUse !== undefined,
     });
 
     return { data, isLoading, isError };

@@ -6,7 +6,11 @@ export const getCommentAPI = async id => {
     try {
         const response = await instance.get(reqURL);
 
-        return response.data;
+        const originalComments = response.data.comments;
+
+        const reversedComments = [...originalComments].reverse();
+
+        return reversedComments;
     } catch (error) {
         throw new Error('댓글을 가져올 수 없습니다.');
     }

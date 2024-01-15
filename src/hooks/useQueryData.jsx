@@ -353,7 +353,6 @@ export const useCommentQueryData = postId => {
     const { data, isLoading, error } = useQuery({
         queryKey: ['getAllComment', postId],
         queryFn: () => getCommentAPI(postId),
-        select: data => data.comments.reverse(),
     });
     return { data, isLoading, error };
 };

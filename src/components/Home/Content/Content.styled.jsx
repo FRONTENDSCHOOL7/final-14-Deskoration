@@ -8,7 +8,7 @@ export const Section = styled.section`
     width: 100%;
     color: ${theme.mainFont};
     overflow-y: ${props => (props.$isProfile ? null : 'auto')};
-    height: calc(100vh - 247px);
+    height: ${props => (props.$isProfile ? null : 'calc(100vh - 247px)')};
     padding: 10px 5px 10px 0;
 
     @media screen and (min-width: 280px) {

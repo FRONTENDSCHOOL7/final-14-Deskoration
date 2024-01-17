@@ -63,6 +63,104 @@ PW : test123
 
 ![브랜치전략](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/e98a8c8d-e950-43d4-b5f7-951924679a8a)
 
+## 파일 구조
+
+```
+src
+ ┣ assets
+ ┃ ┣ fonts
+ ┃ ┗ images
+ ┣ components
+ ┃ ┣ Auth
+ ┃ ┃ ┣ Splash
+ ┃ ┃ ┣ Login.jsx
+ ┃ ┃ ┗ Signup.jsx
+ ┃ ┣ common
+ ┃ ┃ ┣ AlertModal
+ ┃ ┃ ┣ BottomSheet
+ ┃ ┃ ┣ ConfirmModal
+ ┃ ┃ ┣ GradientButton
+ ┃ ┃ ┣ Input
+ ┃ ┃ ┣ Loading
+ ┃ ┃ ┗ NoContents
+ ┃ ┣ Footer
+ ┃ ┣ Header
+ ┃ ┣ Home
+ ┃ ┃ ┣ Content
+ ┃ ┃ ┗ Slide
+ ┃ ┣ Like
+ ┃ ┃ ┣ SocialButton
+ ┃ ┃ ┗ Like.jsx
+ ┃ ┣ Post
+ ┃ ┃ ┣ Marker
+ ┃ ┃ ┣ PostDetail
+ ┃ ┃ ┃ ┣ Comment
+ ┃ ┃ ┃ ┗ DetailPost
+ ┃ ┃ ┣ PostUpload
+ ┃ ┃ ┃ ┣ PostRegister
+ ┃ ┃ ┃ ┗ ProductRegister
+ ┃ ┃ ┗ Tooltip
+ ┃ ┗ Profile
+ ┃ ┃ ┗ ProfileFollow
+ ┣ features
+ ┃ ┣ modal
+ ┃ ┃ ┣ alertModalSlice.js
+ ┃ ┃ ┗ confirmModalSlice.js
+ ┃ ┗ pageTitle
+ ┃ ┃ ┗ pageTitleSlice.js
+ ┣ hooks
+ ┃ ┣ useImgUpload.js
+ ┃ ┣ useLikeUpdate.js
+ ┃ ┣ useNavigate.js
+ ┃ ┣ usePageHandler.js
+ ┃ ┣ useQueryData.jsx
+ ┃ ┗ useScroll.js
+ ┣ Layout
+ ┃ ┣ DefaultLayout.jsx
+ ┃ ┣ LayoutStyle.styled.jsx
+ ┃ ┗ NoFooterLayout.jsx
+ ┣ pages
+ ┃ ┣ 404
+ ┃ ┣ AuthPage
+ ┃ ┣ ChatPage
+ ┃ ┃ ┣ ChatListPage
+ ┃ ┃ ┗ ChatRoomPage
+ ┃ ┣ FeedPage
+ ┃ ┣ FollowPage
+ ┃ ┣ HomePage
+ ┃ ┃ ┗ HomePage.jsx
+ ┃ ┣ PostPage
+ ┃ ┃ ┣ AddPostPage
+ ┃ ┃ ┗ DetailPostPage
+ ┃ ┣ ProductPage
+ ┃ ┣ ProfilePage
+ ┃ ┗ ProfileUploadPage
+ ┣ router
+ ┃ ┣ PrivateRoute.jsx
+ ┃ ┣ PublicRoute.jsx
+ ┃ ┗ Router.jsx
+ ┣ service
+ ┃ ┣ auth_service.js
+ ┃ ┣ axiosInstance.js
+ ┃ ┣ comment_service.js
+ ┃ ┣ follow_service.js
+ ┃ ┣ img_service.js
+ ┃ ┣ kakaoMap_service.js
+ ┃ ┣ like_service.js
+ ┃ ┣ post_service.js
+ ┃ ┗ profile_service.js
+ ┣ styles
+ ┃ ┣ GlobalStyle.js
+ ┃ ┗ theme.js
+ ┣ .editorconfig
+ ┣ .prettierrc
+ ┣ App.css
+ ┣ App.js
+ ┣ firebase.js
+ ┣ index.js
+ ┗ store.js
+```
+
 ## 주요 기능 소개
 
 ### 1. 홈

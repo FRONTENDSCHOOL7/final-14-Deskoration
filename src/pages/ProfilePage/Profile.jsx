@@ -85,12 +85,17 @@ const Profile = () => {
                             postLength={postData.length}
                         />
 
-                        {postData?.length === 0 ? (
+                        {postData?.length === 0 && isMyProfile ? (
                             <NoContents
                                 mainTxt={'아직 등록한 게시글이 없습니다!'}
-                                subTxt={'첫 번째 사진을 공유해보세요'}
+                                subTxt={'첫 번째 사진을 공유해보세요.'}
                                 link={'/postUpload'}
                                 btnLabel={'게시글 작성하기'}
+                            />
+                        ) : postData?.length === 0 && !isMyProfile ? (
+                            <NoContents
+                                mainTxt={'아직 등록한 게시글이 없습니다!'}
+                                subTxt={'팔로우하고 새로운 소식을 만나보세요.'}
                             />
                         ) : (
                             <Content posts={postData} />

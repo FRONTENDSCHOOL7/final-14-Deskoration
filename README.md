@@ -32,9 +32,12 @@ PW : test123
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![React-router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![React-query](https://img.shields.io/badge/React_query-FF4154?style=for-the-badge&logo=React-query&logoColor=white)
+![React-hook-form](https://img.shields.io/badge/React_hook_form-EC5990?style=for-the-badge&logo=React-hook-form&logoColor=61DAFB)
+![Redux-toolkit](https://img.shields.io/badge/Redux_tookit-593D88?style=for-the-badge&logo=redux&logoColor=white)
 ![styled-components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
-![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
-![React-query](https://img.shields.io/badge/React-query-FF4154?style=for-the-badge&logo=React-query&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-20232A?style=for-the-badge&logo=Axios&logoColor=61DAFB)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=61DAFB)
 
 ### Communication
 
@@ -42,7 +45,7 @@ PW : test123
 ![google-sheets](https://img.shields.io/badge/Google%20Sheets-34A853?style=for-the-badge&logo=google-sheets&logoColor=white)
 ![figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 
-### 라이브러리 사용 이유
+### 사용한 라이브러리
 
 | 라이브러리            | 이유                                                                                                                                                                                                                             |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -60,8 +63,6 @@ PW : test123
 
 ![브랜치전략](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/e98a8c8d-e950-43d4-b5f7-951924679a8a)
 
-## 협업 방식
-
 ## 주요 기능 소개
 
 ### 1. 홈
@@ -76,25 +77,28 @@ PW : test123
 | :--------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 | ![5  홈페이지](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/9dd39fbd-42d9-4c45-9bfc-053336b81699) | ![6  피드페이지](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/4b26aea2-3a3b-4492-b9c8-bce4f6d8a3e3) | ![7  게시글 등록](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/95c03275-fbf4-4e3e-9fb4-a6b8f47c38c9) | ![8  게시글 상세보기](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/e5810421-426c-4d91-a4fd-812d85ed2e5f) |
 
-|                                                            게시글 수정                                                            |                                                             게시글 수                                                             |                                                           게시글 신고하기                                                            |     |
-| :-------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: | --- |
-| ![9-2  게시글 수정](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/dccb04ea-0ae2-4371-b402-7bb2db5b5f26) | ![9-1  게시글 삭제](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/af5ff0cb-89bf-492f-a132-3e9023646269) | ![10  게시글 신고하기](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/0da28bba-815f-414d-b184-89eaaf7166b7) |     |
+|                                                            게시글 수정                                                            |                                                            게시글 삭제                                                            |                                                           게시글 신고하기                                                            |
+| :-------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------: |
+| ![9-2  게시글 수정](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/dccb04ea-0ae2-4371-b402-7bb2db5b5f26) | ![9-1  게시글 삭제](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/af5ff0cb-89bf-492f-a132-3e9023646269) | ![10  게시글 신고하기](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/0da28bba-815f-414d-b184-89eaaf7166b7) |
 
 ### 3. 프로필
 
-|                                                            프로필 수정                                                             |                                                            팔로우                                                             |                                                            로그아웃                                                             |     |
-| :--------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: | --- |
-| ![12-1  프로필 수정](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/6c3ff379-a493-4066-8db0-701e681fada8) | ![13-1  팔로우](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/16198277-72c1-4154-9e50-6b731e2fd930) | ![14-1  로그아웃](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/c21e3330-b3a0-4f73-91ae-c34304393078) |     |
+|                                                            프로필 수정                                                             |                                                            팔로우                                                             |                                                            로그아웃                                                             |
+| :--------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: |
+| ![12-1  프로필 수정](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/6c3ff379-a493-4066-8db0-701e681fada8) | ![13-1  팔로우](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/16198277-72c1-4154-9e50-6b731e2fd930) | ![14-1  로그아웃](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/c21e3330-b3a0-4f73-91ae-c34304393078) |
 
 ### 4. 좋아요, 댓글, 채팅
 
-|                                                           좋아요, 댓글                                                            |                                                           채팅                                                            |     |     |
-| :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | --- | --- |
-| ![15  좋아요, 댓글](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/b25fdd53-3f2e-41ac-b7d7-016596d4eac2) | ![16  채팅](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/dfe840e4-4dbb-4965-8b35-ee46eae8cbd2) |     |     |
+|                                                           좋아요, 댓글                                                            |                                                           채팅                                                            |
+| :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: |
+| ![15  좋아요, 댓글](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/b25fdd53-3f2e-41ac-b7d7-016596d4eac2) | ![16  채팅](https://github.com/FRONTENDSCHOOL7/final-14-Deskoration/assets/54842493/dfe840e4-4dbb-4965-8b35-ee46eae8cbd2) |
 
 ## 핵심 코드
 
 ### 마커
+
+**이미지 위에 등록한 마커를 이동하기**:
+`onMouseMove`함수는 마커를 드래그할 때마다 마커의 위치를 동적으로 업데이트하는 함수입니다. 마커의 위치는 이미지 컨테이너의 크기에 맞춰 백분율로 계산됩니다. 이때, 마커가 컨테이너의 경계를 벗어나지 않도록 이동 범위를 제한합니다.
 
 ```javascript
 // 요소가 움직일 수 있는 최대 한계를 계산한다.
@@ -143,6 +147,9 @@ const onMouseMove = (event) => {
 
 ### 커스텀 훅
 
+**React-query를 이용하여 API를 호출하는 커스텀 훅**:
+기존에는 `then`, `catch`를 이용하여 API를 호출하여 데이터를 요청하고, 수정했습니다. 코드가 길어져서 읽기에 어려운 코드 양을 줄이고, 무한 스크롤 기능을 위한 다음 페이지의 데이터를 호출하는 `fetchNextPage`를 사용하기 위해 React-Query를 사용했습니다. 또한, 자주 반복되고 사용되는 React-query로 API를 호출하는 부분을 커스텀 훅으로 만들어서 사용하여 코드의 반복성을 줄이고 가독성을 높였습니다.
+
 ```javascript
 // useQuery 커스텀 훅
 export const useFeedQueryData = () => {
@@ -178,6 +185,11 @@ export const getFeedAPI = async () => {
 ```
 
 ### 채팅
+
+**FireStore를 이용한 유저간의 실시간 채팅**:
+유저들 간의 소통을 원할하게 하기 위하여 서로의 정보를 개인적으로 공유하고자 실시간 채팅 기능을 추가하였습니다. 데스코레이션에서 필요한 채팅은 채팅방 생성과 데이터가 많이 쌓이지 않는 가벼운 채팅을 필요로 했고, 프로젝트 스케줄과 우선순위 상 채팅에 많은 에너지와 시간을 쏟을 수 없는 상황이였기 때문에 시간이 많이 필요한 웹소켓 보다는 파이어스토어를 선택했습니다.
+
+실시간 채팅 기능에서 제일 중요한 것은 실시간(RealTime)인데 이 부분은 `useQueary` 와 `useMutation` 보다 훨씬 속도가 빠른 `onSnapshot`함수를 통해 실시간으로 데이터를 가져오고, `updatedoc`을 통해 실시간으로 데이터를 업데이트 되도 했습니다.
 
 ```javascript
 // 실시간으로 채팅 가져오기
@@ -240,6 +252,9 @@ const handleSendMessage = async (data) => {
 ```
 
 ### 이미지 최적화
+
+**react-browser-image-compression 라이브러리를 활용**:
+이미지 업로드 시 브라우저에서 동적으로 압축을 수행하여 로딩 속도를 향상시키고, 사용자들이 이동 중에 애플리케이션을 이용할 때 모바일 환경에서 데이터 전송량을 감소시켜 빠른 속도와 부드러운 환경에서 이용하도록 사용자 경험을 개선하고 성능 최적화를 달성함으로써 웹 애플리케이션의 효율성을 높였습니다.
 
 ```javascript
 // 이미지 최적화를 위한 라이브러리 및 이미지 업로드 API 호출 함수 가져오기
